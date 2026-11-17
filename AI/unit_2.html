@@ -159,19 +159,19 @@ window.MathJax = {
 </tr>
 <tr>
 <td><strong>2. Successor Function (Actions + Transition Model)</strong></td>
-<td><span class="math">\(ext{SUCCESSOR}(s) 	o \{(a, s')\}\)</span></td>
+<td><span class="math">\(\text{SUCCESSOR}(s) 	o \{(a, s')\}\)</span></td>
 <td>Generates the legal actions executable in state $s$ and returns the resulting successor states $s'$.</td>
 <td>Moving the blank space: <code>Left</code>, <code>Right</code>, <code>Up</code>, or <code>Down</code>.</td>
 </tr>
 <tr>
 <td><strong>3. Goal Test</strong></td>
-<td><span class="math">\(ext{GOAL-TEST}(s) 	o \{	ext{True}, 	ext{False}\}\)</span></td>
+<td><span class="math">\(\text{GOAL-TEST}(s) 	o \{\text{True}, \text{False}\}\)</span></td>
 <td>Determines whether a given state matches the desired goal configuration. Can be explicit (matching a specific state) or implicit (satisfying a property).</td>
 <td>Checks whether the current board tiles exactly match the standard configuration: [Blank, 1, 2, 3, 4, 5, 6, 7, 8].</td>
 </tr>
 <tr>
 <td><strong>4. Path Cost</strong></td>
-<td><span class="math">\(c(s, a, s') 	ext{ and } g(n)\)</span></td>
+<td><span class="math">\(c(s, a, s') \text{ and } g(n)\)</span></td>
 <td>A numeric cost function that assigns a cost to each step along a path. The path cost $g(n)$ is the sum of step costs from initial state to node $n$.</td>
 <td>Each slide move costs 1, so the total path cost equals the total number of moves in the path.</td>
 </tr>
@@ -197,7 +197,7 @@ window.MathJax = {
 </ul>
 <!-- SVG: 8-Puzzle Visual Representation -->
 <div class="figure">
-<svg viewbox="0 0 650 200" xmlns="http://www.w3.org/2000/svg">
+<svg viewbox="0 0 650 250" xmlns="http://www.w3.org/2000/svg">
 <text class="svg-label" font-size="16" text-anchor="middle" x="160" y="30">Start State</text>
 <g transform="translate(70, 45)">
 <rect fill="#fff" height="180" stroke="#087e8b" stroke-width="2.5" width="180" x="0" y="0"></rect>
@@ -312,7 +312,7 @@ window.MathJax = {
 <p>Unlike blind search, <strong>informed search</strong> uses problem-specific knowledge beyond the problem definition itself. This knowledge is supplied via a <strong>Heuristic Function</strong>, denoted <span class="math">\(h(n)\)</span>:</p>
 <div class="exam">
 <strong>Heuristic Function:</strong><br/>
-<span class="math">\(h(n) = 	ext{estimated cost of the cheapest path from node } n 	ext{ to a goal state.}\)</span>
+<span class="math">\(h(n) = \text{estimated cost of the cheapest path from node } n \text{ to a goal state.}\)</span>
 <br/>If $n$ is a goal node, then $h(n) = 0$.
     </div>
 <ul class="point-list">
@@ -407,11 +407,11 @@ window.MathJax = {
 <p>Assuming both players play optimally, <strong>MAX</strong> wants to maximize the utility value, while <strong>MIN</strong> wants to minimize it.</p>
 <div class="exam">
 <strong>Minimax Decision Rule:</strong><br/>
-<span class="math">\(ext{Minimax}(s) = \begin{cases} 
-      	ext{Utility}(s) &amp; 	ext{if } s 	ext{ is Terminal} \
-      \max_{a} 	ext{Minimax}(	ext{Result}(s, a)) &amp; 	ext{if } 	ext{Player}(s) = 	ext{MAX} \
-      \min_{a} 	ext{Minimax}(	ext{Result}(s, a)) &amp; 	ext{if } 	ext{Player}(s) = 	ext{MIN}
-      \end{cases}\)</span>
+<span class="math">\[	ext{Minimax}(s) = \begin{cases} 
+	ext{Utility}(s) & 	ext{if } s 	ext{ is Terminal} \\ 
+\max_{a} 	ext{Minimax}(	ext{Result}(s, a)) & 	ext{if } 	ext{Player}(s) = 	ext{MAX} \\ 
+\min_{a} 	ext{Minimax}(	ext{Result}(s, a)) & 	ext{if } 	ext{Player}(s) = 	ext{MIN}
+\end{cases}\]</span>
 </div>
 </div>
 <div id="t-alpha-beta">
@@ -534,7 +534,7 @@ window.MathJax = {
     </div>
 <div class="formula-box">
 <b>RULES:</b>
-      At MAX node: <span class="math">\(\alpha = \max(\alpha, 	ext{val})\)</span>. At MIN node: <span class="math">\(\beta = \min(\beta, 	ext{val})\)</span>. Prune if <span class="math">\(\alpha \ge \beta\)</span>.
+      At MAX node: <span class="math">\(\alpha = \max(\alpha, \text{val})\)</span>. At MIN node: <span class="math">\(\beta = \min(\beta, \text{val})\)</span>. Prune if <span class="math">\(\alpha \ge \beta\)</span>.
     </div>
 <div class="calc-work">
 <b>STEPWISE TRACE:</b>

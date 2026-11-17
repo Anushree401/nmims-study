@@ -213,7 +213,7 @@ window.MathJax = {
 <ul class="point-list">
 <li><strong>Syntax:</strong>
 <ul>
-<li>Atomic Sentences: Single propositional symbols: $P, Q, R, 	ext{WumpusAhead}$.</li>
+<li>Atomic Sentences: Single propositional symbols: $P, Q, R, \text{WumpusAhead}$.</li>
 <li>Five Logical Connectives: Negation $\neg $ (NOT), Conjunction $\wedge$ (AND), Disjunction $\vee$ (OR), Implication $	o$ (IF-THEN), Biconditional $\leftrightarrow$ (IFF).</li>
 </ul>
 </li>
@@ -246,9 +246,9 @@ window.MathJax = {
 <p><strong>First-Order Logic (FOL)</strong> models the world with richer ontological commitment:</p>
 <ol>
 <li><strong>Objects:</strong> Entities with individual identities (e.g., John, Apple, Student1).</li>
-<li><strong>Properties:</strong> Traits that distinguish objects (e.g., $	ext{Purple}(x)$, $	ext{Poisonous}(x)$).</li>
-<li><strong>Relations:</strong> Relationships holding among objects (e.g., $	ext{BrotherOf}(x, y)$, $	ext{Eats}(x, y)$).</li>
-<li><strong>Functions:</strong> Relations that return exactly one value for any given input (e.g., $	ext{FatherOf}(x)$, $	ext{Plus}(x, y)$).</li>
+<li><strong>Properties:</strong> Traits that distinguish objects (e.g., $\text{Purple}(x)$, $\text{Poisonous}(x)$).</li>
+<li><strong>Relations:</strong> Relationships holding among objects (e.g., $\text{BrotherOf}(x, y)$, $\text{Eats}(x, y)$).</li>
+<li><strong>Functions:</strong> Relations that return exactly one value for any given input (e.g., $\text{FatherOf}(x)$, $\text{Plus}(x, y)$).</li>
 </ol>
 <h4>Quantifiers in FOL</h4>
 <ul class="point-list">
@@ -262,22 +262,22 @@ window.MathJax = {
 <h4>Standard English to FOL Translation Practice (from Slide 21)</h4>
 <table>
 <tr><th>English Sentence</th><th>First Order Logic (FOL) Representation</th></tr>
-<tr><td>"Every gardener likes the sun."</td><td>$\forall x\ (	ext{Gardener}(x) 	o 	ext{Likes}(x, 	ext{Sun}))$</td></tr>
-<tr><td>"You can fool some of the people all of the time."</td><td>$\exists x \forall t\ (	ext{Person}(x) \wedge 	ext{Time}(t) 	o 	ext{CanFool}(x, t))$</td></tr>
-<tr><td>"You can fool all of the people some of the time."</td><td>$\forall x \exists t\ (	ext{Person}(x) \wedge 	ext{Time}(t) 	o 	ext{CanFool}(x, t))$</td></tr>
-<tr><td>"All purple mushrooms are poisonous."</td><td>$\forall x\ (	ext{Mushroom}(x) \wedge 	ext{Purple}(x) 	o 	ext{Poisonous}(x))$</td></tr>
-<tr><td>"No purple mushroom is poisonous."</td><td>$\neg  \exists x\ (	ext{Purple}(x) \wedge 	ext{Mushroom}(x) \wedge 	ext{Poisonous}(x))$ or $\forall x\ (	ext{Mushroom}(x) \wedge 	ext{Purple}(x) 	o \neg  	ext{Poisonous}(x))$</td></tr>
-<tr><td>"Clinton is not tall."</td><td>$\neg  	ext{Tall}(	ext{Clinton})$</td></tr>
+<tr><td>"Every gardener likes the sun."</td><td>$\forall x\ (\text{Gardener}(x) 	o \text{Likes}(x, \text{Sun}))$</td></tr>
+<tr><td>"You can fool some of the people all of the time."</td><td>$\exists x \forall t\ (\text{Person}(x) \wedge \text{Time}(t) 	o \text{CanFool}(x, t))$</td></tr>
+<tr><td>"You can fool all of the people some of the time."</td><td>$\forall x \exists t\ (\text{Person}(x) \wedge \text{Time}(t) 	o \text{CanFool}(x, t))$</td></tr>
+<tr><td>"All purple mushrooms are poisonous."</td><td>$\forall x\ (\text{Mushroom}(x) \wedge \text{Purple}(x) 	o \text{Poisonous}(x))$</td></tr>
+<tr><td>"No purple mushroom is poisonous."</td><td>$\neg  \exists x\ (\text{Purple}(x) \wedge \text{Mushroom}(x) \wedge \text{Poisonous}(x))$ or $\forall x\ (\text{Mushroom}(x) \wedge \text{Purple}(x) 	o \neg  \text{Poisonous}(x))$</td></tr>
+<tr><td>"Clinton is not tall."</td><td>$\neg  \text{Tall}(\text{Clinton})$</td></tr>
 </table>
 </div>
 <div id="t-inference-fol">
 <h3>3.5 Inference Rules in First-Order Logic &amp; Unification</h3>
 <ul class="point-list">
-<li><strong>Universal Instantiation (UI):</strong> From $\forall v\ \alpha$, we can infer $	ext{SUBST}(\{v / g\}, \alpha)$ for any variable $v$ and ground term $g$:
+<li><strong>Universal Instantiation (UI):</strong> From $\forall v\ \alpha$, we can infer $\text{SUBST}(\{v / g\}, \alpha)$ for any variable $v$ and ground term $g$:
         <div class="diagram">∀x (King(x) ∧ Greedy(x) → Evil(x))
 ⇒ King(John) ∧ Greedy(John) → Evil(John)  [by subst {x/John}]</div>
 </li>
-<li><strong>Existential Instantiation (EI) / Skolemization:</strong> From $\exists v\ \alpha$, we can infer $	ext{SUBST}(\{v / k\}, \alpha)$, where $k$ is a brand new constant symbol called a <strong>Skolem constant</strong> that has never appeared anywhere in the KB:
+<li><strong>Existential Instantiation (EI) / Skolemization:</strong> From $\exists v\ \alpha$, we can infer $\text{SUBST}(\{v / k\}, \alpha)$, where $k$ is a brand new constant symbol called a <strong>Skolem constant</strong> that has never appeared anywhere in the KB:
         <div class="diagram">∃x (Crown(x) ∧ OnHead(x, John)) ⇒ Crown(C1) ∧ OnHead(C1, John)</div>
 </li>
 <li><strong>Unification:</strong> The algorithmic process of finding a substitution $	heta$ that makes two different logical expressions identical:
@@ -401,13 +401,13 @@ UNIFY(Knows(John, x), Knows(x, Elizabeth)) ⇒ FAILS (x cannot simultaneously be
           <br/>Fire Rule 3 → Add new fact to KB: <code>[Fritz is colored green]</code>.
         </li>
 <li><strong>Cycle 3:</strong> Match <code>[Fritz is colored green]</code> against query <code>[Fritz is colored Y]?</code>.
-          <br/>Unification succeeds with substitution: <span class="math">\(Y = 	ext{green}\)</span>.
+          <br/>Unification succeeds with substitution: <span class="math">\(Y = \text{green}\)</span>.
         </li>
 </ol>
 </div>
 <div class="answer-box">
 <b>FINAL ANSWER:</b>
-      Derived conclusion: <strong>Fritz is colored green</strong> (<span class="math">\(Y = 	ext{green}\)</span>).
+      Derived conclusion: <strong>Fritz is colored green</strong> (<span class="math">\(Y = \text{green}\)</span>).
     </div>
 </article>
 <article class="worked-block" id="num-complex">
@@ -415,42 +415,42 @@ UNIFY(Knows(John, x), Knows(x, Elizabeth)) ⇒ FAILS (x cannot simultaneously be
 <div class="given-box">
 <b>GIVEN ENGLISH STATEMENTS (from Slides 64–70):</b>
 <ol>
-<li>John likes all kind of food: <span class="math">\(\forall x\ (	ext{Food}(x) 	o 	ext{Likes}(	ext{John}, x))\)</span></li>
-<li>Apple and vegetable are food: <span class="math">\(ext{Food}(	ext{Apple}) \wedge 	ext{Food}(	ext{Vegetables})\)</span></li>
-<li>Anything anyone eats and not killed is food: <span class="math">\(\forall x \forall y\ (	ext{Eats}(x, y) \wedge \neg  	ext{Killed}(x) 	o 	ext{Food}(y))\)</span></li>
-<li>Anil eats peanuts and is still alive: <span class="math">\(ext{Eats}(	ext{Anil}, 	ext{Peanuts}) \wedge 	ext{Alive}(	ext{Anil})\)</span></li>
-<li>Harry eats everything that Anil eats: <span class="math">\(\forall x\ (	ext{Eats}(	ext{Anil}, x) 	o 	ext{Eats}(	ext{Harry}, x))\)</span></li>
-<li>Added background knowledge: <span class="math">\(\forall x\ (	ext{Alive}(x) 	o \neg  	ext{Killed}(x))\)</span></li>
+<li>John likes all kind of food: <span class="math">\(\forall x\ (\text{Food}(x) 	o \text{Likes}(\text{John}, x))\)</span></li>
+<li>Apple and vegetable are food: <span class="math">\(\text{Food}(\text{Apple}) \wedge \text{Food}(\text{Vegetables})\)</span></li>
+<li>Anything anyone eats and not killed is food: <span class="math">\(\forall x \forall y\ (\text{Eats}(x, y) \wedge \neg  \text{Killed}(x) 	o \text{Food}(y))\)</span></li>
+<li>Anil eats peanuts and is still alive: <span class="math">\(\text{Eats}(\text{Anil}, \text{Peanuts}) \wedge \text{Alive}(\text{Anil})\)</span></li>
+<li>Harry eats everything that Anil eats: <span class="math">\(\forall x\ (\text{Eats}(\text{Anil}, x) 	o \text{Eats}(\text{Harry}, x))\)</span></li>
+<li>Added background knowledge: <span class="math">\(\forall x\ (\text{Alive}(x) 	o \neg  \text{Killed}(x))\)</span></li>
 </ol>
-<strong>Prove by Resolution:</strong> <em>"John likes peanuts"</em> (<span class="math">\(ext{Likes}(	ext{John}, 	ext{Peanuts})\)</span>).
+<strong>Prove by Resolution:</strong> <em>"John likes peanuts"</em> (<span class="math">\(\text{Likes}(\text{John}, \text{Peanuts})\)</span>).
     </div>
 <div class="formula-box">
 <b>CONVERT TO CNF CLAUSES:</b>
 <ul>
-<li>C1: <span class="math">\(\neg  	ext{Food}(x) \vee 	ext{Likes}(	ext{John}, x)\)</span></li>
-<li>C2: <span class="math">\(\neg  	ext{Eats}(y, z) \vee 	ext{Killed}(y) \vee 	ext{Food}(z)\)</span></li>
-<li>C3: <span class="math">\(ext{Eats}(	ext{Anil}, 	ext{Peanuts})\)</span></li>
-<li>C4: <span class="math">\(ext{Alive}(	ext{Anil})\)</span></li>
-<li>C5: <span class="math">\(\neg  	ext{Alive}(k) \vee \neg  	ext{Killed}(k)\)</span></li>
-<li><strong>Negated Goal Clause (C6):</strong> <span class="math">\(\neg  	ext{Likes}(	ext{John}, 	ext{Peanuts})\)</span></li>
+<li>C1: <span class="math">\(\neg  \text{Food}(x) \vee \text{Likes}(\text{John}, x)\)</span></li>
+<li>C2: <span class="math">\(\neg  \text{Eats}(y, z) \vee \text{Killed}(y) \vee \text{Food}(z)\)</span></li>
+<li>C3: <span class="math">\(\text{Eats}(\text{Anil}, \text{Peanuts})\)</span></li>
+<li>C4: <span class="math">\(\text{Alive}(\text{Anil})\)</span></li>
+<li>C5: <span class="math">\(\neg  \text{Alive}(k) \vee \neg  \text{Killed}(k)\)</span></li>
+<li><strong>Negated Goal Clause (C6):</strong> <span class="math">\(\neg  \text{Likes}(\text{John}, \text{Peanuts})\)</span></li>
 </ul>
 </div>
 <div class="calc-work">
 <b>RESOLUTION REFUTATION TREE TRACE:</b>
 <ol class="solution-steps">
-<li>Resolve Negated Goal <strong>C6</strong> [<span class="math">\(\neg  	ext{Likes}(	ext{John}, 	ext{Peanuts})\)</span>] with <strong>C1</strong> [<span class="math">\(\neg  	ext{Food}(x) \vee 	ext{Likes}(	ext{John}, x)\)</span>] using substitution <span class="math">\(\{x / 	ext{Peanuts}\}\)</span>:
-          <br/>→ Resolvent <strong>C7:</strong> <span class="math">\(\neg  	ext{Food}(	ext{Peanuts})\)</span>
+<li>Resolve Negated Goal <strong>C6</strong> [<span class="math">\(\neg  \text{Likes}(\text{John}, \text{Peanuts})\)</span>] with <strong>C1</strong> [<span class="math">\(\neg  \text{Food}(x) \vee \text{Likes}(\text{John}, x)\)</span>] using substitution <span class="math">\(\{x / \text{Peanuts}\}\)</span>:
+          <br/>→ Resolvent <strong>C7:</strong> <span class="math">\(\neg  \text{Food}(\text{Peanuts})\)</span>
 </li>
-<li>Resolve <strong>C7</strong> [<span class="math">\(\neg  	ext{Food}(	ext{Peanuts})\)</span>] with <strong>C2</strong> [<span class="math">\(\neg  	ext{Eats}(y, z) \vee 	ext{Killed}(y) \vee 	ext{Food}(z)\)</span>] using substitution <span class="math">\(\{z / 	ext{Peanuts}\}\)</span>:
-          <br/>→ Resolvent <strong>C8:</strong> <span class="math">\(\neg  	ext{Eats}(y, 	ext{Peanuts}) \vee 	ext{Killed}(y)\)</span>
+<li>Resolve <strong>C7</strong> [<span class="math">\(\neg  \text{Food}(\text{Peanuts})\)</span>] with <strong>C2</strong> [<span class="math">\(\neg  \text{Eats}(y, z) \vee \text{Killed}(y) \vee \text{Food}(z)\)</span>] using substitution <span class="math">\(\{z / \text{Peanuts}\}\)</span>:
+          <br/>→ Resolvent <strong>C8:</strong> <span class="math">\(\neg  \text{Eats}(y, \text{Peanuts}) \vee \text{Killed}(y)\)</span>
 </li>
-<li>Resolve <strong>C8</strong> with <strong>C3</strong> [<span class="math">\(ext{Eats}(	ext{Anil}, 	ext{Peanuts})\)</span>] using substitution <span class="math">\(\{y / 	ext{Anil}\}\)</span>:
-          <br/>→ Resolvent <strong>C9:</strong> <span class="math">\(ext{Killed}(	ext{Anil})\)</span>
+<li>Resolve <strong>C8</strong> with <strong>C3</strong> [<span class="math">\(\text{Eats}(\text{Anil}, \text{Peanuts})\)</span>] using substitution <span class="math">\(\{y / \text{Anil}\}\)</span>:
+          <br/>→ Resolvent <strong>C9:</strong> <span class="math">\(\text{Killed}(\text{Anil})\)</span>
 </li>
-<li>Resolve <strong>C9</strong> [<span class="math">\(ext{Killed}(	ext{Anil})\)</span>] with <strong>C5</strong> [<span class="math">\(\neg  	ext{Alive}(k) \vee \neg  	ext{Killed}(k)\)</span>] using substitution <span class="math">\(\{k / 	ext{Anil}\}\)</span>:
-          <br/>→ Resolvent <strong>C10:</strong> <span class="math">\(\neg  	ext{Alive}(	ext{Anil})\)</span>
+<li>Resolve <strong>C9</strong> [<span class="math">\(\text{Killed}(\text{Anil})\)</span>] with <strong>C5</strong> [<span class="math">\(\neg  \text{Alive}(k) \vee \neg  \text{Killed}(k)\)</span>] using substitution <span class="math">\(\{k / \text{Anil}\}\)</span>:
+          <br/>→ Resolvent <strong>C10:</strong> <span class="math">\(\neg  \text{Alive}(\text{Anil})\)</span>
 </li>
-<li>Resolve <strong>C10</strong> [<span class="math">\(\neg  	ext{Alive}(	ext{Anil})\)</span>] with Fact <strong>C4</strong> [<span class="math">\(ext{Alive}(	ext{Anil})\)</span>]:
+<li>Resolve <strong>C10</strong> [<span class="math">\(\neg  \text{Alive}(\text{Anil})\)</span>] with Fact <strong>C4</strong> [<span class="math">\(\text{Alive}(\text{Anil})\)</span>]:
           <br/>→ <strong>Resolvent: $\Box$ (EMPTY CLAUSE / CONTRADICTION)!</strong>
 </li>
 </ol>

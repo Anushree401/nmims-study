@@ -602,15 +602,15 @@ where P* represents the history of all percept sequences received to date, and A
 <br/>Consequently: <span class="math">\(P(\neg  D \mid S=1) = 1 - 0.3719 = 0.6281\ (62.81\%)\)</span>
 </li>
 <li><strong>Compute Expected Utility for Action <code>Shutdown</code>:</strong>
-<br/><span class="math">\(E[U(	ext{Shutdown})] = (0.3719 \times -100) + (0.6281 \times -500)\)</span>
-<br/><span class="math">\(E[U(	ext{Shutdown})] = -37.19 - 314.05 = \mathbf{-351.24}\)</span>
+<br/><span class="math">\(E[U(\text{Shutdown})] = (0.3719 \times -100) + (0.6281 \times -500)\)</span>
+<br/><span class="math">\(E[U(\text{Shutdown})] = -37.19 - 314.05 = \mathbf{-351.24}\)</span>
 </li>
 <li><strong>Compute Expected Utility for Action <code>Continue</code>:</strong>
-<br/><span class="math">\(E[U(	ext{Continue})] = (0.3719 \times -5000) + (0.6281 \times +50)\)</span>
-<br/><span class="math">\(E[U(	ext{Continue})] = -1859.50 + 31.41 = \mathbf{-1828.09}\)</span>
+<br/><span class="math">\(E[U(\text{Continue})] = (0.3719 \times -5000) + (0.6281 \times +50)\)</span>
+<br/><span class="math">\(E[U(\text{Continue})] = -1859.50 + 31.41 = \mathbf{-1828.09}\)</span>
 </li>
 <li><strong>Evaluation:</strong>
-<br/>Comparing <span class="math">\(E[U(	ext{Shutdown})] = -351.24\)</span> versus <span class="math">\(E[U(	ext{Continue})] = -1828.09\)</span>.
+<br/>Comparing <span class="math">\(E[U(\text{Shutdown})] = -351.24\)</span> versus <span class="math">\(E[U(\text{Continue})] = -1828.09\)</span>.
           <br/>Even though there is only a 37.19% chance of an actual defect, the catastrophic penalty of continuing (-5000) makes <code>Shutdown</code> the mathematically rational choice.
         </li>
 </ol>

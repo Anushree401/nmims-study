@@ -499,18 +499,38 @@ function REVISE(csp, Xᵢ, Xⱼ) returns true iff domain of Xᵢ changed
 </table>
 <!-- SVG: Cryptarithmetic illustration -->
 <div class="figure">
-<svg viewbox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+<svg viewbox="0 0 500 230" xmlns="http://www.w3.org/2000/svg">
 <text class="svg-label" font-size="18" text-anchor="middle" x="250" y="30">Cryptarithmetic: SEND + MORE = MONEY</text>
 <!-- Addition layout -->
-<text fill="#087e8b" font-family="monospace" font-size="28" font-weight="700" text-anchor="end" x="310" y="70">S E N D</text>
-<text fill="#087e8b" font-family="monospace" font-size="28" font-weight="700" text-anchor="end" x="195" y="100">+</text>
-<text fill="#087e8b" font-family="monospace" font-size="28" font-weight="700" text-anchor="end" x="310" y="100">M O R E</text>
-<line stroke="#172435" stroke-width="3" x1="175" x2="320" y1="110" y2="110"></line>
-<text fill="#d69b14" font-family="monospace" font-size="28" font-weight="700" text-anchor="end" x="330" y="145">M O N E Y</text>
-<!-- Carries -->
-<text fill="#536578" font-family="monospace" font-size="13" x="185" y="55">C₄ C₃ C₂ C₁</text>
+<!-- Carries row neatly spaced above addition -->
+<text fill="#536578" font-family="monospace" font-size="14" font-weight="600" text-anchor="middle" x="160" y="65">C₄</text>
+<text fill="#536578" font-family="monospace" font-size="14" font-weight="600" text-anchor="middle" x="200" y="65">C₃</text>
+<text fill="#536578" font-family="monospace" font-size="14" font-weight="600" text-anchor="middle" x="240" y="65">C₂</text>
+<text fill="#536578" font-family="monospace" font-size="14" font-weight="600" text-anchor="middle" x="280" y="65">C₁</text>
+
+<!-- Letters precisely positioned in columns -->
+<text fill="#087e8b" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle" x="160" y="98"> </text>
+<text fill="#087e8b" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle" x="200" y="98">S</text>
+<text fill="#087e8b" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle" x="240" y="98">E</text>
+<text fill="#087e8b" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle" x="280" y="98">N</text>
+<text fill="#087e8b" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle" x="320" y="98">D</text>
+
+<text fill="#087e8b" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle" x="120" y="132">+</text>
+<text fill="#087e8b" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle" x="160" y="132"> </text>
+<text fill="#087e8b" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle" x="200" y="132">M</text>
+<text fill="#087e8b" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle" x="240" y="132">O</text>
+<text fill="#087e8b" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle" x="280" y="132">R</text>
+<text fill="#087e8b" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle" x="320" y="132">E</text>
+
+<line stroke="#172435" stroke-width="3" x1="110" x2="340" y1="145" y2="145"></line>
+
+<text fill="#d69b14" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle" x="160" y="180">M</text>
+<text fill="#d69b14" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle" x="200" y="180">O</text>
+<text fill="#d69b14" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle" x="240" y="180">N</text>
+<text fill="#d69b14" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle" x="280" y="180">E</text>
+<text fill="#d69b14" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle" x="320" y="180">Y</text>
 <!-- Solution -->
-<text class="svg-note" font-size="14" text-anchor="middle" x="250" y="185">Solution: 9567 + 1085 = 10652</text>
+<text class="svg-note" font-size="14" text-anchor="middle" x="250" y="215">Solution: 9567 + 1085 = 10652</text>
 </svg>
 <figcaption>Fig 4.7 — SEND + MORE = MONEY cryptarithmetic puzzle</figcaption>
 </div>
