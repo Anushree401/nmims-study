@@ -72,7 +72,22 @@ footer{color:var(--muted)}
 @media print{body{background:white;font-size:11pt}section{box-shadow:none;break-inside:avoid}a{color:inherit;text-decoration:none}}
 @media(max-width:900px){.lesson-layout{max-width:100%;padding:0 16px}.lesson-layout main{max-width:100%;padding:20px 0}.toc-panel{left:12px;top:58px;width:min(232px,calc(100vw - 24px));max-height:calc(100vh - 68px)}.unit-controls{max-width:100%;padding:5px 12px}}
 </style>
-<style>.pyq-focus{margin:1.25rem 0 1.6rem;padding:1.1rem 1.25rem;border:1px solid #9bcbd0;border-left:5px solid #087f8c;border-radius:10px;background:#f1f8f8;color:#172638}.pyq-focus h3{margin:.1rem 0 .7rem}.pyq-focus h4{margin:1.15rem 0 .5rem;color:#075c66}.pyq-focus li{margin:.35rem 0}.pyq-focus .source-note,.source-note{font-size:.92em;color:#52677a;margin-top:.8rem}.pyq-focus .number-steps li{padding:.25rem 0}.pyq-focus .visual-example{margin:1rem 0;padding:.75rem;background:#fff;border:1px solid #d7e3e8;border-radius:8px}.pyq-focus svg{display:block;width:100%;height:auto;max-height:300px}.pyq-focus figcaption,.pyq-focus .visual-example p{font-size:.9em;color:#52677a}.pyq-focus .table-wrap{overflow-x:auto;margin:.75rem 0}.pyq-focus table{width:100%;border-collapse:collapse;background:#fff}.pyq-focus th,.pyq-focus td{border:1px solid #cfdae0;padding:.45rem .55rem;text-align:left}.pyq-focus th{background:#e5f1f3}.pyq-note{padding:.75rem 1rem;border-radius:8px;background:#fff4df;border-left:4px solid #da9f35}.pyq-focus ol{padding-left:1.5rem}</style></head>
+<style>.pyq-focus{margin:1.25rem 0 1.6rem;padding:1.1rem 1.25rem;border:1px solid #9bcbd0;border-left:5px solid #087f8c;border-radius:10px;background:#f1f8f8;color:#172638}.pyq-focus h3{margin:.1rem 0 .7rem}.pyq-focus h4{margin:1.15rem 0 .5rem;color:#075c66}.pyq-focus li{margin:.35rem 0}.pyq-focus .source-note,.source-note{font-size:.92em;color:#52677a;margin-top:.8rem}.pyq-focus .number-steps li{padding:.25rem 0}.pyq-focus .visual-example{margin:1rem 0;padding:.75rem;background:#fff;border:1px solid #d7e3e8;border-radius:8px}.pyq-focus svg{display:block;width:100%;height:auto;max-height:300px}.pyq-focus figcaption,.pyq-focus .visual-example p{font-size:.9em;color:#52677a}.pyq-focus .table-wrap{overflow-x:auto;margin:.75rem 0}.pyq-focus table{width:100%;border-collapse:collapse;background:#fff}.pyq-focus th,.pyq-focus td{border:1px solid #cfdae0;padding:.45rem .55rem;text-align:left}.pyq-focus th{background:#e5f1f3}.pyq-note{padding:.75rem 1rem;border-radius:8px;background:#fff4df;border-left:4px solid #da9f35}.pyq-focus ol{padding-left:1.5rem}</style>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</head>
 <body>
 <nav class="unit-controls">
 <span aria-disabled="true" class="disabled">← Previous unit</span>
@@ -477,25 +492,25 @@ where P* represents the history of all percept sequences received to date, and A
 <b>GIVEN:</b>
       A rational vacuum-cleaner agent in square A is deciding whether to execute action <code>Suck</code>.
       <ul>
-<li>Probability of dirt being successfully cleaned: <span class="math">p_1 = 0.85</span>; Reward = <span class="math">+100</span>.</li>
-<li>Probability of mechanical sensor/motor failure (dirt remains): <span class="math">p_2 = 0.15</span>; Score = <span class="math">-10</span> (energy spent without result).</li>
+<li>Probability of dirt being successfully cleaned: <span class="math">\(p_1 = 0.85\)</span>; Reward = <span class="math">\(+100\)</span>.</li>
+<li>Probability of mechanical sensor/motor failure (dirt remains): <span class="math">\(p_2 = 0.15\)</span>; Score = <span class="math">\(-10\)</span> (energy spent without result).</li>
 </ul>
 </div>
 <div class="formula-box">
 <b>FORMULA / PRINCIPLE OF MAXIMUM EXPECTED UTILITY:</b>
-<div><span class="math">E[U(Action)] = \sum_{i=1}^{n} P(Outcome_i \mid Action) 	imes U(Outcome_i)</span></div>
+<div><span class="math">\(E[U(Action)] = \sum_{i=1}^{n} P(Outcome_i \mid Action) \times U(Outcome_i)\)</span></div>
 </div>
 <div class="calc-work">
 <b>STEPWISE WORKING:</b>
 <ol class="solution-steps">
 <li>Identify probability and utility for outcome 1 (Success):
-          <br/><span class="math">P(Success) 	imes U(Success) = 0.85 	imes 100 = 85.0</span>
+          <br/><span class="math">\(P(Success) \times U(Success) = 0.85 \times 100 = 85.0\)</span>
 </li>
 <li>Identify probability and utility for outcome 2 (Failure):
-          <br/><span class="math">P(Failure) 	imes U(Failure) = 0.15 	imes (-10) = -1.5</span>
+          <br/><span class="math">\(P(Failure) \times U(Failure) = 0.15 \times (-10) = -1.5\)</span>
 </li>
 <li>Sum the expected utilities:
-          <br/><span class="math">E[U(Suck)] = 85.0 + (-1.5) = 83.5</span>
+          <br/><span class="math">\(E[U(Suck)] = 85.0 + (-1.5) = 83.5\)</span>
 </li>
 </ol>
 </div>
@@ -512,36 +527,36 @@ where P* represents the history of all percept sequences received to date, and A
       <ul>
 <li><strong>Route 1 (Highway):</strong> Fast but prone to traffic congestion.
           <ul>
-<li>Congestion occurs with probability <span class="math">0.30</span> → Travel time = 50 mins; Cost = 50. Utility: <span class="math">U = -50</span>.</li>
-<li>Clear traffic with probability <span class="math">0.70</span> → Travel time = 15 mins; Cost = 15. Utility: <span class="math">U = -15</span>.</li>
+<li>Congestion occurs with probability <span class="math">\(0.30\)</span> → Travel time = 50 mins; Cost = 50. Utility: <span class="math">\(U = -50\)</span>.</li>
+<li>Clear traffic with probability <span class="math">\(0.70\)</span> → Travel time = 15 mins; Cost = 15. Utility: <span class="math">\(U = -15\)</span>.</li>
 </ul>
 </li>
 <li><strong>Route 2 (Inner City Lane):</strong> Reliable but consistently moderate speed.
           <ul>
-<li>Delays occur with probability <span class="math">0.10</span> → Travel time = 35 mins; Utility: <span class="math">U = -35</span>.</li>
-<li>Normal transit with probability <span class="math">0.90</span> → Travel time = 24 mins; Utility: <span class="math">U = -24</span>.</li>
+<li>Delays occur with probability <span class="math">\(0.10\)</span> → Travel time = 35 mins; Utility: <span class="math">\(U = -35\)</span>.</li>
+<li>Normal transit with probability <span class="math">\(0.90\)</span> → Travel time = 24 mins; Utility: <span class="math">\(U = -24\)</span>.</li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="formula-box">
 <b>FORMULA:</b>
-<span class="math">E[U(Route)] = \sum P(Condition) 	imes U(TransitTime)</span><br/>
-      The rational agent selects: <span class="math">Route^* = rg\max_{R} E[U(R)]</span> (least negative cost).
+<span class="math">\(E[U(Route)] = \sum P(Condition) \times U(TransitTime)\)</span><br/>
+      The rational agent selects: <span class="math">\(Route^* = \arg\max_{R} E[U(R)]\)</span> (least negative cost).
     </div>
 <div class="calc-work">
 <b>STEPWISE WORKING:</b>
 <ol class="solution-steps">
 <li><strong>Calculate Expected Utility for Route 1 (Highway):</strong>
-<br/><span class="math">E[U(Route_1)] = (0.70 	imes -15) + (0.30 	imes -50)</span>
-<br/><span class="math">E[U(Route_1)] = -10.5 - 15.0 = \mathbf{-25.5}</span>
+<br/><span class="math">\(E[U(Route_1)] = (0.70 \times -15) + (0.30 \times -50)\)</span>
+<br/><span class="math">\(E[U(Route_1)] = -10.5 - 15.0 = \mathbf{-25.5}\)</span>
 </li>
 <li><strong>Calculate Expected Utility for Route 2 (Inner City Lane):</strong>
-<br/><span class="math">E[U(Route_2)] = (0.90 	imes -24) + (0.10 	imes -35)</span>
-<br/><span class="math">E[U(Route_2)] = -21.6 - 3.5 = \mathbf{-25.1}</span>
+<br/><span class="math">\(E[U(Route_2)] = (0.90 \times -24) + (0.10 \times -35)\)</span>
+<br/><span class="math">\(E[U(Route_2)] = -21.6 - 3.5 = \mathbf{-25.1}\)</span>
 </li>
 <li><strong>Comparison:</strong>
-<br/><span class="math">-25.1 &gt; -25.5</span> (Route 2 incurs fewer average lost minutes).
+<br/><span class="math">\(-25.1 &gt; -25.5\)</span> (Route 2 incurs fewer average lost minutes).
         </li>
 </ol>
 </div>
@@ -554,62 +569,55 @@ where P* represents the history of all percept sequences received to date, and A
 <h3><span class="numerical-tag">COMPLEX</span> Multi-Action Decision Analysis: Model-Based vs. Reflex Agent Under Sensor Noise</h3>
 <div class="given-box">
 <b>GIVEN:</b>
-      An inspection robot operates on a pipeline where a critical defect occurs with prior probability <span class="math">P(D) = 0.05</span> (and normal state <span class="math">P(
-eg D) = 0.95</span>).
+      An inspection robot operates on a pipeline where a critical defect occurs with prior probability <span class="math">\(P(D) = 0.05\)</span> (and normal state <span class="math">\(P(\neg  D) = 0.95\)</span>).
       <br/>Sensors are noisy:
       <ul>
-<li>Sensor reports "Defect Detected" when a defect exists: <span class="math">P(S=1 \mid D) = 0.90</span> (True Positive).</li>
-<li>Sensor false alarm rate: <span class="math">P(S=1 \mid 
-eg D) = 0.08</span> (False Positive).</li>
+<li>Sensor reports "Defect Detected" when a defect exists: <span class="math">\(P(S=1 \mid D) = 0.90\)</span> (True Positive).</li>
+<li>Sensor false alarm rate: <span class="math">\(P(S=1 \mid \neg  D) = 0.08\)</span> (False Positive).</li>
 </ul>
       Utility matrix of actions:
       <ul>
 <li>Action <code>Shutdown Pipeline</code>: Cost = -100 if Defect exists (prevented disaster); Cost = -500 if False Alarm (wasted production downtime).</li>
 <li>Action <code>Continue Operation</code>: Utility = +50 if Normal; Catastrophic penalty = -5000 if Defect actually exists.</li>
 </ul>
-      A <strong>Simple Reflex Agent</strong> triggers <code>Shutdown</code> immediately whenever <span class="math">S=1</span>.
-      A <strong>Model-Based Rational Agent</strong> calculates the posterior probability <span class="math">P(D \mid S=1)</span> via Bayes' Theorem before choosing the action.
+      A <strong>Simple Reflex Agent</strong> triggers <code>Shutdown</code> immediately whenever <span class="math">\(S=1\)</span>.
+      A <strong>Model-Based Rational Agent</strong> calculates the posterior probability <span class="math">\(P(D \mid S=1)\)</span> via Bayes' Theorem before choosing the action.
     </div>
 <div class="formula-box">
 <b>FORMULAE:</b>
 <ol class="solution-steps">
-<li>Bayes' Rule: <span class="math">P(D \mid S=1) = rac{P(S=1 \mid D)P(D)}{P(S=1)}</span></li>
-<li>Total Probability: <span class="math">P(S=1) = P(S=1 \mid D)P(D) + P(S=1 \mid 
-eg D)P(
-eg D)</span></li>
-<li>Expected Utility: <span class="math">E[U(a)] = P(D \mid S=1)U(a, D) + P(
-eg D \mid S=1)U(a, 
-eg D)</span></li>
+<li>Bayes' Rule: <span class="math">\(P(D \mid S=1) = \frac{P(S=1 \mid D)P(D)}{P(S=1)}\)</span></li>
+<li>Total Probability: <span class="math">\(P(S=1) = P(S=1 \mid D)P(D) + P(S=1 \mid \neg  D)P(\neg  D)\)</span></li>
+<li>Expected Utility: <span class="math">\(E[U(a)] = P(D \mid S=1)U(a, D) + P(\neg  D \mid S=1)U(a, \neg  D)\)</span></li>
 </ol>
 </div>
 <div class="calc-work">
 <b>STEPWISE WORKING:</b>
 <ol class="solution-steps">
-<li><strong>Calculate Total Probability of Sensor Alarm <span class="math">P(S=1)</span>:</strong>
-<br/><span class="math">P(S=1) = (0.90 	imes 0.05) + (0.08 	imes 0.95) = 0.045 + 0.076 = 0.121</span>
+<li><strong>Calculate Total Probability of Sensor Alarm <span class="math">\(P(S=1)\)</span>:</strong>
+<br/><span class="math">\(P(S=1) = (0.90 \times 0.05) + (0.08 \times 0.95) = 0.045 + 0.076 = 0.121\)</span>
 </li>
 <li><strong>Compute Posterior Probability of Actual Defect Given Alarm:</strong>
-<br/><span class="math">P(D \mid S=1) = rac{0.045}{0.121} pprox 0.3719\ (37.19\%)</span>
-<br/>Consequently: <span class="math">P(
-eg D \mid S=1) = 1 - 0.3719 = 0.6281\ (62.81\%)</span>
+<br/><span class="math">\(P(D \mid S=1) = \frac{0.045}{0.121} \approx 0.3719\ (37.19\%)\)</span>
+<br/>Consequently: <span class="math">\(P(\neg  D \mid S=1) = 1 - 0.3719 = 0.6281\ (62.81\%)\)</span>
 </li>
 <li><strong>Compute Expected Utility for Action <code>Shutdown</code>:</strong>
-<br/><span class="math">E[U(	ext{Shutdown})] = (0.3719 	imes -100) + (0.6281 	imes -500)</span>
-<br/><span class="math">E[U(	ext{Shutdown})] = -37.19 - 314.05 = \mathbf{-351.24}</span>
+<br/><span class="math">\(E[U(	ext{Shutdown})] = (0.3719 \times -100) + (0.6281 \times -500)\)</span>
+<br/><span class="math">\(E[U(	ext{Shutdown})] = -37.19 - 314.05 = \mathbf{-351.24}\)</span>
 </li>
 <li><strong>Compute Expected Utility for Action <code>Continue</code>:</strong>
-<br/><span class="math">E[U(	ext{Continue})] = (0.3719 	imes -5000) + (0.6281 	imes +50)</span>
-<br/><span class="math">E[U(	ext{Continue})] = -1859.50 + 31.41 = \mathbf{-1828.09}</span>
+<br/><span class="math">\(E[U(	ext{Continue})] = (0.3719 \times -5000) + (0.6281 \times +50)\)</span>
+<br/><span class="math">\(E[U(	ext{Continue})] = -1859.50 + 31.41 = \mathbf{-1828.09}\)</span>
 </li>
 <li><strong>Evaluation:</strong>
-<br/>Comparing <span class="math">E[U(	ext{Shutdown})] = -351.24</span> versus <span class="math">E[U(	ext{Continue})] = -1828.09</span>.
+<br/>Comparing <span class="math">\(E[U(	ext{Shutdown})] = -351.24\)</span> versus <span class="math">\(E[U(	ext{Continue})] = -1828.09\)</span>.
           <br/>Even though there is only a 37.19% chance of an actual defect, the catastrophic penalty of continuing (-5000) makes <code>Shutdown</code> the mathematically rational choice.
         </li>
 </ol>
 </div>
 <div class="answer-box">
 <b>FINAL ANSWER:</b>
-      The rational agent chooses <strong><code>Shutdown</code></strong> (<span class="math">E[U] = -351.24 &gt; -1828.09</span>). This demonstrates how a model-based agent balances probability against asymmetric utility consequences, preventing catastrophic failures.
+      The rational agent chooses <strong><code>Shutdown</code></strong> (<span class="math">\(E[U] = -351.24 &gt; -1828.09\)</span>). This demonstrates how a model-based agent balances probability against asymmetric utility consequences, preventing catastrophic failures.
     </div>
 </article>
 </section>

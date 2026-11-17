@@ -6,8 +6,23 @@
     <title>Unit 5: Machine Learning & Unsupervised Learning - NMIMS Master Class Notes</title>
     <link rel="stylesheet" href="../styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 </head>
 <body>
     <div class="layout-container">
@@ -87,7 +102,7 @@
                         <p>Human intelligence and AI agents employ two fundamental modes of inference:</p>
                         <ul>
                             <li><strong>Deductive Learning (Top-Down):</strong> Infers specific logical consequences from generalized universal axioms. If the premises are true, the conclusion is guaranteed to be true (soundness). For example:
-                            $$orall x \, (	ext{Bird}(x) \implies 	ext{CanFly}(x)), \quad 	ext{Bird}(	ext{Tweety}) dash 	ext{CanFly}(	ext{Tweety})$$
+                            $$\forall x \, (	ext{Bird}(x) \implies 	ext{CanFly}(x)), \quad 	ext{Bird}(	ext{Tweety}) \vdash 	ext{CanFly}(	ext{Tweety})$$
                             Deductive reasoning preserves truth but generates no fundamentally new empirical hypothesis beyond what is already entailed.</li>
                             <li><strong>Inductive Learning (Bottom-Up):</strong> Constructs a general hypothesis or mathematical function \(h\) from a finite collection of observed training examples \(\{(x_1, y_1), (x_2, y_2), \dots, (x_N, y_N)\}\). The fundamental assumption of inductive learning is:
                             $$	ext{Any hypothesis found to approximate the target function well over a sufficiently large set of training examples}$$
@@ -168,7 +183,8 @@
                                 </ul>
                             </li>
                             <li><strong>Semi-Supervised Learning:</strong> In many real-world scenarios (e.g., medical imaging or speech analysis), collecting unlabeled data is cheap and abundant, but labeling requires expensive human domain experts. Semi-supervised learning utilizes a small seed of labeled data combined with a large pool of unlabeled data to construct higher-confidence decision boundaries.</li>
-                            <li><strong>Reinforcement Learning (RL):</strong> An autonomous agent interacts dynamically with an uncertain environment modeled as a Markov Decision Process (MDP \(\langle S, A, P, R, \gamma angle\)). At each time step \(t\), the agent observes state \(s_t\), selects action \(a_t\), receives an immediate scalar feedback signal (positive reward or negative penalty \(r_{t+1}\)), and transitions to next state \(s_{t+1}\). The agent's goal is to learn an optimal policy \(\pi^*: S 	o A\) that maximizes expected cumulative discounted reward:
+                            <li><strong>Reinforcement Learning (RL):</strong> An autonomous agent interacts dynamically with an uncertain environment modeled as a Markov Decision Process (MDP \(\langle S, A, P, R, \gamma 
+angle\)). At each time step \(t\), the agent observes state \(s_t\), selects action \(a_t\), receives an immediate scalar feedback signal (positive reward or negative penalty \(r_{t+1}\)), and transitions to next state \(s_{t+1}\). The agent's goal is to learn an optimal policy \(\pi^*: S 	o A\) that maximizes expected cumulative discounted reward:
                             $$G_t = \sum_{k=0}^{\infty} \gamma^k r_{t+k+1}, \quad 	ext{where } \gamma \in [0, 1] 	ext{ is the discount factor.}$$
                             </li>
                         </ol>
@@ -252,14 +268,14 @@
 
                         <h5>2. Information Gain (IG):</h5>
                         <p>Information Gain represents the expected reduction in entropy achieved by partitioning the dataset \(S\) along the candidate attribute \(A\). If attribute \(A\) takes distinct values \(v \in 	ext{Values}(A)\), and \(S_v\) is the subset where \(A = v\):</p>
-                        $$	ext{Gain}(S, A) = 	ext{Entropy}(S) - \sum_{v \in 	ext{Values}(A)} rac{|S_v|}{|S|} \cdot 	ext{Entropy}(S_v)$$
+                        $$	ext{Gain}(S, A) = 	ext{Entropy}(S) - \sum_{v \in 	ext{Values}(A)} \frac{|S_v|}{|S|} \cdot 	ext{Entropy}(S_v)$$
                         <p>The algorithm evaluates \(	ext{Gain}(S, A)\) for all unused attributes and selects the attribute that maximizes \(	ext{Gain}(S, A)\) as the splitting node.</p>
 
                         <h5>3. Gini Index / Gini Impurity (Used in CART):</h5>
                         <p>The CART (Classification and Regression Trees) algorithm uses the Gini Impurity rather than logarithmic entropy for computational speed:</p>
                         $$	ext{Gini}(S) = 1 - \sum_{i=1}^{c} p_i^2$$
                         <p>For a binary split into subsets \(S_1\) and \(S_2\), the split Gini index is:</p>
-                        $$	ext{Gini}_{	ext{split}}(S, A) = rac{|S_1|}{|S|} 	ext{Gini}(S_1) + rac{|S_2|}{|S|} 	ext{Gini}(S_2)$$
+                        $$	ext{Gini}_{	ext{split}}(S, A) = \frac{|S_1|}{|S|} 	ext{Gini}(S_1) + \frac{|S_2|}{|S|} 	ext{Gini}(S_2)$$
                         <p>The attribute with the <em>lowest</em> \(	ext{Gini}_{	ext{split}}\) is selected for the split.</p>
                     </div>
 
@@ -331,7 +347,7 @@
                         <h4>The Objective Function (Inertia / WCSS):</h4>
                         <p>K-Means seeks to find cluster assignments and centroids that minimize the <strong>Within-Cluster Sum of Squares (WCSS)</strong>, also called Inertia:</p>
                         $$J = \sum_{k=1}^{K} \sum_{x_i \in C_k} \| x_i - \mu_k \|^2$$
-                        <p>where \(\mu_k = rac{1}{|C_k|} \sum_{x \in C_k} x\) is the mathematical mean (centroid) of cluster \(C_k\).</p>
+                        <p>where \(\mu_k = \frac{1}{|C_k|} \sum_{x \in C_k} x\) is the mathematical mean (centroid) of cluster \(C_k\).</p>
 
                         <!-- SVG: K-Means Clustering Visual Trace -->
                         <div class="diagram-wrapper">
@@ -401,14 +417,15 @@
                         <ol>
                             <li><strong>Step 1 (Initialization):</strong> Select \(K\) points from the dataset as the initial centroids \(\mu_1^{(0)}, \mu_2^{(0)}, \dots, \mu_K^{(0)}\) (e.g., via random selection or K-Means++ initialization).</li>
                             <li><strong>Step 2 (Assignment / Expectation Step):</strong> Assign each sample point \(x_i\) to its closest centroid using the Euclidean distance metric:
-                            $$C_k = \left\{ x_i : \| x_i - \mu_k \| \le \| x_i - \mu_j \| \quad orall j \in \{1, \dots, K\} ight\}$$
+                            $$C_k = \left\{ x_i : \| x_i - \mu_k \| \le \| x_i - \mu_j \| \quad \forall j \in \{1, \dots, K\} 
+ight\}$$
                             </li>
                             <li><strong>Step 3 (Update / Maximization Step):</strong> Recompute each centroid \(\mu_k\) by calculating the arithmetic mean of all data points assigned to cluster \(C_k\):
-                            $$\mu_k^{(t+1)} = rac{1}{|C_k|} \sum_{x_i \in C_k} x_i$$
+                            $$\mu_k^{(t+1)} = \frac{1}{|C_k|} \sum_{x_i \in C_k} x_i$$
                             </li>
                             <li><strong>Step 4 (Termination / Convergence Check):</strong> Repeat Steps 2 and 3 until a stopping criterion is met:
                                 <ul>
-                                    <li>Centroid locations do not change: \(\|\mu_k^{(t+1)} - \mu_k^{(t)}\| \le \epsilon \quad orall k\).</li>
+                                    <li>Centroid locations do not change: \(\|\mu_k^{(t+1)} - \mu_k^{(t)}\| \le \epsilon \quad \forall k\).</li>
                                     <li>No sample changes cluster membership across iterations.</li>
                                     <li>A maximum iteration limit is reached.</li>
                                 </ul>
@@ -446,15 +463,15 @@
                             <span class="difficulty easy">Simple Example</span>
                             <h3>Problem 5.1: Shannon Entropy Calculation for Binary Target</h3>
                         </div>
-                        <p><strong>Problem Statement:</strong> A small training dataset \(S\) for loan approval has 14 instances. Out of these, 9 applicants are approved (\(	ext{Class} = 	ext{Yes}\)) and 5 applicants are rejected (\(	ext{Class} = 	ext{No}\)). Calculate the Shannon Entropy \(	ext{Entropy}(S)\) of this target distribution. (Note: \(\log_2 9 pprox 3.1699\), \(\log_2 5 pprox 2.3219\), \(\log_2 14 pprox 3.8074\)).</p>
+                        <p><strong>Problem Statement:</strong> A small training dataset \(S\) for loan approval has 14 instances. Out of these, 9 applicants are approved (\(	ext{Class} = 	ext{Yes}\)) and 5 applicants are rejected (\(	ext{Class} = 	ext{No}\)). Calculate the Shannon Entropy \(	ext{Entropy}(S)\) of this target distribution. (Note: \(\log_2 9 \approx 3.1699\), \(\log_2 5 \approx 2.3219\), \(\log_2 14 \approx 3.8074\)).</p>
                         
                         <div class="solution-flow">
                             <div class="step-row">
                                 <span class="step-badge">GIVEN</span>
                                 <div>
                                     <p>Total instances \(|S| = 14\).</p>
-                                    <p>Positive instances \(p_+ = rac{9}{14} pprox 0.6429\).</p>
-                                    <p>Negative instances \(p_- = rac{5}{14} pprox 0.3571\).</p>
+                                    <p>Positive instances \(p_+ = \frac{9}{14} \approx 0.6429\).</p>
+                                    <p>Negative instances \(p_- = \frac{5}{14} \approx 0.3571\).</p>
                                 </div>
                             </div>
 
@@ -469,11 +486,15 @@
                                 <span class="step-badge">STEPS</span>
                                 <div>
                                     <p><strong>Step 1: Compute logarithmic components using log quotient rules:</strong></p>
-                                    $$\log_2(p_+) = \log_2\left(rac{9}{14}ight) = \log_2(9) - \log_2(14) = 3.1699 - 3.8074 = -0.6375$$
-                                    $$\log_2(p_-) = \log_2\left(rac{5}{14}ight) = \log_2(5) - \log_2(14) = 2.3219 - 3.8074 = -1.4855$$
+                                    $$\log_2(p_+) = \log_2\left(\frac{9}{14}
+ight) = \log_2(9) - \log_2(14) = 3.1699 - 3.8074 = -0.6375$$
+                                    $$\log_2(p_-) = \log_2\left(\frac{5}{14}
+ight) = \log_2(5) - \log_2(14) = 2.3219 - 3.8074 = -1.4855$$
                                     <p><strong>Step 2: Substitute probabilities and logs into the entropy equation:</strong></p>
-                                    $$	ext{Entropy}(S) = - \left[ rac{9}{14} 	imes (-0.6375) + rac{5}{14} 	imes (-1.4855) ight]$$
-                                    $$	ext{Entropy}(S) = - \left[ 0.6429 	imes (-0.6375) + 0.3571 	imes (-1.4855) ight]$$
+                                    $$	ext{Entropy}(S) = - \left[ \frac{9}{14}  \times  (-0.6375) + \frac{5}{14}  \times  (-1.4855) 
+ight]$$
+                                    $$	ext{Entropy}(S) = - \left[ 0.6429 \times (-0.6375) + 0.3571 \times (-1.4855) 
+ight]$$
                                     $$	ext{Entropy}(S) = - [ -0.4098 - 0.5305 ] = - [ -0.9403 ] = 0.9403 	ext{ bits}$$
                                 </div>
                             </div>
@@ -506,15 +527,15 @@
                                 <span class="step-badge">GIVEN</span>
                                 <div>
                                     <p>\(|S| = 14\), \(	ext{Entropy}(S) = 0.940\).</p>
-                                    <p>Subset \(S_{	ext{Weak}}\): \(|S_{	ext{Weak}}| = 8\), \(p_+ = rac{6}{8} = 0.75\), \(p_- = rac{2}{8} = 0.25\).</p>
-                                    <p>Subset \(S_{	ext{Strong}}\): \(|S_{	ext{Strong}}| = 6\), \(p_+ = rac{3}{6} = 0.50\), \(p_- = rac{3}{6} = 0.50\).</p>
+                                    <p>Subset \(S_{	ext{Weak}}\): \(|S_{	ext{Weak}}| = 8\), \(p_+ = \frac{6}{8} = 0.75\), \(p_- = \frac{2}{8} = 0.25\).</p>
+                                    <p>Subset \(S_{	ext{Strong}}\): \(|S_{	ext{Strong}}| = 6\), \(p_+ = \frac{3}{6} = 0.50\), \(p_- = \frac{3}{6} = 0.50\).</p>
                                 </div>
                             </div>
 
                             <div class="step-row">
                                 <span class="step-badge">FORMULA</span>
                                 <div>
-                                    $$	ext{Gain}(S, A) = 	ext{Entropy}(S) - \sum_{v \in \{	ext{Weak}, 	ext{Strong}\}} rac{|S_v|}{|S|} 	ext{Entropy}(S_v)$$
+                                    $$	ext{Gain}(S, A) = 	ext{Entropy}(S) - \sum_{v \in \{	ext{Weak}, 	ext{Strong}\}} \frac{|S_v|}{|S|} 	ext{Entropy}(S_v)$$
                                 </div>
                             </div>
 
@@ -531,8 +552,10 @@
                                     $$	ext{Entropy}(S_{	ext{Strong}}) = - [0.5 \log_2(0.5) + 0.5 \log_2(0.5)] = - [0.5(-1) + 0.5(-1)] = 1.000 	ext{ bit}$$
 
                                     <p><strong>Step 3: Compute Expected Weighted Entropy of the split:</strong></p>
-                                    $$	ext{Weighted Entropy} = rac{8}{14} 	ext{Entropy}(S_{	ext{Weak}}) + rac{6}{14} 	ext{Entropy}(S_{	ext{Strong}})$$
-                                    $$	ext{Weighted Entropy} = \left(rac{8}{14} 	imes 0.8113ight) + \left(rac{6}{14} 	imes 1.000ight)$$
+                                    $$	ext{Weighted Entropy} = \frac{8}{14} 	ext{Entropy}(S_{	ext{Weak}}) + \frac{6}{14} 	ext{Entropy}(S_{	ext{Strong}})$$
+                                    $$	ext{Weighted Entropy} = \left(\frac{8}{14}  \times  0.8113
+ight) + \left(\frac{6}{14}  \times  1.000
+ight)$$
                                     $$	ext{Weighted Entropy} = 0.4636 + 0.4286 = 0.8922 	ext{ bits}$$
 
                                     <p><strong>Step 4: Compute Information Gain:</strong></p>
@@ -604,15 +627,15 @@
                                             <tr>
                                                 <td>\(P_3\)</td>
                                                 <td>\((4, 3)\)</td>
-                                                <td>\(\sqrt{(4-1)^2 + (3-1)^2} = \sqrt{9+4} = \sqrt{13} pprox 3.61\)</td>
-                                                <td>\(\sqrt{(4-2)^2 + (3-1)^2} = \sqrt{4+4} = \sqrt{8} pprox \mathbf{2.83}\)</td>
+                                                <td>\(\sqrt{(4-1)^2 + (3-1)^2} = \sqrt{9+4} = \sqrt{13} \approx 3.61\)</td>
+                                                <td>\(\sqrt{(4-2)^2 + (3-1)^2} = \sqrt{4+4} = \sqrt{8} \approx \mathbf{2.83}\)</td>
                                                 <td><strong>Cluster 2</strong></td>
                                             </tr>
                                             <tr>
                                                 <td>\(P_4\)</td>
                                                 <td>\((5, 4)\)</td>
                                                 <td>\(\sqrt{(5-1)^2 + (4-1)^2} = \sqrt{16+9} = \sqrt{25} = 5.00\)</td>
-                                                <td>\(\sqrt{(5-2)^2 + (4-1)^2} = \sqrt{9+9} = \sqrt{18} pprox \mathbf{4.24}\)</td>
+                                                <td>\(\sqrt{(5-2)^2 + (4-1)^2} = \sqrt{9+9} = \sqrt{18} \approx \mathbf{4.24}\)</td>
                                                 <td><strong>Cluster 2</strong></td>
                                             </tr>
                                         </tbody>
@@ -623,7 +646,9 @@
 
                                     <p><strong>Step 3: Recompute Centroids \(\mu_1^{(1)}\) and \(\mu_2^{(1)}\):</strong></p>
                                     $$\mu_1^{(1)} = P_1 = (1, 1)$$
-                                    $$\mu_2^{(1)} = \left(rac{2 + 4 + 5}{3}, rac{1 + 3 + 4}{3}ight) = \left(rac{11}{3}, rac{8}{3}ight) pprox (3.67, 2.67)$$
+                                    $$\mu_2^{(1)} = \left(\frac{2 + 4 + 5}{3}, \frac{1 + 3 + 4}{3}
+ight) = \left(\frac{11}{3}, \frac{8}{3}
+ight) \approx (3.67, 2.67)$$
                                 </div>
                             </div>
 
@@ -646,28 +671,28 @@
                                                 <td>\(P_1\)</td>
                                                 <td>\((1, 1)\)</td>
                                                 <td>\(\mathbf{0.00}\)</td>
-                                                <td>\(\sqrt{(1-3.67)^2 + (1-2.67)^2} = \sqrt{7.13 + 2.79} pprox 3.15\)</td>
+                                                <td>\(\sqrt{(1-3.67)^2 + (1-2.67)^2} = \sqrt{7.13 + 2.79} \approx 3.15\)</td>
                                                 <td><strong>Cluster 1</strong></td>
                                             </tr>
                                             <tr>
                                                 <td>\(P_2\)</td>
                                                 <td>\((2, 1)\)</td>
                                                 <td>\(\sqrt{(2-1)^2 + (1-1)^2} = \mathbf{1.00}\)</td>
-                                                <td>\(\sqrt{(2-3.67)^2 + (1-2.67)^2} = \sqrt{2.79 + 2.79} pprox 2.36\)</td>
+                                                <td>\(\sqrt{(2-3.67)^2 + (1-2.67)^2} = \sqrt{2.79 + 2.79} \approx 2.36\)</td>
                                                 <td><strong>Cluster 1 (Migrated!)</strong></td>
                                             </tr>
                                             <tr>
                                                 <td>\(P_3\)</td>
                                                 <td>\((4, 3)\)</td>
-                                                <td>\(\sqrt{(4-1)^2 + (3-1)^2} = \sqrt{13} pprox 3.61\)</td>
-                                                <td>\(\sqrt{(4-3.67)^2 + (3-2.67)^2} = \sqrt{0.11 + 0.11} pprox \mathbf{0.47}\)</td>
+                                                <td>\(\sqrt{(4-1)^2 + (3-1)^2} = \sqrt{13} \approx 3.61\)</td>
+                                                <td>\(\sqrt{(4-3.67)^2 + (3-2.67)^2} = \sqrt{0.11 + 0.11} \approx \mathbf{0.47}\)</td>
                                                 <td><strong>Cluster 2</strong></td>
                                             </tr>
                                             <tr>
                                                 <td>\(P_4\)</td>
                                                 <td>\((5, 4)\)</td>
                                                 <td>\(\sqrt{(5-1)^2 + (4-1)^2} = 5.00\)</td>
-                                                <td>\(\sqrt{(5-3.67)^2 + (4-2.67)^2} = \sqrt{1.77 + 1.77} pprox \mathbf{1.88}\)</td>
+                                                <td>\(\sqrt{(5-3.67)^2 + (4-2.67)^2} = \sqrt{1.77 + 1.77} \approx \mathbf{1.88}\)</td>
                                                 <td><strong>Cluster 2</strong></td>
                                             </tr>
                                         </tbody>
@@ -678,8 +703,10 @@
                                     <p>Notice that point \(P_2\) migrated from Cluster 2 to Cluster 1!</p>
 
                                     <p><strong>Step 6: Recompute Centroids \(\mu_1^{(2)}\) and \(\mu_2^{(2)}\):</strong></p>
-                                    $$\mu_1^{(2)} = \left(rac{1 + 2}{2}, rac{1 + 1}{2}ight) = (1.5, 1.0)$$
-                                    $$\mu_2^{(2)} = \left(rac{4 + 5}{2}, rac{3 + 4}{2}ight) = (4.5, 3.5)$$
+                                    $$\mu_1^{(2)} = \left(\frac{1 + 2}{2}, \frac{1 + 1}{2}
+ight) = (1.5, 1.0)$$
+                                    $$\mu_2^{(2)} = \left(\frac{4 + 5}{2}, \frac{3 + 4}{2}
+ight) = (4.5, 3.5)$$
                                 </div>
                             </div>
 
@@ -900,10 +927,10 @@
                             <p><strong>Marking Scheme:</strong> 3 marks for \(	ext{Entropy}(S) = 0.940\); 3 marks for \(	ext{Entropy}(S_{	ext{High}})\) and \(	ext{Entropy}(S_{	ext{Normal}})\); 4 marks for weighted sum and \(	ext{Gain}(S, 	ext{Humidity})\) calculation.</p>
                             <p><strong>Model Answer Key:</strong></p>
                             <ul>
-                                <li>\(	ext{Entropy}(S) = -rac{9}{14}\log_2rac{9}{14} - rac{5}{14}\log_2rac{5}{14} = 0.940\) bits.</li>
-                                <li>\(	ext{Entropy}(S_{	ext{High}}) = -rac{3}{7}\log_2rac{3}{7} - rac{4}{7}\log_2rac{4}{7} = 0.985\) bits.</li>
-                                <li>\(	ext{Entropy}(S_{	ext{Normal}}) = -rac{6}{7}\log_2rac{6}{7} - rac{1}{7}\log_2rac{1}{7} = 0.592\) bits.</li>
-                                <li>\(	ext{Weighted Entropy} = rac{7}{14}(0.985) + rac{7}{14}(0.592) = 0.4925 + 0.296 = 0.7885\) bits.</li>
+                                <li>\(	ext{Entropy}(S) = -\frac{9}{14}\log_2\frac{9}{14} - \frac{5}{14}\log_2\frac{5}{14} = 0.940\) bits.</li>
+                                <li>\(	ext{Entropy}(S_{	ext{High}}) = -\frac{3}{7}\log_2\frac{3}{7} - \frac{4}{7}\log_2\frac{4}{7} = 0.985\) bits.</li>
+                                <li>\(	ext{Entropy}(S_{	ext{Normal}}) = -\frac{6}{7}\log_2\frac{6}{7} - \frac{1}{7}\log_2\frac{1}{7} = 0.592\) bits.</li>
+                                <li>\(	ext{Weighted Entropy} = \frac{7}{14}(0.985) + \frac{7}{14}(0.592) = 0.4925 + 0.296 = 0.7885\) bits.</li>
                                 <li>\(	ext{Gain}(S, 	ext{Humidity}) = 0.940 - 0.7885 = 0.1515 	ext{ bits}\).</li>
                             </ul>
                         </div>

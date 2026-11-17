@@ -72,7 +72,22 @@ footer{color:var(--muted)}
 @media print{body{background:white;font-size:11pt}section{box-shadow:none;break-inside:avoid}a{color:inherit;text-decoration:none}}
 @media(max-width:900px){.lesson-layout{max-width:100%;padding:0 16px}.lesson-layout main{max-width:100%;padding:20px 0}.toc-panel{left:12px;top:58px;width:min(232px,calc(100vw - 24px));max-height:calc(100vh - 68px)}.unit-controls{max-width:100%;padding:5px 12px}}
 </style>
-<style>.pyq-focus{margin:1.25rem 0 1.6rem;padding:1.1rem 1.25rem;border:1px solid #9bcbd0;border-left:5px solid #087f8c;border-radius:10px;background:#f1f8f8;color:#172638}.pyq-focus h3{margin:.1rem 0 .7rem}.pyq-focus h4{margin:1.15rem 0 .5rem;color:#075c66}.pyq-focus li{margin:.35rem 0}.pyq-focus .source-note,.source-note{font-size:.92em;color:#52677a;margin-top:.8rem}.pyq-focus .number-steps li{padding:.25rem 0}.pyq-focus .visual-example{margin:1rem 0;padding:.75rem;background:#fff;border:1px solid #d7e3e8;border-radius:8px}.pyq-focus svg{display:block;width:100%;height:auto;max-height:300px}.pyq-focus figcaption,.pyq-focus .visual-example p{font-size:.9em;color:#52677a}.pyq-focus .table-wrap{overflow-x:auto;margin:.75rem 0}.pyq-focus table{width:100%;border-collapse:collapse;background:#fff}.pyq-focus th,.pyq-focus td{border:1px solid #cfdae0;padding:.45rem .55rem;text-align:left}.pyq-focus th{background:#e5f1f3}.pyq-note{padding:.75rem 1rem;border-radius:8px;background:#fff4df;border-left:4px solid #da9f35}.pyq-focus ol{padding-left:1.5rem}</style></head>
+<style>.pyq-focus{margin:1.25rem 0 1.6rem;padding:1.1rem 1.25rem;border:1px solid #9bcbd0;border-left:5px solid #087f8c;border-radius:10px;background:#f1f8f8;color:#172638}.pyq-focus h3{margin:.1rem 0 .7rem}.pyq-focus h4{margin:1.15rem 0 .5rem;color:#075c66}.pyq-focus li{margin:.35rem 0}.pyq-focus .source-note,.source-note{font-size:.92em;color:#52677a;margin-top:.8rem}.pyq-focus .number-steps li{padding:.25rem 0}.pyq-focus .visual-example{margin:1rem 0;padding:.75rem;background:#fff;border:1px solid #d7e3e8;border-radius:8px}.pyq-focus svg{display:block;width:100%;height:auto;max-height:300px}.pyq-focus figcaption,.pyq-focus .visual-example p{font-size:.9em;color:#52677a}.pyq-focus .table-wrap{overflow-x:auto;margin:.75rem 0}.pyq-focus table{width:100%;border-collapse:collapse;background:#fff}.pyq-focus th,.pyq-focus td{border:1px solid #cfdae0;padding:.45rem .55rem;text-align:left}.pyq-focus th{background:#e5f1f3}.pyq-note{padding:.75rem 1rem;border-radius:8px;background:#fff4df;border-left:4px solid #da9f35}.pyq-focus ol{padding-left:1.5rem}</style>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</head>
 <body>
 <nav class="unit-controls">
 <a href="unit_1.html">← Previous unit</a>
@@ -138,25 +153,25 @@ footer{color:var(--muted)}
 </tr>
 <tr>
 <td><strong>1. Initial State</strong></td>
-<td><span class="math">s_0</span></td>
+<td><span class="math">\(s_0\)</span></td>
 <td>The state the agent starts in within the state space.</td>
 <td>Any designated arrangement of 8 numbered tiles and 1 blank space on a 3×3 grid.</td>
 </tr>
 <tr>
 <td><strong>2. Successor Function (Actions + Transition Model)</strong></td>
-<td><span class="math">	ext{SUCCESSOR}(s) 	o \{(a, s')\}</span></td>
+<td><span class="math">\(ext{SUCCESSOR}(s) 	o \{(a, s')\}\)</span></td>
 <td>Generates the legal actions executable in state $s$ and returns the resulting successor states $s'$.</td>
 <td>Moving the blank space: <code>Left</code>, <code>Right</code>, <code>Up</code>, or <code>Down</code>.</td>
 </tr>
 <tr>
 <td><strong>3. Goal Test</strong></td>
-<td><span class="math">	ext{GOAL-TEST}(s) 	o \{	ext{True}, 	ext{False}\}</span></td>
+<td><span class="math">\(ext{GOAL-TEST}(s) 	o \{	ext{True}, 	ext{False}\}\)</span></td>
 <td>Determines whether a given state matches the desired goal configuration. Can be explicit (matching a specific state) or implicit (satisfying a property).</td>
 <td>Checks whether the current board tiles exactly match the standard configuration: [Blank, 1, 2, 3, 4, 5, 6, 7, 8].</td>
 </tr>
 <tr>
 <td><strong>4. Path Cost</strong></td>
-<td><span class="math">c(s, a, s') 	ext{ and } g(n)</span></td>
+<td><span class="math">\(c(s, a, s') 	ext{ and } g(n)\)</span></td>
 <td>A numeric cost function that assigns a cost to each step along a path. The path cost $g(n)$ is the sum of step costs from initial state to node $n$.</td>
 <td>Each slide move costs 1, so the total path cost equals the total number of moves in the path.</td>
 </tr>
@@ -253,7 +268,7 @@ footer{color:var(--muted)}
 <li><strong>Completeness:</strong> No in infinite-depth spaces or spaces with cycles (unless graph search with visited states). Yes in finite spaces.</li>
 <li><strong>Optimality:</strong> No (it returns the first solution it stumbles upon, which may be vastly deeper and costlier than a shallow optimal path).</li>
 <li><strong>Time Complexity:</strong> $O(b^m)$, where $m$ is the maximum depth. Terrible if $m \gg d$.</li>
-<li><strong>Space Complexity:</strong> $O(b 	imes m)$ — <strong>linear space!</strong> Only stores path from root to current node plus siblings. This is the massive advantage of DFS over BFS.</li>
+<li><strong>Space Complexity:</strong> $O(b  \times  m)$ — <strong>linear space!</strong> Only stores path from root to current node plus siblings. This is the massive advantage of DFS over BFS.</li>
 </ul>
 <h4>3. Uniform Cost Search (UCS)</h4>
 <p>While BFS finds the shallowest path, the shallowest path is not necessarily the cheapest path when edge costs vary. <strong>Uniform Cost Search</strong> expands the node with the lowest cumulative path cost $g(n)$ first.</p>
@@ -294,40 +309,40 @@ footer{color:var(--muted)}
 </div>
 <div id="t-informed">
 <h3>2.6 Informed (Heuristic) Search Strategies</h3>
-<p>Unlike blind search, <strong>informed search</strong> uses problem-specific knowledge beyond the problem definition itself. This knowledge is supplied via a <strong>Heuristic Function</strong>, denoted <span class="math">h(n)</span>:</p>
+<p>Unlike blind search, <strong>informed search</strong> uses problem-specific knowledge beyond the problem definition itself. This knowledge is supplied via a <strong>Heuristic Function</strong>, denoted <span class="math">\(h(n)\)</span>:</p>
 <div class="exam">
 <strong>Heuristic Function:</strong><br/>
-<span class="math">h(n) = 	ext{estimated cost of the cheapest path from node } n 	ext{ to a goal state.}</span>
+<span class="math">\(h(n) = 	ext{estimated cost of the cheapest path from node } n 	ext{ to a goal state.}\)</span>
 <br/>If $n$ is a goal node, then $h(n) = 0$.
     </div>
 <ul class="point-list">
 <li><strong>8-Puzzle Heuristics:</strong>
 <ol>
-<li><span class="math">h_1(n)</span>: The number of misplaced tiles relative to the goal state.</li>
-<li><span class="math">h_2(n)</span>: Manhattan Distance — the sum of horizontal and vertical distances of each tile from its target position.</li>
+<li><span class="math">\(h_1(n)\)</span>: The number of misplaced tiles relative to the goal state.</li>
+<li><span class="math">\(h_2(n)\)</span>: Manhattan Distance — the sum of horizontal and vertical distances of each tile from its target position.</li>
 </ol>
 </li>
-<li><strong>Admissible Heuristic:</strong> A heuristic $h(n)$ is <em>admissible</em> if it <strong>never overestimates</strong> the true cost to reach the goal. That is, <span class="math">h(n) \le h^*(n)</span>, where $h^*(n)$ is the true optimal cost. Admissible heuristics are optimistic.</li>
+<li><strong>Admissible Heuristic:</strong> A heuristic $h(n)$ is <em>admissible</em> if it <strong>never overestimates</strong> the true cost to reach the goal. That is, <span class="math">\(h(n) \le h^*(n)\)</span>, where $h^*(n)$ is the true optimal cost. Admissible heuristics are optimistic.</li>
 </ul>
 </div>
 <div id="t-greedy-astar">
 <h3>2.7 Greedy Best-First Search vs. A* Search</h3>
 <h4>1. Greedy Best-First Search</h4>
-<p>Evaluates nodes using solely the heuristic function: <span class="math">f(n) = h(n)</span>. It greedily expands the node that appears to be closest to the goal.</p>
+<p>Evaluates nodes using solely the heuristic function: <span class="math">\(f(n) = h(n)\)</span>. It greedily expands the node that appears to be closest to the goal.</p>
 <div class="exam"><strong>Fatal Flaw:</strong> It completely ignores the accumulated path cost $g(n)$ from the start. Like DFS, it can be led down an arbitrarily expensive or false path. It is neither complete nor optimal.</div>
 <h4>2. A* Search (The King of Heuristic Search)</h4>
 <p>A* combines the proven optimality of Uniform Cost Search with the goal-oriented velocity of Greedy Best-First Search:</p>
 <div class="exam">
 <strong>Evaluation Function of A*:</strong><br/>
-<span class="math">f(n) = g(n) + h(n)</span><br/>
+<span class="math">\(f(n) = g(n) + h(n)\)</span><br/>
       where:
       <ul>
-<li><span class="math">g(n)</span> = exact path cost from initial start state to current node $n$.</li>
-<li><span class="math">h(n)</span> = estimated heuristic cost from node $n$ to the goal.</li>
-<li><span class="math">f(n)</span> = estimated total cost of the cheapest solution passing through node $n$.</li>
+<li><span class="math">\(g(n)\)</span> = exact path cost from initial start state to current node $n$.</li>
+<li><span class="math">\(h(n)\)</span> = estimated heuristic cost from node $n$ to the goal.</li>
+<li><span class="math">\(f(n)\)</span> = estimated total cost of the cheapest solution passing through node $n$.</li>
 </ul>
 </div>
-<p><strong>Optimality Theorem of A*:</strong> Tree-search A* is optimal if <span class="math">h(n)</span> is <strong>admissible</strong>. Graph-search A* is optimal if <span class="math">h(n)</span> is <strong>consistent (monotonic)</strong> (<span class="math">h(n) \le c(n, a, n') + h(n')</span>).</p>
+<p><strong>Optimality Theorem of A*:</strong> Tree-search A* is optimal if <span class="math">\(h(n)\)</span> is <strong>admissible</strong>. Graph-search A* is optimal if <span class="math">\(h(n)\)</span> is <strong>consistent (monotonic)</strong> (<span class="math">\(h(n) \le c(n, a, n') + h(n')\)</span>).</p>
 </div>
 <div id="t-hill-climbing">
 <h3>2.8 Hill Climbing Search &amp; The 3 Landscape Pitfalls</h3>
@@ -392,23 +407,23 @@ footer{color:var(--muted)}
 <p>Assuming both players play optimally, <strong>MAX</strong> wants to maximize the utility value, while <strong>MIN</strong> wants to minimize it.</p>
 <div class="exam">
 <strong>Minimax Decision Rule:</strong><br/>
-<span class="math">	ext{Minimax}(s) = egin{cases} 
+<span class="math">\(ext{Minimax}(s) = \begin{cases} 
       	ext{Utility}(s) &amp; 	ext{if } s 	ext{ is Terminal} \
       \max_{a} 	ext{Minimax}(	ext{Result}(s, a)) &amp; 	ext{if } 	ext{Player}(s) = 	ext{MAX} \
       \min_{a} 	ext{Minimax}(	ext{Result}(s, a)) &amp; 	ext{if } 	ext{Player}(s) = 	ext{MIN}
-      \end{cases}</span>
+      \end{cases}\)</span>
 </div>
 </div>
 <div id="t-alpha-beta">
 <h3>2.11 Alpha-Beta (α-β) Pruning</h3>
 <p>The problem with minimax is exponential complexity: $O(b^m)$ evaluations. <strong>Alpha-Beta Pruning</strong> is an optimal pruning technique that computes the exact identical minimax value at the root while pruning away branches that cannot possibly influence the final decision.</p>
 <ul class="point-list">
-<li><strong>$lpha$ (Alpha):</strong> The value of the best choice found so far along the path for <strong>MAX</strong> (initially $-\infty$).</li>
-<li><strong>$eta$ (Beta):</strong> The value of the best choice found so far along the path for <strong>MIN</strong> (initially $+\infty$).</li>
-<li><strong>Pruning Condition:</strong> Whenever <span class="math">lpha \ge eta</span> at any node, prune all remaining unexplored branches below that node!
+<li><strong>$\alpha$ (Alpha):</strong> The value of the best choice found so far along the path for <strong>MAX</strong> (initially $-\infty$).</li>
+<li><strong>$\beta$ (Beta):</strong> The value of the best choice found so far along the path for <strong>MIN</strong> (initially $+\infty$).</li>
+<li><strong>Pruning Condition:</strong> Whenever <span class="math">\(\alpha \ge \beta\)</span> at any node, prune all remaining unexplored branches below that node!
         <ul>
-<li><strong>Alpha Cut:</strong> Occurs when exploring a MIN node, if its backed-up value $eta \le lpha$.</li>
-<li><strong>Beta Cut:</strong> Occurs when exploring a MAX node, if its backed-up value $lpha \ge eta$.</li>
+<li><strong>Alpha Cut:</strong> Occurs when exploring a MIN node, if its backed-up value $\beta \le \alpha$.</li>
+<li><strong>Beta Cut:</strong> Occurs when exploring a MAX node, if its backed-up value $\alpha \ge \beta$.</li>
 </ul>
 </li>
 </ul>
@@ -467,31 +482,31 @@ footer{color:var(--muted)}
 <li>C → D (cost 3), C → G (cost 4)</li>
 <li>D → G (cost 2)</li>
 </ul>
-      Heuristic values: <span class="math">h(S)=5, h(A)=3, h(B)=4, h(C)=2, h(D)=6, h(G)=0</span>.
+      Heuristic values: <span class="math">\(h(S)=5, h(A)=3, h(B)=4, h(C)=2, h(D)=6, h(G)=0\)</span>.
     </div>
 <div class="formula-box">
 <b>FORMULA:</b>
-<span class="math">f(n) = g(n) + h(n)</span>. Expand node with minimum $f(n)$ from the Priority Queue (Open List).
+<span class="math">\(f(n) = g(n) + h(n)\)</span>. Expand node with minimum $f(n)$ from the Priority Queue (Open List).
     </div>
 <div class="calc-work">
 <b>STEPWISE TRACE:</b>
 <ol class="solution-steps">
-<li><strong>Step 1:</strong> Start at S. <span class="math">g(S)=0, h(S)=5 \implies f(S)=5</span>.
+<li><strong>Step 1:</strong> Start at S. <span class="math">\(g(S)=0, h(S)=5 \implies f(S)=5\)</span>.
           <br/>Open List: <code>[S(5)]</code>. Closed: <code>{}</code>.
         </li>
 <li><strong>Step 2:</strong> Expand S. Successors:
-          <br/>A: <span class="math">g(A) = 0 + 1 = 1</span>; <span class="math">f(A) = 1 + h(A) = 1 + 3 = 4</span>.
-          <br/>G: <span class="math">g(G) = 0 + 10 = 10</span>; <span class="math">f(G) = 10 + 0 = 10</span>.
+          <br/>A: <span class="math">\(g(A) = 0 + 1 = 1\)</span>; <span class="math">\(f(A) = 1 + h(A) = 1 + 3 = 4\)</span>.
+          <br/>G: <span class="math">\(g(G) = 0 + 10 = 10\)</span>; <span class="math">\(f(G) = 10 + 0 = 10\)</span>.
           <br/>Open List: <code>[A(4), G(10)]</code>. Closed: <code>{S}</code>.
         </li>
 <li><strong>Step 3:</strong> Expand A (lowest $f=4$). Successors:
-          <br/>B: <span class="math">g(B) = 1 + 2 = 3</span>; <span class="math">f(B) = 3 + 4 = 7</span>.
-          <br/>C: <span class="math">g(C) = 1 + 1 = 2</span>; <span class="math">f(C) = 2 + 2 = 4</span>.
+          <br/>B: <span class="math">\(g(B) = 1 + 2 = 3\)</span>; <span class="math">\(f(B) = 3 + 4 = 7\)</span>.
+          <br/>C: <span class="math">\(g(C) = 1 + 1 = 2\)</span>; <span class="math">\(f(C) = 2 + 2 = 4\)</span>.
           <br/>Open List: <code>[C(4), B(7), G(10)]</code>. Closed: <code>{S, A}</code>.
         </li>
 <li><strong>Step 4:</strong> Expand C (lowest $f=4$). Successors:
-          <br/>D: <span class="math">g(D) = 2 + 3 = 5</span>; <span class="math">f(D) = 5 + 6 = 11</span>.
-          <br/>G: <span class="math">g(G) = 2 + 4 = 6</span>; <span class="math">f(G) = 6 + 0 = 6</span> (updates path to G from 10 down to 6!).
+          <br/>D: <span class="math">\(g(D) = 2 + 3 = 5\)</span>; <span class="math">\(f(D) = 5 + 6 = 11\)</span>.
+          <br/>G: <span class="math">\(g(G) = 2 + 4 = 6\)</span>; <span class="math">\(f(G) = 6 + 0 = 6\)</span> (updates path to G from 10 down to 6!).
           <br/>Open List: <code>[G(6), B(7), D(11)]</code>. Closed: <code>{S, A, C}</code>.
         </li>
 <li><strong>Step 5:</strong> Expand G (lowest $f=6$). G is the goal node! Search terminates.</li>
@@ -499,7 +514,7 @@ footer{color:var(--muted)}
 </div>
 <div class="answer-box">
 <b>FINAL ANSWER:</b>
-      Optimal Path: <strong>S → A → C → G</strong> with total path cost <span class="math">g(G) = \mathbf{6}</span>.
+      Optimal Path: <strong>S → A → C → G</strong> with total path cost <span class="math">\(g(G) = \mathbf{6}\)</span>.
     </div>
 </article>
 <article class="worked-block" id="num-complex">
@@ -519,46 +534,46 @@ footer{color:var(--muted)}
     </div>
 <div class="formula-box">
 <b>RULES:</b>
-      At MAX node: <span class="math">lpha = \max(lpha, 	ext{val})</span>. At MIN node: <span class="math">eta = \min(eta, 	ext{val})</span>. Prune if <span class="math">lpha \ge eta</span>.
+      At MAX node: <span class="math">\(\alpha = \max(\alpha, 	ext{val})\)</span>. At MIN node: <span class="math">\(\beta = \min(\beta, 	ext{val})\)</span>. Prune if <span class="math">\(\alpha \ge \beta\)</span>.
     </div>
 <div class="calc-work">
 <b>STEPWISE TRACE:</b>
 <ol class="solution-steps">
-<li>Initialize root A: <span class="math">lpha = -\infty, eta = +\infty</span>.
-          <br/>Pass down to B (<span class="math">lpha = -\infty, eta = +\infty</span>) and D (<span class="math">lpha = -\infty, eta = +\infty</span>).
+<li>Initialize root A: <span class="math">\(\alpha = -\infty, \beta = +\infty\)</span>.
+          <br/>Pass down to B (<span class="math">\(\alpha = -\infty, \beta = +\infty\)</span>) and D (<span class="math">\(\alpha = -\infty, \beta = +\infty\)</span>).
         </li>
 <li><strong>Evaluate D (MAX):</strong>
-<br/>Examines first leaf 2 → <span class="math">lpha = \max(-\infty, 2) = 2</span>.
-          <br/>Examines second leaf 3 → <span class="math">lpha = \max(2, 3) = 3</span>.
+<br/>Examines first leaf 2 → <span class="math">\(\alpha = \max(-\infty, 2) = 2\)</span>.
+          <br/>Examines second leaf 3 → <span class="math">\(\alpha = \max(2, 3) = 3\)</span>.
           <br/>D returns value <strong>3</strong> to parent B.
         </li>
 <li><strong>At Node B (MIN):</strong>
-<br/>Receives 3 from D → <span class="math">eta = \min(+\infty, 3) = 3</span>.
-          <br/>Now at B: <span class="math">lpha = -\infty, eta = 3</span>.
+<br/>Receives 3 from D → <span class="math">\(\beta = \min(+\infty, 3) = 3\)</span>.
+          <br/>Now at B: <span class="math">\(\alpha = -\infty, \beta = 3\)</span>.
         </li>
 <li><strong>Explore Node E (MAX) under B:</strong>
-<br/>E inherits <span class="math">lpha = -\infty, eta = 3</span> from B.
-          <br/>Examines first leaf 5 → <span class="math">lpha = \max(-\infty, 5) = 5</span>.
-          <br/><strong>Check Pruning Condition at E:</strong> <span class="math">lpha = 5 \ge eta = 3</span>!
+<br/>E inherits <span class="math">\(\alpha = -\infty, \beta = 3\)</span> from B.
+          <br/>Examines first leaf 5 → <span class="math">\(\alpha = \max(-\infty, 5) = 5\)</span>.
+          <br/><strong>Check Pruning Condition at E:</strong> <span class="math">\(\alpha = 5 \ge \beta = 3\)</span>!
           <br/><strong>PRUNE!</strong> Leaf node <strong>9</strong> is pruned (Beta cut). E returns 5 to B.
         </li>
 <li><strong>Back to B (MIN):</strong>
-<br/>B compares <span class="math">\min(3, 5) = 3</span>. B returns <strong>3</strong> to root A.
+<br/>B compares <span class="math">\(\min(3, 5) = 3\)</span>. B returns <strong>3</strong> to root A.
         </li>
 <li><strong>Back to Root A (MAX):</strong>
-<br/>A receives 3 from B → <span class="math">lpha = \max(-\infty, 3) = 3</span>. A has <span class="math">lpha = 3, eta = +\infty</span>.
+<br/>A receives 3 from B → <span class="math">\(\alpha = \max(-\infty, 3) = 3\)</span>. A has <span class="math">\(\alpha = 3, \beta = +\infty\)</span>.
         </li>
 <li><strong>Explore Node C (MIN) under A:</strong>
-<br/>C inherits <span class="math">lpha = 3, eta = +\infty</span>. Passes down to F (<span class="math">lpha = 3, eta = +\infty</span>).
-          <br/><strong>At F (MAX):</strong> Examines leaf 0 → <span class="math">lpha = \max(3, 0) = 3</span>.
-          <br/>Examines leaf 1 → <span class="math">lpha = \max(3, 1) = 3</span>. F returns value <strong>1</strong> to C.
+<br/>C inherits <span class="math">\(\alpha = 3, \beta = +\infty\)</span>. Passes down to F (<span class="math">\(\alpha = 3, \beta = +\infty\)</span>).
+          <br/><strong>At F (MAX):</strong> Examines leaf 0 → <span class="math">\(\alpha = \max(3, 0) = 3\)</span>.
+          <br/>Examines leaf 1 → <span class="math">\(\alpha = \max(3, 1) = 3\)</span>. F returns value <strong>1</strong> to C.
         </li>
 <li><strong>Back to C (MIN):</strong>
-<br/>Receives 1 from F → <span class="math">eta = \min(+\infty, 1) = 1</span>.
-          <br/><strong>Check Pruning Condition at C:</strong> <span class="math">lpha = 3 \ge eta = 1</span>!
+<br/>Receives 1 from F → <span class="math">\(\beta = \min(+\infty, 1) = 1\)</span>.
+          <br/><strong>Check Pruning Condition at C:</strong> <span class="math">\(\alpha = 3 \ge \beta = 1\)</span>!
           <br/><strong>PRUNE!</strong> Entire subtree under <strong>G</strong> (leaves 7 and 5) is completely pruned (Alpha cut)!
         </li>
-<li>C returns 1 to root A. Root A chooses <span class="math">\max(3, 1) = \mathbf{3}</span>.
+<li>C returns 1 to root A. Root A chooses <span class="math">\(\max(3, 1) = \mathbf{3}\)</span>.
         </li>
 </ol>
 </div>
@@ -596,7 +611,7 @@ footer{color:var(--muted)}
 <td>No in infinite spaces; Yes if finite</td>
 <td>No</td>
 <td>$O(b^m)$</td>
-<td>$O(b 	imes m)$ (Linear memory)</td>
+<td>$O(b  \times  m)$ (Linear memory)</td>
 </tr>
 <tr>
 <td><strong>Uniform Cost Search (UCS)</strong></td>

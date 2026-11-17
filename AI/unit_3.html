@@ -72,7 +72,22 @@ footer{color:var(--muted)}
 @media print{body{background:white;font-size:11pt}section{box-shadow:none;break-inside:avoid}a{color:inherit;text-decoration:none}}
 @media(max-width:900px){.lesson-layout{max-width:100%;padding:0 16px}.lesson-layout main{max-width:100%;padding:20px 0}.toc-panel{left:12px;top:58px;width:min(232px,calc(100vw - 24px));max-height:calc(100vh - 68px)}.unit-controls{max-width:100%;padding:5px 12px}}
 </style>
-<style>.pyq-focus{margin:1.25rem 0 1.6rem;padding:1.1rem 1.25rem;border:1px solid #9bcbd0;border-left:5px solid #087f8c;border-radius:10px;background:#f1f8f8;color:#172638}.pyq-focus h3{margin:.1rem 0 .7rem}.pyq-focus h4{margin:1.15rem 0 .5rem;color:#075c66}.pyq-focus li{margin:.35rem 0}.pyq-focus .source-note,.source-note{font-size:.92em;color:#52677a;margin-top:.8rem}.pyq-focus .number-steps li{padding:.25rem 0}.pyq-focus .visual-example{margin:1rem 0;padding:.75rem;background:#fff;border:1px solid #d7e3e8;border-radius:8px}.pyq-focus svg{display:block;width:100%;height:auto;max-height:300px}.pyq-focus figcaption,.pyq-focus .visual-example p{font-size:.9em;color:#52677a}.pyq-focus .table-wrap{overflow-x:auto;margin:.75rem 0}.pyq-focus table{width:100%;border-collapse:collapse;background:#fff}.pyq-focus th,.pyq-focus td{border:1px solid #cfdae0;padding:.45rem .55rem;text-align:left}.pyq-focus th{background:#e5f1f3}.pyq-note{padding:.75rem 1rem;border-radius:8px;background:#fff4df;border-left:4px solid #da9f35}.pyq-focus ol{padding-left:1.5rem}</style></head>
+<style>.pyq-focus{margin:1.25rem 0 1.6rem;padding:1.1rem 1.25rem;border:1px solid #9bcbd0;border-left:5px solid #087f8c;border-radius:10px;background:#f1f8f8;color:#172638}.pyq-focus h3{margin:.1rem 0 .7rem}.pyq-focus h4{margin:1.15rem 0 .5rem;color:#075c66}.pyq-focus li{margin:.35rem 0}.pyq-focus .source-note,.source-note{font-size:.92em;color:#52677a;margin-top:.8rem}.pyq-focus .number-steps li{padding:.25rem 0}.pyq-focus .visual-example{margin:1rem 0;padding:.75rem;background:#fff;border:1px solid #d7e3e8;border-radius:8px}.pyq-focus svg{display:block;width:100%;height:auto;max-height:300px}.pyq-focus figcaption,.pyq-focus .visual-example p{font-size:.9em;color:#52677a}.pyq-focus .table-wrap{overflow-x:auto;margin:.75rem 0}.pyq-focus table{width:100%;border-collapse:collapse;background:#fff}.pyq-focus th,.pyq-focus td{border:1px solid #cfdae0;padding:.45rem .55rem;text-align:left}.pyq-focus th{background:#e5f1f3}.pyq-note{padding:.75rem 1rem;border-radius:8px;background:#fff4df;border-left:4px solid #da9f35}.pyq-focus ol{padding-left:1.5rem}</style>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</head>
 <body>
 <nav class="unit-controls">
 <a href="unit_2.html">← Previous unit</a>
@@ -199,15 +214,13 @@ footer{color:var(--muted)}
 <li><strong>Syntax:</strong>
 <ul>
 <li>Atomic Sentences: Single propositional symbols: $P, Q, R, 	ext{WumpusAhead}$.</li>
-<li>Five Logical Connectives: Negation $
-eg$ (NOT), Conjunction $\wedge$ (AND), Disjunction $ee$ (OR), Implication $	o$ (IF-THEN), Biconditional $\leftrightarrow$ (IFF).</li>
+<li>Five Logical Connectives: Negation $\neg $ (NOT), Conjunction $\wedge$ (AND), Disjunction $\vee$ (OR), Implication $	o$ (IF-THEN), Biconditional $\leftrightarrow$ (IFF).</li>
 </ul>
 </li>
 <li><strong>Semantics &amp; Truth Table:</strong></li>
 </ul>
 <table>
-<tr><th>$A$</th><th>$B$</th><th>$
-eg B$</th><th>$A \wedge B$</th><th>$A ee B$</th><th>$A 	o B$</th><th>$A \leftrightarrow B$</th></tr>
+<tr><th>$A$</th><th>$B$</th><th>$\neg  B$</th><th>$A \wedge B$</th><th>$A \vee B$</th><th>$A 	o B$</th><th>$A \leftrightarrow B$</th></tr>
 <tr><td>T</td><td>T</td><td>F</td><td>T</td><td>T</td><td>T</td><td>T</td></tr>
 <tr><td>T</td><td>F</td><td>T</td><td>F</td><td>T</td><td><strong>F</strong></td><td>F</td></tr>
 <tr><td>F</td><td>T</td><td>F</td><td>F</td><td>T</td><td>T</td><td>F</td></tr>
@@ -216,15 +229,13 @@ eg B$</th><th>$A \wedge B$</th><th>$A ee B$</th><th>$A 	o B$</th><th>$A \leftri
 <div class="exam"><strong>Crucial Exam Rule:</strong> The implication $A 	o B$ is False <em>if and only if</em> the premise $A$ is True and the consequence $B$ is False! In all other cases, $A 	o B$ evaluates to True.</div>
 <h4>Key Semantic Concepts:</h4>
 <ul>
-<li><strong>Tautology (Valid Sentence):</strong> A sentence that is True under <em>all</em> possible interpretations (e.g., $P ee 
-eg P$).</li>
-<li><strong>Contradiction (Inconsistent Sentence):</strong> A sentence that is False under <em>all</em> possible interpretations (e.g., $P \wedge 
-eg P$).</li>
-<li><strong>Logical Entailment ($lpha \models eta$):</strong> Sentence $lpha$ entails sentence $eta$ if and only if in every model where $lpha$ is True, $eta$ is also True.</li>
+<li><strong>Tautology (Valid Sentence):</strong> A sentence that is True under <em>all</em> possible interpretations (e.g., $P \vee \neg  P$).</li>
+<li><strong>Contradiction (Inconsistent Sentence):</strong> A sentence that is False under <em>all</em> possible interpretations (e.g., $P \wedge \neg  P$).</li>
+<li><strong>Logical Entailment ($\alpha \models \beta$):</strong> Sentence $\alpha$ entails sentence $\beta$ if and only if in every model where $\alpha$ is True, $\beta$ is also True.</li>
 <li><strong>Soundness vs. Completeness of Inference:</strong>
 <ul>
-<li><strong>Soundness:</strong> An inference procedure is sound if it derives <em>only</em> real entailments ($KB dash lpha \implies KB \models lpha$). It never makes false deductions.</li>
-<li><strong>Completeness:</strong> An inference procedure is complete if it can derive <em>all</em> valid sentences ($KB \models lpha \implies KB dash lpha$).</li>
+<li><strong>Soundness:</strong> An inference procedure is sound if it derives <em>only</em> real entailments ($KB \vdash \alpha \implies KB \models \alpha$). It never makes false deductions.</li>
+<li><strong>Completeness:</strong> An inference procedure is complete if it can derive <em>all</em> valid sentences ($KB \models \alpha \implies KB \vdash \alpha$).</li>
 </ul>
 </li>
 </ul>
@@ -241,35 +252,32 @@ eg P$).</li>
 </ol>
 <h4>Quantifiers in FOL</h4>
 <ul class="point-list">
-<li><strong>Universal Quantifier ($orall x$):</strong> Represents "For all $x$". Corresponds to logical conjunction ($\wedge$). Universal statements are standardly paired with Implication ($	o$):
+<li><strong>Universal Quantifier ($\forall x$):</strong> Represents "For all $x$". Corresponds to logical conjunction ($\wedge$). Universal statements are standardly paired with Implication ($	o$):
         <div class="diagram">"All students are smart" → ∀x (Student(x) → Smart(x))</div>
 </li>
-<li><strong>Existential Quantifier ($\exists x$):</strong> Represents "There exists at least one $x$". Corresponds to logical disjunction ($ee$). Existential statements are standardly paired with Conjunction ($\wedge$):
+<li><strong>Existential Quantifier ($\exists x$):</strong> Represents "There exists at least one $x$". Corresponds to logical disjunction ($\vee$). Existential statements are standardly paired with Conjunction ($\wedge$):
         <div class="diagram">"There is a student who is smart" → ∃x (Student(x) ∧ Smart(x))</div>
 </li>
 </ul>
 <h4>Standard English to FOL Translation Practice (from Slide 21)</h4>
 <table>
 <tr><th>English Sentence</th><th>First Order Logic (FOL) Representation</th></tr>
-<tr><td>"Every gardener likes the sun."</td><td>$orall x\ (	ext{Gardener}(x) 	o 	ext{Likes}(x, 	ext{Sun}))$</td></tr>
-<tr><td>"You can fool some of the people all of the time."</td><td>$\exists x orall t\ (	ext{Person}(x) \wedge 	ext{Time}(t) 	o 	ext{CanFool}(x, t))$</td></tr>
-<tr><td>"You can fool all of the people some of the time."</td><td>$orall x \exists t\ (	ext{Person}(x) \wedge 	ext{Time}(t) 	o 	ext{CanFool}(x, t))$</td></tr>
-<tr><td>"All purple mushrooms are poisonous."</td><td>$orall x\ (	ext{Mushroom}(x) \wedge 	ext{Purple}(x) 	o 	ext{Poisonous}(x))$</td></tr>
-<tr><td>"No purple mushroom is poisonous."</td><td>$
-eg \exists x\ (	ext{Purple}(x) \wedge 	ext{Mushroom}(x) \wedge 	ext{Poisonous}(x))$ or $orall x\ (	ext{Mushroom}(x) \wedge 	ext{Purple}(x) 	o 
-eg 	ext{Poisonous}(x))$</td></tr>
-<tr><td>"Clinton is not tall."</td><td>$
-eg 	ext{Tall}(	ext{Clinton})$</td></tr>
+<tr><td>"Every gardener likes the sun."</td><td>$\forall x\ (	ext{Gardener}(x) 	o 	ext{Likes}(x, 	ext{Sun}))$</td></tr>
+<tr><td>"You can fool some of the people all of the time."</td><td>$\exists x \forall t\ (	ext{Person}(x) \wedge 	ext{Time}(t) 	o 	ext{CanFool}(x, t))$</td></tr>
+<tr><td>"You can fool all of the people some of the time."</td><td>$\forall x \exists t\ (	ext{Person}(x) \wedge 	ext{Time}(t) 	o 	ext{CanFool}(x, t))$</td></tr>
+<tr><td>"All purple mushrooms are poisonous."</td><td>$\forall x\ (	ext{Mushroom}(x) \wedge 	ext{Purple}(x) 	o 	ext{Poisonous}(x))$</td></tr>
+<tr><td>"No purple mushroom is poisonous."</td><td>$\neg  \exists x\ (	ext{Purple}(x) \wedge 	ext{Mushroom}(x) \wedge 	ext{Poisonous}(x))$ or $\forall x\ (	ext{Mushroom}(x) \wedge 	ext{Purple}(x) 	o \neg  	ext{Poisonous}(x))$</td></tr>
+<tr><td>"Clinton is not tall."</td><td>$\neg  	ext{Tall}(	ext{Clinton})$</td></tr>
 </table>
 </div>
 <div id="t-inference-fol">
 <h3>3.5 Inference Rules in First-Order Logic &amp; Unification</h3>
 <ul class="point-list">
-<li><strong>Universal Instantiation (UI):</strong> From $orall v\ lpha$, we can infer $	ext{SUBST}(\{v / g\}, lpha)$ for any variable $v$ and ground term $g$:
+<li><strong>Universal Instantiation (UI):</strong> From $\forall v\ \alpha$, we can infer $	ext{SUBST}(\{v / g\}, \alpha)$ for any variable $v$ and ground term $g$:
         <div class="diagram">∀x (King(x) ∧ Greedy(x) → Evil(x))
 ⇒ King(John) ∧ Greedy(John) → Evil(John)  [by subst {x/John}]</div>
 </li>
-<li><strong>Existential Instantiation (EI) / Skolemization:</strong> From $\exists v\ lpha$, we can infer $	ext{SUBST}(\{v / k\}, lpha)$, where $k$ is a brand new constant symbol called a <strong>Skolem constant</strong> that has never appeared anywhere in the KB:
+<li><strong>Existential Instantiation (EI) / Skolemization:</strong> From $\exists v\ \alpha$, we can infer $	ext{SUBST}(\{v / k\}, \alpha)$, where $k$ is a brand new constant symbol called a <strong>Skolem constant</strong> that has never appeared anywhere in the KB:
         <div class="diagram">∃x (Crown(x) ∧ OnHead(x, John)) ⇒ Crown(C1) ∧ OnHead(C1, John)</div>
 </li>
 <li><strong>Unification:</strong> The algorithmic process of finding a substitution $	heta$ that makes two different logical expressions identical:
@@ -325,40 +333,23 @@ UNIFY(Knows(John, x), Knows(x, Elizabeth)) ⇒ FAILS (x cannot simultaneously be
 </div>
 <div id="t-cnf-resolution">
 <h3>3.8 Conjunctive Normal Form (CNF) &amp; Resolution Refutation</h3>
-<p><strong>Resolution</strong> is an automated theorem-proving inference rule based on proof by contradiction (reductio ad absurdum). To prove $KB \models lpha$, we assert $
-eg lpha$ into the KB, convert all sentences into <strong>Conjunctive Normal Form (CNF)</strong>, and systematically resolve complementary literals until deriving the empty clause ($\Box$ or NULL), which indicates a contradiction.</p>
+<p><strong>Resolution</strong> is an automated theorem-proving inference rule based on proof by contradiction (reductio ad absurdum). To prove $KB \models \alpha$, we assert $\neg  \alpha$ into the KB, convert all sentences into <strong>Conjunctive Normal Form (CNF)</strong>, and systematically resolve complementary literals until deriving the empty clause ($\Box$ or NULL), which indicates a contradiction.</p>
 <h4>The 5 Steps to Convert FOL into CNF (from Slides 57–62)</h4>
 <ol class="solution-steps">
 <li><strong>Step 1: Eliminate Implications ($	o, \leftrightarrow$):</strong>
-<br/>Replace $lpha 	o eta$ with $
-eg lpha ee eta$.
-        <br/>Replace $lpha \leftrightarrow eta$ with $(
-eg lpha ee eta) \wedge (
-eg eta ee lpha)$.
+<br/>Replace $\alpha 	o \beta$ with $\neg  \alpha \vee \beta$.
+        <br/>Replace $\alpha \leftrightarrow \beta$ with $(\neg  \alpha \vee \beta) \wedge (\neg  \beta \vee \alpha)$.
       </li>
-<li><strong>Step 2: Move Negation ($
-eg$) Inwards (De Morgan's Laws):</strong>
-<br/>$
-eg (orall x\ P) \equiv \exists x\ 
-eg P$
-        <br/>$
-eg (\exists x\ P) \equiv orall x\ 
-eg P$
-        <br/>$
-eg (lpha \wedge eta) \equiv 
-eg lpha ee 
-eg eta$
-        <br/>$
-eg (lpha ee eta) \equiv 
-eg lpha \wedge 
-eg eta$
-        <br/>$
-eg 
-eg lpha \equiv lpha$
+<li><strong>Step 2: Move Negation ($\neg $) Inwards (De Morgan's Laws):</strong>
+<br/>$\neg  (\forall x\ P) \equiv \exists x\ \neg  P$
+        <br/>$\neg  (\exists x\ P) \equiv \forall x\ \neg  P$
+        <br/>$\neg  (\alpha \wedge \beta) \equiv \neg  \alpha \vee \neg  \beta$
+        <br/>$\neg  (\alpha \vee \beta) \equiv \neg  \alpha \wedge \neg  \beta$
+        <br/>$\neg  \neg  \alpha \equiv \alpha$
       </li>
 <li><strong>Step 3: Standardize / Rename Variables:</strong> Ensure each quantifier uses unique variable names across clauses.</li>
 <li><strong>Step 4: Skolemization (Eliminate $\exists$):</strong> Replace existential variables with Skolem constants or Skolem functions.</li>
-<li><strong>Step 5: Drop Universal Quantifiers ($orall$):</strong> Because all remaining variables are universally quantified, drop prefixes $orall x$.</li>
+<li><strong>Step 5: Drop Universal Quantifiers ($\forall$):</strong> Because all remaining variables are universally quantified, drop prefixes $\forall x$.</li>
 </ol>
 </div>
 </section>
@@ -369,7 +360,7 @@ eg lpha \equiv lpha$
 <h3><span class="numerical-tag">SIMPLE</span> Propositional Truth Table &amp; Tautology Verification</h3>
 <div class="given-box">
 <b>GIVEN:</b>
-      Evaluate whether the logical sentence <span class="math">((P 	o Q) \wedge P) 	o Q</span> (Modus Ponens in conditional form) is a valid Tautology.
+      Evaluate whether the logical sentence <span class="math">\(((P 	o Q) \wedge P) 	o Q\)</span> (Modus Ponens in conditional form) is a valid Tautology.
     </div>
 <div class="calc-work">
 <b>STEPWISE TRUTH TABLE:</b>
@@ -410,13 +401,13 @@ eg lpha \equiv lpha$
           <br/>Fire Rule 3 → Add new fact to KB: <code>[Fritz is colored green]</code>.
         </li>
 <li><strong>Cycle 3:</strong> Match <code>[Fritz is colored green]</code> against query <code>[Fritz is colored Y]?</code>.
-          <br/>Unification succeeds with substitution: <span class="math">Y = 	ext{green}</span>.
+          <br/>Unification succeeds with substitution: <span class="math">\(Y = 	ext{green}\)</span>.
         </li>
 </ol>
 </div>
 <div class="answer-box">
 <b>FINAL ANSWER:</b>
-      Derived conclusion: <strong>Fritz is colored green</strong> (<span class="math">Y = 	ext{green}</span>).
+      Derived conclusion: <strong>Fritz is colored green</strong> (<span class="math">\(Y = 	ext{green}\)</span>).
     </div>
 </article>
 <article class="worked-block" id="num-complex">
@@ -424,59 +415,42 @@ eg lpha \equiv lpha$
 <div class="given-box">
 <b>GIVEN ENGLISH STATEMENTS (from Slides 64–70):</b>
 <ol>
-<li>John likes all kind of food: <span class="math">orall x\ (	ext{Food}(x) 	o 	ext{Likes}(	ext{John}, x))</span></li>
-<li>Apple and vegetable are food: <span class="math">	ext{Food}(	ext{Apple}) \wedge 	ext{Food}(	ext{Vegetables})</span></li>
-<li>Anything anyone eats and not killed is food: <span class="math">orall x orall y\ (	ext{Eats}(x, y) \wedge 
-eg 	ext{Killed}(x) 	o 	ext{Food}(y))</span></li>
-<li>Anil eats peanuts and is still alive: <span class="math">	ext{Eats}(	ext{Anil}, 	ext{Peanuts}) \wedge 	ext{Alive}(	ext{Anil})</span></li>
-<li>Harry eats everything that Anil eats: <span class="math">orall x\ (	ext{Eats}(	ext{Anil}, x) 	o 	ext{Eats}(	ext{Harry}, x))</span></li>
-<li>Added background knowledge: <span class="math">orall x\ (	ext{Alive}(x) 	o 
-eg 	ext{Killed}(x))</span></li>
+<li>John likes all kind of food: <span class="math">\(\forall x\ (	ext{Food}(x) 	o 	ext{Likes}(	ext{John}, x))\)</span></li>
+<li>Apple and vegetable are food: <span class="math">\(ext{Food}(	ext{Apple}) \wedge 	ext{Food}(	ext{Vegetables})\)</span></li>
+<li>Anything anyone eats and not killed is food: <span class="math">\(\forall x \forall y\ (	ext{Eats}(x, y) \wedge \neg  	ext{Killed}(x) 	o 	ext{Food}(y))\)</span></li>
+<li>Anil eats peanuts and is still alive: <span class="math">\(ext{Eats}(	ext{Anil}, 	ext{Peanuts}) \wedge 	ext{Alive}(	ext{Anil})\)</span></li>
+<li>Harry eats everything that Anil eats: <span class="math">\(\forall x\ (	ext{Eats}(	ext{Anil}, x) 	o 	ext{Eats}(	ext{Harry}, x))\)</span></li>
+<li>Added background knowledge: <span class="math">\(\forall x\ (	ext{Alive}(x) 	o \neg  	ext{Killed}(x))\)</span></li>
 </ol>
-<strong>Prove by Resolution:</strong> <em>"John likes peanuts"</em> (<span class="math">	ext{Likes}(	ext{John}, 	ext{Peanuts})</span>).
+<strong>Prove by Resolution:</strong> <em>"John likes peanuts"</em> (<span class="math">\(ext{Likes}(	ext{John}, 	ext{Peanuts})\)</span>).
     </div>
 <div class="formula-box">
 <b>CONVERT TO CNF CLAUSES:</b>
 <ul>
-<li>C1: <span class="math">
-eg 	ext{Food}(x) ee 	ext{Likes}(	ext{John}, x)</span></li>
-<li>C2: <span class="math">
-eg 	ext{Eats}(y, z) ee 	ext{Killed}(y) ee 	ext{Food}(z)</span></li>
-<li>C3: <span class="math">	ext{Eats}(	ext{Anil}, 	ext{Peanuts})</span></li>
-<li>C4: <span class="math">	ext{Alive}(	ext{Anil})</span></li>
-<li>C5: <span class="math">
-eg 	ext{Alive}(k) ee 
-eg 	ext{Killed}(k)</span></li>
-<li><strong>Negated Goal Clause (C6):</strong> <span class="math">
-eg 	ext{Likes}(	ext{John}, 	ext{Peanuts})</span></li>
+<li>C1: <span class="math">\(\neg  	ext{Food}(x) \vee 	ext{Likes}(	ext{John}, x)\)</span></li>
+<li>C2: <span class="math">\(\neg  	ext{Eats}(y, z) \vee 	ext{Killed}(y) \vee 	ext{Food}(z)\)</span></li>
+<li>C3: <span class="math">\(ext{Eats}(	ext{Anil}, 	ext{Peanuts})\)</span></li>
+<li>C4: <span class="math">\(ext{Alive}(	ext{Anil})\)</span></li>
+<li>C5: <span class="math">\(\neg  	ext{Alive}(k) \vee \neg  	ext{Killed}(k)\)</span></li>
+<li><strong>Negated Goal Clause (C6):</strong> <span class="math">\(\neg  	ext{Likes}(	ext{John}, 	ext{Peanuts})\)</span></li>
 </ul>
 </div>
 <div class="calc-work">
 <b>RESOLUTION REFUTATION TREE TRACE:</b>
 <ol class="solution-steps">
-<li>Resolve Negated Goal <strong>C6</strong> [<span class="math">
-eg 	ext{Likes}(	ext{John}, 	ext{Peanuts})</span>] with <strong>C1</strong> [<span class="math">
-eg 	ext{Food}(x) ee 	ext{Likes}(	ext{John}, x)</span>] using substitution <span class="math">\{x / 	ext{Peanuts}\}</span>:
-          <br/>→ Resolvent <strong>C7:</strong> <span class="math">
-eg 	ext{Food}(	ext{Peanuts})</span>
+<li>Resolve Negated Goal <strong>C6</strong> [<span class="math">\(\neg  	ext{Likes}(	ext{John}, 	ext{Peanuts})\)</span>] with <strong>C1</strong> [<span class="math">\(\neg  	ext{Food}(x) \vee 	ext{Likes}(	ext{John}, x)\)</span>] using substitution <span class="math">\(\{x / 	ext{Peanuts}\}\)</span>:
+          <br/>→ Resolvent <strong>C7:</strong> <span class="math">\(\neg  	ext{Food}(	ext{Peanuts})\)</span>
 </li>
-<li>Resolve <strong>C7</strong> [<span class="math">
-eg 	ext{Food}(	ext{Peanuts})</span>] with <strong>C2</strong> [<span class="math">
-eg 	ext{Eats}(y, z) ee 	ext{Killed}(y) ee 	ext{Food}(z)</span>] using substitution <span class="math">\{z / 	ext{Peanuts}\}</span>:
-          <br/>→ Resolvent <strong>C8:</strong> <span class="math">
-eg 	ext{Eats}(y, 	ext{Peanuts}) ee 	ext{Killed}(y)</span>
+<li>Resolve <strong>C7</strong> [<span class="math">\(\neg  	ext{Food}(	ext{Peanuts})\)</span>] with <strong>C2</strong> [<span class="math">\(\neg  	ext{Eats}(y, z) \vee 	ext{Killed}(y) \vee 	ext{Food}(z)\)</span>] using substitution <span class="math">\(\{z / 	ext{Peanuts}\}\)</span>:
+          <br/>→ Resolvent <strong>C8:</strong> <span class="math">\(\neg  	ext{Eats}(y, 	ext{Peanuts}) \vee 	ext{Killed}(y)\)</span>
 </li>
-<li>Resolve <strong>C8</strong> with <strong>C3</strong> [<span class="math">	ext{Eats}(	ext{Anil}, 	ext{Peanuts})</span>] using substitution <span class="math">\{y / 	ext{Anil}\}</span>:
-          <br/>→ Resolvent <strong>C9:</strong> <span class="math">	ext{Killed}(	ext{Anil})</span>
+<li>Resolve <strong>C8</strong> with <strong>C3</strong> [<span class="math">\(ext{Eats}(	ext{Anil}, 	ext{Peanuts})\)</span>] using substitution <span class="math">\(\{y / 	ext{Anil}\}\)</span>:
+          <br/>→ Resolvent <strong>C9:</strong> <span class="math">\(ext{Killed}(	ext{Anil})\)</span>
 </li>
-<li>Resolve <strong>C9</strong> [<span class="math">	ext{Killed}(	ext{Anil})</span>] with <strong>C5</strong> [<span class="math">
-eg 	ext{Alive}(k) ee 
-eg 	ext{Killed}(k)</span>] using substitution <span class="math">\{k / 	ext{Anil}\}</span>:
-          <br/>→ Resolvent <strong>C10:</strong> <span class="math">
-eg 	ext{Alive}(	ext{Anil})</span>
+<li>Resolve <strong>C9</strong> [<span class="math">\(ext{Killed}(	ext{Anil})\)</span>] with <strong>C5</strong> [<span class="math">\(\neg  	ext{Alive}(k) \vee \neg  	ext{Killed}(k)\)</span>] using substitution <span class="math">\(\{k / 	ext{Anil}\}\)</span>:
+          <br/>→ Resolvent <strong>C10:</strong> <span class="math">\(\neg  	ext{Alive}(	ext{Anil})\)</span>
 </li>
-<li>Resolve <strong>C10</strong> [<span class="math">
-eg 	ext{Alive}(	ext{Anil})</span>] with Fact <strong>C4</strong> [<span class="math">	ext{Alive}(	ext{Anil})</span>]:
+<li>Resolve <strong>C10</strong> [<span class="math">\(\neg  	ext{Alive}(	ext{Anil})\)</span>] with Fact <strong>C4</strong> [<span class="math">\(ext{Alive}(	ext{Anil})\)</span>]:
           <br/>→ <strong>Resolvent: $\Box$ (EMPTY CLAUSE / CONTRADICTION)!</strong>
 </li>
 </ol>
@@ -494,7 +468,7 @@ eg 	ext{Alive}(	ext{Anil})</span>] with Fact <strong>C4</strong> [<span class="m
 <tr><th>Feature</th><th>Propositional Logic</th><th>First-Order Logic (FOL)</th></tr>
 <tr><td>Ontological Commitment</td><td>Facts that either hold or do not hold (True/False)</td><td>Objects, Properties, Relations, and Functions</td></tr>
 <tr><td>Epistemological Commitment</td><td>Degree of belief: True, False, or Unknown</td><td>True, False, or Unknown</td></tr>
-<tr><td>Expressive Power</td><td>Low (cannot express generalizations like "All men")</td><td>High (quantifiers $orall, \exists$ allow universal assertions)</td></tr>
+<tr><td>Expressive Power</td><td>Low (cannot express generalizations like "All men")</td><td>High (quantifiers $\forall, \exists$ allow universal assertions)</td></tr>
 <tr><td>Computational Decidability</td><td>Decidable (truth tables always terminate in $2^n$)</td><td>Semidecidable (sound and complete proofs terminate if true, but may loop if false)</td></tr>
 </table>
 <table>
