@@ -1,8 +1,886 @@
-<!doctype html>
 <!DOCTYPE html>
 
-<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unit 4 – Constraint Satisfaction Problems | AI Study Guide</title>
+<style>
+:root{--ink:#172435;--muted:#536578;--line:#d7e0e7;--accent:#087e8b;--paper:#fff;--wash:#f3f7f8}*{box-sizing:border-box}body{margin:0;background:var(--wash);color:var(--ink);font:17px/1.68 system-ui,-apple-system,Segoe UI,sans-serif}header,main,footer{max-width:1050px;margin:auto;padding:28px}header{padding-top:54px;padding-bottom:20px}h1{font-size:2.5rem;line-height:1.12;margin:.2em 0}.sub{color:var(--muted);font-size:1.05rem}section{background:var(--paper);padding:24px 30px;margin:18px 0;border-top:3px solid var(--accent);box-shadow:0 2px 10px #142b3a0c}h2{font-size:1.65rem;margin:.2em 0 .55em}h3{font-size:1.2rem;margin:1.2em 0 .3em}p{margin:.6em 0}li{margin:.28em 0}table{border-collapse:collapse;width:100%;margin:14px 0}th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}th{background:#eaf2f3}code,.math{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#eef3f4;padding:.08em .3em;border-radius:3px}.diagram{background:#f2f7f8;border-left:4px solid var(--accent);padding:14px 18px;overflow:auto;white-space:pre-wrap;font-family:ui-monospace,monospace;line-height:1.55}.exam{background:#fff8e7;border-left:4px solid #d69b14;padding:12px 16px}.step{font-weight:700;color:var(--accent)}.tag{color:var(--muted);font-size:.9rem}a{color:#006b78}footer{color:var(--muted)}
+.unit-controls{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap;width:100%;max-width:1050px;height:46px;margin:0 auto;padding:5px 0;background:#f3f7f8ed;backdrop-filter:blur(8px)}.unit-controls a{display:inline-block;background:#087e8b;color:#fff;text-decoration:none;padding:6px 10px;border-radius:6px;font-size:.88rem;font-weight:650;line-height:1.3}.unit-controls a:hover{background:#075d67}.unit-controls .home{background:#43586c}.unit-controls .disabled{display:inline-block;color:#718092;background:#edf1f4;padding:6px 10px;border-radius:6px;font-size:.88rem;font-weight:600;line-height:1.3}
+.toc-panel{position:fixed;z-index:90;top:62px;left:max(12px,calc((100vw - 1050px)/2 - 252px));width:232px;max-height:calc(100vh - 74px);overflow:auto;margin:0;background:#fff;border:1px solid #d7e0e7;border-radius:10px;box-shadow:0 8px 28px #17243518}.toc-panel details>summary{list-style:none;cursor:pointer;padding:10px 13px;font-weight:700;color:#172435;font-size:.94rem}.toc-panel details>summary::-webkit-details-marker{display:none}.toc-panel details>summary:after{content:"▼";float:right;color:#087e8b}.toc-panel details:not([open])>summary:after{content:"▶"}.toc-panel .toc{display:block;padding:0 8px 10px}.toc-panel .toc a{display:block;margin:2px 0;padding:7px 8px;color:#176778;text-decoration:none;font-size:.9rem;line-height:1.35;border-radius:6px}.toc-panel .toc a:hover{background:#eef6f6}
+.lesson-layout{display:block;width:100%;max-width:1050px;margin:0 auto;padding:0}.lesson-layout main{width:100%;max-width:1050px;min-width:0;margin:0 auto;padding:28px 0}
+.category>section{box-shadow:none;border-top:1px solid var(--line);padding:18px 2px;margin:10px 0;background:transparent}.category>section>h2{font-size:1.22rem;color:#087e8b}.category>h2{margin-bottom:14px}
+.point-list{margin:.45em 0 .9em;padding-left:1.35em;list-style:disc}.point-list li{padding-left:.18em;margin:.28em 0;line-height:1.55}.point-list li::marker{color:#087e8b}
+.numerical-guide{padding:13px 16px;margin:12px 0 16px;background:#e8f4f4;border:1px solid #c8e2e3;border-left:5px solid #087e8b;border-radius:7px;color:#173748}.numerical-guide strong{display:block;letter-spacing:.04em;color:#075d67}.numerical-guide span{display:block;margin-top:3px;font-size:.93rem}
+.numerical-tag{display:inline-block;padding:4px 8px;border-radius:4px;background:#087e8b;color:#fff;font-size:.76rem;letter-spacing:.05em;font-weight:800;line-height:1.25}
+.worked-block{padding:15px 18px 18px;margin:16px 0;background:#fff;border:1px solid #d7e0e7;border-left:4px solid #087e8b;border-radius:8px;box-shadow:0 2px 10px #17243508}.worked-block h3{margin:.1em 0 .85em;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.given-box,.formula-box,.answer-box{padding:10px 13px;margin:10px 0;border-radius:6px}.given-box{background:#f3f6f9}.formula-box{background:#edf5f6}.answer-box{background:#fff7e3;border-left:4px solid #d69b14}
+.given-box>b,.formula-box>b,.answer-box>b{display:block;margin-bottom:4px;font-size:.8rem;letter-spacing:.06em;color:#43586c}
+.solution-steps{margin:.65em 0 1em;padding-left:1.6em}.solution-steps>li{margin:.5em 0;padding-left:.25em;line-height:1.6}
+.figure{margin:18px 0;padding:12px 16px;background:#f2f7f8;border-left:4px solid #087e8b;overflow:auto}.figure svg{display:block;width:100%;max-width:900px;height:auto;margin:auto}.figure figcaption{text-align:center;color:#536578;font-size:.92rem;margin-top:5px}.svg-label{font:600 15px system-ui,sans-serif;fill:#172435}.svg-note{font:14px system-ui,sans-serif;fill:#536578}
+.related{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0 0 12px;color:#657586;font-size:.9rem}.related a{white-space:nowrap}
+@media print{body{background:white;font-size:11pt}section{box-shadow:none;break-inside:avoid}a{color:inherit;text-decoration:none}}
+@media(max-width:900px){.lesson-layout{max-width:100%;padding:0 16px}.lesson-layout main{max-width:100%;padding:20px 0}.toc-panel{left:12px;top:58px;width:min(232px,calc(100vw - 24px));max-height:calc(100vh - 68px)}.unit-controls{max-width:100%;padding:5px 12px}}
+</style>
+<style>.pyq-focus{margin:1.25rem 0 1.6rem;padding:1.1rem 1.25rem;border:1px solid #9bcbd0;border-left:5px solid #087f8c;border-radius:10px;background:#f1f8f8;color:#172638}.pyq-focus h3{margin:.1rem 0 .7rem}.pyq-focus h4{margin:1.15rem 0 .5rem;color:#075c66}.pyq-focus li{margin:.35rem 0}.pyq-focus .source-note,.source-note{font-size:.92em;color:#52677a;margin-top:.8rem}.pyq-focus .number-steps li{padding:.25rem 0}.pyq-focus .visual-example{margin:1rem 0;padding:.75rem;background:#fff;border:1px solid #d7e3e8;border-radius:8px}.pyq-focus svg{display:block;width:100%;height:auto;max-height:300px}.pyq-focus figcaption,.pyq-focus .visual-example p{font-size:.9em;color:#52677a}.pyq-focus .table-wrap{overflow-x:auto;margin:.75rem 0}.pyq-focus table{width:100%;border-collapse:collapse;background:#fff}.pyq-focus th,.pyq-focus td{border:1px solid #cfdae0;padding:.45rem .55rem;text-align:left}.pyq-focus th{background:#e5f1f3}.pyq-note{padding:.75rem 1rem;border-radius:8px;background:#fff4df;border-left:4px solid #da9f35}.pyq-focus ol{padding-left:1.5rem}</style></head>
+<body>
+<!-- ══════════ STICKY NAV ══════════ -->
+<nav class="unit-controls">
+<a href="unit_3.html">← Previous unit</a>
+<a href="unit_5.html">Next unit →</a>
+<a class="home" href="../index.html">NMIMS-STUDY home</a>
+</nav>
+<!-- ══════════ TOC PANEL ══════════ -->
+<nav class="toc-panel">
+<details open="">
+<summary>Unit 4 — Contents</summary>
+<div class="toc">
+<a href="#theory-section">📖 Theory &amp; Concepts</a>
+<a href="#t-csp-definition">  CSP Definition</a>
+<a href="#t-csp-components">  CSP Components</a>
+<a href="#t-constraint-types">  Types of Constraints</a>
+<a href="#t-map-coloring">  Map Coloring Example</a>
+<a href="#t-algorithms">  Algorithms for CSP</a>
+<a href="#t-backtracking">  Backtracking Search</a>
+<a href="#t-variable-ordering">  Variable &amp; Value Ordering</a>
+<a href="#t-forward-checking">  Forward Checking</a>
+<a href="#t-arc-consistency">  Arc Consistency</a>
+<a href="#t-intelligent-bt">  Intelligent Backtracking</a>
+<a href="#t-cryptarithmetic">  Cryptarithmetic</a>
+<a href="#numerical-section">🔢 Numericals</a>
+<a href="#comparison-section">⚖️ Comparisons</a>
+<a href="#case-section">📂 Case Studies</a>
+<a href="#questions-section">❓ Exam Questions</a>
+</div>
+</details>
+</nav>
+<!-- ══════════ HEADER ══════════ -->
+<header>
+<h1>Unit 4: Constraint Satisfaction Problems (CSP)</h1>
+<p class="sub">Artificial Intelligence — Prof. Jesleena Gonsalves | Comprehensive Exam-Ready Notes</p>
+</header>
+<div class="lesson-layout">
+<main>
+<!-- ╔══════════════════════════════════════════════════════════════╗ -->
+<!-- ║  SECTION 1 — THEORY                                        ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════╝ -->
+<section id="theory-section">
+<h2>📖 Theory &amp; In-Depth Concepts</h2>
+<!-- ─── 1.1 CSP DEFINITION ─── -->
+<div id="t-csp-definition">
+<h3>1.1 What is a Constraint Satisfaction Problem?</h3>
+<p>Constraint Satisfaction Problem (CSP) is a fundamental topic in artificial intelligence that deals with solving problems by <strong>identifying constraints</strong> and <strong>finding solutions that satisfy those constraints</strong>.</p>
+<div class="exam">
+<strong>🎯 Exam Definition (10-mark answer):</strong><br/>
+  A CSP is defined by a set of <em>variables</em>, each with a <em>domain</em> of possible values, and a set of <em>constraints</em> that specify allowable combinations of values. A <strong>solution</strong> is an assignment of values to all variables such that every constraint is satisfied.
+</div>
+<p>The goal of AI is to create intelligent machines that can perform tasks that usually require human intelligence, such as reasoning, learning, and problem solving. One of the key approaches in AI is the use of constraint satisfaction techniques to solve complex problems.</p>
+<ul class="point-list">
+<li>CSP is a <strong>specific type of problem-solving approach</strong> that involves identifying constraints that must be satisfied and finding a solution that satisfies all the constraints.</li>
+<li>CSP has been used in a variety of applications, including <strong>scheduling, planning, resource allocation, and automated reasoning</strong>.</li>
+<li>Unlike general search, CSP exploits the <em>structure</em> of states (each state is an assignment of values to variables) which enables powerful inference techniques.</li>
+</ul>
+</div>
+<!-- ─── 1.2 CSP COMPONENTS ─── -->
+<div id="t-csp-components">
+<h3>1.2 Formal Components of a CSP</h3>
+<p>Every CSP is formally described by three core components:</p>
+<table>
+<tr><th style="width:120px">Component</th><th>Description</th><th>Notation</th></tr>
+<tr><td><strong>Variables</strong></td><td>A finite set of entities that need to be assigned values.</td><td>X = {X₁, X₂, …, Xₙ}</td></tr>
+<tr><td><strong>Domains</strong></td><td>Each variable Xᵢ has a domain Dᵢ — the set of permissible values it can take.</td><td>D = {D₁, D₂, …, Dₙ}</td></tr>
+<tr><td><strong>Constraints</strong></td><td>A finite set of restrictions that limit the values that variables can simultaneously take.</td><td>C = {C₁, C₂, …, Cₘ}</td></tr>
+</table>
+<p>A <strong>consistent assignment</strong> is one that does not violate any constraint. A <strong>complete assignment</strong> is one in which every variable has a value. A <strong>solution</strong> to a CSP is a complete, consistent assignment.</p>
+<!-- SVG: CSP formal structure -->
+<div class="figure">
+<svg viewbox="0 0 700 220" xmlns="http://www.w3.org/2000/svg">
+<!-- Boxes -->
+<rect fill="#edf5f6" height="160" rx="12" stroke="#087e8b" stroke-width="2" width="180" x="30" y="30"></rect>
+<rect fill="#edf5f6" height="160" rx="12" stroke="#087e8b" stroke-width="2" width="180" x="260" y="30"></rect>
+<rect fill="#edf5f6" height="160" rx="12" stroke="#087e8b" stroke-width="2" width="180" x="490" y="30"></rect>
+<!-- Titles -->
+<text class="svg-label" font-size="16" text-anchor="middle" x="120" y="62">Variables (X)</text>
+<text class="svg-label" font-size="16" text-anchor="middle" x="350" y="62">Domains (D)</text>
+<text class="svg-label" font-size="16" text-anchor="middle" x="580" y="62">Constraints (C)</text>
+<!-- Content -->
+<text class="svg-note" text-anchor="middle" x="120" y="95">X₁, X₂, …, Xₙ</text>
+<text class="svg-note" text-anchor="middle" x="120" y="120">e.g. WA, NT, SA,</text>
+<text class="svg-note" text-anchor="middle" x="120" y="140">Q, NSW, V, T</text>
+<text class="svg-note" text-anchor="middle" x="350" y="95">D₁, D₂, …, Dₙ</text>
+<text class="svg-note" text-anchor="middle" x="350" y="120">e.g. {R, G, B}</text>
+<text class="svg-note" text-anchor="middle" x="350" y="145">for each variable</text>
+<text class="svg-note" text-anchor="middle" x="580" y="95">C₁, C₂, …, Cₘ</text>
+<text class="svg-note" text-anchor="middle" x="580" y="120">e.g. WA ≠ NT</text>
+<text class="svg-note" text-anchor="middle" x="580" y="145">SA ≠ Q, etc.</text>
+<!-- Arrows -->
+<line marker-end="url(#arrowG)" stroke="#087e8b" stroke-width="2" x1="210" x2="260" y1="110" y2="110"></line>
+<line marker-end="url(#arrowG)" stroke="#087e8b" stroke-width="2" x1="440" x2="490" y1="110" y2="110"></line>
+<defs><marker id="arrowG" markerheight="6" markerwidth="8" orient="auto" refx="8" refy="3"><path d="M0,0 L8,3 L0,6Z" fill="#087e8b"></path></marker></defs>
+</svg>
+<figcaption>Fig 4.1 — The three components of a CSP</figcaption>
+</div>
+</div>
+<!-- ─── 1.3 TYPES OF CONSTRAINTS ─── -->
+<div id="t-constraint-types">
+<h3>1.3 Types of Constraints in CSP</h3>
+<p class="related">➜ See comparison: <a href="#comparison-section">Constraint Types Comparison Table</a></p>
+<p>Several types of constraints can be used in a Constraint Satisfaction Problem in artificial intelligence, including:</p>
+<h4>1. Unary Constraints</h4>
+<p>A unary constraint is a constraint on a <strong>single variable</strong>. It restricts the values that a single variable can take.</p>
+<div class="exam"><strong>Example:</strong> Variable A ≠ "Red" — this means A cannot be assigned the color red.</div>
+<h4>2. Binary Constraints</h4>
+<p>A binary constraint involves <strong>two variables</strong> and specifies a constraint on their values. Binary constraints are the most common type of constraint in CSPs.</p>
+<div class="exam"><strong>Example:</strong> A constraint that two tasks cannot be scheduled at the same time would be a binary constraint. In map coloring: WA ≠ NT.</div>
+<h4>3. Global Constraints</h4>
+<p>Global constraints involve <strong>more than two variables</strong> and specify complex relationships between them.</p>
+<div class="exam"><strong>Example:</strong> A constraint that no two tasks can be scheduled at the same time if they require the same resource would be a global constraint. The <code>AllDiff</code> constraint (all variables must take different values) is a classic global constraint.</div>
+<!-- SVG: Constraint types illustration -->
+<div class="figure">
+<svg viewbox="0 0 750 200" xmlns="http://www.w3.org/2000/svg">
+<!-- Unary -->
+<circle cx="80" cy="100" fill="#c3e8eb" r="30" stroke="#087e8b" stroke-width="2"></circle>
+<text class="svg-label" font-size="14" text-anchor="middle" x="80" y="105">A</text>
+<text class="svg-note" font-size="12" text-anchor="middle" x="80" y="155">A ≠ Red</text>
+<text class="svg-label" font-size="13" text-anchor="middle" x="80" y="40">Unary</text>
+<!-- Binary -->
+<circle cx="270" cy="100" fill="#c3e8eb" r="30" stroke="#087e8b" stroke-width="2"></circle>
+<circle cx="380" cy="100" fill="#c3e8eb" r="30" stroke="#087e8b" stroke-width="2"></circle>
+<text class="svg-label" font-size="14" text-anchor="middle" x="270" y="105">WA</text>
+<text class="svg-label" font-size="14" text-anchor="middle" x="380" y="105">NT</text>
+<line stroke="#d69b14" stroke-width="2.5" x1="300" x2="350" y1="100" y2="100"></line>
+<text class="svg-note" font-size="11" text-anchor="middle" x="325" y="90">≠</text>
+<text class="svg-note" font-size="12" text-anchor="middle" x="325" y="155">WA ≠ NT</text>
+<text class="svg-label" font-size="13" text-anchor="middle" x="325" y="40">Binary</text>
+<!-- Global -->
+<circle cx="540" cy="80" fill="#c3e8eb" r="25" stroke="#087e8b" stroke-width="2"></circle>
+<circle cx="610" cy="130" fill="#c3e8eb" r="25" stroke="#087e8b" stroke-width="2"></circle>
+<circle cx="680" cy="80" fill="#c3e8eb" r="25" stroke="#087e8b" stroke-width="2"></circle>
+<text class="svg-label" font-size="12" text-anchor="middle" x="540" y="85">X₁</text>
+<text class="svg-label" font-size="12" text-anchor="middle" x="610" y="135">X₂</text>
+<text class="svg-label" font-size="12" text-anchor="middle" x="680" y="85">X₃</text>
+<line stroke="#d69b14" stroke-width="2" x1="560" x2="592" y1="92" y2="118"></line>
+<line stroke="#d69b14" stroke-width="2" x1="635" x2="665" y1="118" y2="92"></line>
+<line stroke="#d69b14" stroke-width="2" x1="565" x2="655" y1="80" y2="80"></line>
+<text class="svg-note" font-size="12" text-anchor="middle" x="610" y="175">AllDiff(X₁,X₂,X₃)</text>
+<text class="svg-label" font-size="13" text-anchor="middle" x="610" y="40">Global</text>
+</svg>
+<figcaption>Fig 4.2 — The three types of constraints: Unary, Binary, and Global</figcaption>
+</div>
+</div>
+<!-- ─── 1.4 MAP COLORING ─── -->
+<div id="t-map-coloring">
+<h3>1.4 CSP Example — Map Coloring (Australia)</h3>
+<p class="related">➜ Numerical example: <a href="#num-simple">Simple Map Coloring</a> | Case study: <a href="#case-section">Map Coloring Case</a></p>
+<p><strong>Task:</strong> Color a map of Australia showing each of its states and territories. Color each region either Red, Green, or Blue in such a way that <strong>no two neighboring regions have the same color</strong>.</p>
+<h4>Formulation as a CSP:</h4>
+<table>
+<tr><th>Component</th><th>Details</th></tr>
+<tr><td><strong>Variables</strong></td><td>WA, NT, SA, Q, NSW, V, T (7 states/territories)</td></tr>
+<tr><td><strong>Domains</strong></td><td>Dᵢ = {Red, Green, Blue} for every variable</td></tr>
+<tr><td><strong>Constraints</strong></td><td>Adjacent regions must differ: WA≠NT, WA≠SA, NT≠SA, NT≠Q, SA≠Q, SA≠NSW, SA≠V, Q≠NSW, NSW≠V</td></tr>
+</table>
+<!-- SVG: Map Coloring Constraint Graph -->
+<div class="figure">
+<svg viewbox="0 0 700 350" xmlns="http://www.w3.org/2000/svg">
+<!-- Edges (constraints) -->
+<line stroke="#aaa" stroke-width="2" x1="150" x2="300" y1="80" y2="80"></line>
+<line stroke="#aaa" stroke-width="2" x1="150" x2="250" y1="80" y2="200"></line>
+<line stroke="#aaa" stroke-width="2" x1="300" x2="250" y1="80" y2="200"></line>
+<line stroke="#aaa" stroke-width="2" x1="300" x2="450" y1="80" y2="80"></line>
+<line stroke="#aaa" stroke-width="2" x1="250" x2="450" y1="200" y2="80"></line>
+<line stroke="#aaa" stroke-width="2" x1="250" x2="500" y1="200" y2="180"></line>
+<line stroke="#aaa" stroke-width="2" x1="250" x2="400" y1="200" y2="280"></line>
+<line stroke="#aaa" stroke-width="2" x1="450" x2="500" y1="80" y2="180"></line>
+<line stroke="#aaa" stroke-width="2" x1="500" x2="400" y1="180" y2="280"></line>
+<!-- Nodes -->
+<circle cx="150" cy="80" fill="#ff6b6b" r="30" stroke="#333" stroke-width="2"></circle>
+<text class="svg-label" fill="#fff" text-anchor="middle" x="150" y="86">WA</text>
+<circle cx="300" cy="80" fill="#51cf66" r="30" stroke="#333" stroke-width="2"></circle>
+<text class="svg-label" fill="#fff" text-anchor="middle" x="300" y="86">NT</text>
+<circle cx="450" cy="80" fill="#ff6b6b" r="30" stroke="#333" stroke-width="2"></circle>
+<text class="svg-label" fill="#fff" text-anchor="middle" x="450" y="86">Q</text>
+<circle cx="250" cy="200" fill="#339af0" r="30" stroke="#333" stroke-width="2"></circle>
+<text class="svg-label" fill="#fff" text-anchor="middle" x="250" y="206">SA</text>
+<circle cx="500" cy="180" fill="#51cf66" r="30" stroke="#333" stroke-width="2"></circle>
+<text class="svg-label" fill="#fff" text-anchor="middle" x="500" y="186">NSW</text>
+<circle cx="400" cy="280" fill="#ff6b6b" r="30" stroke="#333" stroke-width="2"></circle>
+<text class="svg-label" fill="#fff" text-anchor="middle" x="400" y="286">V</text>
+<circle cx="600" cy="310" fill="#ff6b6b" r="30" stroke="#333" stroke-width="2"></circle>
+<text class="svg-label" fill="#fff" text-anchor="middle" x="600" y="316">T</text>
+<!-- Legend -->
+<rect fill="#ff6b6b" height="14" rx="3" width="14" x="20" y="310"></rect>
+<text class="svg-note" font-size="12" x="40" y="323">Red</text>
+<rect fill="#51cf66" height="14" rx="3" width="14" x="80" y="310"></rect>
+<text class="svg-note" font-size="12" x="100" y="323">Green</text>
+<rect fill="#339af0" height="14" rx="3" width="14" x="150" y="310"></rect>
+<text class="svg-note" font-size="12" x="170" y="323">Blue</text>
+<text class="svg-note" font-size="11" text-anchor="middle" x="350" y="340">Edges = "must differ" constraints between adjacent regions</text>
+</svg>
+<figcaption>Fig 4.3 — Constraint graph for Australia map coloring with one valid solution</figcaption>
+</div>
+<p><strong>One valid solution:</strong> WA=Red, NT=Green, SA=Blue, Q=Red, NSW=Green, V=Red, T=Red (Tasmania has no constraint with mainland states).</p>
+</div>
+<!-- ─── 1.5 ALGORITHMS OVERVIEW ─── -->
+<div id="t-algorithms">
+<h3>1.5 What Kinds of Algorithms are Used for CSP?</h3>
+<p>Four major algorithmic strategies are used for solving CSPs:</p>
+<ol>
+<li><strong>Backtracking Tree Search</strong> — systematic depth-first exploration.</li>
+<li><strong>Tree Search with Forward Checking</strong> — look-ahead to prune domains.</li>
+<li><strong>Tree Search with Discrete Relaxation (Arc Consistency)</strong> — enforce consistency between all variable pairs.</li>
+<li><strong>Local Search using Complete State Formulation</strong> — start with a complete (possibly incorrect) assignment and iteratively improve.</li>
+</ol>
+</div>
+<!-- ─── 1.6 BACKTRACKING SEARCH ─── -->
+<div id="t-backtracking">
+<h3>1.6 Backtracking Search in CSPs</h3>
+<p class="related">➜ Compare: <a href="#comp-bt-fc">Backtracking vs Forward Checking</a> | Numerical: <a href="#num-medium">Forward Checking Walkthrough</a></p>
+<p>Backtracking search is the foundational algorithm for solving CSPs:</p>
+<ul class="point-list">
+<li>It chooses values for <strong>one variable at a time</strong> and backtracks when a variable has no legal values left to assign.</li>
+<li>Variable assignments are <strong>commutative</strong>, i.e., [WA=red then NT=green] is the same as [NT=green then WA=red].</li>
+<li>Only need to consider assignments to a <strong>single variable at each node</strong>.</li>
+<li><strong>Depth-first search</strong> for CSPs with single-variable assignments is called backtracking search.</li>
+</ul>
+<div class="exam">
+<strong>🎯 Key Exam Point:</strong> Backtracking is essentially DFS + one variable assigned per level + consistency check at each assignment.
+</div>
+<!-- SVG: Backtracking Search Pseudocode Flowchart -->
+<div class="figure">
+<svg viewbox="0 0 700 420" xmlns="http://www.w3.org/2000/svg">
+<!-- Start -->
+<rect fill="#087e8b" height="40" rx="20" stroke="none" width="200" x="250" y="10"></rect>
+<text fill="#fff" font-size="14" font-weight="600" text-anchor="middle" x="350" y="36">BACKTRACKING-SEARCH</text>
+<line marker-end="url(#arrowG)" stroke="#087e8b" stroke-width="2" x1="350" x2="350" y1="50" y2="75"></line>
+<!-- Decision: all assigned? -->
+<polygon fill="#fff8e7" points="350,75 480,120 350,165 220,120" stroke="#d69b14" stroke-width="2"></polygon>
+<text font-size="12" font-weight="600" text-anchor="middle" x="350" y="117">All variables</text>
+<text font-size="12" font-weight="600" text-anchor="middle" x="350" y="133">assigned?</text>
+<!-- Yes -->
+<line marker-end="url(#arrowG)" stroke="#087e8b" stroke-width="2" x1="480" x2="580" y1="120" y2="120"></line>
+<text class="svg-note" font-size="11" x="520" y="112">Yes</text>
+<rect fill="#51cf66" height="40" rx="8" stroke="none" width="100" x="580" y="100"></rect>
+<text fill="#fff" font-size="13" font-weight="600" text-anchor="middle" x="630" y="125">SOLUTION</text>
+<!-- No -->
+<line marker-end="url(#arrowG)" stroke="#087e8b" stroke-width="2" x1="350" x2="350" y1="165" y2="195"></line>
+<text class="svg-note" font-size="11" x="362" y="183">No</text>
+<!-- Select var -->
+<rect fill="#edf5f6" height="38" rx="8" stroke="#087e8b" stroke-width="1.5" width="240" x="230" y="195"></rect>
+<text font-size="12" font-weight="600" text-anchor="middle" x="350" y="219">Select unassigned variable X</text>
+<line marker-end="url(#arrowG)" stroke="#087e8b" stroke-width="2" x1="350" x2="350" y1="233" y2="258"></line>
+<!-- For each value -->
+<rect fill="#edf5f6" height="38" rx="8" stroke="#087e8b" stroke-width="1.5" width="280" x="210" y="258"></rect>
+<text font-size="12" font-weight="600" text-anchor="middle" x="350" y="282">For each value v in Domain(X)</text>
+<line marker-end="url(#arrowG)" stroke="#087e8b" stroke-width="2" x1="350" x2="350" y1="296" y2="320"></line>
+<!-- Consistent? -->
+<polygon fill="#fff8e7" points="350,320 460,355 350,390 240,355" stroke="#d69b14" stroke-width="2"></polygon>
+<text font-size="12" font-weight="600" text-anchor="middle" x="350" y="358">Consistent?</text>
+<!-- Yes - recurse -->
+<line marker-end="url(#arrowG)" stroke="#087e8b" stroke-width="2" x1="460" x2="560" y1="355" y2="355"></line>
+<text class="svg-note" font-size="11" x="500" y="347">Yes</text>
+<rect fill="#087e8b" height="38" rx="8" stroke="none" width="120" x="560" y="335"></rect>
+<text fill="#fff" font-size="12" font-weight="600" text-anchor="middle" x="620" y="359">Assign &amp; Recurse</text>
+<!-- No - try next -->
+<line marker-end="url(#arrowG)" stroke="#d69b14" stroke-width="2" x1="240" x2="140" y1="355" y2="355"></line>
+<text class="svg-note" font-size="11" x="195" y="347">No</text>
+<rect fill="#ff6b6b" height="38" rx="8" stroke="none" width="80" x="60" y="335"></rect>
+<text fill="#fff" font-size="12" font-weight="600" text-anchor="middle" x="100" y="359">Skip v</text>
+</svg>
+<figcaption>Fig 4.4 — Backtracking search algorithm flowchart</figcaption>
+</div>
+<h4>Pseudocode:</h4>
+<div class="diagram">function BACKTRACKING-SEARCH(csp) returns solution or failure
+    return BACKTRACK({}, csp)
 
-<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Unit 4 · Constraint Satisfaction Problems</title><style>:root{--ink:#172435;--muted:#536578;--line:#d7e0e7;--accent:#087e8b;--paper:#fff;--wash:#f3f7f8}*{box-sizing:border-box}body{margin:0;background:var(--wash);color:var(--ink);font:17px/1.68 system-ui,-apple-system,Segoe UI,sans-serif}header,main,footer{max-width:1050px;margin:auto;padding:28px}header{padding-top:54px;padding-bottom:20px}h1{font-size:2.5rem;line-height:1.12;margin:.2em 0}.sub{color:var(--muted);font-size:1.05rem}nav{padding:0 28px 22px;max-width:1050px;margin:auto}nav a{display:inline-block;margin:4px 14px 4px 0;color:var(--accent)}section{background:var(--paper);padding:24px 30px;margin:18px 0;border-top:3px solid var(--accent);box-shadow:0 2px 10px #142b3a0c}h2{font-size:1.65rem;margin:.2em 0 .55em}h3{font-size:1.2rem;margin:1.2em 0 .3em}p{margin:.6em 0}li{margin:.28em 0}table{border-collapse:collapse;width:100%;margin:14px 0}th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}th{background:#eaf2f3}code,.math{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#eef3f4;padding:.08em .3em;border-radius:3px}.diagram{background:#f2f7f8;border-left:4px solid var(--accent);padding:14px 18px;overflow:auto;white-space:pre-wrap;font-family:ui-monospace,monospace;line-height:1.55}.exam{background:#fff8e7;border-left:4px solid #d69b14;padding:12px 16px}.step{font-weight:700;color:var(--accent)}.refs{font-size:.95rem}.tag{color:var(--muted);font-size:.9rem}a{color:#006b78}footer{color:var(--muted)}@media print{body{background:white;font-size:11pt}section{box-shadow:none;break-inside:avoid}a{color:inherit;text-decoration:none}nav{display:none}} .unit-controls{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap;width:100%;max-width:1050px;height:46px;margin:0 auto;padding:5px 0;background:#f3f7f8ed;backdrop-filter:blur(8px)}.unit-controls a{display:inline-block;background:#087e8b;color:#fff;text-decoration:none;padding:6px 10px;border-radius:6px;font-size:.88rem;font-weight:650;line-height:1.3}.unit-controls a:hover{background:#075d67}.unit-controls .home{background:#43586c}.unit-controls .disabled{display:inline-block;color:#718092;background:#edf1f4;padding:6px 10px;border-radius:6px;font-size:.88rem;font-weight:600;line-height:1.3}<style>.toc{display:flex;flex-wrap:wrap;gap:8px 18px;padding:0 28px 18px;max-width:1106px;margin:0 auto}.toc a{font-size:.94rem}.category>section{box-shadow:none;border-top:1px solid var(--line);padding:18px 2px;margin:10px 0;background:transparent}.category>section>h2{font-size:1.22rem;color:#087e8b}.category>h2{margin-bottom:14px}.related{margin:0 0 12px;color:#657586;font-size:.9rem}.related a{white-space:nowrap}.figure{margin:18px 0;padding:12px 16px;background:#f2f7f8;border-left:4px solid #087e8b;overflow:auto}.figure svg{display:block;width:100%;max-width:900px;height:auto;margin:auto}.figure figcaption{text-align:center;color:#536578;font-size:.92rem;margin-top:5px}.svg-label{font:600 15px system-ui,sans-serif;fill:#172435}.svg-note{font:14px system-ui,sans-serif;fill:#536578}.method-note{color:#536578}.category{scroll-margin-top:15px}@media(max-width:620px){.toc{padding-left:18px;padding-right:18px}.figure{padding:8px}.figure svg{min-width:620px}}.lesson-layout{display:block;width:100%;max-width:1050px;margin:0 auto;padding:0}.lesson-layout main{width:100%;max-width:1050px;min-width:0;margin:0 auto;padding:28px 0}.toc-panel{position:fixed;z-index:90;top:62px;left:max(12px,calc((100vw - 1050px)/2 - 252px));width:232px;max-height:calc(100vh - 74px);overflow:auto;margin:0;background:#fff;border:1px solid #d7e0e7;border-radius:10px;box-shadow:0 8px 28px #17243518}.toc-panel details>summary{list-style:none;cursor:pointer;padding:10px 13px;font-weight:700;color:#172435;font-size:.94rem}.toc-panel details>summary::-webkit-details-marker{display:none}.toc-panel details>summary:after{content:"⌄";float:right;color:#087e8b}.toc-panel details:not([open])>summary:after{content:"›"}.toc-panel .toc{display:block;padding:0 8px 10px}.toc-panel .toc a{display:block;margin:2px 0;padding:7px 8px;color:#176778;text-decoration:none;font-size:.9rem;line-height:1.35;border-radius:6px}.toc-panel .toc a:hover{background:#eef6f6;text-decoration:none}.lesson-layout main section[id],.lesson-layout main .category{scroll-margin-top:68px}@media(max-width:900px){.lesson-layout{max-width:100%;padding:0 16px}.lesson-layout main{max-width:100%;padding:20px 0}.toc-panel{left:12px;top:58px;width:min(232px,calc(100vw - 24px));max-height:calc(100vh - 68px)}.unit-controls{max-width:100%;padding:5px 12px}}</style><style><style>
-.point-list{margin:.45em 0 .9em;padding-left:1.35em;list-style:disc}.point-list li{padding-left:.18em;margin:.28em 0;line-height:1.55}.point-list li::marker{color:#087e8b}.category>section>ol,.category>section>ul:not(.point-list){padding-left:1.45em}.category>section>ol>li{margin:.36em 0;padding-left:.2em}.numerical-guide{padding:13px 16px;margin:12px 0 16px;background:#e8f4f4;border:1px solid #c8e2e3;border-left:5px solid #087e8b;border-radius:7px;color:#173748}.numerical-guide strong{display:block;letter-spacing:.04em;color:#075d67}.numerical-guide span{display:block;margin-top:3px;font-size:.93rem}.numerical-tag{display:inline-block;padding:4px 8px;border-radius:4px;background:#087e8b;color:#fff;font-size:.76rem;letter-spacing:.05em;font-weight:800;line-height:1.25}.worked-block{padding:15px 18px 18px;margin:16px 0;background:#fff;border:1px solid #d7e0e7;border-left:4px solid #087e8b;border-radius:8px;box-shadow:0 2px 10px #17243508}.worked-block h3{margin:.1em 0 .85em;display:flex;align-items:center;gap:9px;flex-wrap:wrap}.given-box,.formula-box,.answer-box{padding:10px 13px;margin:10px 0;border-radius:6px}.given-box{background:#f3f6f9}.formula-box{background:#edf5f6}.answer-box{background:#fff7e3;border-left:4px solid #d69b14}.given-box>b,.formula-box>b,.answer-box>b{display:block;margin-bottom:4px;font-size:.8rem;letter-spacing:.06em;color:#43586c}.given-box ul{margin:3px 0;padding-left:1.25em}.formula-box ol{margin:.35em 0}.solution-steps{margin:.65em 0 1em;padding-left:1.6em}.solution-steps>li{margin:.5em 0;padding-left:.25em;line-height:1.6}.method-note{padding:10px 13px;background:#f5f7f9;border-radius:6px;color:#536578}.related{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-</style><style>.example-figure{margin:12px 0 16px;background:#f5f8fa;border-left-color:#c18a2b}.example-figure svg{max-width:760px}.example-figure figcaption{font-size:.9rem}</style></head><body><header><p class="tag">ARTIFICIAL INTELLIGENCE · EXAM NOTES</p><h1>Unit 4 · Constraint Satisfaction Problems</h1><p class="sub">Learn how to model assignment problems and solve them with search and propagation. CSP formulation, backtracking, variable/value ordering, propagation, intelligent backtracking and cryptarithmetic.</p></header><nav aria-label="Unit navigation" class="unit-controls"><a href="unit_3.html">← Previous unit</a><a class="home" href="../index.html">NMIMS-STUDY home</a><a href="unit_5.html">Next unit →</a></nav><div class="lesson-layout"><aside class="toc-panel"><details open=""><summary>On this page</summary><nav aria-label="Notes sections" class="toc"><a href="#theory-section">1. In-depth theory explanation</a> <a href="#numerical-section">2. Worked examples · simple / medium / complex</a> <a href="#comparison-section">3. Comparative studies</a> <a href="#case-section">4. Case studies and real-life examples</a> <a href="#questions-section">5. Possible exam questions</a></nav></details></aside><main><section class="category" id="theory-section"><h2>1. In-depth theory explanation</h2><p class="related">Related: <a href="#numerical-section">worked examples</a> <span aria-hidden="true">·</span> <a href="#comparison-section">comparative studies</a> <span aria-hidden="true">·</span> <a href="#case-section">case studies</a></p><section id="form"><h2>1. CSP model and constraint types</h2><ul class="point-list"><li>A constraint satisfaction problem is <span class="math">(X,D,C)</span>: variables X, domains D of allowed values, and constraints C that specify allowed combinations.</li><li>A solution is a complete assignment satisfying every constraint.</li><li>Partial assignments are consistent if no constraint is violated.</li><li>Constraint graph: variables are nodes; binary constraints are edges.</li></ul><table><tr><th>Constraint</th><th>Example</th></tr><tr><td>Unary</td><td>WA ≠ red.</td></tr><tr><td>Binary</td><td>WA ≠ NT (neighboring map regions differ).</td></tr><tr><td>Global</td><td>AllDifferent(A,B,C,D), or no two exams in a shared room/time.</td></tr></table><figure class="figure"><svg aria-labelledby="fig11title fig11desc" role="img" viewbox="0 0 820 170"><title id="fig11title">CSP constraint graph</title><desc id="fig11desc">Each edge represents a constraint between adjacent regions.</desc><defs><marker id="fig11arr" markerheight="10" markerwidth="10" orient="auto" refx="8" refy="3"><path d="M0,0 L0,6 L9,3 z" fill="#087e8b"></path></marker></defs><rect fill="#eaf2f3" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="13.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="102.5" y="87.0">Variables</text><text class="svg-label" text-anchor="middle" x="102.5" y="109.0">regions</text><line marker-end="url(#fig11arr)" stroke="#087e8b" stroke-width="2.5" x1="195.5" x2="210.5" y1="98.0" y2="98.0"></line><rect fill="#fff" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="218.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="307.5" y="87.0">Domains</text><text class="svg-label" text-anchor="middle" x="307.5" y="109.0">R, G, B</text><line marker-end="url(#fig11arr)" stroke="#087e8b" stroke-width="2.5" x1="400.5" x2="415.5" y1="98.0" y2="98.0"></line><rect fill="#eaf2f3" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="423.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="512.5" y="87.0">Edges</text><text class="svg-label" text-anchor="middle" x="512.5" y="109.0">neighbor ≠</text><line marker-end="url(#fig11arr)" stroke="#087e8b" stroke-width="2.5" x1="605.5" x2="620.5" y1="98.0" y2="98.0"></line><rect fill="#fff" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="628.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="717.5" y="87.0">Consistent assignment</text><text class="svg-label" text-anchor="middle" x="717.5" y="109.0">solution</text><text class="svg-note" text-anchor="middle" x="410.0" y="155">Each edge represents a constraint between adjacent regions.</text></svg><figcaption>CSP constraint graph</figcaption></figure></section><section id="backtrack"><h2>2. Backtracking search</h2><ul class="point-list"><li>Backtracking is depth-first search assigning one variable at a time.</li><li>At each step choose an unassigned variable, try a domain value consistent with assigned neighbors, recurse; if no value works, undo the last choice.</li><li>Assignments commute, so search need not represent every ordering of the same assignment set.</li></ul><ol><li>Select variable and value.</li><li>Check constraints against current partial assignment.</li><li>If consistent, continue.</li><li>If failure, undo and try another value.</li><li>Success when all variables assigned consistently.</li></ol><ul class="point-list"><li>Worst-case exponential, roughly O(d<sup>n</sup>) for n variables and domain size d, but heuristics and propagation cut the explored tree substantially.</li></ul></section><section id="heur"><h2>3. Variable/value ordering heuristics</h2><ul class="point-list"><li><b>MRV (minimum remaining values):</b> choose the unassigned variable with the fewest legal values; exposes failure early.</li><li><b>Degree heuristic:</b> break ties by choosing the variable constraining the most unassigned neighbors.</li><li><b>LCV (least constraining value):</b> try the value that rules out the fewest choices for neighbors first.</li></ul><h3>Worked map-coloring trace</h3><ul class="point-list"><li>Australia variables WA, NT, SA, Q, NSW, V, T; each domain {R,G,B}; adjacent regions differ.</li></ul><ol><li>Choose SA first by degree: it touches WA, NT, Q, NSW, V.</li><li>Assign SA=R. Neighbors lose R, domains become {G,B}; Tasmania T remains {R,G,B}.</li><li>Choose a neighbor, e.g. NT, then MRV ties; use degree to prioritize WA/Q/NSW as appropriate.</li><li>Assign NT=G; WA and Q cannot be G or R (adjacent to SA), so WA= B and Q=B are forced if their remaining domains shrink to one.</li><li>Check Q–NSW: because both cannot be B, set NSW=G; then V adjacent to SA and NSW must be B.</li><li>Final assignment is valid if every edge has different colors; backtrack immediately if a domain empties.</li></ol></section><section id="prop"><h2>4. Constraint propagation: forward checking and arc consistency</h2><ul class="point-list"><li><b>Forward checking</b> after assigning X=v removes inconsistent values from each unassigned neighbor’s domain.</li><li>If any becomes empty, fail early.</li><li>It does not propagate through chains beyond direct neighbors.</li></ul><ul class="point-list"><li><b>Arc consistency:</b> directed arc X→Y is consistent if for every value x in D(X), there is some y in D(Y) satisfying constraint(X,Y).</li><li>Revise removes unsupported x values; enqueue affected neighboring arcs and repeat until no changes or a domain empties (AC-3 pattern).</li><li>Stronger propagation than forward checking, but costs more.</li></ul><figure class="figure"><svg aria-labelledby="fig12title fig12desc" role="img" viewbox="0 0 820 170"><title id="fig12title">Constraint propagation</title><desc id="fig12desc">Propagation reduces domains before choosing every variable.</desc><defs><marker id="fig12arr" markerheight="10" markerwidth="10" orient="auto" refx="8" refy="3"><path d="M0,0 L0,6 L9,3 z" fill="#087e8b"></path></marker></defs><rect fill="#eaf2f3" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="13.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="102.5" y="98.0">Assign value</text><line marker-end="url(#fig12arr)" stroke="#087e8b" stroke-width="2.5" x1="195.5" x2="210.5" y1="98.0" y2="98.0"></line><rect fill="#fff" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="218.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="307.5" y="87.0">Remove conflicts</text><text class="svg-label" text-anchor="middle" x="307.5" y="109.0">forward check</text><line marker-end="url(#fig12arr)" stroke="#087e8b" stroke-width="2.5" x1="400.5" x2="415.5" y1="98.0" y2="98.0"></line><rect fill="#eaf2f3" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="423.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="512.5" y="87.0">Propagate support</text><text class="svg-label" text-anchor="middle" x="512.5" y="109.0">arc consistency</text><line marker-end="url(#fig12arr)" stroke="#087e8b" stroke-width="2.5" x1="605.5" x2="620.5" y1="98.0" y2="98.0"></line><rect fill="#fff" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="628.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="717.5" y="87.0">Empty domain?</text><text class="svg-label" text-anchor="middle" x="717.5" y="109.0">backtrack</text><text class="svg-note" text-anchor="middle" x="410.0" y="155">Propagation reduces domains before choosing every variable.</text></svg><figcaption>Constraint propagation</figcaption></figure><ul class="point-list"><li>Deck’s example: assigning WA=R removes R from neighbors.</li><li>Later assigning NT=G constrains SA, Q, NSW and V; propagation can force values before those variables are selected.</li></ul></section><section id="backjump"><h2>5. Intelligent backtracking</h2><ul class="point-list"><li>Chronological backtracking returns to the immediately preceding variable, even if it did not cause the failure.</li><li>Backjumping records a <b>conflict set</b> of prior variables that constrain the failed variable and jumps to the most recent variable in that set.</li><li>In the slide example, failure at SA depends on {Q, NSW, V}; changing Tasmania cannot help, so skip it and backtrack to V.</li><li>Conflict-directed methods avoid repeating irrelevant choices.</li></ul></section><section id="lesson-csp"><h2>Lesson A · Why constraint satisfaction is a special kind of search</h2><ul class="point-list"><li>Many problems are not about finding any path through states; they are about assigning values while obeying restrictions.</li><li>A timetable assigns a time and room to every course.</li><li>Map coloring assigns a color to every region.</li><li>A cryptarithm assigns digits to letters.</li><li>In each case, a solution is a complete assignment with no violated constraint.</li></ul><ul class="point-list"><li>Write a CSP as variables X, domains D and constraints C.</li><li>A partial assignment is consistent if all constraints whose variables are assigned are satisfied.</li><li>A constraint graph is helpful: each variable is a node, each binary constraint is an edge.</li><li>Dense/high-degree variables restrict many neighbors, which is why degree ordering is useful.</li></ul><h3>Australia map model</h3><ul class="point-list"><li>Variables WA, NT, SA, Q, NSW, V, T.</li><li>Each mainland region has domain {R,G,B}; T has the same domain but no adjacency with mainland in the standard diagram.</li><li>For each neighboring pair impose inequality: WA≠NT, WA≠SA, NT≠SA, NT≠Q, SA≠Q, SA≠NSW, SA≠V, Q≠NSW, NSW≠V.</li><li>A solution is an assignment satisfying every listed edge.</li><li>Writing the constraints explicitly prevents accidentally omitting a border.</li></ul><svg aria-label="Australia map coloring constraint graph" role="img" viewbox="0 0 780 320"><g stroke="#087e8b" stroke-width="3"><path d="M190 75 L350 70 M190 75 L250 155 M350 70 L250 155 M350 70 L500 95 M250 155 L500 95 M250 155 L510 175 M250 155 L380 245 M500 95 L510 175 M510 175 L380 245"></path></g><g fill="#eaf2f3" stroke="#087e8b" stroke-width="2"><circle cx="190" cy="75" r="30"></circle><circle cx="350" cy="70" r="30"></circle><circle cx="250" cy="155" r="30"></circle><circle cx="500" cy="95" r="30"></circle><circle cx="510" cy="175" r="30"></circle><circle cx="380" cy="245" r="30"></circle><circle cx="680" cy="245" r="30"></circle></g><g fill="#172435" text-anchor="middle"><text x="190" y="81">WA</text><text x="350" y="76">NT</text><text x="250" y="161">SA</text><text x="500" y="101">Q</text><text x="510" y="181">NSW</text><text x="380" y="251">V</text><text x="680" y="251">T</text></g><text fill="#536578" x="650" y="205">T is isolated</text></svg></section><section id="lesson-backtrack"><h2>Lesson B · Backtracking and ordering heuristics</h2><ul class="point-list"><li>Backtracking is depth-first search specialized to assignments.</li><li>It assigns one variable, checks constraints, and descends only when the partial assignment remains consistent.</li><li>If a variable has no legal value, it retracts earlier choices and tries another.</li><li>The method is complete for finite domains if it systematically tries all values, but worst-case effort is exponential.</li></ul><ul class="point-list"><li>Three heuristics reduce wasted search.</li><li>MRV chooses the variable with fewest legal values; this reveals a dead end as soon as possible.</li><li>Degree chooses the variable constraining the most remaining variables (tie-break).</li><li>LCV chooses the value that removes the fewest neighbor choices, preserving flexibility.</li></ul><h3>Map coloring trace with MRV/degree logic</h3><ol><li>Initially all regions have 3 colors. SA has the most neighbors, so degree heuristic chooses SA.</li><li>Set SA=R. Remove R from WA, NT, Q, NSW and V; their domains become {G,B}. T remains {R,G,B}.</li><li>Choose NT. Try NT=G (a valid value); then WA, Q lose G. Because both also neighbor SA=R, WA and Q are forced to B.</li><li>Q= B means NSW cannot be B; NSW also cannot be SA’s R, so NSW=G.</li><li>V cannot be R (SA) or G (NSW), so V=B. T is independent and may take any color.</li><li>Check all edges; the assignment is valid. If at any point a domain becomes empty, undo the most recent relevant assignment.</li></ol><ul class="point-list"><li>The exact order can differ with tie-breaking, but each attempted value must be checked against all assigned neighbors.</li></ul></section><section id="lesson-propagation"><h2>Lesson C · Forward checking and arc consistency</h2><ul class="point-list"><li>Search can learn from a choice before selecting every variable.</li><li>Forward checking removes from each unassigned neighbor any value incompatible with the newly assigned variable.</li><li>It detects an immediate empty domain but does not necessarily carry implications through a longer chain.</li></ul><ul class="point-list"><li>Arc consistency is stronger.</li><li>For each directed arc X→Y, every value in X’s domain must have at least one supporting value in Y’s domain satisfying their constraint.</li><li>If not, remove that value from X and revisit arcs pointing to X’s neighbors.</li><li>Repeat until no domain changes.</li><li>It can be used before search or after each assignment.</li><li>Arc consistency is a pruning method, not a guarantee that a complete solution exists.</li></ul><h3>Small numeric domain example</h3><ul class="point-list"><li>Let X,Y,Z each have domain {1,2,3}; constraints X&lt;Y and Y&lt;Z.</li></ul><ol><li>For arc X→Y, X=3 has no supporting Y greater than 3, so remove 3 from D(X).</li><li>For arc Y→Z, Y=3 has no supporting Z greater than 3, so remove 3 from D(Y).</li><li>Revisit X→Y: X=2 now has no supporting Y greater than 2 because D(Y)={1,2}; remove 2 from D(X).</li><li>Revisit Y→Z: Y=2 has no supporting Z greater than 2 because D(Z)={1,2,3} actually Z=3 supports it, so retain 2. X must be 1; then X&lt;Y forces Y∈{2,3}; Y&lt;Z retains support.</li><li>Domains have been reduced without choosing a complete assignment; search can now start with fewer options.</li></ol><ul class="point-list"><li>When writing AC-3 by hand, name the arc, state which value lacks support, remove it, and show the updated domain.</li><li>This is the clearest way to earn process marks.</li></ul></section><section id="lesson-intelligent"><h2>Lesson D · Intelligent backtracking and local search</h2><ul class="point-list"><li>Chronological backtracking returns to the last decision even when it did not cause failure.</li><li>Conflict-directed backjumping records which earlier assignments caused a variable’s domain to empty, then jumps to the most recent assignment in that conflict set.</li><li>If SA has no available color because of Q, NSW and V, changing Tasmania cannot fix it; backjumping avoids that irrelevant reversal.</li></ul><ul class="point-list"><li>Local search for CSP begins with a complete assignment (possibly inconsistent), then repeatedly changes a variable to reduce conflicts.</li><li>Min-conflicts chooses a conflicted variable and a value that minimizes violated constraints.</li><li>It can solve large scheduling-like instances quickly but may get trapped or fail to prove no solution exists.</li><li>Random restarts help; unlike backtracking, local search is not generally complete.</li></ul></section><section id="cryptarithmetic-theory"><h2>Cryptarithmetic as a constraint-satisfaction problem</h2><ul class="point-list"><li>Each letter is a variable and its domain is the decimal digits 0–9.</li><li>AllDifferent requires distinct letters to map to distinct digits.</li><li>Leading letters cannot be zero.</li><li>Each arithmetic column becomes a constraint with a carry variable.</li><li>Search assigns digits while propagation rejects inconsistent partial assignments.</li></ul></section></section><section class="category" id="numerical-section"><h2>2. Worked numerical examples</h2><div class="numerical-guide"><strong>NUMERICAL WORKING · GIVEN → FORMULA / RULE → STEPS → FINAL ANSWER</strong><span>Every example is separated into supplied data, method, numbered working and a checked result.</span></div><p class="method-note">CSP work is shown as assignment/domain arithmetic. Always list variables and domains, then show each constraint check or domain reduction. The cryptarithm is the extended challenge problem.</p><article class="worked-block"><h3><span class="numerical-tag">SIMPLE NUMERICAL</span> Australia map coloring: first assignment</h3><div class="given-box"><b>GIVEN</b><ul><li>Variables include WA, NT, SA, Q, NSW, V, T.</li><li>Domain for each region: {R,G,B}.</li><li>Adjacent regions must have different colors.</li></ul></div><div class="formula-box"><b>FORMULA / RULE</b><div>For every edge X–Y, require X ≠ Y. Assign SA=R and remove R from its neighbors.</div></div><figure class="figure example-figure"><svg aria-label="A valid complete coloring assigns different colors across every edge." role="img" viewbox="0 0 760 250"><title>Australia coloring constraint graph</title><line stroke="#9aaab4" stroke-width="2" x1="100" x2="300" y1="75" y2="55"></line><rect fill="white" height="21" rx="5" width="36" x="182.0" y="51.0"></rect><text fill="#536578" font-family="system-ui" font-size="13" text-anchor="middle" x="200.0" y="66.0">≠</text><line stroke="#9aaab4" stroke-width="2" x1="100" x2="260" y1="75" y2="155"></line><rect fill="white" height="21" rx="5" width="36" x="162.0" y="101.0"></rect><text fill="#536578" font-family="system-ui" font-size="13" text-anchor="middle" x="180.0" y="116.0">≠</text><line stroke="#9aaab4" stroke-width="2" x1="300" x2="260" y1="55" y2="155"></line><rect fill="white" height="21" rx="5" width="36" x="262.0" y="91.0"></rect><text fill="#536578" font-family="system-ui" font-size="13" text-anchor="middle" x="280.0" y="106.0">≠</text><line stroke="#9aaab4" stroke-width="2" x1="300" x2="475" y1="55" y2="75"></line><rect fill="white" height="21" rx="5" width="36" x="369.5" y="51.0"></rect><text fill="#536578" font-family="system-ui" font-size="13" text-anchor="middle" x="387.5" y="66.0">≠</text><line stroke="#9aaab4" stroke-width="2" x1="260" x2="475" y1="155" y2="75"></line><rect fill="white" height="21" rx="5" width="36" x="349.5" y="101.0"></rect><text fill="#536578" font-family="system-ui" font-size="13" text-anchor="middle" x="367.5" y="116.0">≠</text><line stroke="#9aaab4" stroke-width="2" x1="260" x2="480" y1="155" y2="165"></line><rect fill="white" height="21" rx="5" width="36" x="352.0" y="146.0"></rect><text fill="#536578" font-family="system-ui" font-size="13" text-anchor="middle" x="370.0" y="161.0">≠</text><line stroke="#9aaab4" stroke-width="2" x1="260" x2="350" y1="155" y2="220"></line><rect fill="white" height="21" rx="5" width="36" x="287.0" y="173.5"></rect><text fill="#536578" font-family="system-ui" font-size="13" text-anchor="middle" x="305.0" y="188.5">≠</text><line stroke="#9aaab4" stroke-width="2" x1="475" x2="480" y1="75" y2="165"></line><rect fill="white" height="21" rx="5" width="36" x="459.5" y="106.0"></rect><text fill="#536578" font-family="system-ui" font-size="13" text-anchor="middle" x="477.5" y="121.0">≠</text><line stroke="#9aaab4" stroke-width="2" x1="480" x2="350" y1="165" y2="220"></line><rect fill="white" height="21" rx="5" width="36" x="397.0" y="178.5"></rect><text fill="#536578" font-family="system-ui" font-size="13" text-anchor="middle" x="415.0" y="193.5">≠</text><circle cx="100" cy="75" fill="#4886b6" r="30" stroke="#087e8b" stroke-width="2"></circle><text fill="#172435" font-family="system-ui" font-size="15" font-weight="700" text-anchor="middle" x="100" y="73">WA</text><text fill="#536578" font-family="system-ui" font-size="11" text-anchor="middle" x="100" y="92">B</text><circle cx="300" cy="55" fill="#4c9a70" r="30" stroke="#087e8b" stroke-width="2"></circle><text fill="#172435" font-family="system-ui" font-size="15" font-weight="700" text-anchor="middle" x="300" y="53">NT</text><text fill="#536578" font-family="system-ui" font-size="11" text-anchor="middle" x="300" y="72">G</text><circle cx="260" cy="155" fill="#bf6259" r="30" stroke="#087e8b" stroke-width="2"></circle><text fill="#172435" font-family="system-ui" font-size="15" font-weight="700" text-anchor="middle" x="260" y="153">SA</text><text fill="#536578" font-family="system-ui" font-size="11" text-anchor="middle" x="260" y="172">R</text><circle cx="475" cy="75" fill="#4886b6" r="30" stroke="#087e8b" stroke-width="2"></circle><text fill="#172435" font-family="system-ui" font-size="15" font-weight="700" text-anchor="middle" x="475" y="73">Q</text><text fill="#536578" font-family="system-ui" font-size="11" text-anchor="middle" x="475" y="92">B</text><circle cx="480" cy="165" fill="#4c9a70" r="30" stroke="#087e8b" stroke-width="2"></circle><text fill="#172435" font-family="system-ui" font-size="15" font-weight="700" text-anchor="middle" x="480" y="163">NSW</text><text fill="#536578" font-family="system-ui" font-size="11" text-anchor="middle" x="480" y="182">G</text><circle cx="350" cy="220" fill="#4886b6" r="30" stroke="#087e8b" stroke-width="2"></circle><text fill="#172435" font-family="system-ui" font-size="15" font-weight="700" text-anchor="middle" x="350" y="218">V</text><text fill="#536578" font-family="system-ui" font-size="11" text-anchor="middle" x="350" y="237">B</text><circle cx="670" cy="220" fill="#fff" r="30" stroke="#087e8b" stroke-width="2"></circle><text fill="#172435" font-family="system-ui" font-size="15" font-weight="700" text-anchor="middle" x="670" y="218">T</text><text fill="#536578" font-family="system-ui" font-size="11" text-anchor="middle" x="670" y="237">?</text><text fill="#536578" font-family="system-ui" font-size="13" text-anchor="middle" x="380" y="242">A valid complete coloring assigns different colors across every edge.</text></svg><figcaption>A valid complete coloring assigns different colors across every edge.</figcaption></figure><div class="calc-work"><b>STEPWISE WORKING</b><ol><li>SA is adjacent to WA, NT, Q, NSW and V.</li><li>Remove R from each adjacent domain: D(WA)=D(NT)=D(Q)=D(NSW)=D(V)={G,B}.</li><li>T is not adjacent to those regions in the standard map graph, so D(T) remains {R,G,B}.</li></ol></div><div class="answer-box"><b>FINAL ANSWER</b><div>The first assignment SA=R is valid and reduces five neighboring domains. See <a href="#form">CSP formulation</a>.</div></div></article><article class="worked-block"><h3><span class="numerical-tag">MEDIUM NUMERICAL</span> Arc-consistency propagation</h3><div class="given-box"><b>GIVEN</b><ul><li>D(X)=D(Y)=D(Z)={1,2,3}.</li><li>Constraints: X&lt;Y and Y&lt;Z.</li></ul></div><div class="formula-box"><b>FORMULA / RULE</b><div>An arc value survives only if it has a supporting value in the neighboring domain. Repeat revisions until no domain changes.</div></div><figure class="figure example-figure"><svg aria-label="Unsupported values are removed until all arcs have support." role="img" viewbox="0 0 760 250"><title>Arc-consistency domain reduction</title><defs><marker id="arrow-arc-consistency-domain-reduction" markerheight="10" markerwidth="10" orient="auto" refx="8" refy="3"><path d="M0,0 L0,6 L9,3 z" fill="#087e8b"></path></marker></defs><rect fill="#eaf2f3" height="88" rx="10" stroke="#087e8b" stroke-width="2" width="167.5" x="24.0" y="68"></rect><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="107.75" y="100.0">Start</text><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="107.75" y="124.0">{1,2,3}</text><line marker-end="url(#arrow-arc-consistency-domain-reduction)" stroke="#087e8b" stroke-width="2.5" x1="193.5" x2="201.5" y1="112.0" y2="112.0"></line><rect fill="#fff" height="88" rx="10" stroke="#087e8b" stroke-width="2" width="167.5" x="205.5" y="68"></rect><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="289.25" y="100.0">X&lt;Y</text><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="289.25" y="124.0">remove X=3</text><line marker-end="url(#arrow-arc-consistency-domain-reduction)" stroke="#087e8b" stroke-width="2.5" x1="375.0" x2="383.0" y1="112.0" y2="112.0"></line><rect fill="#eaf2f3" height="88" rx="10" stroke="#087e8b" stroke-width="2" width="167.5" x="387.0" y="68"></rect><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="470.75" y="100.0">Y&lt;Z</text><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="470.75" y="124.0">remove Y=3</text><line marker-end="url(#arrow-arc-consistency-domain-reduction)" stroke="#087e8b" stroke-width="2.5" x1="556.5" x2="564.5" y1="112.0" y2="112.0"></line><rect fill="#fff" height="88" rx="10" stroke="#087e8b" stroke-width="2" width="167.5" x="568.5" y="68"></rect><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="652.25" y="100.0">Propagate</text><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="652.25" y="124.0">X=1, Y=2, Z=3</text><text fill="#536578" font-family="system-ui" font-size="14" text-anchor="middle" x="380" y="205">Unsupported values are removed until all arcs have support.</text></svg><figcaption>Unsupported values are removed until all arcs have support.</figcaption></figure><div class="calc-work"><b>STEPWISE WORKING</b><ol><li>Revise X→Y: X=3 has no Y&gt;3, so remove 3. D(X)={1,2}.</li><li>Revise Y→Z: Y=3 has no Z&gt;3, so remove 3. D(Y)={1,2}.</li><li>Revise X→Y again: X=2 has no supporting Y&gt;2 in {1,2}; remove 2. D(X)={1}.</li><li>Revise Y→X: Y=1 has no X&lt;1 in {1}; remove 1. D(Y)={2}.</li><li>Revise Z→Y: Z=1 and Z=2 have no supporting Y&lt;Z; retain only Z=3.</li></ol></div><div class="answer-box"><b>FINAL ANSWER</b><div>The unique consistent assignment is <b>X=1, Y=2, Z=3</b>. See <a href="#prop">arc consistency</a>.</div></div></article><article class="worked-block"><h3><span class="numerical-tag">COMPLEX NUMERICAL</span> Cryptarithmetic: SEND + MORE = MONEY</h3><div class="given-box"><b>GIVEN</b><ul><li>Each letter is a distinct digit 0–9.</li><li>S and M cannot be zero.</li><li>Each column has carry cᵢ∈{0,1}.</li></ul></div><div class="formula-box"><b>FORMULA / RULE</b><div>Units: D+E=Y+10c₁; tens: N+R+c₁=E+10c₂; hundreds: E+O+c₂=N+10c₃; thousands: S+M+c₃=O+10c₄; leading column: c₄=M.</div></div><figure class="figure example-figure"><svg aria-label="Column carries connect the letter assignments." role="img" viewbox="0 0 760 250"><title>Cryptarithm column constraints</title><defs><marker id="arrow-cryptarithm-column-constraints" markerheight="10" markerwidth="10" orient="auto" refx="8" refy="3"><path d="M0,0 L0,6 L9,3 z" fill="#087e8b"></path></marker></defs><rect fill="#eaf2f3" height="88" rx="10" stroke="#087e8b" stroke-width="2" width="167.5" x="24.0" y="68"></rect><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="107.75" y="100.0">Units</text><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="107.75" y="124.0">D+E=Y+10c₁</text><line marker-end="url(#arrow-cryptarithm-column-constraints)" stroke="#087e8b" stroke-width="2.5" x1="193.5" x2="201.5" y1="112.0" y2="112.0"></line><rect fill="#fff" height="88" rx="10" stroke="#087e8b" stroke-width="2" width="167.5" x="205.5" y="68"></rect><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="289.25" y="100.0">Tens</text><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="289.25" y="124.0">N+R+c₁=E+10c₂</text><line marker-end="url(#arrow-cryptarithm-column-constraints)" stroke="#087e8b" stroke-width="2.5" x1="375.0" x2="383.0" y1="112.0" y2="112.0"></line><rect fill="#eaf2f3" height="88" rx="10" stroke="#087e8b" stroke-width="2" width="167.5" x="387.0" y="68"></rect><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="470.75" y="100.0">Hundreds</text><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="470.75" y="124.0">E+O+c₂=N+10c₃</text><line marker-end="url(#arrow-cryptarithm-column-constraints)" stroke="#087e8b" stroke-width="2.5" x1="556.5" x2="564.5" y1="112.0" y2="112.0"></line><rect fill="#fff" height="88" rx="10" stroke="#087e8b" stroke-width="2" width="167.5" x="568.5" y="68"></rect><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="652.25" y="100.0">Thousands</text><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="652.25" y="124.0">S+M+c₃=O+10c₄</text><text fill="#536578" font-family="system-ui" font-size="14" text-anchor="middle" x="380" y="205">Column carries connect the letter assignments.</text></svg><figcaption>Column carries connect the letter assignments.</figcaption></figure><div class="calc-work"><b>STEPWISE WORKING</b><ol><li>Because the sum has five digits, c₄=1; therefore M=1.</li><li>Use the thousands column S+1+c₃=O+10. Since S is nonzero, the left side must reach at least 10; this constrains S to 8 or 9 and fixes O from the carry.</li><li>Apply all-different digits and carry constraints to each remaining column; reject any partial assignment that repeats a digit or makes a carry outside {0,1}.</li><li>A consistent assignment is S=9,E=5,N=6,D=7,M=1,O=0,R=8,Y=2.</li><li>Verify units: 7+5=12, so Y=2,c₁=1.</li><li>Verify tens: 6+8+1=15, so E=5,c₂=1.</li><li>Verify hundreds: 5+0+1=6, so N=6,c₃=0.</li><li>Verify thousands: 9+1+0=10, so O=0,c₄=1; leading M=1.</li></ol></div><div class="answer-box"><b>FINAL ANSWER</b><div>The verified solution is <b>9567 + 1085 = 10652</b>. See <a href="#cryptarithmetic-theory">cryptarithmetic as a CSP</a>.</div></div></article></section><section class="category" id="comparison-section"><h2>3. Comparative studies</h2><section id="compare"><h2>7. Comparisons</h2><table><tr><th>Method</th><th>When used</th><th>Strength / limitation</th></tr><tr><td>Backtracking</td><td>Systematic complete assignment search</td><td>Complete but exponential worst case.</td></tr><tr><td>Forward checking</td><td>After each assignment</td><td>Cheap early detection; propagation only to immediate neighbors.</td></tr><tr><td>Arc consistency</td><td>Preprocessing or after assignment</td><td>More pruning; greater propagation cost; does not always solve CSP alone.</td></tr><tr><td>Chronological backtracking</td><td>Failure recovery</td><td>Simple; may undo irrelevant decisions.</td></tr><tr><td>Backjumping</td><td>Conflict set known</td><td>Skips decisions outside the cause of failure.</td></tr><tr><td>Complete-state local search</td><td>Large CSP optimization</td><td>Can scale; may be incomplete and need restarts.</td></tr></table></section></section><section class="category" id="case-section"><h2>4. Case studies and real-life examples</h2><h3>Map coloring</h3><ul class="point-list"><li>Regions are variables, colors are domains and borders are inequality constraints.</li><li>This small case shows why constraint graphs and degree ordering help: SA touches many neighboring regions.</li><li>See <a href="#form">the graph and formal model</a> and <a href="#numerical-section">the assignment/propagation trace</a>.</li></ul><h3>Exam scheduling</h3><ul class="point-list"><li>Each course is a variable; its domain contains feasible room/time pairs.</li><li>Constraints prevent student conflicts, room overlap, capacity violations and instructor clashes.</li><li>Hard constraints must be satisfied; preferences such as avoiding evening slots can be treated as soft constraints to optimize after feasibility.</li></ul><section id="case"><h2>8. Applications / case study</h2><ul class="point-list"><li><b>Exam scheduling:</b> variables are courses; domain is room/time slots; constraints prevent student conflicts, room overlap, capacity violations and unavailable instructors.</li><li>Add soft constraints (avoid late slots) as an optimization objective.</li><li><b>Map coloring:</b> regions are variables, colors domains and adjacency inequality constraints.</li><li><b>Cryptarithm:</b> letters are variables and digits domains, all-different plus arithmetic constraints.</li><li>These examples are directly grounded in the slides.</li></ul></section></section><section class="category" id="questions-section"><h2>5. Possible exam questions</h2><section id="questions"><h2>9. Possible questions</h2><ol><li>Define CSP and explain variables, domains, constraints, assignment and solution.</li><li>Model Australia map coloring as a CSP and solve with a trace.</li><li>Explain backtracking and MRV, degree heuristic and LCV.</li><li>Compare forward checking and arc consistency; trace domain reductions.</li><li>Explain chronological backtracking, conflict sets and backjumping.</li><li>Solve a cryptarithmetic problem; show column equations and verify.</li><li>Discuss CSP use in timetable scheduling and resource allocation.</li><li>For 10 marks, combine CSP formulation, search, propagation, failure recovery and complexity.</li></ol></section><section id="lesson-exam"><h2>Lesson F · Exam method for any CSP</h2><ul class="point-list"><li>Start by listing variables, domains and constraints.</li><li>Draw the graph if constraints are binary.</li><li>State the search strategy and tie-breaking.</li><li>For every assignment, show domain reductions and consistency checks.</li><li>If failure occurs, identify the empty domain and the relevant conflict set.</li><li>Finish by checking every constraint—not just the final arithmetic or map picture.</li><li>For a comparison answer, distinguish search control (backtracking/local search), ordering heuristics (MRV/degree/LCV), and inference (forward checking/arc consistency).</li></ul></section></section><section class="category" id="references-section"><h2>References and further reading</h2><section id="sources"><h2>References</h2><ul class="refs"><li>Slides: Unit 4, “Constraint Satisfaction Problem” (user supplied).</li><li><a href="https://aima.eecs.berkeley.edu/contents.html">AIMA contents</a> — CSPs, propagation and search.</li></ul></section></section></main></div><footer><p>Prepared from the supplied lecture slides. External sources are linked where they support a real-world case or standard formulation. Numerical datasets below are teaching examples unless explicitly identified otherwise.</p><nav aria-label="Unit navigation" class="unit-controls"><a href="unit_3.html">← Previous unit</a><a class="home" href="../index.html">NMIMS-STUDY home</a><a href="unit_5.html">Next unit →</a></nav></footer></body></html>
+function BACKTRACK(assignment, csp) returns solution or failure
+    if assignment is complete then return assignment
+    var ← SELECT-UNASSIGNED-VARIABLE(csp)
+    for each value in ORDER-DOMAIN-VALUES(var, assignment, csp) do
+        if value is consistent with assignment then
+            add {var = value} to assignment
+            result ← BACKTRACK(assignment, csp)
+            if result ≠ failure then return result
+            remove {var = value} from assignment
+    return failure</div>
+</div>
+<!-- ─── 1.7 VARIABLE & VALUE ORDERING ─── -->
+<div id="t-variable-ordering">
+<h3>1.7 Variable and Value Ordering — Improving Backtracking</h3>
+<p>Backtracking can be improved by using heuristics to guide the search and reduce the number of backtracks. The key questions are:</p>
+<ol>
+<li><strong>Which variable should be assigned next?</strong></li>
+<li><strong>In what order should its values be tried?</strong></li>
+<li><strong>Can we detect inevitable failure early?</strong></li>
+</ol>
+<h4>MRV — Minimum Remaining Values (Most Constrained Variable)</h4>
+<p>Choose the variable with the <strong>fewest legal values</strong> remaining in its domain. This is also called the "Fail-First" heuristic because it prunes failing branches early.</p>
+<div class="exam"><strong>🎯 Rationale:</strong> If a variable has only 1 value left, it must be assigned that value. If a variable has 0 values, we fail immediately — no wasted work. MRV detects inevitable failure early.</div>
+<h4>Degree Heuristic (Tie-breaker for MRV)</h4>
+<p>Among variables with the same MRV count, choose the variable involved in the <strong>largest number of constraints</strong> on remaining unassigned variables. This reduces the branching factor on future choices.</p>
+<h4>LCV — Least Constraining Value</h4>
+<p>Once a variable is selected, try the value that <strong>rules out the fewest choices</strong> for the neighboring variables. This maximizes the remaining flexibility for other variables.</p>
+<div class="exam"><strong>🎯 Key Difference:</strong> MRV selects <em>which variable</em> to assign (fail-first). LCV selects <em>which value</em> to try (succeed-first). They work together.</div>
+<!-- SVG: MRV vs LCV -->
+<div class="figure">
+<svg viewbox="0 0 700 200" xmlns="http://www.w3.org/2000/svg">
+<!-- MRV side -->
+<rect fill="#edf5f6" height="160" rx="10" stroke="#087e8b" stroke-width="2" width="310" x="20" y="20"></rect>
+<text class="svg-label" font-size="15" text-anchor="middle" x="175" y="48">MRV (Variable Selection)</text>
+<text class="svg-note" font-size="13" text-anchor="middle" x="175" y="75">Pick the variable with the</text>
+<text class="svg-note" font-size="13" text-anchor="middle" x="175" y="95">fewest remaining values</text>
+<text class="svg-note" font-size="12" x="60" y="130">A: {R, G, B}  — 3 values</text>
+<text class="svg-note" font-size="12" x="60" y="150">B: {R}         — 1 value ✓</text>
+<text class="svg-note" font-size="12" x="60" y="170">C: {R, G}     — 2 values</text>
+<!-- LCV side -->
+<rect fill="#fff8e7" height="160" rx="10" stroke="#d69b14" stroke-width="2" width="310" x="370" y="20"></rect>
+<text class="svg-label" font-size="15" text-anchor="middle" x="525" y="48">LCV (Value Selection)</text>
+<text class="svg-note" font-size="13" text-anchor="middle" x="525" y="75">Pick the value that rules out</text>
+<text class="svg-note" font-size="13" text-anchor="middle" x="525" y="95">the fewest neighbor values</text>
+<text class="svg-note" font-size="12" x="400" y="130">Red  → eliminates 4 values</text>
+<text class="svg-note" font-size="12" x="400" y="150">Green → eliminates 2 values ✓</text>
+<text class="svg-note" font-size="12" x="400" y="170">Blue → eliminates 3 values</text>
+</svg>
+<figcaption>Fig 4.5 — MRV chooses the most constrained variable; LCV chooses the least constraining value</figcaption>
+</div>
+</div>
+<!-- ─── 1.8 FORWARD CHECKING ─── -->
+<div id="t-forward-checking">
+<h3>1.8 Propagating Information Through Constraints — Forward Checking</h3>
+<p class="related">➜ Numerical: <a href="#num-medium">Forward Checking Walkthrough</a> | Compare: <a href="#comp-fc-ac">FC vs Arc Consistency</a></p>
+<p>So far our search algorithm considers the constraints on a variable only at the time that the variable is chosen by SELECT-UNASSIGNED-VARIABLE. But by looking at some of the constraints <strong>earlier</strong> in the search, or even <strong>before the search has started</strong>, we can drastically reduce the search space.</p>
+<div class="exam">
+<strong>🎯 Forward Checking Rule:</strong> When a variable X is assigned a value v, for <em>every</em> unassigned variable Y connected to X by a constraint, delete from Y's domain any value that is <strong>inconsistent</strong> with v.
+</div>
+<h4>Forward Checking — Australia Map Coloring Walkthrough</h4>
+<p>Using the Australia map with domains {R, G, B} for all variables:</p>
+<table>
+<tr><th>Step</th><th>WA</th><th>NT</th><th>SA</th><th>Q</th><th>NSW</th><th>V</th></tr>
+<tr><td><strong>Initial</strong></td><td>RGB</td><td>RGB</td><td>RGB</td><td>RGB</td><td>RGB</td><td>RGB</td></tr>
+<tr><td><strong>WA=B</strong></td><td><span style="color:#087e8b;font-weight:700">B</span></td><td>RG</td><td>RG</td><td>RGB</td><td>RGB</td><td>RGB</td></tr>
+<tr><td><strong>NT=G</strong></td><td><span style="color:#087e8b;font-weight:700">B</span></td><td><span style="color:#087e8b;font-weight:700">G</span></td><td>R</td><td>RB</td><td>RGB</td><td>RGB</td></tr>
+<tr><td><strong>SA=R</strong></td><td><span style="color:#087e8b;font-weight:700">B</span></td><td><span style="color:#087e8b;font-weight:700">G</span></td><td><span style="color:#087e8b;font-weight:700">R</span></td><td>B</td><td>GB</td><td>GB</td></tr>
+<tr><td><strong>Q=B</strong></td><td><span style="color:#087e8b;font-weight:700">B</span></td><td><span style="color:#087e8b;font-weight:700">G</span></td><td><span style="color:#087e8b;font-weight:700">R</span></td><td><span style="color:#087e8b;font-weight:700">B</span></td><td>G</td><td>GB</td></tr>
+<tr><td><strong>NSW=G</strong></td><td><span style="color:#087e8b;font-weight:700">B</span></td><td><span style="color:#087e8b;font-weight:700">G</span></td><td><span style="color:#087e8b;font-weight:700">R</span></td><td><span style="color:#087e8b;font-weight:700">B</span></td><td><span style="color:#087e8b;font-weight:700">G</span></td><td>B</td></tr>
+<tr><td><strong>V=B</strong></td><td><span style="color:#087e8b;font-weight:700">B</span></td><td><span style="color:#087e8b;font-weight:700">G</span></td><td><span style="color:#087e8b;font-weight:700">R</span></td><td><span style="color:#087e8b;font-weight:700">B</span></td><td><span style="color:#087e8b;font-weight:700">G</span></td><td><span style="color:#087e8b;font-weight:700">B</span></td></tr>
+</table>
+<p><strong>Key insight:</strong> If forward checking ever makes a domain empty, we know immediately that the current path will fail — <strong>backtrack now</strong>, saving time.</p>
+</div>
+<!-- ─── 1.9 ARC CONSISTENCY ─── -->
+<div id="t-arc-consistency">
+<h3>1.9 Arc Consistency (AC-3 Algorithm)</h3>
+<p class="related">➜ Compare: <a href="#comp-fc-ac">FC vs Arc Consistency</a></p>
+<p>Arc consistency eliminates values from the domain of a variable that can <strong>never be part of a consistent solution</strong>.</p>
+<div class="exam">
+<strong>🎯 Definition:</strong> An arc (Xᵢ → Xⱼ) is <strong>arc consistent</strong> if for every value <em>a</em> in the domain of Xᵢ, there exists at least one value <em>b</em> in the domain of Xⱼ such that the constraint between Xᵢ and Xⱼ is satisfied.
+</div>
+<ul class="point-list">
+<li>We achieve consistency on an arc by <strong>deleting values from Dᵢ</strong> (domain of the variable at the tail of the constraint arc) that fail the arc consistency condition.</li>
+<li>Arc consistency checking can be applied either as a <strong>preprocessing step</strong> before the search begins, or as a <strong>propagation step</strong> (like forward checking) after every assignment during search.</li>
+<li>In either case, the process must be applied <strong>repeatedly</strong> until no more inconsistencies remain.</li>
+</ul>
+<h4>AC-3 Algorithm — How It Works:</h4>
+<div class="diagram">function AC-3(csp) returns false if inconsistency found
+    queue ← all arcs in csp
+    while queue is not empty do
+        (Xᵢ, Xⱼ) ← REMOVE-FIRST(queue)
+        if REVISE(csp, Xᵢ, Xⱼ) then
+            if size of Dᵢ = 0 then return false
+            for each Xₖ in NEIGHBORS(Xᵢ) − {Xⱼ} do
+                add (Xₖ, Xᵢ) to queue
+    return true
+
+function REVISE(csp, Xᵢ, Xⱼ) returns true iff domain of Xᵢ changed
+    revised ← false
+    for each x in Dᵢ do
+        if no value y in Dⱼ satisfies constraint(Xᵢ, Xⱼ) then
+            delete x from Dᵢ
+            revised ← true
+    return revised</div>
+<h4>AC-3 Walkthrough (Australia Example):</h4>
+<ul class="point-list">
+<li>Start with the empty assignment. Suppose we assign <strong>WA = R</strong>.</li>
+<li>Enforce arc consistency on neighbors of WA → domains of NT and SA lose R.</li>
+<li>Those domains change, so enforce arc consistency on <em>their</em> neighbors, but nothing changes further.</li>
+<li>At this point, AC produces the same output as forward checking.</li>
+<li>Now pick <strong>NT</strong> and assign NT = G. Enforce arc consistency on neighbors of NT (SA, Q, NSW).</li>
+<li>AC converges: we have <strong>nailed down the assignment for all variables</strong> (except T)!</li>
+<li>Importantly, though we've touched all variables, we are still at the NT node in the search tree. We've paved the way, so when we recurse, there's only one value to try for SA, Q, NSW, and V.</li>
+</ul>
+<div class="exam"><strong>🎯 Key Insight:</strong> Arc consistency is <strong>stronger</strong> than forward checking. FC only checks constraints between the currently assigned variable and future variables. AC propagates constraints between <em>all</em> pairs of unassigned variables too.</div>
+</div>
+<!-- ─── 1.10 INTELLIGENT BACKTRACKING ─── -->
+<div id="t-intelligent-bt">
+<h3>1.10 Intelligent Backtracking</h3>
+<p class="related">➜ Compare: <a href="#comp-chrono-intel">Chronological vs Intelligent Backtracking</a></p>
+<p>The standard BACKTRACKING-SEARCH has a very simple policy for what to do when a branch fails: <strong>back up to the preceding variable</strong> and try a different value. This is called <strong>chronological backtracking</strong>, because the most recent decision point is revisited.</p>
+<h4>The Problem with Chronological Backtracking:</h4>
+<p>Consider applying simple backtracking with a fixed variable ordering: <strong>Q, NSW, V, T, SA, WA, NT</strong>.</p>
+<p>Suppose we have generated the partial assignment {Q = red, NSW = green, V = blue, T = red}. When we try the next variable, <strong>SA</strong>, we see that <em>every value violates a constraint</em>.</p>
+<p>We back up to T and try a new color for Tasmania! <strong>Obviously this is silly</strong> — recoloring Tasmania cannot resolve the problem with South Australia, because T is not connected to SA by any constraint.</p>
+<h4>Conflict Sets and Backjumping:</h4>
+<div class="exam">
+<strong>🎯 Conflict Set:</strong> For variable X, the conflict set is the set of <strong>previously assigned variables that are connected to X by constraints</strong>. In our example, the conflict set for SA is {Q, NSW, V}.
+</div>
+<p>A more intelligent approach is to <strong>backjump</strong> — go all the way back to one of the variables in the conflict set. The <strong>backjumping method</strong> backtracks to the <strong>most recent variable in the conflict set</strong>.</p>
+<p>In this case, backjumping would <strong>jump over Tasmania</strong> and try a new value for V — the most recent variable in SA's conflict set {Q, NSW, V}.</p>
+<!-- SVG: Backjumping vs Chronological -->
+<div class="figure">
+<svg viewbox="0 0 750 280" xmlns="http://www.w3.org/2000/svg">
+<!-- Variable boxes -->
+<rect fill="#ff6b6b" height="40" rx="6" stroke="#333" stroke-width="1.5" width="70" x="20" y="40"></rect>
+<text class="svg-label" fill="#fff" font-size="13" text-anchor="middle" x="55" y="65">Q=R</text>
+<rect fill="#51cf66" height="40" rx="6" stroke="#333" stroke-width="1.5" width="80" x="120" y="40"></rect>
+<text class="svg-label" fill="#fff" font-size="13" text-anchor="middle" x="160" y="65">NSW=G</text>
+<rect fill="#339af0" height="40" rx="6" stroke="#333" stroke-width="1.5" width="70" x="230" y="40"></rect>
+<text class="svg-label" fill="#fff" font-size="13" text-anchor="middle" x="265" y="65">V=B</text>
+<rect fill="#ffd43b" height="40" rx="6" stroke="#333" stroke-width="1.5" width="70" x="330" y="40"></rect>
+<text class="svg-label" font-size="13" text-anchor="middle" x="365" y="65">T=R</text>
+<rect fill="#e9ecef" height="40" rx="6" stroke="#ff0000" stroke-width="2.5" width="70" x="430" y="40"></rect>
+<text class="svg-label" font-size="13" text-anchor="middle" x="465" y="65">SA=?</text>
+<text fill="#ff0000" font-size="12" font-weight="700" text-anchor="middle" x="465" y="100">FAIL!</text>
+<!-- Chronological backtrack arrow -->
+<path d="M 460 110 Q 460 155 395 155 Q 365 155 365 115" fill="none" stroke="#ff6b6b" stroke-dasharray="5,3" stroke-width="2.5"></path>
+<polygon fill="#ff6b6b" points="365,120 360,130 370,130"></polygon>
+<text class="svg-note" fill="#ff6b6b" font-size="11" x="440" y="168">Chronological: back to T</text>
+<text class="svg-note" fill="#ff6b6b" font-size="11" x="440" y="183">(WASTEFUL — T has no</text>
+<text class="svg-note" fill="#ff6b6b" font-size="11" x="440" y="198"> constraint with SA)</text>
+<!-- Backjumping arrow -->
+<path d="M 440 110 Q 440 240 310 240 Q 265 240 265 115" fill="none" stroke="#087e8b" stroke-width="2.5"></path>
+<polygon fill="#087e8b" points="265,120 260,130 270,130"></polygon>
+<text class="svg-note" fill="#087e8b" font-size="11" x="140" y="230">Backjumping: jump to V</text>
+<text class="svg-note" fill="#087e8b" font-size="11" x="140" y="245">(most recent in conflict set {Q, NSW, V})</text>
+<!-- Conflict set label -->
+<rect fill="none" height="50" rx="8" stroke="#087e8b" stroke-dasharray="4,3" stroke-width="1.5" width="295" x="15" y="35"></rect>
+<text class="svg-note" fill="#087e8b" font-size="11" text-anchor="middle" x="162" y="30">Conflict Set of SA = {Q, NSW, V}</text>
+</svg>
+<figcaption>Fig 4.6 — Chronological backtracking wastefully revisits T, while backjumping skips to V</figcaption>
+</div>
+</div>
+<!-- ─── 1.11 CRYPTARITHMETIC ─── -->
+<div id="t-cryptarithmetic">
+<h3>1.11 Cryptarithmetic</h3>
+<p class="related">➜ Numerical: <a href="#num-complex">SEND+MORE=MONEY Walkthrough</a> | Case: <a href="#case-crypto">Cryptarithmetic Case</a></p>
+<p><strong>Cryptarithmetic Problem</strong> is a type of constraint satisfaction problem where the game is about digits and their unique replacement with alphabets or other symbols.</p>
+<ul class="point-list">
+<li>In cryptarithmetic, the digits (0–9) get substituted by possible alphabets or symbols.</li>
+<li>The task is to substitute each digit with an alphabet to get the result <strong>arithmetically correct</strong>.</li>
+</ul>
+<h4>Rules / Constraints of Cryptarithmetic:</h4>
+<ol>
+<li>There should be a <strong>unique digit</strong> to be replaced with a <strong>unique alphabet</strong> (one-to-one mapping).</li>
+<li>The result should satisfy the predefined <strong>arithmetic rules</strong> (e.g., 2+2 = 4).</li>
+<li>Digits should be from <strong>0–9 only</strong>.</li>
+<li>There should be <strong>only one carry forward</strong> while performing the addition operation on a problem.</li>
+<li>The problem can be solved from both sides, i.e., <strong>left-hand side (LHS) or right-hand side (RHS)</strong>.</li>
+</ol>
+<h4>Formulation as a CSP:</h4>
+<table>
+<tr><th>Component</th><th>Details (for SEND + MORE = MONEY)</th></tr>
+<tr><td><strong>Variables</strong></td><td>S, E, N, D, M, O, R, Y, C₁, C₂, C₃, C₄ (letters + carries)</td></tr>
+<tr><td><strong>Domains</strong></td><td>Letters: {0–9}; Carries: {0, 1}; S, M ≠ 0 (leading digits)</td></tr>
+<tr><td><strong>Constraints</strong></td><td>AllDiff(S,E,N,D,M,O,R,Y); Column arithmetic with carries</td></tr>
+</table>
+<!-- SVG: Cryptarithmetic illustration -->
+<div class="figure">
+<svg viewbox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+<text class="svg-label" font-size="18" text-anchor="middle" x="250" y="30">Cryptarithmetic: SEND + MORE = MONEY</text>
+<!-- Addition layout -->
+<text fill="#087e8b" font-family="monospace" font-size="28" font-weight="700" text-anchor="end" x="310" y="70">S E N D</text>
+<text fill="#087e8b" font-family="monospace" font-size="28" font-weight="700" text-anchor="end" x="195" y="100">+</text>
+<text fill="#087e8b" font-family="monospace" font-size="28" font-weight="700" text-anchor="end" x="310" y="100">M O R E</text>
+<line stroke="#172435" stroke-width="3" x1="175" x2="320" y1="110" y2="110"></line>
+<text fill="#d69b14" font-family="monospace" font-size="28" font-weight="700" text-anchor="end" x="330" y="145">M O N E Y</text>
+<!-- Carries -->
+<text fill="#536578" font-family="monospace" font-size="13" x="185" y="55">C₄ C₃ C₂ C₁</text>
+<!-- Solution -->
+<text class="svg-note" font-size="14" text-anchor="middle" x="250" y="185">Solution: 9567 + 1085 = 10652</text>
+</svg>
+<figcaption>Fig 4.7 — SEND + MORE = MONEY cryptarithmetic puzzle</figcaption>
+</div>
+</div>
+</section><!-- end theory-section -->
+<!-- ╔══════════════════════════════════════════════════════════════╗ -->
+<!-- ║  SECTION 2 — NUMERICALS                                    ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════╝ -->
+<section id="numerical-section">
+<h2>🔢 Worked Numerical Examples</h2><aside class="pyq-focus"><h3>PYQ-style CSP: formulate first, enumerate second</h3><p><b>Question (5 marks):</b> X,Y,Z ∈ {1,2,3,4,5}; constraints X+Y=Z and X&lt;Y. Formulate as a CSP and give all solutions.</p>
+<ol class="number-steps"><li><b>Variables:</b> X,Y,Z. <b>Domains:</b> D(X)=D(Y)=D(Z)={1,2,3,4,5}.</li><li><b>Constraints:</b> binary arithmetic X+Y=Z and ordering X&lt;Y. The latter removes symmetric duplicates.</li><li><b>Enumerate X,Y with X&lt;Y:</b> (1,2) gives Z=3; (1,3) gives 4; (1,4) gives 5; (1,5) gives 6 (outside domain); (2,3) gives 5; larger pairs exceed 5.</li><li><b>Final solutions:</b> <b>(1,2,3), (1,3,4), (1,4,5), (2,3,5)</b>. Check each tuple against both constraints.</li></ol>
+<p><b>Suggested 5-mark layout:</b> variables/domains (1), constraints (1), systematic enumeration (1), complete solution set (1), verification/clear notation (1). This is a study guide allocation inferred from the question’s 5-mark scope, not a substitute for an official rubric.</p>
+<h4>Cryptarithm: use carries and all-different constraints</h4><p>For FAIR + GAME = PLAY, define one digit variable per letter, require all ten digits to be distinct, and require F,G,P≠0. Add column equations with carries from right to left. One valid assignment is 1305 + 7329 = 8634 (F=1,A=3,I=0,R=5,G=7,M=2,E=9,P=8,L=6,Y=4). It is <b>not unique</b>: there are multiple valid assignments, so a prompt must not imply uniqueness unless an extra condition is supplied. The answer key’s displayed assignment repeats a digit, which violates the all-different rule; verify the final mapping by substitution.</p>
+<p class="source-note">Question style: <a href="PYQ/QP_Final-Exam_Artificial%20Intelligence%28702CO0C032%29_Semester%20V_2025-2026.pdf">Q4(b) CSP and Q1(c) cryptarithm</a>; key caveat checked against <a href="PYQ/ANS_Final-Exam_Artificial%20Intelligence%28702CO0C032%29_Semester%20V_2025-2026.pdf">the supplied answer key</a>.</p></aside>
+<div class="numerical-guide">
+<strong>HOW TO APPROACH CSP NUMERICALS</strong>
+<span>1. Identify Variables, Domains, Constraints  →  2. Apply algorithm (Backtracking / FC / AC-3)  →  3. Show domain reductions at each step  →  4. Present final solution</span>
+</div>
+<!-- ─── SIMPLE ─── -->
+<div class="worked-block" id="num-simple">
+<h3><span class="numerical-tag">SIMPLE</span> Map Coloring with 4 Regions</h3>
+<div class="given-box">
+<b>GIVEN</b>
+    Four regions: A, B, C, D with adjacency: A–B, A–C, B–C, B–D, C–D.<br/>
+    Colors available: {Red, Green, Blue}.<br/>
+    Constraint: No two adjacent regions may share the same color.
+  </div>
+<div class="formula-box">
+<b>CSP FORMULATION</b>
+    Variables: X = {A, B, C, D}<br/>
+    Domains: Dᵢ = {R, G, B} for all i<br/>
+    Constraints: A≠B, A≠C, B≠C, B≠D, C≠D
+  </div>
+<!-- SVG: 4-region constraint graph -->
+<div class="figure">
+<svg viewbox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+<line stroke="#aaa" stroke-width="2" x1="100" x2="300" y1="60" y2="60"></line>
+<line stroke="#aaa" stroke-width="2" x1="100" x2="100" y1="60" y2="200"></line>
+<line stroke="#aaa" stroke-dasharray="5,3" stroke-width="2" x1="100" x2="300" y1="60" y2="200"></line>
+<line stroke="#aaa" stroke-dasharray="5,3" stroke-width="2" x1="300" x2="100" y1="60" y2="200"></line>
+<line stroke="#aaa" stroke-width="2" x1="300" x2="300" y1="60" y2="200"></line>
+<line stroke="#aaa" stroke-width="2" x1="100" x2="300" y1="200" y2="200"></line>
+<circle cx="100" cy="60" fill="#ff6b6b" r="25" stroke="#333" stroke-width="2"></circle>
+<text class="svg-label" fill="#fff" text-anchor="middle" x="100" y="66">A</text>
+<circle cx="300" cy="60" fill="#51cf66" r="25" stroke="#333" stroke-width="2"></circle>
+<text class="svg-label" fill="#fff" text-anchor="middle" x="300" y="66">B</text>
+<circle cx="100" cy="200" fill="#339af0" r="25" stroke="#333" stroke-width="2"></circle>
+<text class="svg-label" fill="#fff" text-anchor="middle" x="100" y="206">C</text>
+<circle cx="300" cy="200" fill="#ff6b6b" r="25" stroke="#333" stroke-width="2"></circle>
+<text class="svg-label" fill="#fff" text-anchor="middle" x="300" y="206">D</text>
+</svg>
+<figcaption>Constraint graph for 4-region map</figcaption>
+</div>
+<ol class="solution-steps">
+<li><span class="step">Step 1:</span> Assign <strong>A = Red</strong>. Domain changes (Forward checking): B loses R → {G,B}; C loses R → {G,B}.</li>
+<li><span class="step">Step 2:</span> Assign <strong>B = Green</strong> (MRV tie, pick B). Domain changes: C loses G → {B}; D loses G → {R,B}.</li>
+<li><span class="step">Step 3:</span> Assign <strong>C = Blue</strong> (only value left). Domain changes: D loses B → {R}.</li>
+<li><span class="step">Step 4:</span> Assign <strong>D = Red</strong> (only value left). Check all constraints — all satisfied ✓</li>
+</ol>
+<div class="answer-box">
+<b>ANSWER</b>
+    A = Red, B = Green, C = Blue, D = Red.<br/>
+    All 5 constraints satisfied. No backtracking was needed thanks to forward checking and MRV.
+  </div>
+</div>
+<!-- ─── MEDIUM ─── -->
+<div class="worked-block" id="num-medium">
+<h3><span class="numerical-tag">MEDIUM</span> Forward Checking Walkthrough — Australia Map Coloring</h3>
+<div class="given-box">
+<b>GIVEN</b>
+    Australia map with 7 regions: WA, NT, SA, Q, NSW, V, T.<br/>
+    Domain for each: {R, G, B}.<br/>
+    Constraints: WA≠NT, WA≠SA, NT≠SA, NT≠Q, SA≠Q, SA≠NSW, SA≠V, Q≠NSW, NSW≠V.
+  </div>
+<div class="formula-box">
+<b>FORWARD CHECKING RULE</b>
+    When variable X is assigned value v, remove all inconsistent values from domains of <em>unassigned</em> neighbors of X.
+  </div>
+<ol class="solution-steps">
+<li><span class="step">Step 1 — Assign WA = Blue:</span>
+<br/>NT is neighbor of WA → remove B from NT → NT: {R, G}
+      <br/>SA is neighbor of WA → remove B from SA → SA: {R, G}
+      <br/><em>All other domains unchanged.</em>
+</li>
+<li><span class="step">Step 2 — Assign NT = Green (MRV: NT and SA both have 2 values):</span>
+<br/>SA neighbor of NT → remove G from SA → SA: {R}
+      <br/>Q neighbor of NT → remove G from Q → Q: {R, B}
+    </li>
+<li><span class="step">Step 3 — Assign SA = Red (only 1 value left — forced assignment):</span>
+<br/>Q neighbor of SA → remove R from Q → Q: {B}
+      <br/>NSW neighbor of SA → remove R from NSW → NSW: {G, B}
+      <br/>V neighbor of SA → remove R from V → V: {G, B}
+    </li>
+<li><span class="step">Step 4 — Assign Q = Blue (forced):</span>
+<br/>NSW neighbor of Q → remove B from NSW → NSW: {G}
+    </li>
+<li><span class="step">Step 5 — Assign NSW = Green (forced):</span>
+<br/>V neighbor of NSW → remove G from V → V: {B}
+    </li>
+<li><span class="step">Step 6 — Assign V = Blue (forced):</span>
+<br/>No unassigned neighbors left to check.
+    </li>
+<li><span class="step">Step 7 — Assign T = Red (or G or B — T has no mainland constraints):</span>
+<br/>T is unconstrained with others; any color works.
+    </li>
+</ol>
+<h4>Domain Tracking Table:</h4>
+<table>
+<tr><th>Step</th><th>WA</th><th>NT</th><th>SA</th><th>Q</th><th>NSW</th><th>V</th><th>T</th></tr>
+<tr><td>Initial</td><td>RGB</td><td>RGB</td><td>RGB</td><td>RGB</td><td>RGB</td><td>RGB</td><td>RGB</td></tr>
+<tr><td>WA=B</td><td style="color:#087e8b;font-weight:700">B</td><td>RG</td><td>RG</td><td>RGB</td><td>RGB</td><td>RGB</td><td>RGB</td></tr>
+<tr><td>NT=G</td><td style="color:#087e8b;font-weight:700">B</td><td style="color:#087e8b;font-weight:700">G</td><td>R</td><td>RB</td><td>RGB</td><td>RGB</td><td>RGB</td></tr>
+<tr><td>SA=R</td><td style="color:#087e8b;font-weight:700">B</td><td style="color:#087e8b;font-weight:700">G</td><td style="color:#087e8b;font-weight:700">R</td><td>B</td><td>GB</td><td>GB</td><td>RGB</td></tr>
+<tr><td>Q=B</td><td style="color:#087e8b;font-weight:700">B</td><td style="color:#087e8b;font-weight:700">G</td><td style="color:#087e8b;font-weight:700">R</td><td style="color:#087e8b;font-weight:700">B</td><td>G</td><td>GB</td><td>RGB</td></tr>
+<tr><td>NSW=G</td><td style="color:#087e8b;font-weight:700">B</td><td style="color:#087e8b;font-weight:700">G</td><td style="color:#087e8b;font-weight:700">R</td><td style="color:#087e8b;font-weight:700">B</td><td style="color:#087e8b;font-weight:700">G</td><td>B</td><td>RGB</td></tr>
+<tr><td>V=B</td><td style="color:#087e8b;font-weight:700">B</td><td style="color:#087e8b;font-weight:700">G</td><td style="color:#087e8b;font-weight:700">R</td><td style="color:#087e8b;font-weight:700">B</td><td style="color:#087e8b;font-weight:700">G</td><td style="color:#087e8b;font-weight:700">B</td><td>RGB</td></tr>
+</table>
+<div class="answer-box">
+<b>ANSWER</b>
+    WA=Blue, NT=Green, SA=Red, Q=Blue, NSW=Green, V=Blue, T=Red (any color).<br/>
+    Forward checking reduced domains at each step, forcing many assignments automatically — <strong>zero backtracks needed</strong>.
+  </div>
+</div>
+<!-- ─── COMPLEX ─── -->
+<div class="worked-block" id="num-complex">
+<h3><span class="numerical-tag">COMPLEX</span> Cryptarithmetic: SEND + MORE = MONEY</h3>
+<div class="given-box">
+<b>GIVEN</b>
+<code style="font-size:1.2em">  S E N D<br/>+ M O R E<br/>─────────<br/>M O N E Y</code><br/><br/>
+    Each letter represents a unique digit (0–9). Leading digits (S, M) cannot be 0.
+  </div>
+<div class="formula-box">
+<b>COLUMN CONSTRAINTS (Right to Left)</b>
+    Column 1 (ones): D + E = Y + 10·C₁<br/>
+    Column 2 (tens): N + R + C₁ = E + 10·C₂<br/>
+    Column 3 (hundreds): E + O + C₂ = N + 10·C₃<br/>
+    Column 4 (thousands): S + M + C₃ = O + 10·C₄<br/>
+    Column 5 (ten-thousands): C₄ = M<br/>
+    AllDiff(S, E, N, D, M, O, R, Y)
+  </div>
+<ol class="solution-steps">
+<li><span class="step">Step 1 — Determine M:</span>
+<br/>From Column 5: C₄ = M. The carry C₄ can be at most 1 (since the sum of two 4-digit numbers can produce at most a 5-digit number starting with 1).
+      <br/>Therefore <strong>M = 1</strong> and <strong>C₄ = 1</strong>.
+    </li>
+<li><span class="step">Step 2 — Analyze Column 4:</span>
+<br/>S + M + C₃ = O + 10·C₄ → S + 1 + C₃ = O + 10.
+      <br/>Since S ∈ {2–9} (not 0, not 1=M), C₃ ∈ {0,1}:
+      <br/>• If C₃ = 0: S + 1 = O + 10 → S = O + 9. Since S ≤ 9, O = 0 and <strong>S = 9</strong>.
+      <br/>• If C₃ = 1: S + 2 = O + 10 → S = O + 8. Then O = 0, S = 8 or O = 1 (taken). So O = 0, S = 8.
+      <br/>Try <strong>S = 9, O = 0, C₃ = 0</strong> first.
+    </li>
+<li><span class="step">Step 3 — Analyze Column 3:</span>
+<br/>E + O + C₂ = N + 10·C₃ → E + 0 + C₂ = N + 0 → <strong>E + C₂ = N</strong>.
+    </li>
+<li><span class="step">Step 4 — Analyze Column 2:</span>
+<br/>N + R + C₁ = E + 10·C₂.
+      <br/>Substituting N = E + C₂: (E + C₂) + R + C₁ = E + 10·C₂ → R + C₁ = 9·C₂.
+      <br/>Since R ∈ {2–8}, C₁ ∈ {0,1}: R + C₁ ≤ 9. So 9·C₂ ≤ 9, meaning <strong>C₂ = 1</strong>, and <strong>R + C₁ = 9</strong>.
+      <br/>Then N = E + 1 (from Step 3).
+    </li>
+<li><span class="step">Step 5 — Analyze Column 1:</span>
+<br/>D + E = Y + 10·C₁.
+      <br/>• If C₁ = 1: R + 1 = 9 → <strong>R = 8</strong>. And D + E = Y + 10.
+      <br/>• If C₁ = 0: R = 9 (taken by S). So C₁ = 1, R = 8.
+    </li>
+<li><span class="step">Step 6 — Find remaining digits:</span>
+<br/>Used: M=1, S=9, O=0, R=8. Available: {2, 3, 4, 5, 6, 7}.
+      <br/>N = E + 1, and D + E = Y + 10 (since C₁=1).
+      <br/>Try E = 5: N = 6. D + 5 = Y + 10 → D = Y + 5. Available digits: {2,3,4,7}.
+      <br/>D = 7, Y = 2 ✓ (all different, all in range).
+    </li>
+<li><span class="step">Step 7 — Verify:</span>
+<br/>S=9, E=5, N=6, D=7, M=1, O=0, R=8, Y=2.
+      <br/>SEND = 9567, MORE = 1085.
+      <br/>9567 + 1085 = <strong>10652</strong> = MONEY ✓
+    </li>
+</ol>
+<div class="answer-box">
+<b>ANSWER</b>
+    S=9, E=5, N=6, D=7, M=1, O=0, R=8, Y=2<br/>
+<strong>9567 + 1085 = 10652</strong> ✓<br/>
+    All digits unique, no leading zeros, arithmetic correct.
+  </div>
+</div>
+</section><!-- end numerical-section -->
+<!-- ╔══════════════════════════════════════════════════════════════╗ -->
+<!-- ║  SECTION 3 — COMPARISONS                                   ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════╝ -->
+<section id="comparison-section">
+<h2>⚖️ Comparison Tables</h2>
+<!-- Constraint Types -->
+<h3>Table 1: Types of Constraints</h3>
+<table>
+<tr><th>Feature</th><th>Unary</th><th>Binary</th><th>Global</th></tr>
+<tr><td>Variables Involved</td><td>1</td><td>2</td><td>&gt; 2</td></tr>
+<tr><td>Example</td><td>A ≠ Red</td><td>WA ≠ NT</td><td>AllDiff(X₁, X₂, …, Xₙ)</td></tr>
+<tr><td>Can be Preprocessed?</td><td>Yes (reduce domains)</td><td>Yes (arc consistency)</td><td>Often decomposed into binary</td></tr>
+<tr><td>Representation</td><td>Domain restriction</td><td>Edge in constraint graph</td><td>Hyperedge / special predicate</td></tr>
+<tr><td>Complexity</td><td>Low</td><td>Moderate</td><td>High</td></tr>
+</table>
+<!-- Backtracking vs FC -->
+<h3 id="comp-bt-fc">Table 2: Backtracking vs Forward Checking</h3>
+<table>
+<tr><th>Feature</th><th>Simple Backtracking</th><th>Forward Checking</th></tr>
+<tr><td>When constraints checked</td><td>Only when variable is selected</td><td>Immediately after each assignment</td></tr>
+<tr><td>Domain reduction</td><td>None — full domains until assignment</td><td>Removes inconsistent values from neighbors' domains</td></tr>
+<tr><td>Early failure detection</td><td>Poor — discovers failures late</td><td>Good — detects empty domains early</td></tr>
+<tr><td>Pruning power</td><td>Low</td><td>Moderate</td></tr>
+<tr><td>Space overhead</td><td>Minimal</td><td>Must store reduced domains</td></tr>
+<tr><td>Backtrack frequency</td><td>High</td><td>Lower</td></tr>
+</table>
+<!-- FC vs Arc Consistency -->
+<h3 id="comp-fc-ac">Table 3: Forward Checking vs Arc Consistency</h3>
+<table>
+<tr><th>Feature</th><th>Forward Checking</th><th>Arc Consistency (AC-3)</th></tr>
+<tr><td>Scope of propagation</td><td>Only between assigned and unassigned variables</td><td>Between all pairs of variables (assigned and unassigned)</td></tr>
+<tr><td>Strength</td><td>Weaker — may miss cascading effects</td><td>Stronger — detects more inconsistencies</td></tr>
+<tr><td>When applied</td><td>After each assignment</td><td>After each assignment OR as preprocessing</td></tr>
+<tr><td>Computational cost</td><td>O(n · d) per assignment</td><td>O(e · d³) where e = edges, d = domain size</td></tr>
+<tr><td>Can solve without search?</td><td>No</td><td>Sometimes (if domains reduce to single values)</td></tr>
+<tr><td>Implementation</td><td>Simpler</td><td>More complex (queue-based)</td></tr>
+</table>
+<!-- Chronological vs Intelligent Backtracking -->
+<h3 id="comp-chrono-intel">Table 4: Chronological vs Intelligent Backtracking</h3>
+<table>
+<tr><th>Feature</th><th>Chronological Backtracking</th><th>Intelligent Backtracking (Backjumping)</th></tr>
+<tr><td>Where does it backtrack?</td><td>Most recently assigned variable</td><td>Most recent variable in the conflict set</td></tr>
+<tr><td>Uses conflict set?</td><td>No</td><td>Yes</td></tr>
+<tr><td>Efficiency</td><td>May revisit irrelevant variables</td><td>Skips irrelevant variables — more efficient</td></tr>
+<tr><td>Example</td><td>SA fails → back to T (useless)</td><td>SA fails → back to V (conflict set member)</td></tr>
+<tr><td>Implementation</td><td>Simpler</td><td>Requires maintaining conflict sets</td></tr>
+</table>
+<!-- MRV vs LCV -->
+<h3>Table 5: MRV vs Degree Heuristic vs LCV</h3>
+<table>
+<tr><th>Feature</th><th>MRV</th><th>Degree Heuristic</th><th>LCV</th></tr>
+<tr><td>Applies to</td><td>Variable selection</td><td>Variable selection (tie-breaker)</td><td>Value ordering</td></tr>
+<tr><td>Strategy</td><td>Fail-first (pick most constrained)</td><td>Pick most constraining on others</td><td>Succeed-first (least constraining value)</td></tr>
+<tr><td>What it counts</td><td>Remaining legal values</td><td>Number of constraints on unassigned neighbors</td><td>Values eliminated in neighbors' domains</td></tr>
+<tr><td>When to use</td><td>Always — excellent general heuristic</td><td>When MRV gives a tie</td><td>After variable is chosen</td></tr>
+</table>
+<!-- All CSP Algorithms -->
+<h3>Table 6: Summary of All CSP Algorithms</h3>
+<table>
+<tr><th>Algorithm</th><th>Type</th><th>Key Idea</th><th>Completeness</th><th>Efficiency</th></tr>
+<tr><td>Backtracking</td><td>Systematic</td><td>DFS + one variable per level</td><td>Yes</td><td>Low (no pruning)</td></tr>
+<tr><td>Backtracking + MRV/LCV</td><td>Systematic</td><td>+ smart variable/value ordering</td><td>Yes</td><td>Moderate</td></tr>
+<tr><td>Forward Checking</td><td>Systematic + Look-ahead</td><td>Remove inconsistent values after assignment</td><td>Yes</td><td>Good</td></tr>
+<tr><td>Arc Consistency (AC-3)</td><td>Systematic + Propagation</td><td>Enforce pairwise consistency</td><td>Yes (with search)</td><td>Very Good</td></tr>
+<tr><td>Backjumping</td><td>Systematic + Smart backtrack</td><td>Use conflict sets to skip irrelevant levels</td><td>Yes</td><td>Good</td></tr>
+<tr><td>Local Search (Min-conflicts)</td><td>Iterative</td><td>Start complete, fix conflicts</td><td>Incomplete</td><td>Very fast for many CSPs</td></tr>
+</table>
+</section><!-- end comparison-section -->
+<!-- ╔══════════════════════════════════════════════════════════════╗ -->
+<!-- ║  SECTION 4 — CASE STUDIES                                  ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════╝ -->
+<section id="case-section">
+<h2>📂 Real-World Case Studies &amp; Examples</h2>
+<!-- Case 1: Map Coloring -->
+<div class="category">
+<h3 id="case-map">Case 1: Map Coloring — The Classic CSP</h3>
+<p><strong>Context:</strong> The map coloring problem is one of the most studied CSP examples. It originated from the famous <strong>Four Color Theorem</strong> (1852) — any map on a plane can be colored with at most 4 colors such that no two adjacent regions share the same color.</p>
+<h4>Australia Map Coloring (from PPT):</h4>
+<ul class="point-list">
+<li><strong>7 variables:</strong> WA, NT, SA, Q, NSW, V, T representing states/territories of Australia.</li>
+<li><strong>3 colors:</strong> Red, Green, Blue.</li>
+<li><strong>9 binary constraints</strong> (from adjacency relationships).</li>
+<li>SA is the most constrained variable — it borders 5 other states, making it the natural MRV choice.</li>
+<li>Tasmania (T) is an island with no adjacency constraints to mainland — it can be any color independently.</li>
+</ul>
+<h4>Real-World Applications of Graph Coloring:</h4>
+<table>
+<tr><th>Application</th><th>Variables</th><th>Domain</th><th>Constraint</th></tr>
+<tr><td>Exam scheduling</td><td>Exams</td><td>Time slots</td><td>Exams with common students ≠ same slot</td></tr>
+<tr><td>Register allocation</td><td>Program variables</td><td>CPU registers</td><td>Variables alive at same time ≠ same register</td></tr>
+<tr><td>Frequency assignment</td><td>Radio transmitters</td><td>Frequencies</td><td>Nearby transmitters ≠ same frequency</td></tr>
+<tr><td>Sudoku</td><td>81 cells</td><td>{1–9}</td><td>Row, column, box uniqueness</td></tr>
+</table>
+</div>
+<!-- Case 2: Scheduling -->
+<div class="category">
+<h3>Case 2: University Course Scheduling</h3>
+<p><strong>Problem:</strong> Schedule 5 courses into 3 time slots with 2 rooms, such that no professor teaches two courses at the same time and no room is double-booked.</p>
+<table>
+<tr><th>Component</th><th>Details</th></tr>
+<tr><td>Variables</td><td>Course1, Course2, Course3, Course4, Course5</td></tr>
+<tr><td>Domains</td><td>{(Slot1, Room1), (Slot1, Room2), (Slot2, Room1), …} — 6 slot-room pairs</td></tr>
+<tr><td>Constraints</td><td>Same professor ≠ same slot; Same room ≠ same slot</td></tr>
+</table>
+<p>CSP techniques like forward checking and arc consistency can efficiently prune the search space for such scheduling problems.</p>
+</div>
+<!-- Case 3: Cryptarithmetic -->
+<div class="category">
+<h3 id="case-crypto">Case 3: Cryptarithmetic — SEND + MORE = MONEY</h3>
+<p><strong>Context:</strong> Cryptarithmetic puzzles were popularized by Henry Dudeney in 1924. They are a natural fit for CSP because they involve:</p>
+<ul class="point-list">
+<li><strong>Unique assignment</strong> constraint (AllDiff — global constraint)</li>
+<li><strong>Arithmetic</strong> constraints (column-wise addition with carries)</li>
+<li><strong>Domain restrictions</strong> (digits 0–9; leading digits ≠ 0)</li>
+</ul>
+<p><strong>Solution (as derived in <a href="#num-complex">Numerical Section</a>):</strong></p>
+<div class="diagram">    S E N D       9 5 6 7
+  + M O R E     + 1 0 8 5
+  ─────────     ─────────
+  M O N E Y     1 0 6 5 2</div>
+<p><strong>Other common cryptarithmetic examples:</strong></p>
+<ul class="point-list">
+<li>BASE + BALL = GAMES</li>
+<li>CROSS + ROADS = DANGER</li>
+<li>EAT + THAT = APPLE</li>
+<li>TWO + TWO = FOUR</li>
+</ul>
+</div>
+<!-- Case 4: Sudoku -->
+<div class="category">
+<h3>Case 4: Sudoku as a CSP</h3>
+<p><strong>Formulation:</strong></p>
+<ul class="point-list">
+<li><strong>Variables:</strong> 81 cells (each cell is a variable).</li>
+<li><strong>Domains:</strong> {1, 2, 3, 4, 5, 6, 7, 8, 9} for empty cells; fixed value for pre-filled cells (unary constraints).</li>
+<li><strong>Constraints:</strong> AllDiff for each row (9 constraints), each column (9), and each 3×3 box (9) = 27 AllDiff constraints.</li>
+</ul>
+<p>Sudoku is solved extremely efficiently using <strong>AC-3 + Backtracking</strong>. For most puzzles, arc consistency alone solves the entire puzzle without any search!</p>
+</div>
+<!-- Case 5: Resource Allocation -->
+<div class="category">
+<h3>Case 5: Resource Allocation</h3>
+<p><strong>Problem:</strong> Assign 4 tasks to 3 workers, where each worker can handle only certain tasks (skill constraints) and no worker should be overloaded (capacity constraint).</p>
+<p>This demonstrates the use of <strong>global constraints</strong> — the capacity constraint involves all variables simultaneously. CSP provides a natural framework for such resource allocation problems, which are common in operations research, project management, and cloud computing resource scheduling.</p>
+</div>
+</section><!-- end case-section -->
+<!-- ╔══════════════════════════════════════════════════════════════╗ -->
+<!-- ║  SECTION 5 — EXAM QUESTIONS                                ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════╝ -->
+<section id="questions-section">
+<h2>❓ Possible Exam Questions</h2><p class="pyq-note"><b>Past-paper calibration:</b> practise the answer formats shown in the PYQ lens under Section 2, then answer the remaining questions across every syllabus topic. The paper is a guide to depth and marking style, not a boundary on what to study. <a href="PYQ/QP_Final-Exam_Artificial%20Intelligence%28702CO0C032%29_Semester%20V_2025-2026.pdf">Question paper</a> · <a href="PYQ/ANS_Final-Exam_Artificial%20Intelligence%28702CO0C032%29_Semester%20V_2025-2026.pdf">answer key</a>.</p>
+<p class="tag">Covers all topics from the PPT — expect 5-mark and 10-mark questions.</p>
+<h3>Short Answer (5 marks)</h3>
+<ol>
+<li><strong>Define Constraint Satisfaction Problem. What are its three components?</strong>
+<br/><span class="tag">Hint: Variables, Domains, Constraints. See <a href="#t-csp-definition">Theory §1.1–1.2</a></span></li>
+<li><strong>Explain the three types of constraints in CSP with examples.</strong>
+<br/><span class="tag">Hint: Unary, Binary, Global. See <a href="#t-constraint-types">Theory §1.3</a></span></li>
+<li><strong>What is the MRV heuristic? Why is it called the "fail-first" heuristic?</strong>
+<br/><span class="tag">Hint: Minimum Remaining Values — picks variable with fewest legal values. See <a href="#t-variable-ordering">Theory §1.7</a></span></li>
+<li><strong>Differentiate between forward checking and arc consistency.</strong>
+<br/><span class="tag">Hint: Scope of propagation. See <a href="#comp-fc-ac">Comparison Table 3</a></span></li>
+<li><strong>What is a conflict set? Explain with an example.</strong>
+<br/><span class="tag">Hint: Set of previously assigned variables connected by constraints. See <a href="#t-intelligent-bt">Theory §1.10</a></span></li>
+<li><strong>State the rules/constraints of a cryptarithmetic problem.</strong>
+<br/><span class="tag">Hint: Unique digits, arithmetic correctness, 0–9 range, one carry. See <a href="#t-cryptarithmetic">Theory §1.11</a></span></li>
+</ol>
+<h3>Long Answer (10 marks)</h3>
+<ol start="7">
+<li><strong>Formulate the Australia map coloring problem as a CSP. Identify variables, domains, and constraints. Show one valid solution using backtracking with forward checking.</strong>
+<br/><span class="tag">Hint: Full walkthrough in <a href="#num-medium">Numerical (Medium)</a> and <a href="#t-map-coloring">Theory §1.4</a></span></li>
+<li><strong>Explain backtracking search for CSPs. How can it be improved using (a) MRV, (b) LCV, and (c) Forward Checking? Provide pseudocode.</strong>
+<br/><span class="tag">Hint: See <a href="#t-backtracking">Theory §1.6</a> + <a href="#t-variable-ordering">§1.7</a> + <a href="#t-forward-checking">§1.8</a></span></li>
+<li><strong>Explain Arc Consistency. Write the AC-3 algorithm and demonstrate it on the Australia map coloring problem.</strong>
+<br/><span class="tag">Hint: Pseudocode + walkthrough in <a href="#t-arc-consistency">Theory §1.9</a></span></li>
+<li><strong>What is intelligent backtracking? Explain the problem with chronological backtracking and how backjumping solves it with an example.</strong>
+<br/><span class="tag">Hint: Q-NSW-V-T-SA example, conflict set = {Q, NSW, V}. See <a href="#t-intelligent-bt">Theory §1.10</a></span></li>
+<li><strong>Solve the cryptarithmetic problem SEND + MORE = MONEY using CSP techniques. Show all steps.</strong>
+<br/><span class="tag">Hint: Full solution in <a href="#num-complex">Numerical (Complex)</a></span></li>
+<li><strong>Compare and contrast all CSP algorithms: Backtracking, Forward Checking, Arc Consistency, and Backjumping.</strong>
+<br/><span class="tag">Hint: See <a href="#comparison-section">Comparison Tables 2–6</a></span></li>
+<li><strong>Demonstrate forward checking on the Australia map coloring problem. Show the domain reduction table at each step.</strong>
+<br/><span class="tag">Hint: Step-by-step table in <a href="#num-medium">Numerical (Medium)</a> and <a href="#t-forward-checking">Theory §1.8</a></span></li>
+<li><strong>Explain how CSP is applied in real-world applications like scheduling, Sudoku, and resource allocation.</strong>
+<br/><span class="tag">Hint: See <a href="#case-section">Case Studies</a></span></li>
+<li><strong>What is constraint propagation? Explain with reference to Forward Checking and Arc Consistency. How does it reduce the search space?</strong>
+<br/><span class="tag">Hint: Combine <a href="#t-forward-checking">Theory §1.8</a> and <a href="#t-arc-consistency">§1.9</a></span></li>
+</ol>
+</section><!-- end questions-section -->
+</main>
+</div>
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+<p>© NMIMS AI Study Guide — Unit 4: Constraint Satisfaction Problems | Prof. Jesleena Gonsalves</p>
+<nav class="unit-controls" style="position:static;background:transparent;height:auto;padding:10px 0;">
+<a href="unit_3.html">← Previous unit</a>
+<a href="unit_5.html">Next unit →</a>
+<a class="home" href="../index.html">NMIMS-STUDY home</a>
+</nav>
+</footer>
+</body>
+</html>

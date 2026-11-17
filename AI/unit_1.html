@@ -1,20 +1,697 @@
-<!doctype html>
 <!DOCTYPE html>
 
-<!DOCTYPE html>
-
-<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Unit 1 · Introduction to Artificial Intelligence</title><style>:root{--ink:#172435;--muted:#536578;--line:#d7e0e7;--accent:#087e8b;--paper:#fff;--wash:#f3f7f8}*{box-sizing:border-box}body{margin:0;background:var(--wash);color:var(--ink);font:17px/1.68 system-ui,-apple-system,Segoe UI,sans-serif}header,main,footer{max-width:1050px;margin:auto;padding:28px}header{padding-top:54px;padding-bottom:20px}h1{font-size:2.5rem;line-height:1.12;margin:.2em 0}.sub{color:var(--muted);font-size:1.05rem}nav{padding:0 28px 22px;max-width:1050px;margin:auto}nav a{display:inline-block;margin:4px 14px 4px 0;color:var(--accent)}section{background:var(--paper);padding:24px 30px;margin:18px 0;border-top:3px solid var(--accent);box-shadow:0 2px 10px #142b3a0c}h2{font-size:1.65rem;margin:.2em 0 .55em}h3{font-size:1.2rem;margin:1.2em 0 .3em}p{margin:.6em 0}li{margin:.28em 0}table{border-collapse:collapse;width:100%;margin:14px 0}th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}th{background:#eaf2f3}code,.math{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#eef3f4;padding:.08em .3em;border-radius:3px}.diagram{background:#f2f7f8;border-left:4px solid var(--accent);padding:14px 18px;overflow:auto;white-space:pre-wrap;font-family:ui-monospace,monospace;line-height:1.55}.exam{background:#fff8e7;border-left:4px solid #d69b14;padding:12px 16px}.step{font-weight:700;color:var(--accent)}.refs{font-size:.95rem}.tag{color:var(--muted);font-size:.9rem}a{color:#006b78}footer{color:var(--muted)}@media print{body{background:white;font-size:11pt}section{box-shadow:none;break-inside:avoid}a{color:inherit;text-decoration:none}nav{display:none}} .unit-controls{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap;width:100%;max-width:1050px;height:46px;margin:0 auto;padding:5px 0;background:#f3f7f8ed;backdrop-filter:blur(8px)}.unit-controls a{display:inline-block;background:#087e8b;color:#fff;text-decoration:none;padding:6px 10px;border-radius:6px;font-size:.88rem;font-weight:650;line-height:1.3}.unit-controls a:hover{background:#075d67}.unit-controls .home{background:#43586c}.unit-controls .disabled{display:inline-block;color:#718092;background:#edf1f4;padding:6px 10px;border-radius:6px;font-size:.88rem;font-weight:600;line-height:1.3}<style>.toc{display:flex;flex-wrap:wrap;gap:8px 18px;padding:0 28px 18px;max-width:1106px;margin:0 auto}.toc a{font-size:.94rem}.category>section{box-shadow:none;border-top:1px solid var(--line);padding:18px 2px;margin:10px 0;background:transparent}.category>section>h2{font-size:1.22rem;color:#087e8b}.category>h2{margin-bottom:14px}.related{margin:0 0 12px;color:#657586;font-size:.9rem}.related a{white-space:nowrap}.figure{margin:18px 0;padding:12px 16px;background:#f2f7f8;border-left:4px solid #087e8b;overflow:auto}.figure svg{display:block;width:100%;max-width:900px;height:auto;margin:auto}.figure figcaption{text-align:center;color:#536578;font-size:.92rem;margin-top:5px}.svg-label{font:600 15px system-ui,sans-serif;fill:#172435}.svg-note{font:14px system-ui,sans-serif;fill:#536578}.method-note{color:#536578}.category{scroll-margin-top:15px}@media(max-width:620px){.toc{padding-left:18px;padding-right:18px}.figure{padding:8px}.figure svg{min-width:620px}}.lesson-layout{display:block;width:100%;max-width:1050px;margin:0 auto;padding:0}.lesson-layout main{width:100%;max-width:1050px;min-width:0;margin:0 auto;padding:28px 0}.toc-panel{position:fixed;z-index:90;top:62px;left:max(12px,calc((100vw - 1050px)/2 - 252px));width:232px;max-height:calc(100vh - 74px);overflow:auto;margin:0;background:#fff;border:1px solid #d7e0e7;border-radius:10px;box-shadow:0 8px 28px #17243518}.toc-panel details>summary{list-style:none;cursor:pointer;padding:10px 13px;font-weight:700;color:#172435;font-size:.94rem}.toc-panel details>summary::-webkit-details-marker{display:none}.toc-panel details>summary:after{content:"⌄";float:right;color:#087e8b}.toc-panel details:not([open])>summary:after{content:"›"}.toc-panel .toc{display:block;padding:0 8px 10px}.toc-panel .toc a{display:block;margin:2px 0;padding:7px 8px;color:#176778;text-decoration:none;font-size:.9rem;line-height:1.35;border-radius:6px}.toc-panel .toc a:hover{background:#eef6f6;text-decoration:none}.lesson-layout main section[id],.lesson-layout main .category{scroll-margin-top:68px}@media(max-width:900px){.lesson-layout{max-width:100%;padding:0 16px}.lesson-layout main{max-width:100%;padding:20px 0}.toc-panel{left:12px;top:58px;width:min(232px,calc(100vw - 24px));max-height:calc(100vh - 68px)}.unit-controls{max-width:100%;padding:5px 12px}}</style><style><style>
-.point-list{margin:.45em 0 .9em;padding-left:1.35em;list-style:disc}.point-list li{padding-left:.18em;margin:.28em 0;line-height:1.55}.point-list li::marker{color:#087e8b}.category>section>ol,.category>section>ul:not(.point-list){padding-left:1.45em}.category>section>ol>li{margin:.36em 0;padding-left:.2em}.numerical-guide{padding:13px 16px;margin:12px 0 16px;background:#e8f4f4;border:1px solid #c8e2e3;border-left:5px solid #087e8b;border-radius:7px;color:#173748}.numerical-guide strong{display:block;letter-spacing:.04em;color:#075d67}.numerical-guide span{display:block;margin-top:3px;font-size:.93rem}.numerical-tag{display:inline-block;padding:4px 8px;border-radius:4px;background:#087e8b;color:#fff;font-size:.76rem;letter-spacing:.05em;font-weight:800;line-height:1.25}.worked-block{padding:15px 18px 18px;margin:16px 0;background:#fff;border:1px solid #d7e0e7;border-left:4px solid #087e8b;border-radius:8px;box-shadow:0 2px 10px #17243508}.worked-block h3{margin:.1em 0 .85em;display:flex;align-items:center;gap:9px;flex-wrap:wrap}.given-box,.formula-box,.answer-box{padding:10px 13px;margin:10px 0;border-radius:6px}.given-box{background:#f3f6f9}.formula-box{background:#edf5f6}.answer-box{background:#fff7e3;border-left:4px solid #d69b14}.given-box>b,.formula-box>b,.answer-box>b{display:block;margin-bottom:4px;font-size:.8rem;letter-spacing:.06em;color:#43586c}.given-box ul{margin:3px 0;padding-left:1.25em}.formula-box ol{margin:.35em 0}.solution-steps{margin:.65em 0 1em;padding-left:1.6em}.solution-steps>li{margin:.5em 0;padding-left:.25em;line-height:1.6}.method-note{padding:10px 13px;background:#f5f7f9;border-radius:6px;color:#536578}.related{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-</style><style>.example-figure{margin:12px 0 16px;background:#f5f8fa;border-left-color:#c18a2b}.example-figure svg{max-width:760px}.example-figure figcaption{font-size:.9rem}</style></head><body><header><p class="tag">ARTIFICIAL INTELLIGENCE · EXAM NOTES</p><h1>Unit 1 · Introduction to Artificial Intelligence</h1><p class="sub">Learn definitions, agent design, rationality and task environments from first principles. Definitions, rational agents, task environments, learning and agent architectures.</p></header><nav aria-label="Unit navigation" class="unit-controls"><span aria-disabled="true" class="disabled">← Previous unit</span><a class="home" href="../index.html">NMIMS-STUDY home</a><a href="unit_2.html">Next unit →</a></nav><div class="lesson-layout"><aside class="toc-panel"><details open=""><summary>On this page</summary><nav aria-label="Notes sections" class="toc"><a href="#theory-section">1. In-depth theory explanation</a> <a href="#numerical-section">2. Worked examples · simple / medium / complex</a> <a href="#comparison-section">3. Comparative studies</a> <a href="#case-section">4. Case studies and real-life examples</a> <a href="#questions-section">5. Possible exam questions</a></nav></details></aside><main><section class="category" id="theory-section"><h2>1. In-depth theory explanation</h2><p class="related">Related: <a href="#numerical-section">worked examples</a> <span aria-hidden="true">·</span> <a href="#comparison-section">comparative studies</a> <span aria-hidden="true">·</span> <a href="#case-section">case studies</a></p><section id="map"><h2>Unit map</h2><ul class="point-list"><li>AI can be studied as systems that <b>think or act</b>, judged either by resemblance to human behavior or by rational performance.</li><li>This unit centers on the rational-agent view: an agent perceives, selects actions, and aims to maximize a stated performance measure.</li></ul><figure class="figure"><svg aria-labelledby="fig1title fig1desc" role="img" viewbox="0 0 820 170"><title id="fig1title">Agent-environment loop</title><desc id="fig1desc">Percepts enter the agent; actions change the environment.</desc><defs><marker id="fig1arr" markerheight="10" markerwidth="10" orient="auto" refx="8" refy="3"><path d="M0,0 L0,6 L9,3 z" fill="#087e8b"></path></marker></defs><rect fill="#eaf2f3" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="13.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="102.5" y="98.0">Environment</text><line marker-end="url(#fig1arr)" stroke="#087e8b" stroke-width="2.5" x1="195.5" x2="210.5" y1="98.0" y2="98.0"></line><rect fill="#fff" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="218.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="307.5" y="87.0">Sensors</text><text class="svg-label" text-anchor="middle" x="307.5" y="109.0">percepts</text><line marker-end="url(#fig1arr)" stroke="#087e8b" stroke-width="2.5" x1="400.5" x2="415.5" y1="98.0" y2="98.0"></line><rect fill="#eaf2f3" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="423.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="512.5" y="87.0">Agent</text><text class="svg-label" text-anchor="middle" x="512.5" y="109.0">state + decision</text><line marker-end="url(#fig1arr)" stroke="#087e8b" stroke-width="2.5" x1="605.5" x2="620.5" y1="98.0" y2="98.0"></line><rect fill="#fff" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="628.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="717.5" y="87.0">Actuators</text><text class="svg-label" text-anchor="middle" x="717.5" y="109.0">actions</text><text class="svg-note" text-anchor="middle" x="410.0" y="155">Percepts enter the agent; actions change the environment.</text></svg><figcaption>Agent-environment loop</figcaption></figure></section><section id="theory"><h2>1. What is AI? Four approaches</h2><ul class="point-list"><li>Artificial intelligence studies computational systems able to perform tasks that normally require capabilities such as perception, reasoning, learning, planning, language, and action. “Intelligent”</li><li>is not one single test;</li><li>the classical framework separates two dimensions:</li></ul><table><tr><th>Approach</th><th>What counts as success</th><th>Example / limitation</th></tr><tr><td>Acting humanly</td><td>Behavior is indistinguishable from a human in the chosen setting.</td><td>Turing Test: a text-only interrogator cannot reliably distinguish machine from human. Requires language, representation, reasoning and learning; a test can reward imitation without proving understanding.</td></tr><tr><td>Thinking humanly</td><td>Internal processes resemble human cognition.</td><td>Cognitive modeling uses psychology/neuroscience evidence; matching the answer alone is insufficient if the reasoning process differs.</td></tr><tr><td>Thinking rationally</td><td>Reasoning follows valid logical principles.</td><td>Laws-of-thought approach, e.g. “All humans are mortal; Socrates is human; therefore Socrates is mortal.” Pure logic struggles with incomplete information, uncertainty, time and computational cost.</td></tr><tr><td>Acting rationally</td><td>Choose action expected to maximize performance given evidence and capabilities.</td><td>Rational agent approach accommodates uncertainty and imperfect information; rational does not mean omniscient or always successful.</td></tr></table><ul class="point-list"><li><b>Exam point:</b> Human-like performance and rational performance are different criteria.</li><li>Rationality is judged relative to evidence available when acting, not hindsight.</li></ul></section><section id="agents"><h2>2. Agent, rationality and PEAS</h2><ul class="point-list"><li>An <b>agent</b> perceives its environment through sensors and acts on it through actuators.</li><li>An agent function maps percept sequences to actions; the agent program implements that function on an architecture.</li><li>Thus <span class="math">Agent = Architecture + Program</span>.</li></ul><ul class="point-list"><li>Whether an action is rational depends on (1) performance measure, (2) prior knowledge, (3) available actions, and (4) percept sequence so far.</li><li>Rationality means selecting the action expected to maximize performance on this evidence; it does not imply perfect knowledge.</li></ul><ul class="point-list"><li><b>PEAS</b> specifies a task environment: Performance measure, Environment, Actuators, Sensors.</li><li>Example: autonomous taxi — safe/legal/comfortable trip and low cost; roads, traffic, passengers and weather; steering, brakes, accelerator, indicators; cameras, GPS, lidar/radar, speedometer and microphones.</li></ul><figure class="figure"><svg aria-labelledby="fig2title fig2desc" role="img" viewbox="0 0 820 170"><title id="fig2title">PEAS task specification</title><desc id="fig2desc">PEAS makes the task and its success criteria explicit.</desc><defs><marker id="fig2arr" markerheight="10" markerwidth="10" orient="auto" refx="8" refy="3"><path d="M0,0 L0,6 L9,3 z" fill="#087e8b"></path></marker></defs><rect fill="#eaf2f3" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="13.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="102.5" y="87.0">Performance</text><text class="svg-label" text-anchor="middle" x="102.5" y="109.0">success measure</text><line marker-end="url(#fig2arr)" stroke="#087e8b" stroke-width="2.5" x1="195.5" x2="210.5" y1="98.0" y2="98.0"></line><rect fill="#fff" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="218.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="307.5" y="87.0">Environment</text><text class="svg-label" text-anchor="middle" x="307.5" y="109.0">world</text><line marker-end="url(#fig2arr)" stroke="#087e8b" stroke-width="2.5" x1="400.5" x2="415.5" y1="98.0" y2="98.0"></line><rect fill="#eaf2f3" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="423.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="512.5" y="87.0">Actuators</text><text class="svg-label" text-anchor="middle" x="512.5" y="109.0">available actions</text><line marker-end="url(#fig2arr)" stroke="#087e8b" stroke-width="2.5" x1="605.5" x2="620.5" y1="98.0" y2="98.0"></line><rect fill="#fff" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="628.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="717.5" y="87.0">Sensors</text><text class="svg-label" text-anchor="middle" x="717.5" y="109.0">available evidence</text><text class="svg-note" text-anchor="middle" x="410.0" y="155">PEAS makes the task and its success criteria explicit.</text></svg><figcaption>PEAS task specification</figcaption></figure></section><section id="env"><h2>3. Environment properties and agent types</h2><table><tr><th>Dimension</th><th>First case</th><th>Second case</th><th>Illustration</th></tr><tr><td>Observability</td><td>Fully observable: sensors reveal relevant state.</td><td>Partially observable: information is missing/noisy; maintain internal state.</td><td>Chess board vs taxi driver’s hidden intentions of other drivers.</td></tr><tr><td>Agents</td><td>Single agent</td><td>Multi-agent; other agents may cooperate or compete.</td><td>Crossword vs chess.</td></tr><tr><td>Transition</td><td>Deterministic</td><td>Stochastic / uncertain outcomes</td><td>Sliding puzzle vs traffic.</td></tr><tr><td>Time relation</td><td>Episodic: each decision independent</td><td>Sequential: current action affects future states</td><td>Defect inspection vs chess/taxi.</td></tr><tr><td>Change while deciding</td><td>Static</td><td>Dynamic</td><td>Crossword vs moving traffic.</td></tr><tr><td>Representation</td><td>Discrete states/actions/time</td><td>Continuous values/time</td><td>Chess vs vehicle location and velocity.</td></tr></table><ul class="point-list"><li><b>Agent architectures:</b> (1) simple reflex uses current percept and condition–action rules;</li><li>fast but fails when state is hidden. (2) model-based reflex maintains an internal state updated from percept and world model. (3) goal-based evaluates actions by whether they lead to goal states, often using search. (4) utility-based scores outcomes and resolves trade-offs among several goals/uncertainty. (5) learning agent improves from experience;</li><li>a common decomposition is performance element, learning element, critic, and problem generator.</li></ul><figure class="figure"><svg aria-labelledby="fig3title fig3desc" role="img" viewbox="0 0 1025 170"><title id="fig3title">Agent architectures</title><desc id="fig3desc">Architectures add memory, planning, trade-offs and adaptation.</desc><defs><marker id="fig3arr" markerheight="10" markerwidth="10" orient="auto" refx="8" refy="3"><path d="M0,0 L0,6 L9,3 z" fill="#087e8b"></path></marker></defs><rect fill="#eaf2f3" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="13.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="102.5" y="87.0">Reflex</text><text class="svg-label" text-anchor="middle" x="102.5" y="109.0">current percept</text><line marker-end="url(#fig3arr)" stroke="#087e8b" stroke-width="2.5" x1="195.5" x2="210.5" y1="98.0" y2="98.0"></line><rect fill="#fff" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="218.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="307.5" y="87.0">Model-based</text><text class="svg-label" text-anchor="middle" x="307.5" y="109.0">internal state</text><line marker-end="url(#fig3arr)" stroke="#087e8b" stroke-width="2.5" x1="400.5" x2="415.5" y1="98.0" y2="98.0"></line><rect fill="#eaf2f3" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="423.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="512.5" y="87.0">Goal-based</text><text class="svg-label" text-anchor="middle" x="512.5" y="109.0">plan to goal</text><line marker-end="url(#fig3arr)" stroke="#087e8b" stroke-width="2.5" x1="605.5" x2="620.5" y1="98.0" y2="98.0"></line><rect fill="#fff" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="628.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="717.5" y="87.0">Utility-based</text><text class="svg-label" text-anchor="middle" x="717.5" y="109.0">rank outcomes</text><line marker-end="url(#fig3arr)" stroke="#087e8b" stroke-width="2.5" x1="810.5" x2="825.5" y1="98.0" y2="98.0"></line><rect fill="#eaf2f3" height="72" rx="10" stroke="#087e8b" stroke-width="2" width="178.0" x="833.5" y="62"></rect><text class="svg-label" text-anchor="middle" x="922.5" y="87.0">Learning</text><text class="svg-label" text-anchor="middle" x="922.5" y="109.0">improve from feedback</text><text class="svg-note" text-anchor="middle" x="512.5" y="155">Architectures add memory, planning, trade-offs and adaptation.</text></svg><figcaption>Agent architectures</figcaption></figure></section><section id="lesson-foundations"><h2>Lesson A · What are we trying to make a machine do?</h2>
-<ul class="point-list"><li>Start with a task, not with the word “intelligence.” A machine receives information, represents something about the situation, chooses among possible actions, and produces an outcome.</li><li>AI studies how to make these steps work for tasks where a fixed list of simple instructions is not enough: recognizing a spoken request, planning a route, diagnosing a fault, or controlling a robot.</li></ul>
-<ul class="point-list"><li>There are two independent questions in the classical definitions.</li><li>First: do we judge the system by its <em>thinking</em> or its <em>behavior</em>?</li><li>Second: do we judge it by resemblance to humans or by rational correctness?</li><li>Combining them gives the four approaches from the slides.</li><li>A human imitator may copy human mistakes; a logic system may reason correctly but be too slow to act; a rational agent instead asks which action best serves its stated objective with the evidence it has.</li></ul>
-<ul class="point-list"><li><b>Modeling</b> is the act of representing relevant parts of the world in a form a program can use.</li><li>A map is a model of road connectivity; a neural network is a learned model of relationships in examples; a rule base models expert knowledge.</li><li><b>Inference</b> uses a model plus evidence to derive a conclusion.</li><li>For example, a route planner models roads and costs, then infers that one route is cheapest.</li><li><b>Learning</b> changes the model or decision process using experience.</li><li>If observed travel times repeatedly exceed estimates, a learned model can update the expected road costs.</li><li>The three are connected, not interchangeable: learning may build the model, inference uses it, and outcomes provide new learning evidence.</li></ul>
-<svg aria-label="Modeling, inference, learning cycle" role="img" viewbox="0 0 900 170"><defs><marker id="arrow1" markerheight="10" markerwidth="10" orient="auto" refx="8" refy="3"><path d="M0,0 L0,6 L9,3 z" fill="#087e8b"></path></marker></defs><rect fill="#eaf2f3" height="74" rx="8" stroke="#087e8b" width="190" x="20" y="45"></rect><text text-anchor="middle" x="115" y="77">World + data</text><text text-anchor="middle" x="115" y="101">observations</text><rect fill="#eaf2f3" height="74" rx="8" stroke="#087e8b" width="190" x="270" y="45"></rect><text text-anchor="middle" x="365" y="77">Model</text><text text-anchor="middle" x="365" y="101">representation</text><rect fill="#eaf2f3" height="74" rx="8" stroke="#087e8b" width="160" x="520" y="45"></rect><text text-anchor="middle" x="600" y="89">Inference</text><rect fill="#eaf2f3" height="74" rx="8" stroke="#087e8b" width="140" x="740" y="45"></rect><text text-anchor="middle" x="810" y="89">Action</text><path d="M210 82 H262 M460 82 H512 M680 82 H732" marker-end="url(#arrow1)" stroke="#087e8b" stroke-width="3"></path><path d="M810 125 Q450 165 115 125" fill="none" marker-end="url(#arrow1)" stroke="#087e8b" stroke-width="2"></path><text text-anchor="middle" x="460" y="160">Experience / outcome updates the model (learning)</text></svg>
-<h3>Machine learning and deep learning are nested ideas</h3><ul class="point-list"><li>Machine learning uses examples or feedback to fit a model instead of specifying every output by hand.</li><li>In supervised learning, examples have target labels; in unsupervised learning, the system looks for structure without given labels; reinforcement learning uses rewards from actions.</li><li>Deep learning is a subset of machine learning that learns with neural networks containing multiple processing layers.</li><li>More layers can learn useful representations from raw data, but training can demand substantial data and computation. “Deep” describes network depth; it does not mean the system understands like a human.</li></ul></section><section id="lesson-agent"><h2>Lesson B · From a sensor reading to an action</h2>
-<ul class="point-list"><li>Imagine a robot vacuum at a doorway.</li><li>Its sensor reports “dirty.” The actuator controls a suction motor.</li><li>A rule can map this percept to “vacuum.” This is an agent: it observes through sensors and affects its environment through actuators.</li><li>The same structure applies to software agents: a web service receives inputs and emits actions through APIs.</li></ul>
-<ul class="point-list"><li>An agent program runs on an architecture (hardware or software platform).</li><li>Its abstract agent function maps the entire percept history to an action.</li><li>Two programs may receive the same current percept but act differently because one remembers what happened earlier.</li><li>A rational agent chooses the action expected to maximize the performance measure, given percept history, prior knowledge, and available actions.</li><li>This is a fair-time decision rule: an action is judged by information available before the outcome, not by hindsight.</li></ul>
-<h3>PEAS worked through carefully: autonomous taxi</h3><ol><li><b>Performance:</b> reach the requested destination safely and legally, minimize time and operating cost, preserve passenger comfort. These criteria may conflict; a utility function or priority hierarchy makes the trade-off explicit.</li><li><b>Environment:</b> roads, lanes, pedestrians, other vehicles, traffic lights, weather, passenger and destination.</li><li><b>Actuators:</b> steering, throttle, brakes, signals, display/speaker.</li><li><b>Sensors:</b> cameras, radar/lidar, GPS, wheel-speed and inertial sensors, microphone.</li><li><b>Task properties:</b> partially observable (occlusions and hidden intentions), multi-agent, stochastic from the agent’s view, sequential, dynamic, continuous.</li><li><b>Architecture implication:</b> maintain an internal state/map, predict other road users, plan, act, and update from new sensor evidence. A simple reflex “if obstacle, brake” is useful but cannot by itself handle route choice and long-term consequences.</li></ol>
-<ul class="point-list"><li>For a vacuum cleaner the PEAS differs: cleanliness and low energy; rooms and furniture; wheels and suction; dirt, bump, location and battery sensors.</li><li>If only the current square is sensed, the agent must remember visited locations or risk wandering.</li><li>This is why partial observability motivates model-based agents.</li></ul>
-<h3>Why there are several agent designs</h3><ul class="point-list"><li>A simple reflex agent applies condition–action rules to the current percept.</li><li>A model-based reflex agent additionally updates an internal state from the current percept and previous state.</li><li>A goal-based agent searches possible action sequences and asks whether they reach a goal.</li><li>A utility-based agent ranks goal-reaching outcomes when one is safer, cheaper, or faster than another.</li><li>A learning agent has a performance element that acts, a critic that evaluates results, a learning element that improves behavior, and a problem generator that encourages useful exploration.</li><li>Each added capability costs computation and design effort; choose it when the task needs it.</li></ul>
-<svg aria-label="Agent interaction and learning" role="img" viewbox="0 0 900 215"><defs><marker id="arrow2" markerheight="10" markerwidth="10" orient="auto" refx="8" refy="3"><path d="M0,0 L0,6 L9,3 z" fill="#087e8b"></path></marker></defs><rect fill="#fff" height="82" rx="8" stroke="#087e8b" stroke-width="2" width="190" x="40" y="65"></rect><text text-anchor="middle" x="135" y="105">Environment</text><rect fill="#eaf2f3" height="100" rx="8" stroke="#087e8b" stroke-width="2" width="210" x="350" y="55"></rect><text text-anchor="middle" x="455" y="93">Agent program</text><text text-anchor="middle" x="455" y="120">state + decision</text><path d="M230 80 H340 M350 135 H240" marker-end="url(#arrow2)" stroke="#087e8b" stroke-width="3"></path><text text-anchor="middle" x="286" y="70">percepts</text><text text-anchor="middle" x="286" y="165">actions</text><rect fill="#fff" height="55" rx="8" stroke="#087e8b" width="210" x="650" y="30"></rect><text text-anchor="middle" x="755" y="64">Critic / feedback</text><rect fill="#fff" height="55" rx="8" stroke="#087e8b" width="210" x="650" y="125"></rect><text text-anchor="middle" x="755" y="159">Learning element</text><path d="M560 75 H640 M755 85 V117 M650 153 Q600 190 520 145" fill="none" marker-end="url(#arrow2)" stroke="#087e8b" stroke-width="2"></path></svg>
-</section></section><section class="category" id="numerical-section"><h2>2. Worked numerical examples</h2><div class="numerical-guide"><strong>NUMERICAL WORKING · GIVEN → FORMULA / RULE → STEPS → FINAL ANSWER</strong><span>Every example is separated into supplied data, method, numbered working and a checked result.</span></div><p class="method-note">Unit 1 has no arithmetic method in the slides. These practice problems apply rational-agent reasoning: state the performance measure, calculate expected outcomes, and choose the action that maximizes it.</p><article class="worked-block"><h3><span class="numerical-tag">SIMPLE NUMERICAL</span> Expected score for one action</h3><div class="given-box"><b>GIVEN</b><ul><li>Success probability = 0.8; success score = 10.</li><li>Failure probability = 0.2; failure score = 0.</li></ul></div><div class="formula-box"><b>FORMULA / RULE</b><div>Expected score = Σ probability × score.</div></div><figure class="figure example-figure"><svg aria-label="Expected score is the probability-weighted sum." role="img" viewbox="0 0 760 250"><title>Expected score calculation</title><defs><marker id="arrow-expected-score-calculation" markerheight="10" markerwidth="10" orient="auto" refx="8" refy="3"><path d="M0,0 L0,6 L9,3 z" fill="#087e8b"></path></marker></defs><rect fill="#eaf2f3" height="88" rx="10" stroke="#087e8b" stroke-width="2" width="167.5" x="24.0" y="68"></rect><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="107.75" y="100.0">Success</text><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="107.75" y="124.0">p = 0.8, u = 10</text><line marker-end="url(#arrow-expected-score-calculation)" stroke="#087e8b" stroke-width="2.5" x1="193.5" x2="201.5" y1="112.0" y2="112.0"></line><rect fill="#fff" height="88" rx="10" stroke="#087e8b" stroke-width="2" width="167.5" x="205.5" y="68"></rect><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="289.25" y="100.0">Failure</text><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="289.25" y="124.0">p = 0.2, u = 0</text><line marker-end="url(#arrow-expected-score-calculation)" stroke="#087e8b" stroke-width="2.5" x1="375.0" x2="383.0" y1="112.0" y2="112.0"></line><rect fill="#eaf2f3" height="88" rx="10" stroke="#087e8b" stroke-width="2" width="167.5" x="387.0" y="68"></rect><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="470.75" y="100.0">Weight</text><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="470.75" y="124.0">p × u</text><line marker-end="url(#arrow-expected-score-calculation)" stroke="#087e8b" stroke-width="2.5" x1="556.5" x2="564.5" y1="112.0" y2="112.0"></line><rect fill="#fff" height="88" rx="10" stroke="#087e8b" stroke-width="2" width="167.5" x="568.5" y="68"></rect><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="652.25" y="100.0">Add</text><text fill="#172435" font-family="system-ui" font-size="13" font-weight="600" text-anchor="middle" x="652.25" y="124.0">8 + 0 = 8</text><text fill="#536578" font-family="system-ui" font-size="14" text-anchor="middle" x="380" y="205">Expected score is the probability-weighted sum.</text></svg><figcaption>Expected score is the probability-weighted sum.</figcaption></figure><div class="calc-work"><b>STEPWISE WORKING</b><ol><li>Success contribution = 0.8 × 10 = 8.</li><li>Failure contribution = 0.2 × 0 = 0.</li><li>Add the contributions: 8 + 0 = 8.</li></ol></div><div class="answer-box"><b>FINAL ANSWER</b><div>Expected score = <b>8</b>. The agent uses this value to compare actions. See <a href="#agents">rationality</a>.</div></div></article><article class="worked-block"><h3><span class="numerical-tag">MEDIUM NUMERICAL</span> Choose between two delivery routes</h3><div class="given-box"><b>GIVEN</b><ul><li>Fast route: success p=0.80, score +100; failure p=0.20, score −40.</li><li>Safe route: success p=0.95, score +70; failure p=0.05, score −40.</li></ul></div><div class="formula-box"><b>FORMULA / RULE</b><div>EU(action) = Σ p(outcome) × performance(outcome).</div></div><figure class="figure example-figure"><svg aria-label="Choose the action with the greater expected score." role="img" viewbox="0 0 760 250"><title>Expected utility by route</title><line stroke="#91a2ad" x1="195" x2="195" y1="45" y2="215"></line><text fill="#172435" font-family="system-ui" font-size="15" text-anchor="end" x="180" y="77">Fast route</text><rect fill="#087e8b" height="30" rx="5" width="410.0" x="205" y="58"></rect><text fill="#172435" font-family="system-ui" font-size="14" font-weight="700" x="625.0" y="78">72</text><text fill="#172435" font-family="system-ui" font-size="15" text-anchor="end" x="180" y="129">Safe route</text><rect fill="#d39a2f" height="30" rx="5" width="367.2916666666667" x="205" y="110"></rect><text fill="#172435" font-family="system-ui" font-size="14" font-weight="700" x="582.2916666666667" y="130">64.5</text><text fill="#536578" font-family="system-ui" font-size="13" text-anchor="middle" x="380" y="235">Choose the action with the greater expected score.</text></svg><figcaption>Choose the action with the greater expected score.</figcaption></figure><div class="calc-work"><b>STEPWISE WORKING</b><ol><li>Fast = 0.80(100) + 0.20(−40).</li><li>Safe = 0.95(70) + 0.05(−40).</li></ol></div><div class="answer-box"><b>FINAL ANSWER</b><div>Choose the <b>fast route</b>, because 72 &gt; 64.5. If the failure penalty changes, recompute both actions. See <a href="#examples">taxi-agent case</a>.</div></div></article><article class="worked-block"><h3><span class="numerical-tag">COMPLEX NUMERICAL</span> Compare options with different risk profiles</h3><div class="given-box"><b>GIVEN</b><ul><li>Action A: 0.70 chance of +120, 0.20 chance of +20, 0.10 chance of −250.</li><li>Action B: 0.94 chance of +85, 0.06 chance of −40.</li></ul></div><div class="formula-box"><b>FORMULA / RULE</b><div>EU(action) = Σ pᵢuᵢ; check that probabilities for each action sum to 1.</div></div><figure class="figure example-figure"><svg aria-label="Probabilities and outcome values are shown in the worked calculation." role="img" viewbox="0 0 760 250"><title>Risk-sensitive action comparison</title><line stroke="#91a2ad" x1="195" x2="195" y1="45" y2="215"></line><text fill="#172435" font-family="system-ui" font-size="15" text-anchor="end" x="180" y="77">Action A</text><rect fill="#087e8b" height="30" rx="5" width="333.2903225806452" x="205" y="58"></rect><text fill="#172435" font-family="system-ui" font-size="14" font-weight="700" x="548.2903225806451" y="78">63</text><text fill="#172435" font-family="system-ui" font-size="15" text-anchor="end" x="180" y="129">Action B</text><rect fill="#d39a2f" height="30" rx="5" width="410.0" x="205" y="110"></rect><text fill="#172435" font-family="system-ui" font-size="14" font-weight="700" x="625.0" y="130">77.5</text><text fill="#536578" font-family="system-ui" font-size="13" text-anchor="middle" x="380" y="235">Probabilities and outcome values are shown in the worked calculation.</text></svg><figcaption>Probabilities and outcome values are shown in the worked calculation.</figcaption></figure><div class="calc-work"><b>STEPWISE WORKING</b><ol><li>Check A probabilities: 0.70 + 0.20 + 0.10 = 1.00.</li><li>EU(A) = 0.70(120) + 0.20(20) + 0.10(−250).</li><li>EU(A) = 84 + 4 − 25 = 63.</li><li>Check B probabilities: 0.94 + 0.06 = 1.00.</li><li>EU(B) = 0.94(85) + 0.06(−40) = 79.9 − 2.4 = 77.5.</li><li>Choose the larger expected utility; rationality is relative to the specified performance measure.</li></ol></div><div class="answer-box"><b>FINAL ANSWER</b><div>Choose <b>Action B</b>. This result depends on the stated score and probabilities. See <a href="#compare">goal-based vs utility-based agents</a>.</div></div></article></section><section class="category" id="comparison-section"><h2>3. Comparative studies</h2><section id="compare"><h2>6. Comparisons to memorize</h2><table><tr><th>Pair</th><th>Core difference</th><th>Exam phrase</th></tr><tr><td>Modeling vs inference vs learning</td><td>Modeling represents a domain; inference derives a conclusion from the model/evidence; learning changes the model or policy from experience.</td><td>They can form a loop: data → learned model → inference → action → new data.</td></tr><tr><td>ML vs deep learning</td><td>ML is a family of data-driven methods; deep learning uses multilayer neural networks.</td><td>Deep learning can learn representations, often needs more data/compute and can be harder to interpret.</td></tr><tr><td>Simple reflex vs model-based</td><td>Current percept only vs percept plus internal state.</td><td>Use memory/model when the environment is partially observable.</td></tr><tr><td>Goal vs utility agent</td><td>Goal tests satisfaction; utility ranks outcomes and handles trade-offs.</td><td>Several goal-reaching outcomes can have different utility.</td></tr><tr><td>Human-like vs rational</td><td>Imitation of human behavior vs maximizing expected performance.</td><td>A rational agent need not copy human errors.</td></tr></table></section></section><section class="category" id="case-section"><h2>4. Case studies and real-life examples</h2><section id="examples"><h2>4. Application examples and case analysis</h2><ul class="point-list"><li><b>Vacuum agent:</b> performance may reward clean squares and penalize time/energy; environment is rooms; actuators move/suck; sensors detect location and dirt.</li><li>If it has only a local dirt sensor, it is partially observable.</li><li>A fixed “if dirty, suck; otherwise move” rule is simple reflex; a map and memory make it model-based.</li></ul><ul class="point-list"><li><b>Recommendation system:</b> observes clicks/ratings, predicts preferences, and ranks items.</li><li>It learns from past behavior, but the performance measure (clicks, satisfaction, diversity) changes what “good” means.</li><li>This is an example of modeling data and learning a policy; inference estimates likely preferences from evidence.</li></ul><ul class="point-list"><li><b>Robot arm:</b> camera/force sensors provide percepts, actuators move joints, and a goal-based controller plans a grasp.</li><li>Inference derives object position; learning can improve grasp parameters.</li><li>The diagram and PEAS terms above provide the answer framework.</li></ul><ul class="point-list"><li>Applications in the deck include game playing, planning and scheduling, autonomous control, diagnosis, robotics, and logistics.</li><li>Describe for each: input/percepts → representation/model → decision or plan → action → performance feedback.</li></ul></section></section><section class="category" id="questions-section"><h2>5. Possible exam questions</h2><section id="questions"><h2>7. Likely exam questions</h2><ol><li>Explain the four approaches to defining AI, with examples and limitations.</li><li>Define an intelligent agent and explain rationality and its four determinants.</li><li>Describe PEAS with a suitable autonomous taxi or vacuum-cleaner example.</li><li>Explain task-environment properties and classify chess/taxi/vacuum.</li><li>Compare simple reflex, model-based, goal-based, utility-based and learning agents.</li><li>Explain the Turing Test and capabilities required to pass it.</li><li>Distinguish modeling, inference, machine learning and deep learning.</li><li>For 8–10 marks, draw and explain the agent–environment loop and connect it to a real application.</li></ol><div class="exam"><b>Answer length plan:</b> 4 marks = definition + 3–4 points + tiny example. 6 = add diagram/PEAS. 8 = explain operation and compare alternatives. 10 = include assumptions, limitations, real case and conclusion.</div></section><section id="lesson-exam"><h2>Lesson C · How to build an answer that earns marks</h2><ul class="point-list"><li>For any agent question, proceed in a stable order: define agent and environment; state the performance measure; list PEAS; classify observability, determinism, time relation, dynamics, discreteness and number of agents; choose an architecture; explain how percepts produce actions; name one limitation.</li><li>A diagram should show arrows in both directions—percepts enter, actions leave—and label sensors and actuators.</li><li>For a comparison question, define both terms before listing differences and give one task where each is suitable.</li></ul><ul class="point-list"><li><b>Short practice:</b> A board-game system sees all pieces, takes turns against another player, and uses discrete legal moves.</li><li>It is fully observable, multi-agent, sequential and discrete.</li><li>If the opponent’s move is governed by fixed rules, transitions may be deterministic, but the agent still cannot know which choice the opponent will make in advance.</li><li>That distinction between deterministic rules and uncertain behavior is often tested.</li></ul></section></section><section class="category" id="references-section"><h2>References and further reading</h2><section id="sources"><h2>References</h2><ul class="refs"><li>Slides: Unit 1, “Introduction to Artificial Intelligence” (user supplied).</li><li><a href="https://aima.eecs.berkeley.edu/contents.html">Russell &amp; Norvig, Artificial Intelligence: A Modern Approach — contents and chapter structure</a> (agents, search, logic, CSP and learning).</li></ul></section></section></main></div><footer><p>Prepared from the supplied lecture slides. External sources are linked where they support a real-world case or standard formulation. Numerical datasets below are teaching examples unless explicitly identified otherwise.</p><nav aria-label="Unit navigation" class="unit-controls"><span aria-disabled="true" class="disabled">← Previous unit</span><a class="home" href="../index.html">NMIMS-STUDY home</a><a href="unit_2.html">Next unit →</a></nav></footer></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unit 1 – Introduction to Artificial Intelligence | Lecture Study Guide</title>
+<style>
+:root{--ink:#172435;--muted:#536578;--line:#d7e0e7;--accent:#087e8b;--paper:#fff;--wash:#f3f7f8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--wash);color:var(--ink);font:17px/1.68 system-ui,-apple-system,Segoe UI,sans-serif}
+header,main,footer{max-width:1050px;margin:auto;padding:28px}
+header{padding-top:54px;padding-bottom:20px}
+h1{font-size:2.5rem;line-height:1.12;margin:.2em 0}
+.sub{color:var(--muted);font-size:1.05rem}
+section{background:var(--paper);padding:24px 30px;margin:18px 0;border-top:3px solid var(--accent);box-shadow:0 2px 10px #142b3a0c}
+h2{font-size:1.65rem;margin:.2em 0 .55em}
+h3{font-size:1.2rem;margin:1.2em 0 .3em}
+p{margin:.6em 0}
+li{margin:.28em 0}
+table{border-collapse:collapse;width:100%;margin:14px 0}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:#eaf2f3}
+code,.math{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#eef3f4;padding:.08em .3em;border-radius:3px}
+.diagram{background:#f2f7f8;border-left:4px solid var(--accent);padding:14px 18px;overflow:auto;white-space:pre-wrap;font-family:ui-monospace,monospace;line-height:1.55}
+.exam{background:#fff8e7;border-left:4px solid #d69b14;padding:12px 16px;margin:12px 0}
+.step{font-weight:700;color:var(--accent)}
+.tag{color:var(--muted);font-size:.9rem}
+a{color:#006b78}
+footer{color:var(--muted)}
+.unit-controls{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap;width:100%;max-width:1050px;height:46px;margin:0 auto;padding:5px 0;background:#f3f7f8ed;backdrop-filter:blur(8px)}
+.unit-controls a{display:inline-block;background:#087e8b;color:#fff;text-decoration:none;padding:6px 10px;border-radius:6px;font-size:.88rem;font-weight:650;line-height:1.3}
+.unit-controls a:hover{background:#075d67}
+.unit-controls .home{background:#43586c}
+.unit-controls .disabled{display:inline-block;color:#718092;background:#edf1f4;padding:6px 10px;border-radius:6px;font-size:.88rem;font-weight:600;line-height:1.3}
+.toc-panel{position:fixed;z-index:90;top:62px;left:max(12px,calc((100vw - 1050px)/2 - 252px));width:232px;max-height:calc(100vh - 74px);overflow:auto;margin:0;background:#fff;border:1px solid #d7e0e7;border-radius:10px;box-shadow:0 8px 28px #17243518}
+.toc-panel details>summary{list-style:none;cursor:pointer;padding:10px 13px;font-weight:700;color:#172435;font-size:.94rem}
+.toc-panel details>summary::-webkit-details-marker{display:none}
+.toc-panel details>summary:after{content:"▼";float:right;color:#087e8b}
+.toc-panel details:not([open])>summary:after{content:"▶"}
+.toc-panel .toc{display:block;padding:0 8px 10px}
+.toc-panel .toc a{display:block;margin:2px 0;padding:7px 8px;color:#176778;text-decoration:none;font-size:.9rem;line-height:1.35;border-radius:6px}
+.toc-panel .toc a:hover{background:#eef6f6}
+.lesson-layout{display:block;width:100%;max-width:1050px;margin:0 auto;padding:0}
+.lesson-layout main{width:100%;max-width:1050px;min-width:0;margin:0 auto;padding:28px 0}
+.category>section{box-shadow:none;border-top:1px solid var(--line);padding:18px 2px;margin:10px 0;background:transparent}
+.category>section>h2{font-size:1.22rem;color:#087e8b}
+.category>h2{margin-bottom:14px}
+.point-list{margin:.45em 0 .9em;padding-left:1.35em;list-style:disc}
+.point-list li{padding-left:.18em;margin:.28em 0;line-height:1.55}
+.point-list li::marker{color:#087e8b}
+.numerical-guide{padding:13px 16px;margin:12px 0 16px;background:#e8f4f4;border:1px solid #c8e2e3;border-left:5px solid #087e8b;border-radius:7px;color:#173748}
+.numerical-guide strong{display:block;letter-spacing:.04em;color:#075d67}
+.numerical-guide span{display:block;margin-top:3px;font-size:.93rem}
+.numerical-tag{display:inline-block;padding:4px 8px;border-radius:4px;background:#087e8b;color:#fff;font-size:.76rem;letter-spacing:.05em;font-weight:800;line-height:1.25}
+.worked-block{padding:15px 18px 18px;margin:16px 0;background:#fff;border:1px solid #d7e0e7;border-left:4px solid #087e8b;border-radius:8px;box-shadow:0 2px 10px #17243508}
+.worked-block h3{margin:.1em 0 .85em;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.given-box,.formula-box,.answer-box{padding:10px 13px;margin:10px 0;border-radius:6px}
+.given-box{background:#f3f6f9}
+.formula-box{background:#edf5f6}
+.answer-box{background:#fff7e3;border-left:4px solid #d69b14}
+.given-box>b,.formula-box>b,.answer-box>b{display:block;margin-bottom:4px;font-size:.8rem;letter-spacing:.06em;color:#43586c}
+.solution-steps{margin:.65em 0 1em;padding-left:1.6em}
+.solution-steps>li{margin:.5em 0;padding-left:.25em;line-height:1.6}
+.figure{margin:18px 0;padding:12px 16px;background:#f2f7f8;border-left:4px solid #087e8b;overflow:auto}
+.figure svg{display:block;width:100%;max-width:900px;height:auto;margin:auto}
+.figure figcaption{text-align:center;color:#536578;font-size:.92rem;margin-top:5px}
+.svg-label{font:600 15px system-ui,sans-serif;fill:#172435}
+.svg-note{font:14px system-ui,sans-serif;fill:#536578}
+.related{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0 0 12px;color:#657586;font-size:.9rem}
+.related a{white-space:nowrap}
+@media print{body{background:white;font-size:11pt}section{box-shadow:none;break-inside:avoid}a{color:inherit;text-decoration:none}}
+@media(max-width:900px){.lesson-layout{max-width:100%;padding:0 16px}.lesson-layout main{max-width:100%;padding:20px 0}.toc-panel{left:12px;top:58px;width:min(232px,calc(100vw - 24px));max-height:calc(100vh - 68px)}.unit-controls{max-width:100%;padding:5px 12px}}
+</style>
+<style>.pyq-focus{margin:1.25rem 0 1.6rem;padding:1.1rem 1.25rem;border:1px solid #9bcbd0;border-left:5px solid #087f8c;border-radius:10px;background:#f1f8f8;color:#172638}.pyq-focus h3{margin:.1rem 0 .7rem}.pyq-focus h4{margin:1.15rem 0 .5rem;color:#075c66}.pyq-focus li{margin:.35rem 0}.pyq-focus .source-note,.source-note{font-size:.92em;color:#52677a;margin-top:.8rem}.pyq-focus .number-steps li{padding:.25rem 0}.pyq-focus .visual-example{margin:1rem 0;padding:.75rem;background:#fff;border:1px solid #d7e3e8;border-radius:8px}.pyq-focus svg{display:block;width:100%;height:auto;max-height:300px}.pyq-focus figcaption,.pyq-focus .visual-example p{font-size:.9em;color:#52677a}.pyq-focus .table-wrap{overflow-x:auto;margin:.75rem 0}.pyq-focus table{width:100%;border-collapse:collapse;background:#fff}.pyq-focus th,.pyq-focus td{border:1px solid #cfdae0;padding:.45rem .55rem;text-align:left}.pyq-focus th{background:#e5f1f3}.pyq-note{padding:.75rem 1rem;border-radius:8px;background:#fff4df;border-left:4px solid #da9f35}.pyq-focus ol{padding-left:1.5rem}</style></head>
+<body>
+<nav class="unit-controls">
+<span aria-disabled="true" class="disabled">← Previous unit</span>
+<a href="unit_2.html">Next unit →</a>
+<a class="home" href="../index.html">NMIMS-STUDY home</a>
+</nav>
+<nav class="toc-panel">
+<details open="">
+<summary>Unit 1 — Contents</summary>
+<div class="toc">
+<a href="#theory-section">📖 Comprehensive Theory</a>
+<a href="#t-what-is-ai">  What is AI?</a>
+<a href="#t-four-approaches">  4 Approaches to AI</a>
+<a href="#t-subsets">  AI vs ML vs Deep Learning</a>
+<a href="#t-components-ai">  Components of AI System</a>
+<a href="#t-agents-rationality">  Agents &amp; Rationality</a>
+<a href="#t-peas">  PEAS Framework</a>
+<a href="#t-environments">  Task Environment Properties</a>
+<a href="#t-agent-types">  5 Types of Agents (Architectures)</a>
+<a href="#numerical-section">🧮 Worked Problem Examples</a>
+<a href="#num-simple">  Simple: Expected Score / Value</a>
+<a href="#num-medium">  Medium: Multi-Action Expected Utility</a>
+<a href="#num-complex">  Complex: Risk-Profile &amp; Architecture Trade-off</a>
+<a href="#comparison-section">⚖️ Comparative Tables</a>
+<a href="#case-section">🏢 Real-World Case Studies</a>
+<a href="#questions-section">❓ Exam Questions Bank</a>
+</div>
+</details>
+</nav>
+<div class="lesson-layout">
+<main>
+<header>
+<p class="tag">ARTIFICIAL INTELLIGENCE · UNIT 1 COMPREHENSIVE LECTURE STUDY GUIDE</p>
+<h1>Unit 1: Introduction to Artificial Intelligence</h1>
+<p class="sub">Prof. Jesleena Gonsalves · In-Depth Classroom Lecture Notes, Detailed Diagrams, Mathematical Foundations, PEAS Formulations &amp; Exam Practice</p>
+</header>
+<section class="category" id="theory-section">
+<h2>1. In-Depth Theory &amp; Concepts (Classroom Lecture Style)</h2>
+<p class="related">Related: <a href="#numerical-section">Worked Examples</a> · <a href="#comparison-section">Comparative Studies</a> · <a href="#case-section">Case Studies</a></p>
+<div id="t-what-is-ai">
+<h3>1.1 What is Intelligence &amp; Artificial Intelligence?</h3>
+<p>Good morning class. When we begin our journey into Artificial Intelligence, the fundamental question we must pose is: <em>what actually constitutes intelligence?</em></p>
+<p><strong>Intelligence</strong> is defined as the capability to calculate, reason, perceive relationships and analogies, learn from experience, store and retrieve information from memory, solve problems, comprehend complex ideas, use natural language fluently, classify, generalize, and adapt to novel situations.</p>
+<p>In concise technical terms from our lecture syllabus: <strong>"Intelligence is the ability to think and achieve desired goals, thus we can say intelligence is used for PROBLEM SOLVING."</strong></p>
+<p>Traditionally, intelligence was viewed as a uniquely human biological trait. When this intelligence—specifically the perception, learning, and decision-making ability—is engineered and implemented inside computational machines, it is designated as <strong>ARTIFICIAL INTELLIGENCE (AI)</strong>.</p>
+<div class="exam">
+<strong>Exam Definition to Write:</strong><br/>
+<em>"Artificial Intelligence is that branch of computer science which focuses on creating software and hardware systems capable of demonstrating behaviors, reasoning, and problem-solving abilities that would be characterized as intelligent if exhibited by a human being."</em>
+</div>
+</div>
+<div id="t-four-approaches">
+<h3>1.2 The Four Approaches to Defining Artificial Intelligence</h3>
+<p>In historical literature and contemporary research, definitions of AI fall along two orthogonal dimensions:</p>
+<ol>
+<li><strong>Thought processes and reasoning</strong> versus <strong>Observable behavior and action</strong>.</li>
+<li>Measuring success against <strong>Human performance</strong> (fidelity to human behavior) versus measuring against an ideal standard called <strong>Rationality</strong> (an idealized standard of doing the 'right thing').</li>
+</ol>
+<p>This yields a classical 2×2 matrix of four distinct approaches:</p>
+<table>
+<tr>
+<th>Category</th>
+<th>Thinking (Internal Mental State)</th>
+<th>Acting (External Visible Behavior)</th>
+</tr>
+<tr>
+<th>Human Standard<br/>(Fidelity to Humans)</th>
+<td>
+<strong>1. Thinking Humanly (Cognitive Modeling Approach)</strong><br/>
+<em>"The exciting new effort to make computers think… machines with minds, in the full and literal sense."</em> (Haugeland, 1985)<br/>
+          Focus: Determining how the human mind thinks via introspection, psychological experiments, and brain imaging (fMRI/EEG).
+        </td>
+<td>
+<strong>2. Acting Humanly (Turing Test Approach)</strong><br/>
+<em>"The art of creating machines that perform functions that require intelligence when performed by people."</em> (Kurzweil, 1990)<br/>
+          Focus: Passing operational tests of indistinguishability from human beings (Alan Turing, 1950).
+        </td>
+</tr>
+<tr>
+<th>Rational Standard<br/>(Ideal Intelligence)</th>
+<td>
+<strong>3. Thinking Rationally (Laws of Thought Approach)</strong><br/>
+<em>"The study of mental faculties through the use of computational models."</em> (Charniak &amp; McDermott, 1985)<br/>
+          Focus: Codifying 'right thinking' using formal logic, starting from Aristotle's syllogisms.
+        </td>
+<td>
+<strong>4. Acting Rationally (Rational Agent Approach)</strong><br/>
+<em>"Computational Intelligence is the study of the design of intelligent agents."</em> (Poole et al., 1998)<br/>
+          Focus: Designing autonomous agents that perceive their environment and select actions that maximize their expected performance.
+        </td>
+</tr>
+</table>
+<!-- SVG DIAGRAM: The 4 Quadrants -->
+<div class="figure">
+<svg viewbox="0 0 800 320" xmlns="http://www.w3.org/2000/svg">
+<line stroke="#087e8b" stroke-dasharray="5,5" stroke-width="3" x1="400" x2="400" y1="30" y2="300"></line>
+<line stroke="#087e8b" stroke-dasharray="5,5" stroke-width="3" x1="60" x2="740" y1="165" y2="165"></line>
+<rect fill="#eaf2f3" height="110" rx="10" stroke="#087e8b" stroke-width="2" width="310" x="70" y="40"></rect>
+<text class="svg-label" font-size="16" text-anchor="middle" x="225" y="70">Thinking Humanly</text>
+<text class="svg-note" text-anchor="middle" x="225" y="95">Cognitive Science &amp; Psychology</text>
+<text class="svg-note" text-anchor="middle" x="225" y="115">General Problem Solver (GPS)</text>
+<text class="svg-note" text-anchor="middle" x="225" y="135">Introspection &amp; Brain Scans</text>
+<rect fill="#eaf2f3" height="110" rx="10" stroke="#087e8b" stroke-width="2" width="310" x="420" y="40"></rect>
+<text class="svg-label" font-size="16" text-anchor="middle" x="575" y="70">Thinking Rationally</text>
+<text class="svg-note" text-anchor="middle" x="575" y="95">Laws of Thought &amp; Logic</text>
+<text class="svg-note" text-anchor="middle" x="575" y="115">Aristotle's Syllogisms</text>
+<text class="svg-note" text-anchor="middle" x="575" y="135">Deductive Entailment</text>
+<rect fill="#fff" height="110" rx="10" stroke="#087e8b" stroke-width="2" width="310" x="70" y="180"></rect>
+<text class="svg-label" font-size="16" text-anchor="middle" x="225" y="210">Acting Humanly</text>
+<text class="svg-note" text-anchor="middle" x="225" y="235">Alan Turing Test (1950)</text>
+<text class="svg-note" text-anchor="middle" x="225" y="255">NLP, KR, Automated Reasoning,</text>
+<text class="svg-note" text-anchor="middle" x="225" y="275">Machine Learning, Vision, Robotics</text>
+<rect fill="#fff" height="110" rx="10" stroke="#087e8b" stroke-width="2" width="310" x="420" y="180"></rect>
+<text class="svg-label" font-size="16" text-anchor="middle" x="575" y="210">Acting Rationally</text>
+<text class="svg-note" text-anchor="middle" x="575" y="235">The Rational Agent Approach</text>
+<text class="svg-note" text-anchor="middle" x="575" y="255">Maximizing Expected Utility</text>
+<text class="svg-note" text-anchor="middle" x="575" y="275">AIMA Standard Modern Framework</text>
+</svg>
+<figcaption>Fig 1.1 — The 4 Classical Dimensions of Artificial Intelligence</figcaption>
+</div>
+<h4>Deep-Dive: The Turing Test (1950)</h4>
+<p>Proposed by Alan Turing in his landmark paper <em>Computing Machinery and Intelligence</em>, the Turing Test provides an operational definition of intelligence based on indistinguishability.</p>
+<ul class="point-list">
+<li><strong>Test Setup:</strong> A human interrogator interacts with two concealed entities—one human and one machine—via teletype / text terminal only.</li>
+<li><strong>Success Condition:</strong> If the interrogator cannot tell whether the written responses come from the person or the computer, the computer passes.</li>
+<li><strong>Six Required Capabilities to Pass the Full (Total) Turing Test:</strong>
+<ol>
+<li><strong>Natural Language Processing (NLP):</strong> To communicate fluently in natural human languages.</li>
+<li><strong>Knowledge Representation (KR):</strong> To store what it knows or hears systematically.</li>
+<li><strong>Automated Reasoning:</strong> To use stored information to answer questions and draw new conclusions.</li>
+<li><strong>Machine Learning (ML):</strong> To adapt to new circumstances and detect and extrapolate patterns.</li>
+<li><strong>Computer Vision:</strong> (Total Turing Test) To perceive physical objects and scenes.</li>
+<li><strong>Robotics:</strong> (Total Turing Test) To manipulate physical objects and navigate the physical environment.</li>
+</ol>
+</li>
+</ul>
+<h4>Deep-Dive: Cognitive Modeling (Thinking Humanly)</h4>
+<p>To construct machines that think like humans, we must understand the actual cognitive mechanisms of the brain. The 3 scientific methodologies are:</p>
+<ul class="point-list">
+<li><strong>Introspection:</strong> Catching our own thoughts as they pass through our conscious mind.</li>
+<li><strong>Psychological Experiments:</strong> Observing human subjects solving logic or puzzle problems and recording response times and errors.</li>
+<li><strong>Brain Imaging (Neuroscience):</strong> Observing brain activity in real time via fMRI, PET, or EEG scans during cognitive tasks.</li>
+<li><strong>Key Landmark:</strong> Allen Newell and Herbert Simon developed the <em>General Problem Solver (GPS)</em> (1957) specifically to demonstrate that a program could follow the identical reasoning trace as a human test subject.</li>
+</ul>
+<h4>Deep-Dive: The Laws of Thought (Thinking Rationally)</h4>
+<p>The Greek philosopher Aristotle was among the first to formalize 'right thinking'—irrefutable reasoning processes called <strong>syllogisms</strong>:</p>
+<div class="diagram">Premise 1: Socrates is a man.
+Premise 2: All men are mortal.
+Conclusion: Therefore, Socrates is mortal.</div>
+<p>These laws of thought initiated formal logic. However, this approach faces two major obstacles in practice: (1) It is difficult to take informal real-world knowledge and formulate it in the formal terms of logical notation, especially when knowledge is less than 100% certain; (2) There is a big difference between solving a problem in principle and solving it in practice (combinatorial explosion).</p>
+</div>
+<div id="t-subsets">
+<h3>1.3 AI vs Machine Learning vs Deep Learning</h3>
+<p>Students frequently confuse AI, Machine Learning, and Deep Learning in viva and written exams. They are not competing alternatives—they are strictly <strong>nested concentric subsets</strong>:</p>
+<!-- SVG DIAGRAM: Concentric Nested Circles -->
+<div class="figure">
+<svg viewbox="0 0 700 320" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="350" cy="160" fill="#eaf2f3" rx="330" ry="145" stroke="#087e8b" stroke-width="2.5"></ellipse>
+<text class="svg-label" font-size="18" text-anchor="middle" x="350" y="45">ARTIFICIAL INTELLIGENCE (Broadest Domain)</text>
+<text class="svg-note" text-anchor="middle" x="350" y="68">Techniques enabling machines to mimic human intelligence &amp; solve problems</text>
+<ellipse cx="350" cy="180" fill="#d0e5e8" rx="230" ry="105" stroke="#087e8b" stroke-width="2.5"></ellipse>
+<text class="svg-label" font-size="16" text-anchor="middle" x="350" y="115">MACHINE LEARNING (Subset of AI)</text>
+<text class="svg-note" text-anchor="middle" x="350" y="135">Statistical algorithms that improve automatically through experience &amp; data</text>
+<ellipse cx="350" cy="215" fill="#087e8b" rx="130" ry="60"></ellipse>
+<text fill="#fff" font-size="15" font-weight="700" text-anchor="middle" x="350" y="205">DEEP LEARNING</text>
+<text fill="#f3f7f8" font-size="13" text-anchor="middle" x="350" y="225">(Subset of ML)</text>
+<text fill="#f3f7f8" font-size="12" text-anchor="middle" x="350" y="245">Multi-layer Neural Nets</text>
+</svg>
+<figcaption>Fig 1.2 — Nested Relationship: AI ⊃ Machine Learning ⊃ Deep Learning</figcaption>
+</div>
+<ul class="point-list">
+<li><strong>Artificial Intelligence:</strong> The overarching discipline aiming to build smart machines capable of performing tasks requiring human intelligence.</li>
+<li><strong>Machine Learning:</strong> A branch of AI focusing on the development of mathematical algorithms that learn from historical training data without being explicitly programmed with hardcoded rules for every scenario.</li>
+<li><strong>Deep Learning:</strong> A specialized subfield of ML inspired by biological neural networks. Utilizes multi-layer artificial neural networks (DNNs, CNNs, Transformers) to extract features directly from raw high-dimensional data (pixels, audio waveforms, text).</li>
+</ul>
+<h4>The Core Trio: Modeling, Inference, and Learning</h4>
+<p>Every intelligent agent system relies on three interconnected pillars:</p>
+<ol class="solution-steps">
+<li><strong>Modeling:</strong> The mathematical or logical representation of the environment, rules, and relationships (e.g., transition models, Bayesian networks, logic clauses).</li>
+<li><strong>Inference:</strong> Deriving conclusions, predictions, or action selections from the current model and observed facts (e.g., Modus Ponens, resolution, forward search).</li>
+<li><strong>Learning:</strong> Updating the model itself when new evidence, errors, or environmental rewards become available.</li>
+</ol>
+</div>
+<div id="t-components-ai">
+<h3>1.4 The Four Physical Components of an AI Machine</h3>
+<p>From the hardware and systems perspective covered in Prof. Gonsalves' lecture slides, every complete AI system has four essential components:</p>
+<table>
+<tr>
+<th>Component</th>
+<th>Biological Analogy</th>
+<th>Definition &amp; Role</th>
+<th>Examples</th>
+</tr>
+<tr>
+<td><strong>1. Sensors</strong></td>
+<td>Eyes, Ears, Skin</td>
+<td>Devices that perceive physical stimuli from the environment and convert them into electrical / digital signals (percepts).</td>
+<td>Cameras, Lidar, Radar, Microphones, Infrared, GPS, Sonar, Thermocouples.</td>
+</tr>
+<tr>
+<td><strong>2. Effectors / Actuators</strong></td>
+<td>Hands, Legs, Vocal cords</td>
+<td>Hardware mechanisms responsible for carrying out decisions and physically altering the state of the environment.</td>
+<td>Robotic arms, Stepper motors, Wheels, Grippers, Audio speakers, Display screens.</td>
+</tr>
+<tr>
+<td><strong>3. Knowledge Base</strong></td>
+<td>Heart / Long-term Memory</td>
+<td>Stores all facts, assertions, rules, heuristics, and domain representations of the environment.</td>
+<td>First-order logic sentences, relational databases, ontologies, learned weight matrices.</td>
+</tr>
+<tr>
+<td><strong>4. Inference Engine</strong></td>
+<td>Brain / Central Processor</td>
+<td>The computational reasoning algorithm that manipulates the knowledge base to infer new conclusions and select optimal actions.</td>
+<td>Inference rules, Chaining algorithms, Search engines ($A^*$, Minimax), CSP solvers.</td>
+</tr>
+</table>
+</div>
+<div id="t-agents-rationality">
+<h3>1.5 Intelligent Agents &amp; The Concept of Rationality</h3>
+<p>An <strong>agent</strong> is anything that can be viewed as perceiving its environment through sensors and acting upon that environment through actuators.</p>
+<p>Mathematically, the agent's behavior is described by an <strong>Agent Function</strong>:</p>
+<div class="diagram">f: P* → A
+where P* represents the history of all percept sequences received to date, and A is the action chosen.</div>
+<p>The <strong>Agent Program</strong> is the concrete implementation of this function running on physical computing architecture:</p>
+<div class="exam"><strong>Agent = Architecture + Program</strong></div>
+<!-- SVG: Agent-Environment Loop -->
+<div class="figure">
+<svg viewbox="0 0 750 240" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#fff" height="160" rx="12" stroke="#087e8b" stroke-width="2.5" width="220" x="50" y="40"></rect>
+<text class="svg-label" font-size="18" text-anchor="middle" x="160" y="125">ENVIRONMENT</text>
+<rect fill="#eaf2f3" height="160" rx="12" stroke="#087e8b" stroke-width="2.5" width="240" x="470" y="40"></rect>
+<text class="svg-label" font-size="18" text-anchor="middle" x="590" y="80">AGENT</text>
+<!-- Internal Agent Components -->
+<rect fill="#fff" height="40" rx="6" stroke="#087e8b" stroke-width="1.5" width="95" x="490" y="100"></rect>
+<text font-size="13" font-weight="600" text-anchor="middle" x="537" y="125">Sensors</text>
+<rect fill="#fff" height="35" rx="6" stroke="#087e8b" stroke-width="1.5" width="200" x="490" y="150"></rect>
+<text font-size="13" font-weight="600" text-anchor="middle" x="590" y="172">Inference Program</text>
+<rect fill="#fff" height="40" rx="6" stroke="#087e8b" stroke-width="1.5" width="95" x="595" y="100"></rect>
+<text font-size="13" font-weight="600" text-anchor="middle" x="642" y="125">Actuators</text>
+<!-- Arrows -->
+<path d="M 270 80 L 490 115" fill="none" marker-end="url(#arr1)" stroke="#087e8b" stroke-width="2.5"></path>
+<text class="svg-label" fill="#087e8b" text-anchor="middle" x="380" y="85">Percepts</text>
+<path d="M 595 130 L 270 170" fill="none" marker-end="url(#arr2)" stroke="#d69b14" stroke-width="2.5"></path>
+<text class="svg-label" fill="#d69b14" text-anchor="middle" x="380" y="180">Actions</text>
+<defs>
+<marker id="arr1" markerheight="6" markerwidth="8" orient="auto" refx="8" refy="3"><path d="M0,0 L8,3 L0,6Z" fill="#087e8b"></path></marker>
+<marker id="arr2" markerheight="6" markerwidth="8" orient="auto" refx="8" refy="3"><path d="M0,0 L8,3 L0,6Z" fill="#d69b14"></path></marker>
+</defs>
+</svg>
+<figcaption>Fig 1.3 — The Closed Interaction Loop Between Agent and Environment</figcaption>
+</div>
+<h4>The Four Determinants of Rationality</h4>
+<p>A <strong>rational agent</strong> is one that does the right thing. But what is rational at any given instant? Rationality is NOT omniscience (knowing all future outcomes). Rationality depends strictly on four factors:</p>
+<ol>
+<li><strong>The Performance Measure:</strong> The objective criterion defining success (specified externally by the designer).</li>
+<li><strong>Prior Knowledge:</strong> The built-in knowledge the agent possesses about its environment.</li>
+<li><strong>Available Actions:</strong> The finite set of actions the agent is physically capable of performing.</li>
+<li><strong>The Percept Sequence to Date:</strong> The complete recorded sensory history of what the agent has experienced so far.</li>
+</ol>
+<div class="exam">
+<strong>Core Definition to Memorize:</strong><br/>
+<em>"For each possible percept sequence, a rational agent should select an action that is expected to maximize its performance measure, given the evidence provided by the percept sequence and whatever built-in knowledge the agent has."</em>
+</div>
+</div>
+<div id="t-peas">
+<h3>1.6 The PEAS Description of Task Environments</h3>
+<p>Before designing an AI system, an engineer must first fully characterize its task environment using the <strong>PEAS</strong> framework:</p>
+<ul class="point-list">
+<li><strong>P — Performance Measure:</strong> The quantifiable metrics of success and penalties.</li>
+<li><strong>E — Environment:</strong> The physical or virtual external domain within which the agent operates.</li>
+<li><strong>A — Actuators:</strong> The control mechanisms through which the agent performs actions.</li>
+<li><strong>S — Sensors:</strong> The sensory instruments through which the agent collects data.</li>
+</ul>
+<h4>Comprehensive PEAS Formulations from Slides</h4>
+<table>
+<tr>
+<th>Agent Type</th>
+<th>Performance Measure (P)</th>
+<th>Environment (E)</th>
+<th>Actuators (A)</th>
+<th>Sensors (S)</th>
+</tr>
+<tr>
+<td><strong>Automated Taxi Driver</strong></td>
+<td>Safe, fast, legal, comfortable trip, maximize profit, minimize operating cost</td>
+<td>Roads, rural lanes, freeway, traffic, pedestrians, weather, potholes, police</td>
+<td>Steering wheel, accelerator, brake pedal, horn, turn signals, display screen</td>
+<td>Cameras, Sonar, Lidar, Speedometer, GPS, Odometer, Accelerometers, Microphones</td>
+</tr>
+<tr>
+<td><strong>ATM System</strong></td>
+<td>Security, zero cash errors, high reliability, fast customer service</td>
+<td>Bank branch, shopping mall, rural kiosk, telecommunications network</td>
+<td>Cash dispenser mechanism, receipt printer, card eject slot, screen display</td>
+<td>Card magnetic/chip reader, keypad, touch screen, cash sensor, security camera</td>
+</tr>
+<tr>
+<td><strong>Vacuum-Cleaner Agent</strong></td>
+<td>Cleanliness (+100 per clean room), low energy consumption (-1 per move), zero damage</td>
+<td>Rooms A and B, walls, floor dirt, furniture, obstacles</td>
+<td>Left motor, right motor, brush, suction motor</td>
+<td>Dirt sensor, bumper switch, boundary infra-red sensor</td>
+</tr>
+<tr>
+<td><strong>Medical Diagnosis System</strong></td>
+<td>Healthy patient, minimized treatment costs, zero misdiagnoses, fast diagnosis</td>
+<td>Hospital clinic, patient symptoms, lab test results, disease epidemiology</td>
+<td>Display screen (prescriptions, diagnostic reports, referral orders)</td>
+<td>Keyboard (symptoms, patient history input), direct digital lab feeds</td>
+</tr>
+</table>
+</div>
+<div id="t-environments">
+<h3>1.7 The Six Properties of Task Environments</h3>
+<p>Task environments vary dramatically. How we design an agent program depends directly on where the environment falls across these six dimensions:</p>
+<h4>1. Fully Observable vs. Partially Observable</h4>
+<p>If an agent's sensors give it access to the complete state of the environment at each point in time, it is <strong>fully observable</strong>. In such environments, the agent does not need to maintain internal memory to track what is happening elsewhere (e.g., Chess). If sensors are noisy, inaccurate, or parts of the world are occluded, it is <strong>partially observable</strong> (e.g., automated taxi driving; poker).</p>
+<h4>2. Deterministic vs. Stochastic</h4>
+<p>If the next state of the environment is completely determined by the current state and the action executed by the agent, the environment is <strong>deterministic</strong> (e.g., 8-puzzle). If uncertainty, random chance, or unpredictable factors play a role, it is <strong>stochastic</strong> (e.g., driving in traffic where tires may blow or pedestrians jump into the road). If the environment is deterministic except for the actions of other agents, it is called <em>strategic</em>.</p>
+<h4>3. Episodic vs. Sequential</h4>
+<p>In an <strong>episodic</strong> environment, the agent's experience is divided into atomic, independent episodes. Each episode consists of the agent perceiving and executing a single action; crucially, current actions do <em>not</em> affect future episodes (e.g., defect classification on an assembly line). In <strong>sequential</strong> environments, the current decision affects all future possibilities (e.g., Chess, driving).</p>
+<h4>4. Static vs. Dynamic</h4>
+<p>If the environment can change while the agent is deliberating, it is <strong>dynamic</strong> (e.g., driving a taxi—the world moves while you think!). If the environment remains frozen until the agent issues an action, it is <strong>static</strong> (e.g., crossword puzzles). If the environment itself doesn't change with time, but the agent's performance score does, it is called <em>semidynamic</em> (e.g., timed chess).</p>
+<h4>5. Discrete vs. Continuous</h4>
+<p>A <strong>discrete</strong> environment has a finite, countable number of distinct states, distinct percepts, and distinct actions (e.g., Chess board coordinates and turns). A <strong>continuous</strong> environment involves continuous sweeps of values over time, such as vehicle velocity, angles, and real coordinates (e.g., automated taxi).</p>
+<h4>6. Single Agent vs. Multi-Agent</h4>
+<p>An agent operating alone in an environment is in a <strong>single-agent</strong> setup (e.g., crossword puzzle, solitaire). When other entities act as agents (either competitive like chess or cooperative like multi-robot soccer), it is a <strong>multi-agent</strong> environment.</p>
+<h4>Comparative Matrix of Environments (from Slide 28)</h4>
+<table>
+<tr>
+<th>Task Environment</th>
+<th>Observable</th>
+<th>Deterministic</th>
+<th>Episodic</th>
+<th>Static</th>
+<th>Discrete</th>
+<th>Agents</th>
+</tr>
+<tr><td>Crossword puzzle</td><td>Fully</td><td>Deterministic</td><td>Sequential</td><td>Static</td><td>Discrete</td><td>Single</td></tr>
+<tr><td>Chess with a clock</td><td>Fully</td><td>Strategic</td><td>Sequential</td><td>Semi</td><td>Discrete</td><td>Multi</td></tr>
+<tr><td>Poker</td><td>Partially</td><td>Stochastic</td><td>Sequential</td><td>Static</td><td>Discrete</td><td>Multi</td></tr>
+<tr><td>Backgammon</td><td>Fully</td><td>Stochastic</td><td>Sequential</td><td>Static</td><td>Discrete</td><td>Multi</td></tr>
+<tr><td>Taxi driving</td><td>Partially</td><td>Stochastic</td><td>Sequential</td><td>Dynamic</td><td>Continuous</td><td>Multi</td></tr>
+<tr><td>Medical diagnosis</td><td>Partially</td><td>Stochastic</td><td>Sequential</td><td>Dynamic</td><td>Continuous</td><td>Single</td></tr>
+<tr><td>Part-picking robot</td><td>Partially</td><td>Stochastic</td><td>Episodic</td><td>Dynamic</td><td>Continuous</td><td>Single</td></tr>
+</table>
+</div>
+<div id="t-agent-types">
+<h3>1.8 The Five Fundamental Agent Architectures</h3>
+<p>AI organizes agent programs into a progressive hierarchy based on increasing intelligence, memory, and deliberative capacity:</p>
+<h4>1. Simple Reflex Agents</h4>
+<p>Select actions based <em>only on the current percept</em>, ignoring the rest of the percept history. Built using condition-action rules: <code>IF condition THEN action</code>.</p>
+<div class="exam"><strong>Critical Limitation:</strong> Only works if the environment is <em>fully observable</em>. In partially observable environments, simple reflex agents inevitably enter infinite loops.</div>
+<!-- SVG: Simple Reflex Agent -->
+<div class="figure">
+<svg viewbox="0 0 700 200" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#fff" height="160" rx="8" stroke="#087e8b" stroke-width="2" width="120" x="30" y="20"></rect>
+<text class="svg-label" text-anchor="middle" x="90" y="105">Sensors</text>
+<rect fill="#eaf2f3" height="60" rx="8" stroke="#087e8b" stroke-width="2" width="220" x="200" y="30"></rect>
+<text class="svg-label" text-anchor="middle" x="310" y="65">What world is like now</text>
+<rect fill="#eaf2f3" height="60" rx="8" stroke="#087e8b" stroke-width="2" width="220" x="200" y="115"></rect>
+<text class="svg-label" text-anchor="middle" x="310" y="150">Condition-Action Rules</text>
+<rect fill="#edf5f6" height="70" rx="8" stroke="#087e8b" stroke-width="2" width="180" x="470" y="65"></rect>
+<text class="svg-label" text-anchor="middle" x="560" y="105">Actuators</text>
+<line stroke="#087e8b" stroke-width="2" x1="150" x2="200" y1="60" y2="60"></line>
+<line stroke="#087e8b" stroke-width="2" x1="310" x2="310" y1="90" y2="115"></line>
+<line stroke="#087e8b" stroke-width="2" x1="420" x2="470" y1="145" y2="100"></line>
+</svg>
+<figcaption>Fig 1.4 — Simple Reflex Agent Architecture</figcaption>
+</div>
+<h4>2. Model-Based Reflex Agents</h4>
+<p>To overcome partial observability, this agent maintains an <strong>internal state</strong> that tracks aspects of the world it cannot currently see. It requires two forms of background knowledge:</p>
+<ul class="point-list">
+<li><strong>Transition Model ("How the world evolves"):</strong> How the environment changes independently of the agent.</li>
+<li><strong>Sensor Model ("What my actions do"):</strong> How the agent's own actions impact the state.</li>
+</ul>
+<h4>3. Goal-Based Agents</h4>
+<p>Knowing the current state is not always sufficient to decide what to do. The agent needs <strong>goal information</strong> describing situations that are desirable (e.g., reaching destination B). Combines search and planning techniques (as we will study in Units 2 and 4).</p>
+<h4>4. Utility-Based Agents</h4>
+<p>Goals provide only a crude binary distinction between 'success' and 'failure'. A <strong>utility function</strong> maps a state onto a real number representing the degree of happiness or desirability. This allows the agent to make rational trade-offs between conflicting goals (e.g., speed vs. fuel efficiency vs. passenger safety).</p>
+<h4>5. Learning Agents</h4>
+<p>All previous architectures can be transformed into a learning agent. It is divided into four conceptual components:</p>
+<ol class="solution-steps">
+<li><strong>Learning Element:</strong> Responsible for making improvements based on feedback from the critic.</li>
+<li><strong>Performance Element:</strong> The operational agent that selects external actions based on percepts.</li>
+<li><strong>Critic:</strong> Evaluates how well the agent is doing with respect to an external performance standard.</li>
+<li><strong>Problem Generator:</strong> Suggests exploratory actions that lead to new experiences, preventing the agent from being trapped in suboptimal habits.</li>
+</ol>
+</div>
+</section>
+<!-- ══════════ SECTION 2: WORKED NUMERICALS ══════════ -->
+<section class="category" id="numerical-section">
+<h2>2. Step-by-Step Worked Problem Examples</h2><aside class="pyq-focus"><h3>PYQ lens · answer depth, not a syllabus filter</h3><ul><li><b>Observed format:</b> the final uses several 5-mark prompts, then 10-mark structured answers. A 5-marker rewards a precise definition plus explanation/application; a 10-marker needs a labeled diagram, component-by-component explanation, interaction/working, and a grounded example.</li><li><b>Learning agent (10 marks):</b> draw and label performance element, learning element, critic, and problem generator; add the environment loop (percepts → action → feedback). Explain the job of each block and trace one example of improvement over time.</li><li><b>PEAS (5 marks):</b> for a drone, state Performance measure, Environment, Actuators, Sensors separately; use concrete examples and explain why each item belongs in that category.</li><li><b>Coverage rule:</b> these are answer-shape examples from one paper. The other Unit 1 topics—AI definitions and approaches, rationality, task environments, and agent types—remain equally important.</li></ul><p class="source-note">Pattern checked against <a href="PYQ/QP_Final-Exam_Artificial%20Intelligence%28702CO0C032%29_Semester%20V_2025-2026.pdf">Question Paper Q2</a>; use the <a href="PYQ/ANS_Final-Exam_Artificial%20Intelligence%28702CO0C032%29_Semester%20V_2025-2026.pdf">Answer Key</a> only as a marking-style reference.</p></aside>
+<div class="numerical-guide">
+<strong>RIGOROUS WORKING: GIVEN → FORMULA / RULE → STEP-BY-STEP CALCULATION → FINAL ANSWER</strong>
+<span>Unit 1 requires analytical problem solving: Computing expected utilities, formalizing PEAS, and evaluating rational decisions under uncertainty.</span>
+</div>
+<article class="worked-block" id="num-simple">
+<h3><span class="numerical-tag">SIMPLE</span> Expected Score for a Vacuum-Cleaner Agent Action</h3>
+<div class="given-box">
+<b>GIVEN:</b>
+      A rational vacuum-cleaner agent in square A is deciding whether to execute action <code>Suck</code>.
+      <ul>
+<li>Probability of dirt being successfully cleaned: <span class="math">p_1 = 0.85</span>; Reward = <span class="math">+100</span>.</li>
+<li>Probability of mechanical sensor/motor failure (dirt remains): <span class="math">p_2 = 0.15</span>; Score = <span class="math">-10</span> (energy spent without result).</li>
+</ul>
+</div>
+<div class="formula-box">
+<b>FORMULA / PRINCIPLE OF MAXIMUM EXPECTED UTILITY:</b>
+<div><span class="math">E[U(Action)] = \sum_{i=1}^{n} P(Outcome_i \mid Action) 	imes U(Outcome_i)</span></div>
+</div>
+<div class="calc-work">
+<b>STEPWISE WORKING:</b>
+<ol class="solution-steps">
+<li>Identify probability and utility for outcome 1 (Success):
+          <br/><span class="math">P(Success) 	imes U(Success) = 0.85 	imes 100 = 85.0</span>
+</li>
+<li>Identify probability and utility for outcome 2 (Failure):
+          <br/><span class="math">P(Failure) 	imes U(Failure) = 0.15 	imes (-10) = -1.5</span>
+</li>
+<li>Sum the expected utilities:
+          <br/><span class="math">E[U(Suck)] = 85.0 + (-1.5) = 83.5</span>
+</li>
+</ol>
+</div>
+<div class="answer-box">
+<b>FINAL ANSWER:</b>
+      The expected utility of executing <code>Suck</code> is <strong>+83.5</strong>. Because 83.5 &gt; 0, executing the action is strictly rational.
+    </div>
+</article>
+<article class="worked-block" id="num-medium">
+<h3><span class="numerical-tag">MEDIUM</span> Autonomous Delivery Route Decision Under Traffic Uncertainty</h3>
+<div class="given-box">
+<b>GIVEN:</b>
+      An autonomous delivery robot must deliver medication between Hospital H and Clinic C. It has two route choices:
+      <ul>
+<li><strong>Route 1 (Highway):</strong> Fast but prone to traffic congestion.
+          <ul>
+<li>Congestion occurs with probability <span class="math">0.30</span> → Travel time = 50 mins; Cost = 50. Utility: <span class="math">U = -50</span>.</li>
+<li>Clear traffic with probability <span class="math">0.70</span> → Travel time = 15 mins; Cost = 15. Utility: <span class="math">U = -15</span>.</li>
+</ul>
+</li>
+<li><strong>Route 2 (Inner City Lane):</strong> Reliable but consistently moderate speed.
+          <ul>
+<li>Delays occur with probability <span class="math">0.10</span> → Travel time = 35 mins; Utility: <span class="math">U = -35</span>.</li>
+<li>Normal transit with probability <span class="math">0.90</span> → Travel time = 24 mins; Utility: <span class="math">U = -24</span>.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="formula-box">
+<b>FORMULA:</b>
+<span class="math">E[U(Route)] = \sum P(Condition) 	imes U(TransitTime)</span><br/>
+      The rational agent selects: <span class="math">Route^* = rg\max_{R} E[U(R)]</span> (least negative cost).
+    </div>
+<div class="calc-work">
+<b>STEPWISE WORKING:</b>
+<ol class="solution-steps">
+<li><strong>Calculate Expected Utility for Route 1 (Highway):</strong>
+<br/><span class="math">E[U(Route_1)] = (0.70 	imes -15) + (0.30 	imes -50)</span>
+<br/><span class="math">E[U(Route_1)] = -10.5 - 15.0 = \mathbf{-25.5}</span>
+</li>
+<li><strong>Calculate Expected Utility for Route 2 (Inner City Lane):</strong>
+<br/><span class="math">E[U(Route_2)] = (0.90 	imes -24) + (0.10 	imes -35)</span>
+<br/><span class="math">E[U(Route_2)] = -21.6 - 3.5 = \mathbf{-25.1}</span>
+</li>
+<li><strong>Comparison:</strong>
+<br/><span class="math">-25.1 &gt; -25.5</span> (Route 2 incurs fewer average lost minutes).
+        </li>
+</ol>
+</div>
+<div class="answer-box">
+<b>FINAL ANSWER:</b>
+      The rational agent must select <strong>Route 2</strong>. Even though Route 1 has a faster best-case scenario (15 mins), its expected travel penalty (-25.5) is worse than Route 2 (-25.1).
+    </div>
+</article>
+<article class="worked-block" id="num-complex">
+<h3><span class="numerical-tag">COMPLEX</span> Multi-Action Decision Analysis: Model-Based vs. Reflex Agent Under Sensor Noise</h3>
+<div class="given-box">
+<b>GIVEN:</b>
+      An inspection robot operates on a pipeline where a critical defect occurs with prior probability <span class="math">P(D) = 0.05</span> (and normal state <span class="math">P(
+eg D) = 0.95</span>).
+      <br/>Sensors are noisy:
+      <ul>
+<li>Sensor reports "Defect Detected" when a defect exists: <span class="math">P(S=1 \mid D) = 0.90</span> (True Positive).</li>
+<li>Sensor false alarm rate: <span class="math">P(S=1 \mid 
+eg D) = 0.08</span> (False Positive).</li>
+</ul>
+      Utility matrix of actions:
+      <ul>
+<li>Action <code>Shutdown Pipeline</code>: Cost = -100 if Defect exists (prevented disaster); Cost = -500 if False Alarm (wasted production downtime).</li>
+<li>Action <code>Continue Operation</code>: Utility = +50 if Normal; Catastrophic penalty = -5000 if Defect actually exists.</li>
+</ul>
+      A <strong>Simple Reflex Agent</strong> triggers <code>Shutdown</code> immediately whenever <span class="math">S=1</span>.
+      A <strong>Model-Based Rational Agent</strong> calculates the posterior probability <span class="math">P(D \mid S=1)</span> via Bayes' Theorem before choosing the action.
+    </div>
+<div class="formula-box">
+<b>FORMULAE:</b>
+<ol class="solution-steps">
+<li>Bayes' Rule: <span class="math">P(D \mid S=1) = rac{P(S=1 \mid D)P(D)}{P(S=1)}</span></li>
+<li>Total Probability: <span class="math">P(S=1) = P(S=1 \mid D)P(D) + P(S=1 \mid 
+eg D)P(
+eg D)</span></li>
+<li>Expected Utility: <span class="math">E[U(a)] = P(D \mid S=1)U(a, D) + P(
+eg D \mid S=1)U(a, 
+eg D)</span></li>
+</ol>
+</div>
+<div class="calc-work">
+<b>STEPWISE WORKING:</b>
+<ol class="solution-steps">
+<li><strong>Calculate Total Probability of Sensor Alarm <span class="math">P(S=1)</span>:</strong>
+<br/><span class="math">P(S=1) = (0.90 	imes 0.05) + (0.08 	imes 0.95) = 0.045 + 0.076 = 0.121</span>
+</li>
+<li><strong>Compute Posterior Probability of Actual Defect Given Alarm:</strong>
+<br/><span class="math">P(D \mid S=1) = rac{0.045}{0.121} pprox 0.3719\ (37.19\%)</span>
+<br/>Consequently: <span class="math">P(
+eg D \mid S=1) = 1 - 0.3719 = 0.6281\ (62.81\%)</span>
+</li>
+<li><strong>Compute Expected Utility for Action <code>Shutdown</code>:</strong>
+<br/><span class="math">E[U(	ext{Shutdown})] = (0.3719 	imes -100) + (0.6281 	imes -500)</span>
+<br/><span class="math">E[U(	ext{Shutdown})] = -37.19 - 314.05 = \mathbf{-351.24}</span>
+</li>
+<li><strong>Compute Expected Utility for Action <code>Continue</code>:</strong>
+<br/><span class="math">E[U(	ext{Continue})] = (0.3719 	imes -5000) + (0.6281 	imes +50)</span>
+<br/><span class="math">E[U(	ext{Continue})] = -1859.50 + 31.41 = \mathbf{-1828.09}</span>
+</li>
+<li><strong>Evaluation:</strong>
+<br/>Comparing <span class="math">E[U(	ext{Shutdown})] = -351.24</span> versus <span class="math">E[U(	ext{Continue})] = -1828.09</span>.
+          <br/>Even though there is only a 37.19% chance of an actual defect, the catastrophic penalty of continuing (-5000) makes <code>Shutdown</code> the mathematically rational choice.
+        </li>
+</ol>
+</div>
+<div class="answer-box">
+<b>FINAL ANSWER:</b>
+      The rational agent chooses <strong><code>Shutdown</code></strong> (<span class="math">E[U] = -351.24 &gt; -1828.09</span>). This demonstrates how a model-based agent balances probability against asymmetric utility consequences, preventing catastrophic failures.
+    </div>
+</article>
+</section>
+<!-- ══════════ SECTION 3: COMPARATIVE STUDIES ══════════ -->
+<section class="category" id="comparison-section">
+<h2>3. Comprehensive Comparative Studies</h2>
+<table>
+<tr>
+<th>Comparison Parameter</th>
+<th>Simple Reflex Agent</th>
+<th>Model-Based Reflex</th>
+<th>Goal-Based Agent</th>
+<th>Utility-Based Agent</th>
+<th>Learning Agent</th>
+</tr>
+<tr>
+<td><strong>Core Basis for Action</strong></td>
+<td>Current sensory percept only</td>
+<td>Current percept + Internal world state model</td>
+<td>Internal state + Explicit desired Goal descriptions</td>
+<td>Internal state + Utility objective function</td>
+<td>Performance element directed by critic &amp; learning element</td>
+</tr>
+<tr>
+<td><strong>Handling Hidden States</strong></td>
+<td>Fails completely (loops)</td>
+<td>Tracks unobserved variables via models</td>
+<td>Tracks unobserved variables + goal distance</td>
+<td>Tracks unobserved variables + utility expectations</td>
+<td>Discovers unobserved dynamics over time</td>
+</tr>
+<tr>
+<td><strong>Flexibility to Goal Changes</strong></td>
+<td>None (hardcoded rules must be rewritten)</td>
+<td>Low (rules still tied to specific triggers)</td>
+<td>High (simply update the goal test)</td>
+<td>Very High (adjust weights of utility tradeoffs)</td>
+<td>Highest (re-learns policy automatically)</td>
+</tr>
+<tr>
+<td><strong>Computational Complexity</strong></td>
+<td>$O(1)$ fast table/rule lookup</td>
+<td>$O(1)$ to update state &amp; check rules</td>
+<td>High (requires combinatorial search / planning)</td>
+<td>Very High (evaluates expected utility integrals)</td>
+<td>High training cost; variable inference cost</td>
+</tr>
+</table>
+</section>
+<!-- ══════════ SECTION 4: CASE STUDIES ══════════ -->
+<section class="category" id="case-section">
+<h2>4. Real-World Case Studies &amp; Concrete Examples</h2>
+<h3>Case 1: Autonomous Highway Driving System (Waymo / Tesla Autopilot)</h3>
+<ul class="point-list">
+<li><strong>Task Environment Analysis:</strong> Partially observable (blind spots, occlusion behind trucks), stochastic (pedestrians, mechanical tire failure), sequential (lane changes commit the vehicle to new trajectories), dynamic (vehicles move at 100 km/h during decision intervals), continuous (steering angle, velocity), multi-agent (competing and collaborating drivers).</li>
+<li><strong>Why Reflex Fails:</strong> A reflex rule "IF distance &lt; 10m THEN Brake" will slam brakes on a highway when a vehicle briefly merges ahead, causing rear-end pileups.</li>
+<li><strong>Required Architecture:</strong> Model-based utility agent with learning. Must track other vehicles' velocity vectors in an internal occupancy grid, project future states, and optimize utility balancing safety, speed, and passenger comfort.</li>
+</ul>
+<h3>Case 2: Industrial Defect Inspection on Assembly Lines</h3>
+<ul class="point-list">
+<li><strong>Task Environment Analysis:</strong> Fully observable (high-speed strobe lighting over fixed conveyor belt), deterministic (parts move on fixed mechanical tracks), episodic (inspection of part 101 has zero effect on part 102), static (image captured and frozen for analysis), discrete class output (pass/reject), single agent.</li>
+<li><strong>Design Recommendation:</strong> A simple reflex or feedforward convolutional neural network is ideal. Because it is episodic and fully observable, maintaining an internal history between parts is completely unnecessary.</li>
+</ul>
+</section>
+<!-- ══════════ SECTION 5: QUESTIONS BANK ══════════ -->
+<section class="category" id="questions-section">
+<h2>5. Possible University Exam Questions Bank</h2><p class="pyq-note"><b>Past-paper calibration:</b> practise the answer formats shown in the PYQ lens under Section 2, then answer the remaining questions across every syllabus topic. The paper is a guide to depth and marking style, not a boundary on what to study. <a href="PYQ/QP_Final-Exam_Artificial%20Intelligence%28702CO0C032%29_Semester%20V_2025-2026.pdf">Question paper</a> · <a href="PYQ/ANS_Final-Exam_Artificial%20Intelligence%28702CO0C032%29_Semester%20V_2025-2026.pdf">answer key</a>.</p>
+<ol>
+<li>Define Artificial Intelligence. Explain the four classical approaches to defining AI with examples. (10 Marks)</li>
+<li>What is the Turing Test? What capabilities must a computer possess to pass the Total Turing Test? (6 Marks)</li>
+<li>Define an Intelligent Agent. State and explain the four determinants of rationality. (6 Marks)</li>
+<li>Explain the PEAS framework. Formulate complete PEAS descriptions for an Autonomous Taxi Driver and an ATM System. (8 Marks)</li>
+<li>Discuss the six properties of task environments with contrasting examples. Classify Chess, Taxi Driving, and Medical Diagnosis. (10 Marks)</li>
+<li>Draw and explain the architecture of: (a) Simple Reflex Agent, (b) Model-Based Reflex Agent, (c) Utility-Based Agent, (d) Learning Agent. (10 Marks)</li>
+<li>Differentiate between: (a) Episodic vs Sequential environments, (b) Static vs Dynamic environments. (4 Marks)</li>
+<li>Explain why a rational agent is not necessarily omniscient. Provide a concrete scenario. (4 Marks)</li>
+</ol>
+</section>
+</main>
+</div>
+<footer>
+<p>NMIMS AI Study Portal · Unit 1 Comprehensive Lecture Notes Prepared According to University Curriculum.</p>
+</footer>
+</body>
+</html>
