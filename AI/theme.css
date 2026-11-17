@@ -223,6 +223,30 @@ html[data-theme="dark"] .diagram-wrapper svg {
   background: #ffffff;
 }
 
+
+/* Keep every heading bright against the charcoal surfaces. */
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3,
+html[data-theme="dark"] h4,
+html[data-theme="dark"] h5,
+html[data-theme="dark"] h6 {
+  color: #f5f5f5;
+}
+
+html[data-theme="dark"] .case-tag {
+  color: #a8c8ff;
+}
+
+html[data-theme="dark"] .hint,
+html[data-theme="dark"] .diagram-caption,
+html[data-theme="dark"] .topic-block p,
+html[data-theme="dark"] .topic-block li,
+html[data-theme="dark"] .q-answer,
+html[data-theme="dark"] .callout {
+  color: #e2e2e2;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .theme-toggle {
     transition: none;
