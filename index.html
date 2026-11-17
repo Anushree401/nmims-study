@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10233f">
+<title>NMIMS Study</title>
+<style>
+:root{--navy:#10233f;--blue:#244c78;--teal:#087e8b;--ink:#182638;--muted:#586a7c;--line:#dbe3eb;--paper:#fff;--bg:#f2f5f8;--gold:#f1c66d}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}.hero{background:linear-gradient(135deg,var(--navy),var(--blue));color:white;padding:56px max(24px,calc((100vw - 1080px)/2)) 46px}.hero .eyebrow{color:var(--gold);text-transform:uppercase;letter-spacing:.13em;font-size:.8rem;font-weight:700}.hero h1{margin:8px 0;font-size:clamp(2.1rem,5vw,3.4rem);line-height:1.1}.hero p{max-width:650px;color:#e2e9f1;margin:12px 0 0}.wrap{max-width:1080px;padding:26px 24px 60px;margin:auto}details.semester{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 8px 30px #0d243814}details>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:14px;padding:20px 24px;font-weight:750}details>summary::-webkit-details-marker{display:none}details>summary::before{content:"＋";display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#eaf2f3;color:var(--teal);font-size:1.1rem;flex:none}details[open]>summary::before{content:"−"}.semester>summary{font-size:1.45rem;background:#fff}.semester-body{padding:0 22px 24px}.subject{border:1px solid var(--line);border-radius:10px;margin:4px 0 0;overflow:hidden}.subject>summary{background:#f7fafc;font-size:1.15rem}.subject-body{padding:18px 22px 24px}.intro{margin:0 0 20px;color:var(--muted)}.syllabus{border:1px solid var(--line);border-radius:9px;padding:17px;background:#fbfcfd}.syllabus-top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}.syllabus h3,.units-heading{margin:0;color:var(--navy)}button,.button{appearance:none;border:0;border-radius:7px;background:var(--teal);color:#fff;padding:10px 15px;font:inherit;font-weight:700;text-decoration:none;cursor:pointer;display:inline-block}button:hover,.button:hover{background:#066a74}.secondary{background:var(--navy)}.pdf-viewer{margin-top:16px}.pdf-viewer[hidden]{display:none}.pdf-viewer iframe{width:100%;height:min(78vh,900px);min-height:500px;border:1px solid var(--line);border-radius:6px;background:white}.units-heading{margin:28px 0 4px}.unit-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:13px;margin-top:16px}.unit-card{background:white;border:1px solid var(--line);border-radius:9px;padding:17px 18px;display:flex;flex-direction:column;min-height:155px}.unit-card h3{font-size:1.05rem;margin:0 0 7px;color:var(--navy)}.unit-card p{font-size:.94rem;color:var(--muted);margin:0 0 15px;flex:1}.unit-card a{align-self:flex-start}.footnote{color:var(--muted);font-size:.9rem;margin-top:24px}a{color:#076d79}a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #e6a323;outline-offset:3px}@media(max-width:580px){.hero{padding-top:38px;padding-bottom:35px}.wrap{padding:16px 12px 40px}.semester-body{padding:0 12px 16px}.subject-body{padding:12px}.pdf-viewer iframe{min-height:65vh}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="eyebrow">Study space</div><h1>NMIMS Study</h1><p>Your course notes and syllabus, organized by semester and subject.</p></header>
+<main class="wrap">
+<details class="semester">
+<summary>Semester 5</summary>
+<div class="semester-body">
+<details class="subject" open>
+<summary>Artificial Intelligence</summary>
+<div class="subject-body">
+<p class="intro">Open the official AI syllabus below, then choose a unit to study its full lesson, diagrams, worked examples, comparisons and likely exam questions.</p>
+<section class="syllabus" aria-labelledby="syllabus-title">
+<div class="syllabus-top"><div><h3 id="syllabus-title">Artificial Intelligence syllabus</h3><div class="footnote">PDF · 2 pages</div></div><button id="syllabus-toggle" type="button" aria-expanded="false" aria-controls="syllabus-viewer">View syllabus</button></div>
+<div id="syllabus-viewer" class="pdf-viewer" hidden><iframe src="AI/ai_syllabus.pdf#toolbar=1&navpanes=0" title="Artificial Intelligence syllabus PDF"></iframe><p class="footnote">If your browser does not display the PDF, <a href="AI/ai_syllabus.pdf" target="_blank" rel="noopener">open the syllabus in a new tab</a>.</p></div>
+</section>
+<h2 class="units-heading">Unitwise notes</h2>
+<div class="unit-list">
+<article class="unit-card"><h3>Unit 1 notes · Introduction to AI</h3><p>AI definitions, intelligent agents, rationality, PEAS and task environments.</p><a class="button" href="AI/unit_1.html">Open Unit 1</a></article>
+<article class="unit-card"><h3>Unit 2 notes · Search</h3><p>Uninformed and informed search, heuristics, genetic algorithms and game trees.</p><a class="button" href="AI/unit_2.html">Open Unit 2</a></article>
+<article class="unit-card"><h3>Unit 3 notes · Knowledge Representation</h3><p>Propositional logic, first-order logic, chaining and resolution.</p><a class="button" href="AI/unit_3.html">Open Unit 3</a></article>
+<article class="unit-card"><h3>Unit 4 notes · Constraint Satisfaction</h3><p>CSP formulation, backtracking, heuristics, propagation and cryptarithmetic.</p><a class="button" href="AI/unit_4.html">Open Unit 4</a></article>
+<article class="unit-card"><h3>Unit 5 notes · Learning</h3><p>Learning types, decision trees, entropy, information gain, Gini and k-means.</p><a class="button" href="AI/unit_5.html">Open Unit 5</a></article>
+<article class="unit-card"><h3>Unit 6 notes · Expert Systems</h3><p>Architecture, inference, certainty factors, MYCIN and development process.</p><a class="button" href="AI/unit_6.html">Open Unit 6</a></article>
+</div>
+<p class="footnote">Inside each unit, use Previous unit and Next unit to move through the lessons, or NMIMS-STUDY home to return here.</p>
+</div>
+</details>
+</div>
+</details>
+</main>
+<script>
+const toggle=document.getElementById('syllabus-toggle');
+const viewer=document.getElementById('syllabus-viewer');
+toggle.addEventListener('click',()=>{const open=viewer.hidden;viewer.hidden=!open;toggle.setAttribute('aria-expanded',String(open));toggle.textContent=open?'Hide syllabus':'View syllabus';if(open) viewer.scrollIntoView({behavior:'smooth',block:'nearest'});});
+</script>
+</body>
+</html>
