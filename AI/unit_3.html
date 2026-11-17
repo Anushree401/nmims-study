@@ -4,508 +4,1020 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Unit 3 – Knowledge Representation &amp; Logic | Lecture Study Guide</title>
-<style>
-:root{--ink:#172435;--muted:#536578;--line:#d7e0e7;--accent:#087e8b;--paper:#fff;--wash:#f3f7f8}
-*{box-sizing:border-box}
-body{margin:0;background:var(--wash);color:var(--ink);font:17px/1.68 system-ui,-apple-system,Segoe UI,sans-serif}
-header,main,footer{max-width:1050px;margin:auto;padding:28px}
-header{padding-top:54px;padding-bottom:20px}
-h1{font-size:2.5rem;line-height:1.12;margin:.2em 0}
-.sub{color:var(--muted);font-size:1.05rem}
-section{background:var(--paper);padding:24px 30px;margin:18px 0;border-top:3px solid var(--accent);box-shadow:0 2px 10px #142b3a0c}
-h2{font-size:1.65rem;margin:.2em 0 .55em}
-h3{font-size:1.2rem;margin:1.2em 0 .3em}
-p{margin:.6em 0}
-li{margin:.28em 0}
-table{border-collapse:collapse;width:100%;margin:14px 0}
-th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
-th{background:#eaf2f3}
-code,.math{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#eef3f4;padding:.08em .3em;border-radius:3px}
-.diagram{background:#f2f7f8;border-left:4px solid var(--accent);padding:14px 18px;overflow:auto;white-space:pre-wrap;font-family:ui-monospace,monospace;line-height:1.55}
-.exam{background:#fff8e7;border-left:4px solid #d69b14;padding:12px 16px;margin:12px 0}
-.step{font-weight:700;color:var(--accent)}
-.tag{color:var(--muted);font-size:.9rem}
-a{color:#006b78}
-footer{color:var(--muted)}
-.unit-controls{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap;width:100%;max-width:1050px;height:46px;margin:0 auto;padding:5px 0;background:#f3f7f8ed;backdrop-filter:blur(8px)}
-.unit-controls a{display:inline-block;background:#087e8b;color:#fff;text-decoration:none;padding:6px 10px;border-radius:6px;font-size:.88rem;font-weight:650;line-height:1.3}
-.unit-controls a:hover{background:#075d67}
-.unit-controls .home{background:#43586c}
-.unit-controls .disabled{display:inline-block;color:#718092;background:#edf1f4;padding:6px 10px;border-radius:6px;font-size:.88rem;font-weight:600;line-height:1.3}
-.toc-panel{position:fixed;z-index:90;top:62px;left:max(12px,calc((100vw - 1050px)/2 - 252px));width:232px;max-height:calc(100vh - 74px);overflow:auto;margin:0;background:#fff;border:1px solid #d7e0e7;border-radius:10px;box-shadow:0 8px 28px #17243518}
-.toc-panel details>summary{list-style:none;cursor:pointer;padding:10px 13px;font-weight:700;color:#172435;font-size:.94rem}
-.toc-panel details>summary::-webkit-details-marker{display:none}
-.toc-panel details>summary:after{content:"▼";float:right;color:#087e8b}
-.toc-panel details:not([open])>summary:after{content:"▶"}
-.toc-panel .toc{display:block;padding:0 8px 10px}
-.toc-panel .toc a{display:block;margin:2px 0;padding:7px 8px;color:#176778;text-decoration:none;font-size:.9rem;line-height:1.35;border-radius:6px}
-.toc-panel .toc a:hover{background:#eef6f6}
-.lesson-layout{display:block;width:100%;max-width:1050px;margin:0 auto;padding:0}
-.lesson-layout main{width:100%;max-width:1050px;min-width:0;margin:0 auto;padding:28px 0}
-.category>section{box-shadow:none;border-top:1px solid var(--line);padding:18px 2px;margin:10px 0;background:transparent}
-.category>section>h2{font-size:1.22rem;color:#087e8b}
-.category>h2{margin-bottom:14px}
-.point-list{margin:.45em 0 .9em;padding-left:1.35em;list-style:disc}
-.point-list li{padding-left:.18em;margin:.28em 0;line-height:1.55}
-.point-list li::marker{color:#087e8b}
-.numerical-guide{padding:13px 16px;margin:12px 0 16px;background:#e8f4f4;border:1px solid #c8e2e3;border-left:5px solid #087e8b;border-radius:7px;color:#173748}
-.numerical-guide strong{display:block;letter-spacing:.04em;color:#075d67}
-.numerical-guide span{display:block;margin-top:3px;font-size:.93rem}
-.numerical-tag{display:inline-block;padding:4px 8px;border-radius:4px;background:#087e8b;color:#fff;font-size:.76rem;letter-spacing:.05em;font-weight:800;line-height:1.25}
-.worked-block{padding:15px 18px 18px;margin:16px 0;background:#fff;border:1px solid #d7e0e7;border-left:4px solid #087e8b;border-radius:8px;box-shadow:0 2px 10px #17243508}
-.worked-block h3{margin:.1em 0 .85em;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.given-box,.formula-box,.answer-box{padding:10px 13px;margin:10px 0;border-radius:6px}
-.given-box{background:#f3f6f9}
-.formula-box{background:#edf5f6}
-.answer-box{background:#fff7e3;border-left:4px solid #d69b14}
-.given-box>b,.formula-box>b,.answer-box>b{display:block;margin-bottom:4px;font-size:.8rem;letter-spacing:.06em;color:#43586c}
-.solution-steps{margin:.65em 0 1em;padding-left:1.6em}
-.solution-steps>li{margin:.5em 0;padding-left:.25em;line-height:1.6}
-.figure{margin:18px 0;padding:12px 16px;background:#f2f7f8;border-left:4px solid #087e8b;overflow:auto}
-.figure svg{display:block;width:100%;max-width:900px;height:auto;margin:auto}
-.figure figcaption{text-align:center;color:#536578;font-size:.92rem;margin-top:5px}
-.svg-label{font:600 15px system-ui,sans-serif;fill:#172435}
-.svg-note{font:14px system-ui,sans-serif;fill:#536578}
-.related{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0 0 12px;color:#657586;font-size:.9rem}
-.related a{white-space:nowrap}
-@media print{body{background:white;font-size:11pt}section{box-shadow:none;break-inside:avoid}a{color:inherit;text-decoration:none}}
-@media(max-width:900px){.lesson-layout{max-width:100%;padding:0 16px}.lesson-layout main{max-width:100%;padding:20px 0}.toc-panel{left:12px;top:58px;width:min(232px,calc(100vw - 24px));max-height:calc(100vh - 68px)}.unit-controls{max-width:100%;padding:5px 12px}}
-</style>
-<style>.pyq-focus{margin:1.25rem 0 1.6rem;padding:1.1rem 1.25rem;border:1px solid #9bcbd0;border-left:5px solid #087f8c;border-radius:10px;background:#f1f8f8;color:#172638}.pyq-focus h3{margin:.1rem 0 .7rem}.pyq-focus h4{margin:1.15rem 0 .5rem;color:#075c66}.pyq-focus li{margin:.35rem 0}.pyq-focus .source-note,.source-note{font-size:.92em;color:#52677a;margin-top:.8rem}.pyq-focus .number-steps li{padding:.25rem 0}.pyq-focus .visual-example{margin:1rem 0;padding:.75rem;background:#fff;border:1px solid #d7e3e8;border-radius:8px}.pyq-focus svg{display:block;width:100%;height:auto;max-height:300px}.pyq-focus figcaption,.pyq-focus .visual-example p{font-size:.9em;color:#52677a}.pyq-focus .table-wrap{overflow-x:auto;margin:.75rem 0}.pyq-focus table{width:100%;border-collapse:collapse;background:#fff}.pyq-focus th,.pyq-focus td{border:1px solid #cfdae0;padding:.45rem .55rem;text-align:left}.pyq-focus th{background:#e5f1f3}.pyq-note{padding:.75rem 1rem;border-radius:8px;background:#fff4df;border-left:4px solid #da9f35}.pyq-focus ol{padding-left:1.5rem}</style>
+<title>Unit 3: Knowledge Representation &amp; Logic - NMIMS Master Class Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <script>
-window.MathJax = {
-  tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']],
-    displayMath: [['$$', '$$'], ['\\[', '\\]']],
-    processEscapes: true
-  },
-  options: {
-    processHtmlClass: 'tex2jax_process|math'
-  }
-};
-</script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        processHtmlClass: 'tex2jax_process|math'
+      }
+    };
+    </script>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="ai-formatting-polish">/* AI unit pages: formatting-only polish */
+:root {
+  --ai-content-width: 980px;
+}
 
-</head>
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  min-width: 320px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.layout-container,
+.main-content,
+.content-wrapper {
+  min-width: 0;
+}
+
+.main-content {
+  width: calc(100% - 290px);
+  max-width: none;
+}
+
+.content-wrapper {
+  max-width: var(--ai-content-width);
+}
+
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  min-height: 52px;
+  padding: 12px 0;
+  margin-top: -32px;
+  background: color-mix(in srgb, var(--bg-main) 94%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.unit-hero {
+  padding-top: 6px;
+  margin-bottom: clamp(26px, 4vw, 42px);
+}
+
+.unit-hero h1 {
+  max-width: 24ch;
+  font-size: clamp(1.8rem, 3.3vw, 2.45rem);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.unit-hero .lead {
+  max-width: 75ch;
+}
+
+.module-section {
+  scroll-margin-top: 76px;
+  padding: clamp(20px, 3vw, 34px);
+  margin-bottom: clamp(24px, 4vw, 40px);
+}
+
+.section-title {
+  align-items: flex-start;
+}
+
+.section-title h2 {
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+.topic-block {
+  scroll-margin-top: 76px;
+}
+
+.topic-block p,
+.topic-block li,
+.q-answer p,
+.callout p {
+  max-width: 82ch;
+  line-height: 1.72;
+}
+
+.topic-block ul,
+.topic-block ol,
+.callout ul,
+.callout ol {
+  padding-left: 0.35rem;
+}
+
+.callout,
+.case-card,
+.problem-card,
+.question-item,
+.final-box {
+  overflow-wrap: anywhere;
+}
+
+.callout {
+  padding: 18px 20px;
+  border-radius: 10px;
+}
+
+.problem-card {
+  padding: clamp(16px, 2.5vw, 25px);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.035);
+}
+
+.problem-header {
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.problem-header h3,
+.q-header h4,
+.case-header h3 {
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.step-row {
+  min-width: 0;
+}
+
+.step-row > :last-child {
+  min-width: 0;
+}
+
+.step-badge {
+  flex: 0 0 auto;
+}
+
+.final-box {
+  margin-top: 14px;
+  line-height: 1.65;
+}
+
+.diagram-wrapper {
+  max-width: 100%;
+  padding: 4px 0;
+  overscroll-behavior-inline: contain;
+  scrollbar-color: #94a3b8 #eef2f7;
+}
+
+.diagram-wrapper svg,
+.module-section svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.diagram-caption {
+  max-width: 72ch;
+  margin-right: auto;
+  margin-left: auto;
+  line-height: 1.55;
+}
+
+.data-table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  scrollbar-color: #94a3b8 #eef2f7;
+  overscroll-behavior-inline: contain;
+}
+
+.data-table th,
+.data-table td {
+  min-width: 7rem;
+  vertical-align: top;
+  line-height: 1.55;
+}
+
+.data-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.data-table tr:hover td {
+  background-color: #f8fafc;
+}
+
+code,
+kbd,
+pre {
+  font-family: var(--font-mono);
+}
+
+code {
+  overflow-wrap: anywhere;
+}
+
+pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 14px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: #f8fafc;
+  line-height: 1.6;
+  scrollbar-color: #94a3b8 #eef2f7;
+}
+
+.MathJax,
+.MathJax_Display,
+mjx-container {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 0;
+}
+
+.q-header {
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.marks-badge {
+  margin-top: 2px;
+}
+
+.q-answer {
+  line-height: 1.7;
+}
+
+.unit-pagination {
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.35;
+}
+
+.sidebar-nav a:focus-visible,
+.btn:focus-visible,
+a:focus-visible {
+  outline: 3px solid #f2bd48;
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    max-height: 34vh;
+    padding: 16px;
+    overscroll-behavior: contain;
+  }
+
+  .sidebar-header {
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+
+  .sidebar-nav h3 {
+    margin-top: 14px;
+  }
+
+  .main-content {
+    width: 100%;
+    padding: 24px 16px 56px;
+  }
+
+  .top-bar {
+    margin-top: -24px;
+  }
+
+  .module-section {
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 15px;
+  }
+
+  .top-bar {
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    font-size: 0.82rem;
+  }
+
+  .meta-tag {
+    font-size: 0.72rem;
+  }
+
+  .unit-hero h1 {
+    font-size: clamp(1.65rem, 8vw, 2.05rem);
+  }
+
+  .unit-hero .lead {
+    font-size: 1rem;
+  }
+
+  .section-title {
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+
+  .section-title h2 {
+    font-size: 1.25rem;
+  }
+
+  .cross-ref-badge {
+    font-size: 0.7rem;
+  }
+
+  .step-row {
+    gap: 10px;
+  }
+
+  .step-badge {
+    white-space: normal;
+  }
+
+  .data-table {
+    font-size: 0.84rem;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 9px 10px;
+    min-width: 6.25rem;
+  }
+
+  .unit-pagination {
+    justify-content: stretch;
+  }
+
+  .unit-pagination .btn {
+    flex: 1 1 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media print {
+  .sidebar,
+  .top-bar,
+  .unit-pagination {
+    display: none !important;
+  }
+
+  .main-content {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .module-section,
+  .problem-card,
+  .case-card,
+  .callout {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+}
+</style></head>
 <body>
-<nav class="unit-controls">
-<a href="unit_2.html">← Previous unit</a>
-<a href="unit_4.html">Next unit →</a>
-<a class="home" href="../index.html">NMIMS-STUDY home</a>
-</nav>
-<nav class="toc-panel">
-<details open="">
-<summary>Unit 3 — Contents</summary>
-<div class="toc">
-<a href="#theory-section">📖 Comprehensive Theory</a>
-<a href="#t-kb-agents">  Knowledge-Based Agents</a>
-<a href="#t-wumpus">  Wumpus World Simulation</a>
-<a href="#t-prop-logic">  Propositional Logic</a>
-<a href="#t-fol">  First Order Logic (FOL)</a>
-<a href="#t-inference-fol">  Inference Rules (UI, EI, Unification)</a>
-<a href="#t-production-rules">  Production Rules &amp; Water Jug</a>
-<a href="#t-chaining">  Forward &amp; Backward Chaining</a>
-<a href="#t-cnf-resolution">  CNF Conversion &amp; Resolution</a>
-<a href="#numerical-section">🧮 Worked Problem Examples</a>
-<a href="#num-simple">  Simple: Propositional Truth Table</a>
-<a href="#num-medium">  Medium: Forward Chaining Trace</a>
-<a href="#num-complex">  Complex: Resolution Refutation Proof</a>
-<a href="#comparison-section">⚖️ Comparative Studies</a>
-<a href="#case-section">🏢 Case Studies</a>
-<a href="#questions-section">❓ Exam Questions Bank</a>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · AI Master</a>
+<span class="badge">Semester Exam Prep</span>
 </div>
-</details>
+<nav class="sidebar-nav">
+<h3>Syllabus Units</h3>
+<ul>
+<li><a href="unit_1.html"><span class="unit-num">01</span> Intro to AI &amp; Intelligent Agents</a></li>
+<li><a href="unit_2.html"><span class="unit-num">02</span> Problem Solving &amp; Adversarial Search</a></li>
+<li><a class="active" href="unit_3.html"><span class="unit-num">03</span> Knowledge Representation &amp; Logic</a></li>
+<li><a href="unit_4.html"><span class="unit-num">04</span> Constraint Satisfaction Problems</a></li>
+<li><a href="unit_5.html"><span class="unit-num">05</span> Machine Learning &amp; Clustering</a></li>
+<li><a href="unit_6.html"><span class="unit-num">06</span> Expert Systems &amp; Shells</a></li>
+</ul>
+<h3>Unit 3 Contents</h3>
+<ul>
+<li><a href="#theory-section">1. In-Depth Lecture &amp; Theory</a></li>
+<li><a href="#sec-kba">1.1 Knowledge-Based Agents &amp; The Wumpus World</a></li>
+<li><a href="#sec-prop-logic">1.2 Propositional Logic: Syntax, Semantics, Truth Tables</a></li>
+<li><a href="#sec-fol">1.3 First-Order Logic (FOL) &amp; Quantifiers</a></li>
+<li><a href="#sec-unification">1.4 Inference Rules &amp; The Unification Algorithm</a></li>
+<li><a href="#sec-production-rules">1.5 Production Systems &amp; Water Jug Problem</a></li>
+<li><a href="#sec-forward-backward">1.6 Forward Chaining vs. Backward Chaining</a></li>
+<li><a href="#sec-resolution">1.7 Conjunctive Normal Form (CNF) &amp; Resolution</a></li>
+<li><a href="#numerical-section">2. Step-by-Step Numericals</a></li>
+<li><a href="#num-1">2.1 Simple: Propositional Truth Table Tautology Proof</a></li>
+<li><a href="#num-2">2.2 Medium: Forward Chaining Deductive Trace</a></li>
+<li><a href="#num-3">2.3 Complex: Complete First-Order Logic Resolution Refutation</a></li>
+<li><a href="#comparison-section">3. Comparative Studies</a></li>
+<li><a href="#case-section">4. Case Studies &amp; Applications</a></li>
+<li><a href="#questions-section">5. Exam Questions &amp; Marking Guide</a></li>
+</ul>
 </nav>
-<div class="lesson-layout">
-<main>
-<header>
-<p class="tag">ARTIFICIAL INTELLIGENCE · UNIT 3 COMPREHENSIVE LECTURE STUDY GUIDE</p>
-<h1>Unit 3: Knowledge Representation &amp; Logic</h1>
-<p class="sub">Prof. Jesleena Gonsalves · In-Depth Lecture Notes, Wumpus World PEAS, FOL Quantifiers, Unification, Production Rules, Chaining Traces &amp; CNF Resolution Proofs</p>
+</aside>
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 3: Knowledge Representation &amp; Logic</span>
+</div>
+<div class="meta-tag">Unit 3 · 100% PPT Faithful · Comprehensive Lecture</div>
 </header>
-<section class="category" id="theory-section">
-<h2>1. In-Depth Theory &amp; Concepts (Classroom Lecture Style)</h2>
-<p class="related">Related: <a href="#numerical-section">Worked Examples</a> · <a href="#comparison-section">Comparative Studies</a> · <a href="#case-section">Case Studies</a></p>
-<div id="t-kb-agents">
-<h3>3.1 Knowledge-Based Agents &amp; The TELL / ASK Interface</h3>
-<p>In search-based agents, the problem representation was atomic. In this unit, we explore <strong>Knowledge-Based Agents (KB Agents)</strong> that maintain an internal representation of the world expressed in formal declarative sentences.</p>
-<p>A Knowledge-Based Agent is composed of two primary sub-systems:</p>
-<ol>
-<li><strong>Knowledge Base (KB):</strong> A central repository containing a set of representations of facts of the world, each called a <em>sentence</em>, expressed in a knowledge representation language.</li>
-<li><strong>Inference Engine:</strong> Algorithms for deriving new valid sentences from existing ones.</li>
-</ol>
-<p>The agent interacts with its KB through a canonical interface:</p>
-<ul class="point-list">
-<li><strong>TELL:</strong> Inserts new percepts and world observations into the KB.</li>
-<li><strong>ASK:</strong> Queries the KB to determine what action to perform next.</li>
-</ul>
-<div class="exam">
-<strong>Language Implementation:</strong>
-      KB agents execute <code>TELL</code> using Propositional Logic or First Order Logic (FOL), and execute <code>ASK</code> using Resolution, Forward Chaining, or Backward Chaining.
-    </div>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>Unit 3: Knowledge Representation &amp; Logic</h1>
+<p class="lead">A rigorous examination preparation guide covering Knowledge-Based Agents, Wumpus World environment mechanics, Propositional and First-Order Logic, Production Rules (including the 10-rule Water Jug Problem formulation), Forward and Backward Chaining, and automated theorem proving via CNF conversion and Resolution Refutation.</p>
+</header>
+<!-- SECTION 1: IN-DEPTH THEORY -->
+<section class="module-section" id="theory-section">
+<div class="section-title">
+<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+<span class="cross-ref-badge">Strictly Faithful to Slides &amp; Numericals</span>
 </div>
-<div id="t-wumpus">
-<h3>3.2 The Wumpus World Environment (The Standard AI Testbed)</h3>
-<p>The <strong>Wumpus World</strong> is a classic grid cave environment used throughout AI literature to demonstrate the power of logical deduction under partial observability:</p>
-<h4>1. PEAS Description of Wumpus World</h4>
+<div class="topic-block" id="sec-kba">
+<h3>1.1 Knowledge-Based Agents (KBA) &amp; The Wumpus World</h3>
+<p>A <strong>Knowledge-Based Agent (KBA)</strong> is an intelligent agent whose central component is a <strong>Knowledge Base (KB)</strong>: a set of sentences expressed in a formal knowledge representation language. KBAs operate via two core primitive operations:</p>
 <ul>
-<li><strong>Performance Measure:</strong> +1000 for grabbing the gold, -1000 for falling into a bottomless pit or being eaten by the Wumpus, -1 for each move taken, -10 for using up the single arrow.</li>
-<li><strong>Environment:</strong> A 4×4 grid of 16 rooms. The agent always starts at room (1,1) facing right. Room (1,1) is guaranteed free of pits and Wumpus.</li>
-<li><strong>Actuators:</strong> <code>Move Forward</code>, <code>Turn Left 90°</code>, <code>Turn Right 90°</code>, <code>Grab Gold</code>, <code>Shoot Arrow</code> (shoots straight in direction facing, kills Wumpus if aligned).</li>
-<li><strong>Sensors (5-Element Percept Vector):</strong>
-<ol>
-<li><strong>Stench:</strong> In rooms directly adjacent (horizontally or vertically) to the Wumpus.</li>
-<li><strong>Breeze:</strong> In rooms directly adjacent to a Pit.</li>
-<li><strong>Glitter:</strong> In the exact room containing the Gold.</li>
-<li><strong>Bump:</strong> Perceived when walking into an outer perimeter wall.</li>
-<li><strong>Scream:</strong> Heard globally across the cave when the Wumpus is killed.</li>
-</ol>
-</li>
+<li>\(\text{TELL}(KB, \text{sentence})\): Adds new assertions, percepts, or background axioms into the Knowledge Base.</li>
+<li>\(\text{ASK}(KB, \text{query})\): Queries the Knowledge Base to determine whether a hypothesis is logically entailed by stored knowledge (\(KB \models \alpha\)).</li>
 </ul>
-<!-- SVG DIAGRAM: Wumpus World Grid -->
-<div class="figure">
-<svg viewbox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-<rect fill="#fff" height="400" stroke="#087e8b" stroke-width="3" width="400" x="50" y="50"></rect>
-<line stroke="#087e8b" stroke-width="1.5" x1="150" x2="150" y1="50" y2="450"></line>
-<line stroke="#087e8b" stroke-width="1.5" x1="250" x2="250" y1="50" y2="450"></line>
-<line stroke="#087e8b" stroke-width="1.5" x1="350" x2="350" y1="50" y2="450"></line>
-<line stroke="#087e8b" stroke-width="1.5" x1="50" x2="450" y1="150" y2="150"></line>
-<line stroke="#087e8b" stroke-width="1.5" x1="50" x2="450" y1="250" y2="250"></line>
-<line stroke="#087e8b" stroke-width="1.5" x1="50" x2="450" y1="350" y2="350"></line>
-<!-- Row 4 -->
-<text fill="#d69b14" font-size="14" font-weight="700" text-anchor="middle" x="100" y="90">Stench</text>
-<text font-size="12" text-anchor="middle" x="100" y="115">[1,4]</text>
-<text font-size="12" text-anchor="middle" x="200" y="115">[2,4]</text>
-<text fill="#087e8b" font-size="14" font-weight="700" text-anchor="middle" x="300" y="90">Breeze</text>
-<text font-size="12" text-anchor="middle" x="300" y="115">[3,4]</text>
-<rect fill="#172435" height="90" width="90" x="355" y="55"></rect>
-<text fill="#fff" font-size="16" font-weight="700" text-anchor="middle" x="400" y="105">PIT</text>
-<!-- Row 3 -->
-<circle cx="100" cy="200" fill="#fff" r="30" stroke="#d69b14" stroke-width="2"></circle>
-<text font-size="13" font-weight="700" text-anchor="middle" x="100" y="205">WUMPUS</text>
-<text fill="#d69b14" font-size="13" font-weight="700" text-anchor="middle" x="200" y="185">Stench/Breeze</text>
-<rect fill="#d69b14" height="20" width="40" x="180" y="210"></rect>
-<text fill="#fff" font-size="11" font-weight="700" text-anchor="middle" x="200" y="225">GOLD</text>
-<rect fill="#172435" height="90" width="90" x="255" y="155"></rect>
-<text fill="#fff" font-size="16" font-weight="700" text-anchor="middle" x="300" y="205">PIT</text>
-<text fill="#087e8b" font-size="14" font-weight="700" text-anchor="middle" x="400" y="190">Breeze</text>
-<!-- Row 2 -->
-<text fill="#d69b14" font-size="14" font-weight="700" text-anchor="middle" x="100" y="290">Stench</text>
-<text font-size="12" text-anchor="middle" x="200" y="305">[2,2]</text>
-<text fill="#087e8b" font-size="14" font-weight="700" text-anchor="middle" x="300" y="290">Breeze</text>
-<text font-size="12" text-anchor="middle" x="400" y="305">[4,2]</text>
-<!-- Row 1 -->
-<rect fill="#eaf2f3" height="70" stroke="#087e8b" stroke-width="2" width="70" x="65" y="365"></rect>
-<text fill="#087e8b" font-size="14" font-weight="700" text-anchor="middle" x="100" y="405">AGENT</text>
-<text font-size="11" text-anchor="middle" x="100" y="425">START [1,1]</text>
-<text fill="#087e8b" font-size="14" font-weight="700" text-anchor="middle" x="200" y="390">Breeze</text>
-<rect fill="#172435" height="90" width="90" x="255" y="355"></rect>
-<text fill="#fff" font-size="16" font-weight="700" text-anchor="middle" x="300" y="405">PIT</text>
-<text fill="#087e8b" font-size="14" font-weight="700" text-anchor="middle" x="400" y="390">Breeze</text>
+<h4>The Wumpus World Benchmark Environment:</h4>
+<p>The Wumpus World is an exploration benchmark consisting of a \(4 \times 4\) grid cave surrounded by walls:</p>
+<ul>
+<li><strong>Agent:</strong> Starts in square \([1, 1]\), facing East.</li>
+<li><strong>Wumpus:</strong> A beast that eats anyone entering its square. Stays stationary. Emits a foul <em>Stench</em> in all immediately adjacent (cardinal) squares.</li>
+<li><strong>Pits:</strong> Bottomless traps scattered across the grid with probability \(0.20\). Any square adjacent to a pit experiences a <em>Breeze</em>.</li>
+<li><strong>Gold:</strong> Glitter is perceived if and only if the agent is in the exact square containing the gold.</li>
+<li><strong>Sensory Percept Vector:</strong> At each time step, the agent receives a 5-element percept vector:
+                            $$\mathbf{\text{Percept}} = [\text{Stench}, \text{Breeze}, \text{Glitter}, \text{Bump}, \text{Scream}]$$
+                            </li>
+</ul>
+<!-- SVG: Wumpus World 4x4 Grid -->
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:450px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewbox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+<!-- Outer boundary -->
+<rect fill="#f8fafc" height="440" stroke="#1e293b" stroke-width="3" width="440" x="30" y="30"></rect>
+<!-- Grid Lines -->
+<line stroke="#cbd5e1" stroke-width="2" x1="140" x2="140" y1="30" y2="470"></line>
+<line stroke="#cbd5e1" stroke-width="2" x1="250" x2="250" y1="30" y2="470"></line>
+<line stroke="#cbd5e1" stroke-width="2" x1="360" x2="360" y1="30" y2="470"></line>
+<line stroke="#cbd5e1" stroke-width="2" x1="30" x2="470" y1="140" y2="140"></line>
+<line stroke="#cbd5e1" stroke-width="2" x1="30" x2="470" y1="250" y2="250"></line>
+<line stroke="#cbd5e1" stroke-width="2" x1="30" x2="470" y1="360" y2="360"></line>
+<!-- Row 4 (y=30 to 140) -->
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="85" y="70">[1, 4]</text>
+<text fill="#15803d" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="85" y="95">Stench</text>
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="195" y="70">[2, 4]</text>
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="305" y="70">[3, 4]</text>
+<text fill="#0369a1" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="305" y="95">Breeze</text>
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="415" y="70">[4, 4]</text>
+<rect fill="#fee2e2" height="40" rx="6" width="80" x="375" y="80"></rect>
+<text fill="#b91c1c" font-family="'Inter', sans-serif" font-size="13" font-weight="800" text-anchor="middle" x="415" y="105">PIT</text>
+<!-- Row 3 (y=140 to 250) -->
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="85" y="180">[1, 3]</text>
+<rect fill="#fef2f2" height="40" rx="6" stroke="#ef4444" width="80" x="45" y="190"></rect>
+<text fill="#dc2626" font-family="'Inter', sans-serif" font-size="12" font-weight="800" text-anchor="middle" x="85" y="215">WUMPUS</text>
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="195" y="180">[2, 3]</text>
+<rect fill="#fefce8" height="45" rx="6" stroke="#ca8a04" width="80" x="155" y="190"></rect>
+<text fill="#a16207" font-family="'Inter', sans-serif" font-size="11" font-weight="800" text-anchor="middle" x="195" y="208">GOLD</text>
+<text fill="#a16207" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle" x="195" y="224">+Breeze+Stench</text>
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="305" y="180">[3, 3]</text>
+<rect fill="#fee2e2" height="40" rx="6" width="80" x="265" y="190"></rect>
+<text fill="#b91c1c" font-family="'Inter', sans-serif" font-size="13" font-weight="800" text-anchor="middle" x="305" y="215">PIT</text>
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="415" y="180">[4, 3]</text>
+<text fill="#0369a1" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="415" y="205">Breeze</text>
+<!-- Row 2 (y=250 to 360) -->
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="85" y="290">[1, 2]</text>
+<text fill="#15803d" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="85" y="315">Stench</text>
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="195" y="290">[2, 2]</text>
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="305" y="290">[3, 2]</text>
+<text fill="#0369a1" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="305" y="315">Breeze</text>
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="415" y="290">[4, 2]</text>
+<!-- Row 1 (y=360 to 470) -->
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="85" y="400">[1, 1]</text>
+<rect fill="#eff6ff" height="40" rx="6" stroke="#3b82f6" width="80" x="45" y="410"></rect>
+<text fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="12" font-weight="800" text-anchor="middle" x="85" y="435">START</text>
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="195" y="400">[2, 1]</text>
+<text fill="#0369a1" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="195" y="425">Breeze</text>
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="305" y="400">[3, 1]</text>
+<rect fill="#fee2e2" height="40" rx="6" width="80" x="265" y="410"></rect>
+<text fill="#b91c1c" font-family="'Inter', sans-serif" font-size="13" font-weight="800" text-anchor="middle" x="305" y="435">PIT</text>
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="415" y="400">[4, 1]</text>
+<text fill="#0369a1" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="415" y="425">Breeze</text>
 </svg>
-<figcaption>Fig 3.1 — The 4×4 Wumpus World Environment Map</figcaption>
+<p class="diagram-caption">Figure 3.1: The 4×4 Wumpus World layout with pits, monster, percepts, and start square.</p>
 </div>
 </div>
-<div id="t-prop-logic">
-<h3>3.3 Propositional Logic (Syntax, Semantics, Entailment)</h3>
-<p><strong>Propositional Logic</strong> is the simplest formal logic language. A proposition is a declarative statement that is either True or False, but not both.</p>
-<ul class="point-list">
-<li><strong>Syntax:</strong>
+<div class="topic-block" id="sec-prop-logic">
+<h3>1.2 Propositional Logic: Syntax, Semantics, Truth Tables</h3>
+<p><strong>Propositional Logic</strong> (Boolean Logic) is the simplest formal logic system. It represents atomic declarative propositions that can be either <code>True</code> or <code>False</code>.</p>
+<h4>Logical Connectives:</h4>
 <ul>
-<li>Atomic Sentences: Single propositional symbols: $P, Q, R, \text{WumpusAhead}$.</li>
-<li>Five Logical Connectives: Negation $\neg $ (NOT), Conjunction $\wedge$ (AND), Disjunction $\vee$ (OR), Implication $	o$ (IF-THEN), Biconditional $\leftrightarrow$ (IFF).</li>
+<li><strong>Negation (\(\neg\)):</strong> NOT operator. \(\neg P\) is True iff \(P\) is False.</li>
+<li><strong>Conjunction (\(\wedge\)):</strong> AND operator. \(P \wedge Q\) is True iff both \(P\) and \(Q\) are True.</li>
+<li><strong>Disjunction (\(\vee\)):</strong> OR operator. \(P \vee Q\) is True if at least one operand is True.</li>
+<li><strong>Implication (\(\to\)):</strong> IF-THEN operator. \(P \to Q \equiv \neg P \vee Q\). Only False when premise \(P\) is True and conclusion \(Q\) is False.</li>
+<li><strong>Biconditional (\(\leftrightarrow\)):</strong> IFF operator. \(P \leftrightarrow Q\) is True iff both operands have identical truth values.</li>
 </ul>
-</li>
-<li><strong>Semantics &amp; Truth Table:</strong></li>
-</ul>
-<table>
-<tr><th>$A$</th><th>$B$</th><th>$\neg  B$</th><th>$A \wedge B$</th><th>$A \vee B$</th><th>$A 	o B$</th><th>$A \leftrightarrow B$</th></tr>
-<tr><td>T</td><td>T</td><td>F</td><td>T</td><td>T</td><td>T</td><td>T</td></tr>
-<tr><td>T</td><td>F</td><td>T</td><td>F</td><td>T</td><td><strong>F</strong></td><td>F</td></tr>
-<tr><td>F</td><td>T</td><td>F</td><td>F</td><td>T</td><td>T</td><td>F</td></tr>
-<tr><td>F</td><td>F</td><td>T</td><td>F</td><td>F</td><td>T</td><td>T</td></tr>
-</table>
-<div class="exam"><strong>Crucial Exam Rule:</strong> The implication $A 	o B$ is False <em>if and only if</em> the premise $A$ is True and the consequence $B$ is False! In all other cases, $A 	o B$ evaluates to True.</div>
 <h4>Key Semantic Concepts:</h4>
 <ul>
-<li><strong>Tautology (Valid Sentence):</strong> A sentence that is True under <em>all</em> possible interpretations (e.g., $P \vee \neg  P$).</li>
-<li><strong>Contradiction (Inconsistent Sentence):</strong> A sentence that is False under <em>all</em> possible interpretations (e.g., $P \wedge \neg  P$).</li>
-<li><strong>Logical Entailment ($\alpha \models \beta$):</strong> Sentence $\alpha$ entails sentence $\beta$ if and only if in every model where $\alpha$ is True, $\beta$ is also True.</li>
-<li><strong>Soundness vs. Completeness of Inference:</strong>
-<ul>
-<li><strong>Soundness:</strong> An inference procedure is sound if it derives <em>only</em> real entailments ($KB \vdash \alpha \implies KB \models \alpha$). It never makes false deductions.</li>
-<li><strong>Completeness:</strong> An inference procedure is complete if it can derive <em>all</em> valid sentences ($KB \models \alpha \implies KB \vdash \alpha$).</li>
-</ul>
-</li>
+<li><strong>Validity / Tautology:</strong> A sentence that is True under <em>all possible interpretations / truth assignments</em> (e.g., \(P \vee \neg P\)).</li>
+<li><strong>Satisfiability:</strong> A sentence is satisfiable if there exists at least one truth assignment that makes it True.</li>
+<li><strong>Unsatisfiability / Contradiction:</strong> A sentence that is False in every possible interpretation (e.g., \(P \wedge \neg P\)).</li>
+<li><strong>Logical Entailment (\(\alpha \models \beta\)):</strong> Sentence \(\alpha\) entails sentence \(\beta\) if and only if in every model where \(\alpha\) is True, \(\beta\) is also True.</li>
 </ul>
 </div>
-<div id="t-fol">
-<h3>3.4 First-Order Logic (FOL / Predicate Logic)</h3>
-<p>While propositional logic is declarative, it suffers from severe limitations: it assumes the world consists only of atomic facts, lacking expressive power to generalize statements like <em>"All purple mushrooms are poisonous."</em></p>
-<p><strong>First-Order Logic (FOL)</strong> models the world with richer ontological commitment:</p>
+<div class="topic-block" id="sec-fol">
+<h3>1.3 First-Order Logic (FOL / Predicate Logic)</h3>
+<p>While propositional logic can only represent zero-order facts, <strong>First-Order Logic (FOL)</strong> provides expressive ontological commitment: the world consists of <strong>Objects</strong>, <strong>Relations / Predicates</strong>, and <strong>Functions</strong>.</p>
+<h4>Quantifiers in FOL:</h4>
+<ul>
+<li><strong>Universal Quantifier (\(\forall x\)):</strong> Asserts that a predicate holds for <em>all</em> entities in the universe of discourse. It acts as an iterated conjunction (\(\wedge\)):
+                            $$\forall x \, (\text{King}(x) \to \text{Person}(x))$$
+                            <em>Golden Rule:</em> The main connective with \(\forall\) is almost always an <strong>implication (\(\to\))</strong>.</li>
+<li><strong>Existential Quantifier (\(\exists x\)):</strong> Asserts that a predicate holds for <em>at least one</em> entity. It acts as an iterated disjunction (\(\vee\)):
+                            $$\exists x \, (\text{Crown}(x) \wedge \text{OnHead}(x, \text{John}))$$
+                            <em>Golden Rule:</em> The main connective with \(\exists\) is almost always a <strong>conjunction (\(\wedge\))</strong>.</li>
+</ul>
+<h4>English-to-FOL Translation Reference:</h4>
+<table class="data-table">
+<thead>
+<tr>
+<th>Natural Language Sentence</th>
+<th>First-Order Logic Representation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>"Marcus was a man."</em></td>
+<td>\(\text{Man}(\text{Marcus})\)</td>
+</tr>
+<tr>
+<td><em>"All men are mortal."</em></td>
+<td>\(\forall x \, (\text{Man}(x) \to \text{Mortal}(x))\)</td>
+</tr>
+<tr>
+<td><em>"Everyone loves someone."</em></td>
+<td>\(\forall x \, \exists y \, \text{Loves}(x, y)\)</td>
+</tr>
+<tr>
+<td><em>"There is someone who is loved by everyone."</em></td>
+<td>\(\exists y \, \forall x \, \text{Loves}(x, y)\)</td>
+</tr>
+<tr>
+<td><em>"Brothers are siblings."</em></td>
+<td>\(\forall x, y \, (\text{Brother}(x, y) \to \text{Sibling}(x, y))\)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="topic-block" id="sec-unification">
+<h3>1.4 Inference Rules &amp; The Unification Algorithm</h3>
+<p>To perform automated reasoning across quantified FOL sentences, agents lift propositional inference rules using <strong>Unification</strong>: finding a variable substitution \(\theta = \{v_1 / t_1, v_2 / t_2, \dots\}\) that makes two syntactically distinct logical expressions identical:</p>
+                        $$\text{UNIFY}(p, q) = \theta \quad \text{such that} \quad \text{Subst}(\theta, p) = \text{Subst}(\theta, q)$$
+
+                        <h4>Canonical Unification Examples:</h4>
+<ul>
+<li>\(\text{UNIFY}(\text{Knows}(\text{John}, x), \text{Knows}(\text{John}, \text{Jane})) = \{x / \text{Jane}\}\)</li>
+<li>\(\text{UNIFY}(\text{Knows}(\text{John}, x), \text{Knows}(y, \text{Bill})) = \{x / \text{Bill}, y / \text{John}\}\)</li>
+<li>\(\text{UNIFY}(\text{Knows}(\text{John}, x), \text{Knows}(x, \text{Mother}(x))) = \text{FAIL}\) (due to variable name collision; requires <em>Standardizing Variables Apart</em>).</li>
+</ul>
+</div>
+<div class="topic-block" id="sec-production-rules">
+<h3>1.5 Production Systems &amp; The Water Jug Problem</h3>
+<p>A <strong>Production System</strong> consists of a set of declarative production rules of the form <code>IF &lt;pattern&gt; THEN &lt;action&gt;</code>, a dynamic Working Memory, and an execution cycle (Recognize-Act).</p>
+<h4>The Water Jug Problem (Complete 10-Rule Formulation):</h4>
+<p>Given two unmeasured water jugs with capacities of <strong>4 gallons</strong> (Jug \(X\)) and <strong>3 gallons</strong> (Jug \(Y\)), and an unlimited pump. The goal is to obtain exactly <strong>2 gallons</strong> in the 4-gallon jug (\(X=2, Y=0\)).</p>
+<div class="callout callout-def">
+<h4>The 10 Production Rules for the Water Jug Problem:</h4>
 <ol>
-<li><strong>Objects:</strong> Entities with individual identities (e.g., John, Apple, Student1).</li>
-<li><strong>Properties:</strong> Traits that distinguish objects (e.g., $\text{Purple}(x)$, $\text{Poisonous}(x)$).</li>
-<li><strong>Relations:</strong> Relationships holding among objects (e.g., $\text{BrotherOf}(x, y)$, $\text{Eats}(x, y)$).</li>
-<li><strong>Functions:</strong> Relations that return exactly one value for any given input (e.g., $\text{FatherOf}(x)$, $\text{Plus}(x, y)$).</li>
+<li><code>(x, y) if x &lt; 4 → (4, y)</code>: Fill the 4-gallon jug completely.</li>
+<li><code>(x, y) if y &lt; 3 → (x, 3)</code>: Fill the 3-gallon jug completely.</li>
+<li><code>(x, y) if x &gt; 0 → (x - d, y)</code>: Pour some water out of the 4-gallon jug.</li>
+<li><code>(x, y) if y &gt; 0 → (x, y - d)</code>: Pour some water out of the 3-gallon jug.</li>
+<li><code>(x, y) if x &gt; 0 → (0, y)</code>: Empty the 4-gallon jug on the ground.</li>
+<li><code>(x, y) if y &gt; 0 → (x, 0)</code>: Empty the 3-gallon jug on the ground.</li>
+<li><code>(x, y) if x + y ≥ 4 and y &gt; 0 → (4, y - (4 - x))</code>: Pour water from 3-gal jug into 4-gal jug until 4-gal jug is full.</li>
+<li><code>(x, y) if x + y ≥ 3 and x &gt; 0 → (x - (3 - y), 3)</code>: Pour water from 4-gal jug into 3-gal jug until 3-gal jug is full.</li>
+<li><code>(x, y) if x + y ≤ 4 and y &gt; 0 → (x + y, 0)</code>: Pour all water from 3-gal jug into 4-gal jug.</li>
+<li><code>(x, y) if x + y ≤ 3 and x &gt; 0 → (0, x + y)</code>: Pour all water from 4-gal jug into 3-gal jug.</li>
 </ol>
-<h4>Quantifiers in FOL</h4>
-<ul class="point-list">
-<li><strong>Universal Quantifier ($\forall x$):</strong> Represents "For all $x$". Corresponds to logical conjunction ($\wedge$). Universal statements are standardly paired with Implication ($	o$):
-        <div class="diagram">"All students are smart" → ∀x (Student(x) → Smart(x))</div>
-</li>
-<li><strong>Existential Quantifier ($\exists x$):</strong> Represents "There exists at least one $x$". Corresponds to logical disjunction ($\vee$). Existential statements are standardly paired with Conjunction ($\wedge$):
-        <div class="diagram">"There is a student who is smart" → ∃x (Student(x) ∧ Smart(x))</div>
-</li>
-</ul>
-<h4>Standard English to FOL Translation Practice (from Slide 21)</h4>
-<table>
-<tr><th>English Sentence</th><th>First Order Logic (FOL) Representation</th></tr>
-<tr><td>"Every gardener likes the sun."</td><td>$\forall x\ (\text{Gardener}(x) 	o \text{Likes}(x, \text{Sun}))$</td></tr>
-<tr><td>"You can fool some of the people all of the time."</td><td>$\exists x \forall t\ (\text{Person}(x) \wedge \text{Time}(t) 	o \text{CanFool}(x, t))$</td></tr>
-<tr><td>"You can fool all of the people some of the time."</td><td>$\forall x \exists t\ (\text{Person}(x) \wedge \text{Time}(t) 	o \text{CanFool}(x, t))$</td></tr>
-<tr><td>"All purple mushrooms are poisonous."</td><td>$\forall x\ (\text{Mushroom}(x) \wedge \text{Purple}(x) 	o \text{Poisonous}(x))$</td></tr>
-<tr><td>"No purple mushroom is poisonous."</td><td>$\neg  \exists x\ (\text{Purple}(x) \wedge \text{Mushroom}(x) \wedge \text{Poisonous}(x))$ or $\forall x\ (\text{Mushroom}(x) \wedge \text{Purple}(x) 	o \neg  \text{Poisonous}(x))$</td></tr>
-<tr><td>"Clinton is not tall."</td><td>$\neg  \text{Tall}(\text{Clinton})$</td></tr>
+</div>
+<h4>Optimal Solution Sequence Table:</h4>
+<table class="data-table">
+<thead>
+<tr>
+<th>Step #</th>
+<th>Jug X (4-Gal)</th>
+<th>Jug Y (3-Gal)</th>
+<th>Rule Applied</th>
+<th>Description of Physical Operation</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>0</td><td>0</td><td>-</td><td>Initial State (both jugs empty)</td></tr>
+<tr><td>1</td><td>0</td><td>3</td><td>Rule 2</td><td>Fill 3-gallon jug completely</td></tr>
+<tr><td>2</td><td>3</td><td>0</td><td>Rule 9</td><td>Pour all water from 3-gal jug into 4-gal jug</td></tr>
+<tr><td>3</td><td>3</td><td>3</td><td>Rule 2</td><td>Fill 3-gallon jug completely again</td></tr>
+<tr><td>4</td><td>4</td><td>2</td><td>Rule 7</td><td>Pour from 3-gal into 4-gal until 4-gal is full (leaves 2 in 3-gal)</td></tr>
+<tr><td>5</td><td>0</td><td>2</td><td>Rule 5</td><td>Empty 4-gallon jug onto the ground</td></tr>
+<tr><td>6</td><td>2</td><td>0</td><td>Rule 9</td><td>Pour all 2 gallons from 3-gal jug into 4-gal jug (Goal Reached!)</td></tr>
+</tbody>
 </table>
 </div>
-<div id="t-inference-fol">
-<h3>3.5 Inference Rules in First-Order Logic &amp; Unification</h3>
-<ul class="point-list">
-<li><strong>Universal Instantiation (UI):</strong> From $\forall v\ \alpha$, we can infer $\text{SUBST}(\{v / g\}, \alpha)$ for any variable $v$ and ground term $g$:
-        <div class="diagram">∀x (King(x) ∧ Greedy(x) → Evil(x))
-⇒ King(John) ∧ Greedy(John) → Evil(John)  [by subst {x/John}]</div>
-</li>
-<li><strong>Existential Instantiation (EI) / Skolemization:</strong> From $\exists v\ \alpha$, we can infer $\text{SUBST}(\{v / k\}, \alpha)$, where $k$ is a brand new constant symbol called a <strong>Skolem constant</strong> that has never appeared anywhere in the KB:
-        <div class="diagram">∃x (Crown(x) ∧ OnHead(x, John)) ⇒ Crown(C1) ∧ OnHead(C1, John)</div>
-</li>
-<li><strong>Unification:</strong> The algorithmic process of finding a substitution $	heta$ that makes two different logical expressions identical:
-        <div class="diagram">UNIFY(Knows(John, x), Knows(John, Jane)) ⇒ θ = {x / Jane}
-UNIFY(Knows(John, x), Knows(y, Bill)) ⇒ θ = {x / Bill, y / John}
-UNIFY(Knows(John, x), Knows(x, Elizabeth)) ⇒ FAILS (x cannot simultaneously be John and Elizabeth)</div>
-</li>
-</ul>
-</div>
-<div id="t-production-rules">
-<h3>3.6 Production Rule Systems &amp; The Water Jug Problem</h3>
-<p>A <strong>production system</strong> is a modular cognitive AI architecture consisting of:</p>
+<div class="topic-block" id="sec-forward-backward">
+<h3>1.6 Forward Chaining vs. Backward Chaining</h3>
+<p>Production systems execute rules via two classic chaining strategies:</p>
 <ul>
-<li><strong>Working Memory:</strong> A global database storing current state facts.</li>
-<li><strong>Production Rules:</strong> Condition-Action pairs: <code>IF &lt;condition&gt; THEN &lt;action&gt;</code>.</li>
-<li><strong>Rule Interpreter / Conflict Resolver:</strong> Determines which rule to fire when multiple preconditions match.</li>
+<li><strong>Forward Chaining (Data-Driven):</strong> Starts with known facts in working memory. Matches facts against rule IF-conditions (premises) and fires them to assert new facts into working memory. Continues in a Recognize-Act cycle until the goal is proven or no new rules can fire.
+                                <ul>
+<li><em>Best Suited For:</em> Monitoring, planning, reactive systems, and configurations.</li>
 </ul>
-<h4>The Water Jug Problem (Slide 29–31)</h4>
-<p><strong>Setup:</strong> Two jugs: 4-gallon jug ($x$) and 3-gallon jug ($y$). Neither has measurement markings. Initial state: $(0, 0)$. Goal state: Fill the 4-gallon jug with exactly 2 gallons: $(2, 0)$ or $(2, y)$.</p>
-<table>
-<tr><th>Rule #</th><th>Initial State</th><th>Condition</th><th>Final State</th><th>Description</th></tr>
-<tr><td>1</td><td>(x, y)</td><td>x &lt; 4</td><td>(4, y)</td><td>Fill the 4-gallon jug completely</td></tr>
-<tr><td>2</td><td>(x, y)</td><td>y &lt; 3</td><td>(x, 3)</td><td>Fill the 3-gallon jug completely</td></tr>
-<tr><td>5</td><td>(x, y)</td><td>x &gt; 0</td><td>(0, y)</td><td>Empty the 4-gallon jug</td></tr>
-<tr><td>6</td><td>(x, y)</td><td>y &gt; 0</td><td>(x, 0)</td><td>Empty the 3-gallon jug</td></tr>
-<tr><td>7</td><td>(x, y)</td><td>(x + y) ≥ 4 and y &gt; 0</td><td>(4, y - (4 - x))</td><td>Pour water from 3-gal jug to fill 4-gal jug</td></tr>
-<tr><td>8</td><td>(x, y)</td><td>(x + y) ≥ 3 and x &gt; 0</td><td>(x - (3 - y), 3)</td><td>Pour water from 4-gal jug to fill 3-gal jug</td></tr>
-<tr><td>9</td><td>(x, y)</td><td>(x + y) ≤ 4 and y &gt; 0</td><td>(x + y, 0)</td><td>Pour all water from 3-gal jug to 4-gal jug</td></tr>
-<tr><td>10</td><td>(x, y)</td><td>(x + y) ≤ 3 and x &gt; 0</td><td>(0, x + y)</td><td>Pour all water from 4-gal jug to 3-gal jug</td></tr>
-</table>
-<h4>Step-by-Step State Sequence (from Slide 31)</h4>
-<table>
-<tr><th>Step</th><th>4-Gal Jug (x)</th><th>3-Gal Jug (y)</th><th>Rule Applied</th></tr>
-<tr><td>1</td><td>0</td><td>0</td><td>Initial state</td></tr>
-<tr><td>2</td><td>0</td><td>3</td><td>Rule 2 (Fill 3-gal jug)</td></tr>
-<tr><td>3</td><td>3</td><td>0</td><td>Rule 9 (Pour all from 3-gal into 4-gal)</td></tr>
-<tr><td>4</td><td>3</td><td>3</td><td>Rule 2 (Fill 3-gal jug)</td></tr>
-<tr><td>5</td><td>4</td><td>2</td><td>Rule 7 (Pour from 3-gal to fill 4-gal)</td></tr>
-<tr><td>6</td><td>0</td><td>2</td><td>Rule 5 (Empty 4-gal jug)</td></tr>
-<tr><td>7</td><td>2</td><td>0</td><td>Rule 9 (Pour all 2 gal from 3-gal to 4-gal) → <strong>GOAL REACHED!</strong></td></tr>
-</table>
-</div>
-<div id="t-chaining">
-<h3>3.7 Forward Chaining vs. Backward Chaining</h3>
-<ul class="point-list">
-<li><strong>Forward Chaining (Data-Driven):</strong> Starts with known facts in the KB, searches for rules whose premises (antecedents) are satisfied, fires them, and adds the consequents as new facts into the KB. Repeats until the target goal is derived.
-        <br/><em>Best used:</em> When new facts arrive periodically and many conclusions need to be monitored (e.g., monitoring pipelines, synthesis).
-      </li>
-<li><strong>Backward Chaining (Goal-Driven):</strong> Starts with the hypothesis/query goal, works backward by searching for rules whose consequents match the goal, and places the antecedents on a goal stack as sub-goals to prove.
-        <br/><em>Best used:</em> When a specific question is asked and the set of relevant facts is small (e.g., diagnostic expert systems like MYCIN).
-      </li>
+</li>
+<li><strong>Backward Chaining (Goal-Driven):</strong> Starts with a hypothesis (the goal query). Finds rules whose THEN-consequents conclude that goal, and works backward, treating the premises as subgoals that must be proven. Recursively evaluates subgoals by querying the user or matching known facts.
+                                <ul>
+<li><em>Best Suited For:</em> Diagnostic troubleshooting, medical diagnosis (e.g., MYCIN), and interactive query systems.</li>
+</ul>
+</li>
 </ul>
 </div>
-<div id="t-cnf-resolution">
-<h3>3.8 Conjunctive Normal Form (CNF) &amp; Resolution Refutation</h3>
-<p><strong>Resolution</strong> is an automated theorem-proving inference rule based on proof by contradiction (reductio ad absurdum). To prove $KB \models \alpha$, we assert $\neg  \alpha$ into the KB, convert all sentences into <strong>Conjunctive Normal Form (CNF)</strong>, and systematically resolve complementary literals until deriving the empty clause ($\Box$ or NULL), which indicates a contradiction.</p>
-<h4>The 5 Steps to Convert FOL into CNF (from Slides 57–62)</h4>
-<ol class="solution-steps">
-<li><strong>Step 1: Eliminate Implications ($	o, \leftrightarrow$):</strong>
-<br/>Replace $\alpha 	o \beta$ with $\neg  \alpha \vee \beta$.
-        <br/>Replace $\alpha \leftrightarrow \beta$ with $(\neg  \alpha \vee \beta) \wedge (\neg  \beta \vee \alpha)$.
-      </li>
-<li><strong>Step 2: Move Negation ($\neg $) Inwards (De Morgan's Laws):</strong>
-<br/>$\neg  (\forall x\ P) \equiv \exists x\ \neg  P$
-        <br/>$\neg  (\exists x\ P) \equiv \forall x\ \neg  P$
-        <br/>$\neg  (\alpha \wedge \beta) \equiv \neg  \alpha \vee \neg  \beta$
-        <br/>$\neg  (\alpha \vee \beta) \equiv \neg  \alpha \wedge \neg  \beta$
-        <br/>$\neg  \neg  \alpha \equiv \alpha$
-      </li>
-<li><strong>Step 3: Standardize / Rename Variables:</strong> Ensure each quantifier uses unique variable names across clauses.</li>
-<li><strong>Step 4: Skolemization (Eliminate $\exists$):</strong> Replace existential variables with Skolem constants or Skolem functions.</li>
-<li><strong>Step 5: Drop Universal Quantifiers ($\forall$):</strong> Because all remaining variables are universally quantified, drop prefixes $\forall x$.</li>
-</ol>
-</div>
-</section>
-<!-- ══════════ SECTION 2: WORKED NUMERICALS ══════════ -->
-<section class="category" id="numerical-section">
-<h2>2. Step-by-Step Worked Problem Examples</h2><aside class="pyq-focus"><h3>PYQ lens · symbolic work earns marks in visible stages</h3><ul><li><b>Resolution proof (15 marks):</b> present three visibly separate stages: (1) translate every fact and query into FOL (5), (2) convert all clauses to CNF and number them (5), (3) show parent clause numbers and substitutions at every resolution step until the empty clause □ (5). Do not jump from premises straight to “proved”.</li><li><b>FOL to CNF (5 marks):</b> show implication removal, negation movement/quantifier changes, standardize variables, Skolemize existential variables, drop universal quantifiers, and distribute OR over AND. State which rules you used.</li><li><b>Keep equal coverage:</b> the PYQ’s logic proof does not replace propositional semantics, knowledge bases, forward/backward chaining, or modeling facts and relations; retain examples for each.</li></ul><p class="source-note">Pattern checked against <a href="PYQ/QP_Final-Exam_Artificial%20Intelligence%28702CO0C032%29_Semester%20V_2025-2026.pdf">Question Paper Q4 and Q5</a> and <a href="PYQ/ANS_Final-Exam_Artificial%20Intelligence%28702CO0C032%29_Semester%20V_2025-2026.pdf">Answer Key</a>.</p></aside>
-<article class="worked-block" id="num-simple">
-<h3><span class="numerical-tag">SIMPLE</span> Propositional Truth Table &amp; Tautology Verification</h3>
-<div class="given-box">
-<b>GIVEN:</b>
-      Evaluate whether the logical sentence <span class="math">\(((P 	o Q) \wedge P) 	o Q\)</span> (Modus Ponens in conditional form) is a valid Tautology.
-    </div>
-<div class="calc-work">
-<b>STEPWISE TRUTH TABLE:</b>
-<table>
-<tr><th>$P$</th><th>$Q$</th><th>$P 	o Q$</th><th>$(P 	o Q) \wedge P$</th><th>$((P 	o Q) \wedge P) 	o Q$</th></tr>
-<tr><td>T</td><td>T</td><td>T</td><td>T</td><td><strong>T</strong></td></tr>
-<tr><td>T</td><td>F</td><td>F</td><td>F</td><td><strong>T</strong></td></tr>
-<tr><td>F</td><td>T</td><td>T</td><td>F</td><td><strong>T</strong></td></tr>
-<tr><td>F</td><td>F</td><td>T</td><td>F</td><td><strong>T</strong></td></tr>
-</table>
-</div>
-<div class="answer-box">
-<b>FINAL ANSWER:</b>
-      Every row in the final column evaluates to <strong>True (T)</strong>. Therefore, the sentence is a <strong>Tautology (Valid)</strong> under all interpretations.
-    </div>
-</article>
-<article class="worked-block" id="num-medium">
-<h3><span class="numerical-tag">MEDIUM</span> Step-by-Step Forward Chaining Trace (Fritz the Frog)</h3>
-<div class="given-box">
-<b>GIVEN KNOWLEDGE BASE (from Slides 33–43):</b>
-<ul>
-<li>R1: <code>IF [X croaks and eats flies] THEN [X is a frog]</code></li>
-<li>R2: <code>IF [X chirps and sings] THEN [X is a canary]</code></li>
-<li>R3: <code>IF [X is a frog] THEN [X is colored green]</code></li>
-<li>R4: <code>IF [X is a canary] THEN [X is colored yellow]</code></li>
-<li>Fact 1: <code>[Fritz croaks and eats flies]</code></li>
-</ul>
-<strong>Query Goal:</strong> What is Fritz's color? <code>[Fritz is colored Y]?</code>
-</div>
-<div class="calc-work">
-<b>STEPWISE WORKING:</b>
-<ol class="solution-steps">
-<li><strong>Cycle 1:</strong> Examine KB facts. Working memory has <code>[Fritz croaks and eats flies]</code>.
-          <br/>Match with R1 premise: <code>X = Fritz</code>.
-          <br/>Fire Rule 1 → Add new fact to KB: <code>[Fritz is a frog]</code>.
-        </li>
-<li><strong>Cycle 2:</strong> Match newly added fact <code>[Fritz is a frog]</code> with R3 premise: <code>X = Fritz</code>.
-          <br/>Fire Rule 3 → Add new fact to KB: <code>[Fritz is colored green]</code>.
-        </li>
-<li><strong>Cycle 3:</strong> Match <code>[Fritz is colored green]</code> against query <code>[Fritz is colored Y]?</code>.
-          <br/>Unification succeeds with substitution: <span class="math">\(Y = \text{green}\)</span>.
-        </li>
-</ol>
-</div>
-<div class="answer-box">
-<b>FINAL ANSWER:</b>
-      Derived conclusion: <strong>Fritz is colored green</strong> (<span class="math">\(Y = \text{green}\)</span>).
-    </div>
-</article>
-<article class="worked-block" id="num-complex">
-<h3><span class="numerical-tag">COMPLEX</span> Complete Resolution Refutation Proof ("John Likes Peanuts")</h3>
-<div class="given-box">
-<b>GIVEN ENGLISH STATEMENTS (from Slides 64–70):</b>
+<div class="topic-block" id="sec-resolution">
+<h3>1.7 Conjunctive Normal Form (CNF) &amp; Resolution Refutation</h3>
+<p><strong>Resolution</strong> (J. Alan Robinson, 1965) is a sound and complete refutation inference rule. To prove that a Knowledge Base entails query \(\alpha\) (\(KB \models \alpha\)):</p>
+                        $$\mathbf{\text{Assert } \neg \alpha \text{ into the KB and derive a Contradiction (Empty Clause } \square)}$$
+
+                        <h4>The 5-Step Algorithm to Convert First-Order Logic to CNF:</h4>
 <ol>
-<li>John likes all kind of food: <span class="math">\(\forall x\ (\text{Food}(x) 	o \text{Likes}(\text{John}, x))\)</span></li>
-<li>Apple and vegetable are food: <span class="math">\(\text{Food}(\text{Apple}) \wedge \text{Food}(\text{Vegetables})\)</span></li>
-<li>Anything anyone eats and not killed is food: <span class="math">\(\forall x \forall y\ (\text{Eats}(x, y) \wedge \neg  \text{Killed}(x) 	o \text{Food}(y))\)</span></li>
-<li>Anil eats peanuts and is still alive: <span class="math">\(\text{Eats}(\text{Anil}, \text{Peanuts}) \wedge \text{Alive}(\text{Anil})\)</span></li>
-<li>Harry eats everything that Anil eats: <span class="math">\(\forall x\ (\text{Eats}(\text{Anil}, x) 	o \text{Eats}(\text{Harry}, x))\)</span></li>
-<li>Added background knowledge: <span class="math">\(\forall x\ (\text{Alive}(x) 	o \neg  \text{Killed}(x))\)</span></li>
-</ol>
-<strong>Prove by Resolution:</strong> <em>"John likes peanuts"</em> (<span class="math">\(\text{Likes}(\text{John}, \text{Peanuts})\)</span>).
-    </div>
-<div class="formula-box">
-<b>CONVERT TO CNF CLAUSES:</b>
+<li><strong>Step 1: Eliminate Implications and Biconditionals:</strong>
 <ul>
-<li>C1: <span class="math">\(\neg  \text{Food}(x) \vee \text{Likes}(\text{John}, x)\)</span></li>
-<li>C2: <span class="math">\(\neg  \text{Eats}(y, z) \vee \text{Killed}(y) \vee \text{Food}(z)\)</span></li>
-<li>C3: <span class="math">\(\text{Eats}(\text{Anil}, \text{Peanuts})\)</span></li>
-<li>C4: <span class="math">\(\text{Alive}(\text{Anil})\)</span></li>
-<li>C5: <span class="math">\(\neg  \text{Alive}(k) \vee \neg  \text{Killed}(k)\)</span></li>
-<li><strong>Negated Goal Clause (C6):</strong> <span class="math">\(\neg  \text{Likes}(\text{John}, \text{Peanuts})\)</span></li>
+<li>Replace \(\alpha \to \beta\) with \(\neg \alpha \vee \beta\).</li>
+<li>Replace \(\alpha \leftrightarrow \beta\) with \((\neg \alpha \vee \beta) \wedge (\neg \beta \vee \alpha)\).</li>
 </ul>
-</div>
-<div class="calc-work">
-<b>RESOLUTION REFUTATION TREE TRACE:</b>
-<ol class="solution-steps">
-<li>Resolve Negated Goal <strong>C6</strong> [<span class="math">\(\neg  \text{Likes}(\text{John}, \text{Peanuts})\)</span>] with <strong>C1</strong> [<span class="math">\(\neg  \text{Food}(x) \vee \text{Likes}(\text{John}, x)\)</span>] using substitution <span class="math">\(\{x / \text{Peanuts}\}\)</span>:
-          <br/>→ Resolvent <strong>C7:</strong> <span class="math">\(\neg  \text{Food}(\text{Peanuts})\)</span>
 </li>
-<li>Resolve <strong>C7</strong> [<span class="math">\(\neg  \text{Food}(\text{Peanuts})\)</span>] with <strong>C2</strong> [<span class="math">\(\neg  \text{Eats}(y, z) \vee \text{Killed}(y) \vee \text{Food}(z)\)</span>] using substitution <span class="math">\(\{z / \text{Peanuts}\}\)</span>:
-          <br/>→ Resolvent <strong>C8:</strong> <span class="math">\(\neg  \text{Eats}(y, \text{Peanuts}) \vee \text{Killed}(y)\)</span>
+<li><strong>Step 2: Move Negations Inwards (De Morgan's Laws):</strong>
+<ul>
+<li>\(\neg (\forall x \, P) \equiv \exists x \, \neg P\), \quad \(\neg (\exists x \, P) \equiv \forall x \, \neg P\)</li>
+<li>\(\neg (\alpha \wedge \beta) \equiv \neg \alpha \vee \neg \beta\), \quad \(\neg (\alpha \vee \beta) \equiv \neg \alpha \wedge \neg \beta\)</li>
+<li>\(\neg \neg \alpha \equiv \alpha\)</li>
+</ul>
 </li>
-<li>Resolve <strong>C8</strong> with <strong>C3</strong> [<span class="math">\(\text{Eats}(\text{Anil}, \text{Peanuts})\)</span>] using substitution <span class="math">\(\{y / \text{Anil}\}\)</span>:
-          <br/>→ Resolvent <strong>C9:</strong> <span class="math">\(\text{Killed}(\text{Anil})\)</span>
+<li><strong>Step 3: Standardize Variables Apart:</strong> Rename duplicate variable names used across different quantifiers (e.g., replace \((\forall x \, P(x)) \vee (\exists x \, Q(x))\) with \((\forall x \, P(x)) \vee (\exists y \, Q(y))\)).</li>
+<li><strong>Step 4: Skolemization (Eliminate Existential Quantifiers):</strong>
+<ul>
+<li>If \(\exists x\) is not inside a \(\forall\), replace \(x\) with a unique constant: <em>Skolem Constant</em> (e.g., \(A\)).</li>
+<li>If \(\exists x\) is inside universal quantifiers \(\forall y_1 \dots \forall y_k\), replace \(x\) with a <em>Skolem Function</em> \(F(y_1, \dots, y_k)\).</li>
+</ul>
 </li>
-<li>Resolve <strong>C9</strong> [<span class="math">\(\text{Killed}(\text{Anil})\)</span>] with <strong>C5</strong> [<span class="math">\(\neg  \text{Alive}(k) \vee \neg  \text{Killed}(k)\)</span>] using substitution <span class="math">\(\{k / \text{Anil}\}\)</span>:
-          <br/>→ Resolvent <strong>C10:</strong> <span class="math">\(\neg  \text{Alive}(\text{Anil})\)</span>
-</li>
-<li>Resolve <strong>C10</strong> [<span class="math">\(\neg  \text{Alive}(\text{Anil})\)</span>] with Fact <strong>C4</strong> [<span class="math">\(\text{Alive}(\text{Anil})\)</span>]:
-          <br/>→ <strong>Resolvent: $\Box$ (EMPTY CLAUSE / CONTRADICTION)!</strong>
-</li>
+<li><strong>Step 5: Drop Universal Quantifiers &amp; Distribute \(\vee\) over \(\wedge\):</strong> Drop explicit \(\forall\) prefixes (all variables are implicitly universally quantified) and distribute \(\alpha \vee (\beta \wedge \gamma) \equiv (\alpha \vee \beta) \wedge (\alpha \vee \gamma)\) to produce a set of disjunctive clauses.</li>
 </ol>
 </div>
-<div class="answer-box">
-<b>FINAL ANSWER:</b>
-      Derivation of the empty clause ($\Box$) contradicts our negated assumption. Therefore, the statement <strong>"John likes peanuts" is mathematically proven to be TRUE</strong>.
-    </div>
-</article>
 </section>
-<!-- ══════════ SECTION 3: COMPARATIVE STUDIES ══════════ -->
-<section class="category" id="comparison-section">
-<h2>3. Comprehensive Comparative Studies</h2>
-<table>
-<tr><th>Feature</th><th>Propositional Logic</th><th>First-Order Logic (FOL)</th></tr>
-<tr><td>Ontological Commitment</td><td>Facts that either hold or do not hold (True/False)</td><td>Objects, Properties, Relations, and Functions</td></tr>
-<tr><td>Epistemological Commitment</td><td>Degree of belief: True, False, or Unknown</td><td>True, False, or Unknown</td></tr>
-<tr><td>Expressive Power</td><td>Low (cannot express generalizations like "All men")</td><td>High (quantifiers $\forall, \exists$ allow universal assertions)</td></tr>
-<tr><td>Computational Decidability</td><td>Decidable (truth tables always terminate in $2^n$)</td><td>Semidecidable (sound and complete proofs terminate if true, but may loop if false)</td></tr>
+<!-- SECTION 2: STEP-BY-STEP NUMERICALS -->
+<section class="module-section" id="numerical-section">
+<div class="section-title">
+<h2>2. In-Depth Numerical Explanations (Step-by-Step)</h2>
+<span class="cross-ref-badge">3 Tiered Solved Problems</span>
+</div>
+<!-- NUMERICAL 1: SIMPLE -->
+<div class="problem-card" id="num-1">
+<div class="problem-header">
+<span class="difficulty easy">Simple Example</span>
+<h3>Problem 3.1: Truth Table Tautology Proof</h3>
+</div>
+<p><strong>Problem Statement:</strong> Using the truth table method, prove that the following propositional logic sentence is a <strong>valid tautology</strong>:
+                        $$((P \to Q) \wedge P) \to Q$$
+                        (This is the formal proposition of Modus Ponens).</p>
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">TRUTH TABLE</span>
+<div>
+<table class="data-table">
+<thead>
+<tr>
+<th>\(P\)</th>
+<th>\(Q\)</th>
+<th>\(P \to Q\)</th>
+<th>\((P \to Q) \wedge P\)</th>
+<th>\(((P \to Q) \wedge P) \to Q\)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+<td><strong>T</strong></td>
+</tr>
+<tr>
+<td>T</td>
+<td>F</td>
+<td>F</td>
+<td>F</td>
+<td><strong>T</strong></td>
+</tr>
+<tr>
+<td>F</td>
+<td>T</td>
+<td>T</td>
+<td>F</td>
+<td><strong>T</strong></td>
+</tr>
+<tr>
+<td>F</td>
+<td>F</td>
+<td>T</td>
+<td>F</td>
+<td><strong>T</strong></td>
+</tr>
+</tbody>
 </table>
-<table>
-<tr><th>Feature</th><th>Forward Chaining</th><th>Backward Chaining</th></tr>
-<tr><td>Direction</td><td>Data-driven (Bottom-up: from facts → goal)</td><td>Goal-driven (Top-down: from goal → sub-goals → facts)</td></tr>
-<tr><td>Search Strategy</td><td>Applies all rules whose premises match known facts</td><td>Matches goal to rule consequents, proves antecedents</td></tr>
-<tr><td>Work Done</td><td>May derive many irrelevant conclusions</td><td>Focused strictly on answering the given query</td></tr>
-<tr><td>Applications</td><td>Real-time event monitoring, synthesis, game logic</td><td>Medical diagnosis, debugging, automated theorem proving</td></tr>
-</table>
-</section>
-<!-- ══════════ SECTION 4: CASE STUDIES ══════════ -->
-<section class="category" id="case-section">
-<h2>4. Real-World Case Studies &amp; Concrete Examples</h2>
-<h3>Case 1: Automated Theorem Proving (Prover9 / Coq)</h3>
-<ul class="point-list">
-<li>Commercial hardware design relies on resolution-based theorem provers to verify microprocessor logic (e.g., verifying that the floating-point unit never causes division errors, avoiding the famous 1994 Pentium bug).</li>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge answer">FINAL ANSWER</span>
+<div>
+<p class="final-box">\(\mathbf{((P \to Q) \wedge P) \to Q \text{ evaluates to True under ALL interpretations (Tautology / Valid).}}\)</p>
+</div>
+</div>
+</div>
+</div>
+<!-- NUMERICAL 2: MEDIUM -->
+<div class="problem-card" id="num-2">
+<div class="problem-header">
+<span class="difficulty medium">Medium Example</span>
+<h3>Problem 3.2: Forward Chaining Deductive Trace</h3>
+</div>
+<p><strong>Problem Statement:</strong> Consider the following Knowledge Base about animals:</p>
+<ul>
+<li><strong>R1:</strong> IF \(\text{Croaks}(x)\) AND \(\text{EatsFlies}(x)\) THEN \(\text{Frog}(x)\)</li>
+<li><strong>R2:</strong> IF \(\text{Frog}(x)\) THEN \(\text{Green}(x)\)</li>
+<li><strong>R3:</strong> IF \(\text{Chirps}(x)\) AND \(\text{Sings}(x)\) THEN \(\text{Canary}(x)\)</li>
+<li><strong>R4:</strong> IF \(\text{Canary}(x)\) THEN \(\text{Yellow}(x)\)</li>
 </ul>
-</section>
-<!-- ══════════ SECTION 5: QUESTIONS BANK ══════════ -->
-<section class="category" id="questions-section">
-<h2>5. Possible University Exam Questions Bank</h2><p class="pyq-note"><b>Past-paper calibration:</b> practise the answer formats shown in the PYQ lens under Section 2, then answer the remaining questions across every syllabus topic. The paper is a guide to depth and marking style, not a boundary on what to study. <a href="PYQ/QP_Final-Exam_Artificial%20Intelligence%28702CO0C032%29_Semester%20V_2025-2026.pdf">Question paper</a> · <a href="PYQ/ANS_Final-Exam_Artificial%20Intelligence%28702CO0C032%29_Semester%20V_2025-2026.pdf">answer key</a>.</p>
+<p>Initial facts in Working Memory: \(\{\text{Croaks}(\text{Fritz}), \text{EatsFlies}(\text{Fritz})\}\). Prove whether the query \(\text{Green}(\text{Fritz})\) is entailed using Forward Chaining.</p>
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">CYCLE 1</span>
+<div>
+<p><strong>Pattern Matching:</strong> Check premises against \(WM_0 = \{\text{Croaks}(\text{Fritz}), \text{EatsFlies}(\text{Fritz})\}\):</p>
+<p>Rule R1 premises are satisfied with \(\theta = \{x / \text{Fritz}\}\). Fire R1.</p>
+<p><strong>Assert:</strong> \(\text{Frog}(\text{Fritz})\) into Working Memory.</p>
+<p>Updated \(WM_1 = \{\text{Croaks}(\text{Fritz}), \text{EatsFlies}(\text{Fritz}), \text{Frog}(\text{Fritz})\}\).</p>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge">CYCLE 2</span>
+<div>
+<p><strong>Pattern Matching:</strong> Check premises against \(WM_1\):</p>
+<p>Rule R2 premise \(\text{Frog}(x)\) is now satisfied with \(\theta = \{x / \text{Fritz}\}\). Fire R2.</p>
+<p><strong>Assert:</strong> \(\text{Green}(\text{Fritz})\) into Working Memory.</p>
+<p>Updated \(WM_2 = \{\text{Croaks}(\text{Fritz}), \text{EatsFlies}(\text{Fritz}), \text{Frog}(\text{Fritz}), \mathbf{\text{Green}(\text{Fritz})}\}\).</p>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge answer">FINAL ANSWER</span>
+<div>
+<p class="final-box">\(\mathbf{\text{Target Query } \text{Green}(\text{Fritz}) \text{ is proven True via inference sequence } R1 \to R2.}\)</p>
+</div>
+</div>
+</div>
+</div>
+<!-- NUMERICAL 3: COMPLEX -->
+<div class="problem-card" id="num-3">
+<div class="problem-header">
+<span class="difficulty hard">Complex Example</span>
+<h3>Problem 3.3: First-Order Logic Resolution Refutation Proof</h3>
+</div>
+<p><strong>Problem Statement:</strong> Given the natural language statements:</p>
 <ol>
-<li>Explain the architecture of a Knowledge-Based Agent. Describe the TELL and ASK operations. (6 Marks)</li>
-<li>Describe Wumpus World with respect to PEAS, environment properties, and sensor percept vector. (8 Marks)</li>
-<li>Define Propositional Logic. Explain syntax, semantics, tautology, contradiction, and entailment. (8 Marks)</li>
-<li>Differentiate between Propositional Logic and First Order Logic with examples. (6 Marks)</li>
-<li>Explain the rules of Universal Instantiation, Existential Instantiation (Skolemization), and Unification. (8 Marks)</li>
-<li>Describe the production system architecture and solve the Water Jug Problem using production rules. (10 Marks)</li>
-<li>Compare Forward Chaining and Backward Chaining with a step-by-step example. (8 Marks)</li>
-<li>State the 5 steps to convert First-Order Logic sentences into Conjunctive Normal Form (CNF). (6 Marks)</li>
-<li>Demonstrate proof by Resolution refutation with an example. (10 Marks)</li>
+<li>"Marcus was a man."</li>
+<li>"Marcus was a Pompeian."</li>
+<li>"All Pompeians were Romans."</li>
+<li>"Caesar was a ruler."</li>
+<li>"All Romans were either loyal to Caesar or hated him."</li>
+<li>"Everyone is loyal to someone."</li>
+<li>"People only try to assassinate rulers they are not loyal to."</li>
+<li>"Marcus tried to assassinate Caesar."</li>
 </ol>
+<p>Prove by Resolution Refutation that: <strong>"Marcus hated Caesar."</strong></p>
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">CNF CLAUSES</span>
+<div>
+<ol>
+<li>\(C_1: \text{Man}(\text{Marcus})\)</li>
+<li>\(C_2: \text{Pompeian}(\text{Marcus})\)</li>
+<li>\(C_3: \neg \text{Pompeian}(x_1) \vee \text{Roman}(x_1)\)</li>
+<li>\(C_4: \text{Ruler}(\text{Caesar})\)</li>
+<li>\(C_5: \neg \text{Roman}(x_2) \vee \text{LoyalTo}(x_2, \text{Caesar}) \vee \text{Hate}(x_2, \text{Caesar})\)</li>
+<li>\(C_6: \neg \text{Man}(x_3) \vee \neg \text{Ruler}(y_1) \vee \neg \text{TryAssassinate}(x_3, y_1) \vee \neg \text{LoyalTo}(x_3, y_1)\)</li>
+<li>\(C_7: \text{TryAssassinate}(\text{Marcus}, \text{Caesar})\)</li>
+<li><strong>Negated Goal \(C_8\):</strong> \(\neg \text{Hate}(\text{Marcus}, \text{Caesar})\)</li>
+</ol>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge">RESOLUTION TRACE</span>
+<div>
+<ol>
+<li>Resolve \(C_8\) with \(C_5\) with \(\{x_2 / \text{Marcus}\}\):<br/>
+                                        \(\implies C_9: \neg \text{Roman}(\text{Marcus}) \vee \text{LoyalTo}(\text{Marcus}, \text{Caesar})\)</li>
+<li>Resolve \(C_9\) with \(C_3\) with \(\{x_1 / \text{Marcus}\}\):<br/>
+                                        \(\implies C_{10}: \neg \text{Pompeian}(\text{Marcus}) \vee \text{LoyalTo}(\text{Marcus}, \text{Caesar})\)</li>
+<li>Resolve \(C_{10}\) with \(C_2\):<br/>
+                                        \(\implies C_{11}: \text{LoyalTo}(\text{Marcus}, \text{Caesar})\)</li>
+<li>Resolve \(C_6\) with \(C_7\) with \(\{x_3 / \text{Marcus}, y_1 / \text{Caesar}\}\):<br/>
+                                        \(\implies C_{12}: \neg \text{Man}(\text{Marcus}) \vee \neg \text{Ruler}(\text{Caesar}) \vee \neg \text{LoyalTo}(\text{Marcus}, \text{Caesar})\)</li>
+<li>Resolve \(C_{12}\) with \(C_1\) (\(\text{Man}(\text{Marcus})\)):<br/>
+                                        \(\implies C_{13}: \neg \text{Ruler}(\text{Caesar}) \vee \neg \text{LoyalTo}(\text{Marcus}, \text{Caesar})\)</li>
+<li>Resolve \(C_{13}\) with \(C_4\) (\(\text{Ruler}(\text{Caesar})\)):<br/>
+                                        \(\implies C_{14}: \neg \text{LoyalTo}(\text{Marcus}, \text{Caesar})\)</li>
+<li>Resolve \(C_{14}\) with \(C_{11}\) (\(\text{LoyalTo}(\text{Marcus}, \text{Caesar})\)):<br/>
+                                        \(\implies \mathbf{\square \quad (\text{EMPTY CLAUSE / CONTRADICTION DERIVED!})}\)</li>
+</ol>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge answer">FINAL ANSWER</span>
+<div>
+<p class="final-box">\(\mathbf{\text{Since the negated goal leads directly to an empty clause } \square, \text{ the query "Marcus hated Caesar" is proven True.}}\)</p>
+</div>
+</div>
+</div>
+</div>
 </section>
+<!-- SECTION 3: COMPARATIVE STUDIES -->
+<section class="module-section" id="comparison-section">
+<div class="section-title">
+<h2>3. Comparative Studies</h2>
+<span class="cross-ref-badge">Exam-Focused Tabular Comparisons</span>
+</div>
+<h3>Table 3.1: Propositional Logic vs. First-Order Logic (FOL)</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Comparison Dimension</th>
+<th>Propositional Logic</th>
+<th>First-Order Logic (FOL)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ontological Commitment</strong></td>
+<td>Facts that are either True or False in the world</td>
+<td>Objects, Relations, Predicates, and Functions</td>
+</tr>
+<tr>
+<td><strong>Expressiveness</strong></td>
+<td>Low (cannot express "all humans" without writing millions of conjunctions)</td>
+<td>High (concisely captures infinite generalities via quantifiers \(\forall, \exists\))</td>
+</tr>
+<tr>
+<td><strong>Decidability</strong></td>
+<td>Decidable (truth tables always terminate in \(2^n\) steps)</td>
+<td>Semi-decidable (if sentence is entailed, proof will terminate; if not, may loop indefinitely)</td>
+</tr>
+<tr>
+<td><strong>Computational Complexity</strong></td>
+<td>NP-Complete (Boolean Satisfiability - SAT)</td>
+<td>Undecidable in the worst case</td>
+</tr>
+</tbody>
+</table>
+<h3>Table 3.2: Forward Chaining vs. Backward Chaining</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Forward Chaining (Data-Driven)</th>
+<th>Backward Chaining (Goal-Driven)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Starting State</strong></td>
+<td>Initial known facts in Working Memory</td>
+<td>Target query or hypothesis (Goal)</td>
+</tr>
+<tr>
+<td><strong>Direction of Inference</strong></td>
+<td>Bottom-Up (Antecedent → Consequent)</td>
+<td>Top-Down (Consequent → Antecedent subgoals)</td>
+</tr>
+<tr>
+<td><strong>User Interaction</strong></td>
+<td>Passive (user inputs all observations upfront)</td>
+<td>Active (system asks targeted questions to satisfy subgoals)</td>
+</tr>
+<tr>
+<td><strong>Canonical Applications</strong></td>
+<td>Industrial monitoring, automated configuration (XCON)</td>
+<td>Medical diagnostic systems (MYCIN), theorem provers</td>
+</tr>
+</tbody>
+</table>
+</section>
+<!-- SECTION 4: CASE STUDIES & REAL-WORLD APPLICATIONS -->
+<section class="module-section" id="case-section">
+<div class="section-title">
+<h2>4. Real-World Case Studies &amp; Practical Systems</h2>
+<span class="cross-ref-badge">Knowledge Systems Milestones</span>
+</div>
+<div class="case-card">
+<div class="case-header">
+<span class="case-tag">Automated Theorem Proving</span>
+<h3>Otter / Prover9 Automated Logic Prover</h3>
+</div>
+<p><strong>System Genesis:</strong> Otter (Organized Techniques for Theorem-proving and Effective Research) developed at Argonne National Laboratory used resolution refutation to solve open mathematical conjectures, including the Robbins Conjecture in Boolean Algebra in 1996.</p>
+</div>
+<div class="case-card">
+<div class="case-header">
+<span class="case-tag">Enterprise Knowledge Graph</span>
+<h3>Cyc Knowledge Base (Doug Lenat, Cycorp)</h3>
+</div>
+<p><strong>System Genesis:</strong> Begun in 1984, Cyc is the world's longest-running symbolic AI project, encoding over 25 million formal logic assertions representing human common-sense facts to facilitate human-like deduction in healthcare and defense.</p>
+</div>
+</section>
+<!-- SECTION 5: EXAM QUESTIONS -->
+<section class="module-section" id="questions-section">
+<div class="section-title">
+<h2>5. Possible University Exam Questions &amp; Marking Guide</h2>
+<span class="cross-ref-badge">NMIMS Pattern: 4, 6, 8, 10 Marks</span>
+</div>
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">4 Marks</span>
+<h4>Q1. Differentiate between Tautology, Satisfiable, and Unsatisfiable sentences in Propositional Logic with examples.</h4>
+</div>
+<div class="q-answer">
+<p><strong>Marking Scheme:</strong> 1.5 marks for tautology and example; 1.5 marks for satisfiable; 1 mark for unsatisfiable.</p>
+<p><strong>Model Answer Key:</strong> Tautology is true under all interpretations (\(P \vee \neg P\)). Satisfiable has at least one true interpretation (\(P \wedge Q\)). Unsatisfiable/Contradiction is false under all interpretations (\(P \wedge \neg P\)).</p>
+</div>
+</div>
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">6 Marks</span>
+<h4>Q2. Explain the Unification Algorithm in First-Order Logic. Give two examples of successful unifications and one failure case.</h4>
+</div>
+<div class="q-answer">
+<p><strong>Marking Scheme:</strong> 2 marks for core concept/definition; 2 marks for successful unifications; 2 marks for failure case.</p>
+<p><strong>Model Answer Key:</strong> Unification finds variable substitution \(\theta\) such that \(\text{Subst}(\theta, p) = \text{Subst}(\theta, q)\). Give examples: \(\text{UNIFY}(\text{Knows}(\text{John}, x), \text{Knows}(\text{John}, \text{Jane})) = \{x / \text{Jane}\}\). Failure occurs when predicate names or arity differ, or during occur-check failure.</p>
+</div>
+</div>
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">8 Marks</span>
+<h4>Q3. State the 10 production rules for the Water Jug Problem (4-gallon and 3-gallon jugs). Provide the exact step-by-step state transition table to obtain 2 gallons.</h4>
+</div>
+<div class="q-answer">
+<p><strong>Marking Scheme:</strong> 4 marks for clearly listing all production rules; 4 marks for complete step-by-step transition table from \((0,0)\) to \((2,0)\).</p>
+<p><strong>Model Answer Key:</strong> Detail the 10 rules as presented in Section 1.5 and the exact 6-step operation sequence reaching state \((2, 0)\).</p>
+</div>
+</div>
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">10 Marks</span>
+<h4>Q4. Explain the Resolution Refutation algorithm in First-Order Logic. Detail the five steps required to convert FOL sentences into Conjunctive Normal Form (CNF) with an illustrative example.</h4>
+</div>
+<div class="q-answer">
+<p><strong>Marking Scheme:</strong> 3 marks for resolution principle and refutation strategy (\(\neg \alpha \to \square\)); 5 marks for 5 CNF conversion steps (implications, negations, standardization, skolemization, distribution); 2 marks for example resolution step.</p>
+<p><strong>Model Answer Key:</strong> Detail the refutation theorem proving concept. Explain the 5 conversion steps as listed in Section 1.7. Demonstrate clause cancellation via complementary literals.</p>
+</div>
+</div>
+</section>
+<!-- Navigation Footer -->
+<nav class="unit-pagination">
+<a class="btn btn-outline" href="unit_2.html">← Previous: Unit 2 (Search)</a>
+<a class="btn btn-primary" href="unit_4.html">Next: Unit 4 (CSPs) →</a>
+</nav>
+</article>
 </main>
 </div>
-<footer>
-<p>NMIMS AI Study Portal · Unit 3 Comprehensive Lecture Notes Prepared According to University Curriculum.</p>
-</footer>
 </body>
 </html>

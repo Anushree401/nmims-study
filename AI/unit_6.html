@@ -1,14 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unit 6: Expert Systems & Shells - NMIMS Master Class Notes</title>
-    <link rel="stylesheet" href="../styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    
-
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unit 6: Expert Systems &amp; Shells - NMIMS Master Class Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <script>
 window.MathJax = {
   tex: {
@@ -21,837 +19,1135 @@ window.MathJax = {
   }
 };
 </script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="ai-formatting-polish">/* AI unit pages: formatting-only polish */
+:root {
+  --ai-content-width: 980px;
+}
 
-</head>
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  min-width: 320px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.layout-container,
+.main-content,
+.content-wrapper {
+  min-width: 0;
+}
+
+.main-content {
+  width: calc(100% - 290px);
+  max-width: none;
+}
+
+.content-wrapper {
+  max-width: var(--ai-content-width);
+}
+
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  min-height: 52px;
+  padding: 12px 0;
+  margin-top: -32px;
+  background: color-mix(in srgb, var(--bg-main) 94%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.unit-hero {
+  padding-top: 6px;
+  margin-bottom: clamp(26px, 4vw, 42px);
+}
+
+.unit-hero h1 {
+  max-width: 24ch;
+  font-size: clamp(1.8rem, 3.3vw, 2.45rem);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.unit-hero .lead {
+  max-width: 75ch;
+}
+
+.module-section {
+  scroll-margin-top: 76px;
+  padding: clamp(20px, 3vw, 34px);
+  margin-bottom: clamp(24px, 4vw, 40px);
+}
+
+.section-title {
+  align-items: flex-start;
+}
+
+.section-title h2 {
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+.topic-block {
+  scroll-margin-top: 76px;
+}
+
+.topic-block p,
+.topic-block li,
+.q-answer p,
+.callout p {
+  max-width: 82ch;
+  line-height: 1.72;
+}
+
+.topic-block ul,
+.topic-block ol,
+.callout ul,
+.callout ol {
+  padding-left: 0.35rem;
+}
+
+.callout,
+.case-card,
+.problem-card,
+.question-item,
+.final-box {
+  overflow-wrap: anywhere;
+}
+
+.callout {
+  padding: 18px 20px;
+  border-radius: 10px;
+}
+
+.problem-card {
+  padding: clamp(16px, 2.5vw, 25px);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.035);
+}
+
+.problem-header {
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.problem-header h3,
+.q-header h4,
+.case-header h3 {
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.step-row {
+  min-width: 0;
+}
+
+.step-row > :last-child {
+  min-width: 0;
+}
+
+.step-badge {
+  flex: 0 0 auto;
+}
+
+.final-box {
+  margin-top: 14px;
+  line-height: 1.65;
+}
+
+.diagram-wrapper {
+  max-width: 100%;
+  padding: 4px 0;
+  overscroll-behavior-inline: contain;
+  scrollbar-color: #94a3b8 #eef2f7;
+}
+
+.diagram-wrapper svg,
+.module-section svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.diagram-caption {
+  max-width: 72ch;
+  margin-right: auto;
+  margin-left: auto;
+  line-height: 1.55;
+}
+
+.data-table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  scrollbar-color: #94a3b8 #eef2f7;
+  overscroll-behavior-inline: contain;
+}
+
+.data-table th,
+.data-table td {
+  min-width: 7rem;
+  vertical-align: top;
+  line-height: 1.55;
+}
+
+.data-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.data-table tr:hover td {
+  background-color: #f8fafc;
+}
+
+code,
+kbd,
+pre {
+  font-family: var(--font-mono);
+}
+
+code {
+  overflow-wrap: anywhere;
+}
+
+pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 14px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: #f8fafc;
+  line-height: 1.6;
+  scrollbar-color: #94a3b8 #eef2f7;
+}
+
+.MathJax,
+.MathJax_Display,
+mjx-container {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 0;
+}
+
+.q-header {
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.marks-badge {
+  margin-top: 2px;
+}
+
+.q-answer {
+  line-height: 1.7;
+}
+
+.unit-pagination {
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.35;
+}
+
+.sidebar-nav a:focus-visible,
+.btn:focus-visible,
+a:focus-visible {
+  outline: 3px solid #f2bd48;
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    max-height: 34vh;
+    padding: 16px;
+    overscroll-behavior: contain;
+  }
+
+  .sidebar-header {
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+
+  .sidebar-nav h3 {
+    margin-top: 14px;
+  }
+
+  .main-content {
+    width: 100%;
+    padding: 24px 16px 56px;
+  }
+
+  .top-bar {
+    margin-top: -24px;
+  }
+
+  .module-section {
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 15px;
+  }
+
+  .top-bar {
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    font-size: 0.82rem;
+  }
+
+  .meta-tag {
+    font-size: 0.72rem;
+  }
+
+  .unit-hero h1 {
+    font-size: clamp(1.65rem, 8vw, 2.05rem);
+  }
+
+  .unit-hero .lead {
+    font-size: 1rem;
+  }
+
+  .section-title {
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+
+  .section-title h2 {
+    font-size: 1.25rem;
+  }
+
+  .cross-ref-badge {
+    font-size: 0.7rem;
+  }
+
+  .step-row {
+    gap: 10px;
+  }
+
+  .step-badge {
+    white-space: normal;
+  }
+
+  .data-table {
+    font-size: 0.84rem;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 9px 10px;
+    min-width: 6.25rem;
+  }
+
+  .unit-pagination {
+    justify-content: stretch;
+  }
+
+  .unit-pagination .btn {
+    flex: 1 1 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media print {
+  .sidebar,
+  .top-bar,
+  .unit-pagination {
+    display: none !important;
+  }
+
+  .main-content {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .module-section,
+  .problem-card,
+  .case-card,
+  .callout {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+}
+</style></head>
 <body>
-    <div class="layout-container">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <a href="../index.html" class="logo">NMIMS · AI Master</a>
-                <span class="badge">Semester Exam Prep</span>
-            </div>
-            <nav class="sidebar-nav">
-                <h3>Syllabus Units</h3>
-                <ul>
-                    <li><a href="unit_1.html"><span class="unit-num">01</span> Intro to AI & Intelligent Agents</a></li>
-                    <li><a href="unit_2.html"><span class="unit-num">02</span> Problem Solving & Adversarial Search</a></li>
-                    <li><a href="unit_3.html"><span class="unit-num">03</span> Knowledge Representation & Logic</a></li>
-                    <li><a href="unit_4.html"><span class="unit-num">04</span> Constraint Satisfaction Problems</a></li>
-                    <li><a href="unit_5.html"><span class="unit-num">05</span> Machine Learning & Clustering</a></li>
-                    <li><a href="unit_6.html" class="active"><span class="unit-num">06</span> Expert Systems & Shells</a></li>
-                </ul>
-
-                <h3>Unit 6 Contents</h3>
-                <ul>
-                    <li><a href="#theory-section">1. In-Depth Lecture & Theory</a></li>
-                    <li><a href="#sec-es-definition">1.1 Definition, Concept & Foundational Model</a></li>
-                    <li><a href="#sec-es-characteristics">1.2 Five Key Characteristics of Expert Systems</a></li>
-                    <li><a href="#sec-es-architecture">1.3 Detailed Architecture & Core Components</a></li>
-                    <li><a href="#sec-es-participants">1.4 Roles: Expert, Knowledge Engineer, User</a></li>
-                    <li><a href="#sec-es-caps-incaps">1.5 Capabilities vs. Incapabilities</a></li>
-                    <li><a href="#sec-es-shells">1.6 Expert System Shells (JESS & Vidwan)</a></li>
-                    <li><a href="#sec-es-lifecycle">1.7 Iterative Development Lifecycle (6 Stages)</a></li>
-                    <li><a href="#sec-es-rulebased-mycin">1.8 Rule-Based Systems & MYCIN Architecture</a></li>
-                    <li><a href="#sec-es-cf">1.9 Certainty Factors (CF) & Uncertainty Calculus</a></li>
-                    <li><a href="#numerical-section">2. Step-by-Step Numericals</a></li>
-                    <li><a href="#num-1">2.1 Simple: Certainty Factor Combination Rule</a></li>
-                    <li><a href="#num-2">2.2 Medium: Forward Chaining Diagnostic Trace</a></li>
-                    <li><a href="#num-3">2.3 Complex: Backward Chaining Goal Resolution</a></li>
-                    <li><a href="#comparison-section">3. Comparative Studies</a></li>
-                    <li><a href="#case-section">4. Case Studies & Applications</a></li>
-                    <li><a href="#questions-section">5. Exam Questions & Marking Guide</a></li>
-                </ul>
-            </nav>
-        </aside>
-
-        <!-- Main Content Area -->
-        <main class="main-content">
-            <header class="top-bar">
-                <div class="breadcrumb">
-                    <a href="../index.html">Home</a> &gt; <span>Unit 6: Expert Systems</span>
-                </div>
-                <div class="meta-tag">Unit 6 · 100% PPT Faithful · Comprehensive Lecture</div>
-            </header>
-
-            <article class="content-wrapper">
-                <header class="unit-hero">
-                    <h1>Unit 6: Expert Systems &amp; Shells</h1>
-                    <p class="lead">A comprehensive examination-oriented masterclass covering Expert System architectures, Knowledge Base vs. Inference Engine decoupling, development life cycles, Expert System Shells (JESS, Vidwan), MYCIN case study, and probabilistic reasoning via Certainty Factor calculus.</p>
-                </header>
-
-                <!-- SECTION 1: IN-DEPTH THEORY -->
-                <section id="theory-section" class="module-section">
-                    <div class="section-title">
-                        <h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
-                        <span class="cross-ref-badge">Strictly Faithful to Slides &amp; Numericals</span>
-                    </div>
-
-                    <div id="sec-es-definition" class="topic-block">
-                        <h3>1.1 What is an Expert System? (Definition &amp; Foundational Model)</h3>
-                        <p>In traditional computer programs, domain knowledge and control logic are inextricably intertwined within procedural code (e.g., nested <code>if-else</code> blocks or switch statements). If a rule changes, the entire code base must be rewritten and recompiled. An <strong>Expert System (ES)</strong> revolutionizes this paradigm by strictly divorcing domain knowledge from the execution machinery.</p>
-                        
-                        <div class="callout callout-def">
-                            <h4>Formal Definition of an Expert System</h4>
-                            <p><em>"An Expert System is an interactive, computer-based decision-making tool that uses facts, heuristics, and symbolic reasoning to solve complex problems in a specific, narrow domain at the performance level of a human expert."</em></p>
-                            <p>Mathematically and conceptually, the foundational equation of an Expert System is:</p>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · AI Master</a>
+<span class="badge">Semester Exam Prep</span>
+</div>
+<nav class="sidebar-nav">
+<h3>Syllabus Units</h3>
+<ul>
+<li><a href="unit_1.html"><span class="unit-num">01</span> Intro to AI &amp; Intelligent Agents</a></li>
+<li><a href="unit_2.html"><span class="unit-num">02</span> Problem Solving &amp; Adversarial Search</a></li>
+<li><a href="unit_3.html"><span class="unit-num">03</span> Knowledge Representation &amp; Logic</a></li>
+<li><a href="unit_4.html"><span class="unit-num">04</span> Constraint Satisfaction Problems</a></li>
+<li><a href="unit_5.html"><span class="unit-num">05</span> Machine Learning &amp; Clustering</a></li>
+<li><a class="active" href="unit_6.html"><span class="unit-num">06</span> Expert Systems &amp; Shells</a></li>
+</ul>
+<h3>Unit 6 Contents</h3>
+<ul>
+<li><a href="#theory-section">1. In-Depth Lecture &amp; Theory</a></li>
+<li><a href="#sec-es-definition">1.1 Definition, Concept &amp; Foundational Model</a></li>
+<li><a href="#sec-es-characteristics">1.2 Five Key Characteristics of Expert Systems</a></li>
+<li><a href="#sec-es-architecture">1.3 Detailed Architecture &amp; Core Components</a></li>
+<li><a href="#sec-es-participants">1.4 Roles: Expert, Knowledge Engineer, User</a></li>
+<li><a href="#sec-es-caps-incaps">1.5 Capabilities vs. Incapabilities</a></li>
+<li><a href="#sec-es-shells">1.6 Expert System Shells (JESS &amp; Vidwan)</a></li>
+<li><a href="#sec-es-lifecycle">1.7 Iterative Development Lifecycle (6 Stages)</a></li>
+<li><a href="#sec-es-rulebased-mycin">1.8 Rule-Based Systems &amp; MYCIN Architecture</a></li>
+<li><a href="#sec-es-cf">1.9 Certainty Factors (CF) &amp; Uncertainty Calculus</a></li>
+<li><a href="#numerical-section">2. Step-by-Step Numericals</a></li>
+<li><a href="#num-1">2.1 Simple: Certainty Factor Combination Rule</a></li>
+<li><a href="#num-2">2.2 Medium: Forward Chaining Diagnostic Trace</a></li>
+<li><a href="#num-3">2.3 Complex: Backward Chaining Goal Resolution</a></li>
+<li><a href="#comparison-section">3. Comparative Studies</a></li>
+<li><a href="#case-section">4. Case Studies &amp; Applications</a></li>
+<li><a href="#questions-section">5. Exam Questions &amp; Marking Guide</a></li>
+</ul>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 6: Expert Systems</span>
+</div>
+<div class="meta-tag">Unit 6 · 100% PPT Faithful · Comprehensive Lecture</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>Unit 6: Expert Systems &amp; Shells</h1>
+<p class="lead">A comprehensive examination-oriented masterclass covering Expert System architectures, Knowledge Base vs. Inference Engine decoupling, development life cycles, Expert System Shells (JESS, Vidwan), MYCIN case study, and probabilistic reasoning via Certainty Factor calculus.</p>
+</header>
+<!-- SECTION 1: IN-DEPTH THEORY -->
+<section class="module-section" id="theory-section">
+<div class="section-title">
+<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+<span class="cross-ref-badge">Strictly Faithful to Slides &amp; Numericals</span>
+</div>
+<div class="topic-block" id="sec-es-definition">
+<h3>1.1 What is an Expert System? (Definition &amp; Foundational Model)</h3>
+<p>In traditional computer programs, domain knowledge and control logic are inextricably intertwined within procedural code (e.g., nested <code>if-else</code> blocks or switch statements). If a rule changes, the entire code base must be rewritten and recompiled. An <strong>Expert System (ES)</strong> revolutionizes this paradigm by strictly divorcing domain knowledge from the execution machinery.</p>
+<div class="callout callout-def">
+<h4>Formal Definition of an Expert System</h4>
+<p><em>"An Expert System is an interactive, computer-based decision-making tool that uses facts, heuristics, and symbolic reasoning to solve complex problems in a specific, narrow domain at the performance level of a human expert."</em></p>
+<p>Mathematically and conceptually, the foundational equation of an Expert System is:</p>
                             $$\mathbf{\text{Expert System} = \text{Knowledge Base} + \text{Inference Engine}}$$
                         </div>
-
-                        <p>Unlike algorithmic software that computes numerical solutions, an Expert System excels in non-algorithmic domains characterized by heuristic rules-of-thumb, incomplete observations, and uncertain domain knowledge (such as medical diagnosis, mineral exploration, and complex hardware fault isolation).</p>
-                    </div>
-
-                    <div id="sec-es-characteristics" class="topic-block">
-                        <h3>1.2 Five Key Characteristics of Expert Systems</h3>
-                        <p>To qualify as a genuine Expert System rather than conventional software, a system must exhibit five defining characteristics:</p>
-                        <ol>
-                            <li><strong>Separation of Knowledge from Control:</strong> The Knowledge Base (declarative facts and IF-THEN rules) is completely independent of the Inference Engine (the domain-independent control strategy). Knowledge can be updated, expanded, or modified without altering the inference code.</li>
-                            <li><strong>Knowledge vs. Data Distinction:</strong> Conventional programs manipulate raw, passive <em>data</em>. Expert systems manipulate active, structured <em>domain knowledge</em>—including relational patterns, qualitative assertions, and heuristic rules-of-thumb elicited from veteran human practitioners.</li>
-                            <li><strong>Explanation Facility (Justification / Transparency):</strong> Unlike "black-box" machine learning models or opaque procedural scripts, an Expert System can articulate <em>why</em> it is asking a specific user query and <em>how</em> it arrived at a final diagnostic conclusion (inspecting the chain of fired production rules).</li>
-                            <li><strong>Symbolic Representation and Reasoning:</strong> Problem entities, relationships, concepts, and hypotheses are represented symbolically rather than purely numerically (e.g., <code>(InfectionType Bacterial)</code>, <code>(Organism Morphology Rod)</code>).</li>
-                            <li><strong>Handling Uncertainty and Meta-Knowledge:</strong> Real-world expert domains are fraught with ambiguous, missing, or noisy data. Expert systems incorporate uncertainty calculus (such as Certainty Factors) and <em>meta-knowledge</em> (knowledge about its own knowledge, boundaries, and confidence limits).</li>
-                        </ol>
-                    </div>
-
-                    <div id="sec-es-architecture" class="topic-block">
-                        <h3>1.3 Detailed Architecture of an Expert System</h3>
-                        <p>A complete production-grade Expert System comprises six tightly integrated functional subsystems:</p>
-
-                        <!-- SVG: Full Architecture of Expert System -->
-                        <div class="diagram-wrapper">
-                            <svg viewBox="0 0 850 420" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:850px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
-                                <!-- Boundary: Expert System Shell -->
-                                <rect x="230" y="20" width="440" height="380" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6" />
-                                <text x="450" y="45" fill="#64748b" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle">EXPERT SYSTEM ENVIRONMENT</text>
-
-                                <!-- Left Side: Human Roles -->
-                                <!-- Knowledge Engineer & Expert -->
-                                <rect x="20" y="70" width="160" height="70" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" />
-                                <text x="100" y="98" fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">Domain Expert &amp;</text>
-                                <text x="100" y="118" fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">Knowledge Engineer</text>
-
-                                <!-- End User -->
-                                <rect x="20" y="270" width="160" height="70" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="2" />
-                                <text x="100" y="302" fill="#15803d" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle">Non-Expert User</text>
-                                <text x="100" y="322" fill="#475569" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">(Queries / Answers)</text>
-
-                                <!-- Inside Shell: User Interface -->
-                                <rect x="250" y="270" width="160" height="70" rx="8" fill="#f1f5f9" stroke="#475569" stroke-width="2" />
-                                <text x="330" y="302" fill="#1e293b" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle">User Interface</text>
-                                <text x="330" y="322" fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">NL / Form Processing</text>
-
-                                <!-- Inside Shell: Knowledge Base Editor -->
-                                <rect x="250" y="70" width="160" height="70" rx="8" fill="#f1f5f9" stroke="#475569" stroke-width="2" />
-                                <text x="330" y="100" fill="#1e293b" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">Knowledge-Base</text>
-                                <text x="330" y="120" fill="#1e293b" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">Editor / Tools</text>
-
-                                <!-- Center Shell: Inference Engine -->
-                                <rect x="470" y="170" width="180" height="80" rx="8" fill="#1e293b" stroke="#0f172a" stroke-width="2" />
-                                <text x="560" y="202" fill="#ffffff" font-family="'Inter', sans-serif" font-size="14" font-weight="700" text-anchor="middle">Inference Engine</text>
-                                <text x="560" y="222" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">(Forward / Backward)</text>
-                                <text x="560" y="238" fill="#38bdf8" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Agenda &amp; Conflict Resol.</text>
-
-                                <!-- Center Shell: Explanation System -->
-                                <rect x="250" y="170" width="160" height="70" rx="8" fill="#fefce8" stroke="#ca8a04" stroke-width="2" />
-                                <text x="330" y="200" fill="#854d0e" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">Explanation System</text>
-                                <text x="330" y="220" fill="#a16207" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">(WHY / HOW Tracers)</text>
-
-                                <!-- Right Side: Knowledge Base & Fact DB -->
-                                <rect x="690" y="70" width="140" height="90" rx="8" fill="#fdf2f8" stroke="#db2777" stroke-width="2" />
-                                <text x="760" y="102" fill="#9d174d" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">Knowledge Base</text>
-                                <text x="760" y="122" fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Rules: IF ... THEN</text>
-                                <text x="760" y="138" fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Heuristics &amp; Axioms</text>
-
-                                <rect x="690" y="250" width="140" height="90" rx="8" fill="#ecfeff" stroke="#0891b2" stroke-width="2" />
-                                <text x="760" y="282" fill="#155e75" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">Fact Base / DB</text>
-                                <text x="760" y="302" fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Working Memory</text>
-                                <text x="760" y="318" fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Case-Specific Facts</text>
-
-                                <!-- Connectors -->
-                                <!-- KE -> KB Editor -> KB -->
-                                <path d="M 180 105 L 250 105" stroke="#3b82f6" stroke-width="2" />
-                                <path d="M 410 105 L 690 105" stroke="#3b82f6" stroke-width="2" />
-
-                                <!-- User -> UI -> Inference Engine -->
-                                <path d="M 180 305 L 250 305" stroke="#22c55e" stroke-width="2" />
-                                <path d="M 410 305 L 470 305 L 470 230" stroke="#475569" stroke-width="2" fill="none" />
-
-                                <!-- UI <-> Explanation System -->
-                                <path d="M 330 270 L 330 240" stroke="#ca8a04" stroke-width="2" />
-
-                                <!-- Inference Engine <-> Explanation System -->
-                                <path d="M 470 205 L 410 205" stroke="#ca8a04" stroke-width="2" />
-
-                                <!-- Inference Engine <-> KB & Fact DB -->
-                                <path d="M 650 190 L 720 190 L 720 160" stroke="#db2777" stroke-width="2" fill="none" />
-                                <path d="M 650 220 L 720 220 L 720 250" stroke="#0891b2" stroke-width="2" fill="none" />
-                            </svg>
-                            <p class="diagram-caption">Figure 6.1: High-level architectural schema of a complete Expert System, highlighting shell boundaries.</p>
-                        </div>
-
-                        <h4>Component Responsibilities:</h4>
-                        <ol>
-                            <li><strong>Knowledge Base (KB):</strong> The repository of high-level human domain expertise represented in the form of production rules (<code>IF premise THEN conclusion</code>), semantic frames, or probabilistic heuristics. It contains both domain-wide scientific principles and empirical heuristics.</li>
-                            <li><strong>Working Memory / Fact Database:</strong> A dynamic memory space containing the assertions, evidence, and observations that are verified to be true for the <em>current</em> problem instance (e.g., <code>Patient-Temperature = 103F</code>, <code>Platelet-Count = Low</code>).</li>
-                            <li><strong>Inference Engine (Brain of the System):</strong> The reasoning mechanism that matches the current contents of Working Memory against the conditions of rules in the Knowledge Base. It contains:
+<p>Unlike algorithmic software that computes numerical solutions, an Expert System excels in non-algorithmic domains characterized by heuristic rules-of-thumb, incomplete observations, and uncertain domain knowledge (such as medical diagnosis, mineral exploration, and complex hardware fault isolation).</p>
+</div>
+<div class="topic-block" id="sec-es-characteristics">
+<h3>1.2 Five Key Characteristics of Expert Systems</h3>
+<p>To qualify as a genuine Expert System rather than conventional software, a system must exhibit five defining characteristics:</p>
+<ol>
+<li><strong>Separation of Knowledge from Control:</strong> The Knowledge Base (declarative facts and IF-THEN rules) is completely independent of the Inference Engine (the domain-independent control strategy). Knowledge can be updated, expanded, or modified without altering the inference code.</li>
+<li><strong>Knowledge vs. Data Distinction:</strong> Conventional programs manipulate raw, passive <em>data</em>. Expert systems manipulate active, structured <em>domain knowledge</em>—including relational patterns, qualitative assertions, and heuristic rules-of-thumb elicited from veteran human practitioners.</li>
+<li><strong>Explanation Facility (Justification / Transparency):</strong> Unlike "black-box" machine learning models or opaque procedural scripts, an Expert System can articulate <em>why</em> it is asking a specific user query and <em>how</em> it arrived at a final diagnostic conclusion (inspecting the chain of fired production rules).</li>
+<li><strong>Symbolic Representation and Reasoning:</strong> Problem entities, relationships, concepts, and hypotheses are represented symbolically rather than purely numerically (e.g., <code>(InfectionType Bacterial)</code>, <code>(Organism Morphology Rod)</code>).</li>
+<li><strong>Handling Uncertainty and Meta-Knowledge:</strong> Real-world expert domains are fraught with ambiguous, missing, or noisy data. Expert systems incorporate uncertainty calculus (such as Certainty Factors) and <em>meta-knowledge</em> (knowledge about its own knowledge, boundaries, and confidence limits).</li>
+</ol>
+</div>
+<div class="topic-block" id="sec-es-architecture">
+<h3>1.3 Detailed Architecture of an Expert System</h3>
+<p>A complete production-grade Expert System comprises six tightly integrated functional subsystems:</p>
+<!-- SVG: Full Architecture of Expert System -->
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:850px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewbox="0 0 850 420" xmlns="http://www.w3.org/2000/svg">
+<!-- Boundary: Expert System Shell -->
+<rect fill="#f8fafc" height="380" rx="12" stroke="#94a3b8" stroke-dasharray="6" stroke-width="2" width="440" x="230" y="20"></rect>
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle" x="450" y="45">EXPERT SYSTEM ENVIRONMENT</text>
+<!-- Left Side: Human Roles -->
+<!-- Knowledge Engineer & Expert -->
+<rect fill="#eff6ff" height="70" rx="8" stroke="#3b82f6" stroke-width="2" width="160" x="20" y="70"></rect>
+<text fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="100" y="98">Domain Expert &amp;</text>
+<text fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="100" y="118">Knowledge Engineer</text>
+<!-- End User -->
+<rect fill="#f0fdf4" height="70" rx="8" stroke="#22c55e" stroke-width="2" width="160" x="20" y="270"></rect>
+<text fill="#15803d" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle" x="100" y="302">Non-Expert User</text>
+<text fill="#475569" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="100" y="322">(Queries / Answers)</text>
+<!-- Inside Shell: User Interface -->
+<rect fill="#f1f5f9" height="70" rx="8" stroke="#475569" stroke-width="2" width="160" x="250" y="270"></rect>
+<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle" x="330" y="302">User Interface</text>
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="330" y="322">NL / Form Processing</text>
+<!-- Inside Shell: Knowledge Base Editor -->
+<rect fill="#f1f5f9" height="70" rx="8" stroke="#475569" stroke-width="2" width="160" x="250" y="70"></rect>
+<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="330" y="100">Knowledge-Base</text>
+<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="330" y="120">Editor / Tools</text>
+<!-- Center Shell: Inference Engine -->
+<rect fill="#1e293b" height="80" rx="8" stroke="#0f172a" stroke-width="2" width="180" x="470" y="170"></rect>
+<text fill="#ffffff" font-family="'Inter', sans-serif" font-size="14" font-weight="700" text-anchor="middle" x="560" y="202">Inference Engine</text>
+<text fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="560" y="222">(Forward / Backward)</text>
+<text fill="#38bdf8" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="560" y="238">Agenda &amp; Conflict Resol.</text>
+<!-- Center Shell: Explanation System -->
+<rect fill="#fefce8" height="70" rx="8" stroke="#ca8a04" stroke-width="2" width="160" x="250" y="170"></rect>
+<text fill="#854d0e" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="330" y="200">Explanation System</text>
+<text fill="#a16207" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="330" y="220">(WHY / HOW Tracers)</text>
+<!-- Right Side: Knowledge Base & Fact DB -->
+<rect fill="#fdf2f8" height="90" rx="8" stroke="#db2777" stroke-width="2" width="140" x="690" y="70"></rect>
+<text fill="#9d174d" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="760" y="102">Knowledge Base</text>
+<text fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="760" y="122">Rules: IF ... THEN</text>
+<text fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="760" y="138">Heuristics &amp; Axioms</text>
+<rect fill="#ecfeff" height="90" rx="8" stroke="#0891b2" stroke-width="2" width="140" x="690" y="250"></rect>
+<text fill="#155e75" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="760" y="282">Fact Base / DB</text>
+<text fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="760" y="302">Working Memory</text>
+<text fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="760" y="318">Case-Specific Facts</text>
+<!-- Connectors -->
+<!-- KE -> KB Editor -> KB -->
+<path d="M 180 105 L 250 105" stroke="#3b82f6" stroke-width="2"></path>
+<path d="M 410 105 L 690 105" stroke="#3b82f6" stroke-width="2"></path>
+<!-- User -> UI -> Inference Engine -->
+<path d="M 180 305 L 250 305" stroke="#22c55e" stroke-width="2"></path>
+<path d="M 410 305 L 470 305 L 470 230" fill="none" stroke="#475569" stroke-width="2"></path>
+<!-- UI <-> Explanation System -->
+<path d="M 330 270 L 330 240" stroke="#ca8a04" stroke-width="2"></path>
+<!-- Inference Engine <-> Explanation System -->
+<path d="M 470 205 L 410 205" stroke="#ca8a04" stroke-width="2"></path>
+<!-- Inference Engine <-> KB & Fact DB -->
+<path d="M 650 190 L 720 190 L 720 160" fill="none" stroke="#db2777" stroke-width="2"></path>
+<path d="M 650 220 L 720 220 L 720 250" fill="none" stroke="#0891b2" stroke-width="2"></path>
+</svg>
+<p class="diagram-caption">Figure 6.1: High-level architectural schema of a complete Expert System, highlighting shell boundaries.</p>
+</div>
+<h4>Component Responsibilities:</h4>
+<ol>
+<li><strong>Knowledge Base (KB):</strong> The repository of high-level human domain expertise represented in the form of production rules (<code>IF premise THEN conclusion</code>), semantic frames, or probabilistic heuristics. It contains both domain-wide scientific principles and empirical heuristics.</li>
+<li><strong>Working Memory / Fact Database:</strong> A dynamic memory space containing the assertions, evidence, and observations that are verified to be true for the <em>current</em> problem instance (e.g., <code>Patient-Temperature = 103F</code>, <code>Platelet-Count = Low</code>).</li>
+<li><strong>Inference Engine (Brain of the System):</strong> The reasoning mechanism that matches the current contents of Working Memory against the conditions of rules in the Knowledge Base. It contains:
                                 <ul>
-                                    <li><em>Pattern Matcher:</em> Identifies all candidate rules whose premises are satisfied by current facts.</li>
-                                    <li><em>Agenda / Conflict Set:</em> Holds all satisfied candidate rules.</li>
-                                    <li><em>Conflict Resolution Strategy:</em> Selects which rule to fire first if multiple rules are activated simultaneously (e.g., Refraction, Specificity, Recency).</li>
-                                </ul>
-                            </li>
-                            <li><strong>Explanation Facility:</strong> Answers two essential user queries:
+<li><em>Pattern Matcher:</em> Identifies all candidate rules whose premises are satisfied by current facts.</li>
+<li><em>Agenda / Conflict Set:</em> Holds all satisfied candidate rules.</li>
+<li><em>Conflict Resolution Strategy:</em> Selects which rule to fire first if multiple rules are activated simultaneously (e.g., Refraction, Specificity, Recency).</li>
+</ul>
+</li>
+<li><strong>Explanation Facility:</strong> Answers two essential user queries:
                                 <ul>
-                                    <li><em>"WHY are you asking this question?"</em> &rarr; The system displays the current active goal rule it is attempting to satisfy.</li>
-                                    <li><em>"HOW did you reach this diagnosis?"</em> &rarr; The system traces backwards through the chain of executed rules and validated working memory facts.</li>
-                                </ul>
-                            </li>
-                            <li><strong>Knowledge Acquisition Subsystem / Editor:</strong> An interface that allows domain experts and knowledge engineers to author, validate, check consistency, and insert new rules into the KB without altering source code.</li>
-                            <li><strong>User Interface:</strong> Facilitates natural language or structured dialog between the non-expert user and the system.</li>
-                        </ol>
-                    </div>
-
-                    <div id="sec-es-participants" class="topic-block">
-                        <h3>1.4 Human Participants in Expert System Development</h3>
-                        <p>The engineering and operational deployment of an Expert System involves three distinct human roles:</p>
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Human Participant</th>
-                                    <th>Primary Responsibilities</th>
-                                    <th>Core Expertise Required</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>1. Domain Expert</strong></td>
-                                    <td>Provides the specialized real-world knowledge, diagnostic strategies, rules-of-thumb, and past case experience that make the system intelligent. Acts as the primary subject-matter source.</td>
-                                    <td>Deep, authoritative expertise in the target problem domain (e.g., senior cardiologist, chief geologist, master metallurgist).</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>2. Knowledge Engineer (KE)</strong></td>
-                                    <td>Interviews the domain expert, extracts and formalizes tacit heuristic knowledge, structures it into formal production rules/frames, chooses the appropriate ES shell, and builds the prototype.</td>
-                                    <td>Knowledge acquisition methodologies, AI knowledge representation, logic, ontology engineering, and ES shell development.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>3. End User</strong></td>
-                                    <td>Interacts with the operational system to receive expert-grade guidance, inputting symptoms, observations, or test readings and inspecting the system's reasoning trail.</td>
-                                    <td>Basic operational knowledge of the task (e.g., resident physician, factory maintenance technician, customer service rep).</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div id="sec-es-caps-incaps" class="topic-block">
-                        <h3>1.5 Capabilities vs. Incapabilities of Expert Systems</h3>
-                        <p>To avoid unrealistic engineering expectations, it is crucial to delineate what an Expert System can and cannot achieve:</p>
-                        
-                        <div class="table-grid">
-                            <div class="table-col">
-                                <h4 class="text-success">&check; What an Expert System CAN Do:</h4>
-                                <ul>
-                                    <li><strong>Consistent, Tireless Performance:</strong> Delivers identical, high-quality decisions 24/7 without fatigue, stress, emotional bias, or memory lapses.</li>
-                                    <li><strong>Institutional Knowledge Preservation:</strong> Preserves irreplaceable corporate/medical expertise when senior human experts retire or leave.</li>
-                                    <li><strong>Transparent Justification:</strong> Fully explains the reasoning path leading to every recommendation.</li>
-                                    <li><strong>Multi-Factor Integration:</strong> Simultaneously synthesizes massive numbers of complex, interacting variables faster than human working memory can hold.</li>
-                                    <li><strong>Cost-Effective Expertise Dissemination:</strong> Transports top-tier specialist advice to remote, underserved geographic areas.</li>
-                                </ul>
-                            </div>
-                            <div class="table-col">
-                                <h4 class="text-danger">&cross; What an Expert System CANNOT Do:</h4>
-                                <ul>
-                                    <li><strong>Zero Common Sense:</strong> Possesses no intuitive world knowledge outside its narrow, specified domain boundary.</li>
-                                    <li><strong>Cannot Innovate or Create:</strong> Cannot invent new scientific theories or discover unprecedented remedies; strictly limited to its codified knowledge base.</li>
-                                    <li><strong>Brittle at the Boundaries:</strong> Experiences severe, abrupt degradation when presented with edge cases just outside its scope, failing to recognize its own ignorance.</li>
-                                    <li><strong>Cannot Adapt Automatically:</strong> In classical rule-based systems, it cannot automatically learn from its mistakes without a knowledge engineer manually modifying the rules.</li>
-                                    <li><strong>Knowledge Acquisition Bottleneck:</strong> Extracting tacit expertise from reluctant or inarticulate human experts is notoriously laborious and error-prone.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="sec-es-shells" class="topic-block">
-                        <h3>1.6 Expert System Technology &amp; Shells</h3>
-                        
-                        <div class="callout callout-def">
-                            <h4>Definition: Expert System Shell</h4>
-                            <p>An <strong>Expert System Shell</strong> is a complete Expert System from which the specific domain Knowledge Base and Fact Base have been emptied, leaving behind the reusable inference engine, explanation subsystem, knowledge acquisition editor, and user interface framework:</p>
+<li><em>"WHY are you asking this question?"</em> → The system displays the current active goal rule it is attempting to satisfy.</li>
+<li><em>"HOW did you reach this diagnosis?"</em> → The system traces backwards through the chain of executed rules and validated working memory facts.</li>
+</ul>
+</li>
+<li><strong>Knowledge Acquisition Subsystem / Editor:</strong> An interface that allows domain experts and knowledge engineers to author, validate, check consistency, and insert new rules into the KB without altering source code.</li>
+<li><strong>User Interface:</strong> Facilitates natural language or structured dialog between the non-expert user and the system.</li>
+</ol>
+</div>
+<div class="topic-block" id="sec-es-participants">
+<h3>1.4 Human Participants in Expert System Development</h3>
+<p>The engineering and operational deployment of an Expert System involves three distinct human roles:</p>
+<table class="data-table">
+<thead>
+<tr>
+<th>Human Participant</th>
+<th>Primary Responsibilities</th>
+<th>Core Expertise Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Domain Expert</strong></td>
+<td>Provides the specialized real-world knowledge, diagnostic strategies, rules-of-thumb, and past case experience that make the system intelligent. Acts as the primary subject-matter source.</td>
+<td>Deep, authoritative expertise in the target problem domain (e.g., senior cardiologist, chief geologist, master metallurgist).</td>
+</tr>
+<tr>
+<td><strong>2. Knowledge Engineer (KE)</strong></td>
+<td>Interviews the domain expert, extracts and formalizes tacit heuristic knowledge, structures it into formal production rules/frames, chooses the appropriate ES shell, and builds the prototype.</td>
+<td>Knowledge acquisition methodologies, AI knowledge representation, logic, ontology engineering, and ES shell development.</td>
+</tr>
+<tr>
+<td><strong>3. End User</strong></td>
+<td>Interacts with the operational system to receive expert-grade guidance, inputting symptoms, observations, or test readings and inspecting the system's reasoning trail.</td>
+<td>Basic operational knowledge of the task (e.g., resident physician, factory maintenance technician, customer service rep).</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="topic-block" id="sec-es-caps-incaps">
+<h3>1.5 Capabilities vs. Incapabilities of Expert Systems</h3>
+<p>To avoid unrealistic engineering expectations, it is crucial to delineate what an Expert System can and cannot achieve:</p>
+<div class="table-grid">
+<div class="table-col">
+<h4 class="text-success">✓ What an Expert System CAN Do:</h4>
+<ul>
+<li><strong>Consistent, Tireless Performance:</strong> Delivers identical, high-quality decisions 24/7 without fatigue, stress, emotional bias, or memory lapses.</li>
+<li><strong>Institutional Knowledge Preservation:</strong> Preserves irreplaceable corporate/medical expertise when senior human experts retire or leave.</li>
+<li><strong>Transparent Justification:</strong> Fully explains the reasoning path leading to every recommendation.</li>
+<li><strong>Multi-Factor Integration:</strong> Simultaneously synthesizes massive numbers of complex, interacting variables faster than human working memory can hold.</li>
+<li><strong>Cost-Effective Expertise Dissemination:</strong> Transports top-tier specialist advice to remote, underserved geographic areas.</li>
+</ul>
+</div>
+<div class="table-col">
+<h4 class="text-danger">✗ What an Expert System CANNOT Do:</h4>
+<ul>
+<li><strong>Zero Common Sense:</strong> Possesses no intuitive world knowledge outside its narrow, specified domain boundary.</li>
+<li><strong>Cannot Innovate or Create:</strong> Cannot invent new scientific theories or discover unprecedented remedies; strictly limited to its codified knowledge base.</li>
+<li><strong>Brittle at the Boundaries:</strong> Experiences severe, abrupt degradation when presented with edge cases just outside its scope, failing to recognize its own ignorance.</li>
+<li><strong>Cannot Adapt Automatically:</strong> In classical rule-based systems, it cannot automatically learn from its mistakes without a knowledge engineer manually modifying the rules.</li>
+<li><strong>Knowledge Acquisition Bottleneck:</strong> Extracting tacit expertise from reluctant or inarticulate human experts is notoriously laborious and error-prone.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="topic-block" id="sec-es-shells">
+<h3>1.6 Expert System Technology &amp; Shells</h3>
+<div class="callout callout-def">
+<h4>Definition: Expert System Shell</h4>
+<p>An <strong>Expert System Shell</strong> is a complete Expert System from which the specific domain Knowledge Base and Fact Base have been emptied, leaving behind the reusable inference engine, explanation subsystem, knowledge acquisition editor, and user interface framework:</p>
                             $$\mathbf{\text{Expert System Shell} = \text{Expert System} - \text{Domain Knowledge Base}}$$
                         </div>
-
-                        <p>Shells drastically compress development timelines: instead of engineering pattern-matching algorithms, conflict resolvers, and UI tracers from scratch (taking years), a team only needs to author domain-specific rules (taking weeks).</p>
-
-                        <h4>Prominent Shell Examples:</h4>
-                        <ul>
-                            <li><strong>JESS (Java Expert System Shell):</strong> Created by Ernest Friedman-Hill at Sandia National Laboratories in the late 1990s. JESS is written entirely in Java and is a superset of the classic CLIPS language. It utilizes the highly optimized <em>Rete Algorithm</em> to match production rules against facts at blazing speed. Its tight integration with Java allows developers to directly instantiate and manipulate Java objects within rule premises.</li>
-                            <li><strong>Vidwan (NCST Mumbai, 1993):</strong> A pioneering indigenous Expert System Shell developed in India by the National Centre for Software Technology (NCST). Vidwan supported backward and forward chaining, certainty factor reasoning, and bilingual/local language user interfaces, proving instrumental in agricultural advisory and industrial diagnosis across Indian state enterprises.</li>
-                            <li><strong>EMYCIN (Empty MYCIN):</strong> The historic grand-ancestor of all shells, produced by stripping the infectious disease rules out of Stanford's MYCIN system to create a generic rule engine for medical diagnosis.</li>
-                        </ul>
-                    </div>
-
-                    <div id="sec-es-lifecycle" class="topic-block">
-                        <h3>1.7 The Iterative Development Lifecycle (6 Stages)</h3>
-                        <p>Developing an Expert System is an exploratory, evolutionary process. Unlike the rigid waterfall model of traditional software, ES development follows six highly iterative phases:</p>
-
-                        <!-- SVG: 6 Lifecycle Stages -->
-                        <div class="diagram-wrapper">
-                            <svg viewBox="0 0 820 160" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:820px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
-                                <!-- 6 Circular / Rect Stages -->
-                                <!-- Stage 1 -->
-                                <rect x="15" y="45" width="115" height="70" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" />
-                                <text x="72" y="72" fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">1. Identify</text>
-                                <text x="72" y="90" fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Problem &amp;</text>
-                                <text x="72" y="104" fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Domain</text>
-
-                                <line x1="130" y1="80" x2="150" y2="80" stroke="#94a3b8" stroke-width="2" />
-
-                                <!-- Stage 2 -->
-                                <rect x="150" y="45" width="115" height="70" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" />
-                                <text x="207" y="72" fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">2. Design</text>
-                                <text x="207" y="90" fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">System &amp; Select</text>
-                                <text x="207" y="104" fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Shell / Paradigm</text>
-
-                                <line x1="265" y1="80" x2="285" y2="80" stroke="#94a3b8" stroke-width="2" />
-
-                                <!-- Stage 3 -->
-                                <rect x="285" y="45" width="115" height="70" rx="8" fill="#fefce8" stroke="#eab308" stroke-width="2" />
-                                <text x="342" y="72" fill="#a16207" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">3. Prototype</text>
-                                <text x="342" y="90" fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Build Initial</text>
-                                <text x="342" y="104" fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Core Rule Base</text>
-
-                                <line x1="400" y1="80" x2="420" y2="80" stroke="#94a3b8" stroke-width="2" />
-
-                                <!-- Stage 4 -->
-                                <rect x="420" y="45" width="115" height="70" rx="8" fill="#fef2f2" stroke="#ef4444" stroke-width="2" />
-                                <text x="477" y="72" fill="#b91c1c" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">4. Test &amp; Refine</text>
-                                <text x="477" y="90" fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Validate Against</text>
-                                <text x="477" y="104" fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Expert Cases</text>
-
-                                <line x1="535" y1="80" x2="555" y2="80" stroke="#94a3b8" stroke-width="2" />
-
-                                <!-- Stage 5 -->
-                                <rect x="555" y="45" width="115" height="70" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="2" />
-                                <text x="612" y="72" fill="#15803d" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">5. Complete</text>
-                                <text x="612" y="90" fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Full Scaling &amp;</text>
-                                <text x="612" y="104" fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">UI Integration</text>
-
-                                <line x1="670" y1="80" x2="690" y2="80" stroke="#94a3b8" stroke-width="2" />
-
-                                <!-- Stage 6 -->
-                                <rect x="690" y="45" width="115" height="70" rx="8" fill="#faf5ff" stroke="#a855f7" stroke-width="2" />
-                                <text x="747" y="72" fill="#7e22ce" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">6. Maintain</text>
-                                <text x="747" y="90" fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Continuous KB</text>
-                                <text x="747" y="104" fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Updating</text>
-
-                                <!-- Iterative Loop Feedback Arrow -->
-                                <path d="M 477 115 L 477 140 L 342 140 L 342 115" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3" fill="none" />
-                                <text x="410" y="152" fill="#ef4444" font-size="10" font-weight="600" text-anchor="middle">Iterative Refinement Loop</text>
-                            </svg>
-                            <p class="diagram-caption">Figure 6.2: The six iterative stages of the Expert System development lifecycle.</p>
-                        </div>
-
-                        <ol>
-                            <li><strong>Phase 1: Identify Domain &amp; Task:</strong> Verify feasibility. The problem must have no standard closed-form algorithmic solution, human experts must exist and agree, and the payoff must justify the significant engineering investment.</li>
-                            <li><strong>Phase 2: Design System &amp; Select Architecture:</strong> Choose the knowledge representation paradigm (rules, frames, semantic nets) and select an appropriate shell (JESS, CLIPS) or custom inference strategy (forward vs backward chaining).</li>
-                            <li><strong>Phase 3: Develop Rapid Prototype:</strong> Build a scaled-down version containing 20–50 core rules to validate feasibility and confirm that the shell matches domain characteristics.</li>
-                            <li><strong>Phase 4: Test and Refine (Knowledge Verification):</strong> Run historic benchmark cases through the system. Identify conflicting, missing, or redundant rules in collaboration with the domain expert.</li>
-                            <li><strong>Phase 5: Develop and Complete Field System:</strong> Scale the knowledge base to hundreds/thousands of rules, engineer user-friendly dialog interfaces, and integrate with live hospital/enterprise databases.</li>
-                            <li><strong>Phase 6: Maintain &amp; Update:</strong> Systematically review and update the rule base as new medical discoveries, industrial standards, and statutory regulations emerge.</li>
-                        </ol>
-                    </div>
-
-                    <div id="sec-es-rulebased-mycin" class="topic-block">
-                        <h3>1.8 Rule-Based Expert Systems &amp; Case Study: MYCIN</h3>
-                        <p>The overwhelming majority of commercial expert systems are <strong>Rule-Based Systems</strong>. Knowledge is codified as a collection of declarative production rules of the canonical form:</p>
+<p>Shells drastically compress development timelines: instead of engineering pattern-matching algorithms, conflict resolvers, and UI tracers from scratch (taking years), a team only needs to author domain-specific rules (taking weeks).</p>
+<h4>Prominent Shell Examples:</h4>
+<ul>
+<li><strong>JESS (Java Expert System Shell):</strong> Created by Ernest Friedman-Hill at Sandia National Laboratories in the late 1990s. JESS is written entirely in Java and is a superset of the classic CLIPS language. It utilizes the highly optimized <em>Rete Algorithm</em> to match production rules against facts at blazing speed. Its tight integration with Java allows developers to directly instantiate and manipulate Java objects within rule premises.</li>
+<li><strong>Vidwan (NCST Mumbai, 1993):</strong> A pioneering indigenous Expert System Shell developed in India by the National Centre for Software Technology (NCST). Vidwan supported backward and forward chaining, certainty factor reasoning, and bilingual/local language user interfaces, proving instrumental in agricultural advisory and industrial diagnosis across Indian state enterprises.</li>
+<li><strong>EMYCIN (Empty MYCIN):</strong> The historic grand-ancestor of all shells, produced by stripping the infectious disease rules out of Stanford's MYCIN system to create a generic rule engine for medical diagnosis.</li>
+</ul>
+</div>
+<div class="topic-block" id="sec-es-lifecycle">
+<h3>1.7 The Iterative Development Lifecycle (6 Stages)</h3>
+<p>Developing an Expert System is an exploratory, evolutionary process. Unlike the rigid waterfall model of traditional software, ES development follows six highly iterative phases:</p>
+<!-- SVG: 6 Lifecycle Stages -->
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:820px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewbox="0 0 820 160" xmlns="http://www.w3.org/2000/svg">
+<!-- 6 Circular / Rect Stages -->
+<!-- Stage 1 -->
+<rect fill="#eff6ff" height="70" rx="8" stroke="#3b82f6" stroke-width="2" width="115" x="15" y="45"></rect>
+<text fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle" x="72" y="72">1. Identify</text>
+<text fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="72" y="90">Problem &amp;</text>
+<text fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="72" y="104">Domain</text>
+<line stroke="#94a3b8" stroke-width="2" x1="130" x2="150" y1="80" y2="80"></line>
+<!-- Stage 2 -->
+<rect fill="#eff6ff" height="70" rx="8" stroke="#3b82f6" stroke-width="2" width="115" x="150" y="45"></rect>
+<text fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle" x="207" y="72">2. Design</text>
+<text fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="207" y="90">System &amp; Select</text>
+<text fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="207" y="104">Shell / Paradigm</text>
+<line stroke="#94a3b8" stroke-width="2" x1="265" x2="285" y1="80" y2="80"></line>
+<!-- Stage 3 -->
+<rect fill="#fefce8" height="70" rx="8" stroke="#eab308" stroke-width="2" width="115" x="285" y="45"></rect>
+<text fill="#a16207" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle" x="342" y="72">3. Prototype</text>
+<text fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="342" y="90">Build Initial</text>
+<text fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="342" y="104">Core Rule Base</text>
+<line stroke="#94a3b8" stroke-width="2" x1="400" x2="420" y1="80" y2="80"></line>
+<!-- Stage 4 -->
+<rect fill="#fef2f2" height="70" rx="8" stroke="#ef4444" stroke-width="2" width="115" x="420" y="45"></rect>
+<text fill="#b91c1c" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle" x="477" y="72">4. Test &amp; Refine</text>
+<text fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="477" y="90">Validate Against</text>
+<text fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="477" y="104">Expert Cases</text>
+<line stroke="#94a3b8" stroke-width="2" x1="535" x2="555" y1="80" y2="80"></line>
+<!-- Stage 5 -->
+<rect fill="#f0fdf4" height="70" rx="8" stroke="#22c55e" stroke-width="2" width="115" x="555" y="45"></rect>
+<text fill="#15803d" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle" x="612" y="72">5. Complete</text>
+<text fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="612" y="90">Full Scaling &amp;</text>
+<text fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="612" y="104">UI Integration</text>
+<line stroke="#94a3b8" stroke-width="2" x1="670" x2="690" y1="80" y2="80"></line>
+<!-- Stage 6 -->
+<rect fill="#faf5ff" height="70" rx="8" stroke="#a855f7" stroke-width="2" width="115" x="690" y="45"></rect>
+<text fill="#7e22ce" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle" x="747" y="72">6. Maintain</text>
+<text fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="747" y="90">Continuous KB</text>
+<text fill="#475569" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="747" y="104">Updating</text>
+<!-- Iterative Loop Feedback Arrow -->
+<path d="M 477 115 L 477 140 L 342 140 L 342 115" fill="none" stroke="#ef4444" stroke-dasharray="3" stroke-width="1.5"></path>
+<text fill="#ef4444" font-size="10" font-weight="600" text-anchor="middle" x="410" y="152">Iterative Refinement Loop</text>
+</svg>
+<p class="diagram-caption">Figure 6.2: The six iterative stages of the Expert System development lifecycle.</p>
+</div>
+<ol>
+<li><strong>Phase 1: Identify Domain &amp; Task:</strong> Verify feasibility. The problem must have no standard closed-form algorithmic solution, human experts must exist and agree, and the payoff must justify the significant engineering investment.</li>
+<li><strong>Phase 2: Design System &amp; Select Architecture:</strong> Choose the knowledge representation paradigm (rules, frames, semantic nets) and select an appropriate shell (JESS, CLIPS) or custom inference strategy (forward vs backward chaining).</li>
+<li><strong>Phase 3: Develop Rapid Prototype:</strong> Build a scaled-down version containing 20–50 core rules to validate feasibility and confirm that the shell matches domain characteristics.</li>
+<li><strong>Phase 4: Test and Refine (Knowledge Verification):</strong> Run historic benchmark cases through the system. Identify conflicting, missing, or redundant rules in collaboration with the domain expert.</li>
+<li><strong>Phase 5: Develop and Complete Field System:</strong> Scale the knowledge base to hundreds/thousands of rules, engineer user-friendly dialog interfaces, and integrate with live hospital/enterprise databases.</li>
+<li><strong>Phase 6: Maintain &amp; Update:</strong> Systematically review and update the rule base as new medical discoveries, industrial standards, and statutory regulations emerge.</li>
+</ol>
+</div>
+<div class="topic-block" id="sec-es-rulebased-mycin">
+<h3>1.8 Rule-Based Expert Systems &amp; Case Study: MYCIN</h3>
+<p>The overwhelming majority of commercial expert systems are <strong>Rule-Based Systems</strong>. Knowledge is codified as a collection of declarative production rules of the canonical form:</p>
                         $$\mathbf{\text{IF } \langle\text{antecedent / condition}\rangle \text{ THEN } \langle\text{consequent / action}\rangle}$$
 
                         <h4>Case Study: MYCIN (Stanford University, 1970s)</h4>
-                        <p>Developed by Dr. Edward Shortliffe at Stanford University, MYCIN is the defining historical landmark of expert systems. It diagnosed severe bacterial blood infections (such as bacteremia and meningitis) and recommended optimal antibiotic regimens.</p>
-                        <ul>
-                            <li><strong>Language &amp; Scale:</strong> Implemented in LISP; contained approximately 450 to 500 heuristic production rules.</li>
-                            <li><strong>Inference Strategy:</strong> Utilized <strong>Backward Chaining (Goal-Directed Reasoning)</strong>. The system started with the top-level hypothesis: <em>"The patient has a severe bacterial infection requiring therapy"</em>, and worked backwards to establish intermediate subgoals (organism identity, genus, gram-stain response) by posing interactive clinical questions to the attending physician.</li>
-                            <li><strong>Sample MYCIN Production Rule:</strong>
-                                <pre><code>RULE 035
+<p>Developed by Dr. Edward Shortliffe at Stanford University, MYCIN is the defining historical landmark of expert systems. It diagnosed severe bacterial blood infections (such as bacteremia and meningitis) and recommended optimal antibiotic regimens.</p>
+<ul>
+<li><strong>Language &amp; Scale:</strong> Implemented in LISP; contained approximately 450 to 500 heuristic production rules.</li>
+<li><strong>Inference Strategy:</strong> Utilized <strong>Backward Chaining (Goal-Directed Reasoning)</strong>. The system started with the top-level hypothesis: <em>"The patient has a severe bacterial infection requiring therapy"</em>, and worked backwards to establish intermediate subgoals (organism identity, genus, gram-stain response) by posing interactive clinical questions to the attending physician.</li>
+<li><strong>Sample MYCIN Production Rule:</strong>
+<pre><code>RULE 035
 IF:
   1) The stain of the organism is gramneg, AND
   2) The morphology of the organism is rod, AND
   3) The aerobicity of the organism is anaerobic
 THEN:
   There is suggestive evidence (0.6) that the identity of the organism is Bacteroides.</code></pre>
-                            </li>
-                            <li><strong>Clinical Performance:</strong> In double-blind clinical trials evaluated against panels of Stanford medical faculty, MYCIN achieved a <strong>65% prescribed therapy success rate</strong>, outperforming non-specialist physicians (approx. 50%) and equaling top infectious disease specialists.</li>
-                        </ul>
-                    </div>
-
-                    <div id="sec-es-cf" class="topic-block">
-                        <h3>1.9 Certainty Factors (CF) &amp; Uncertainty Calculus</h3>
-                        <p>In domains like medicine and geology, assertions are rarely binary absolute truths. A physician cannot say with 100% mathematical certainty that a specific rash implies measles. Shortliffe and Buchanan invented the <strong>Certainty Factor (CF)</strong> model for MYCIN to represent heuristic confidence numerically without requiring unrealistic joint probability distributions.</p>
-
-                        <div class="callout callout-def">
-                            <h4>Definition &amp; Range of Certainty Factor</h4>
-                            <p>A Certainty Factor \(CF \in [-1.0, +1.0]\) quantifies the degree of belief or disbelief in a hypothesis \(H\) given clinical evidence \(E\):</p>
-                            <ul>
-                                <li>\(CF = +1.0\): Absolutely proven / definitive fact.</li>
-                                <li>\(CF = 0.0\): Complete ignorance / no evidence either way.</li>
-                                <li>\(CF = -1.0\): Absolutely disproven / conclusively refuted.</li>
-                            </ul>
-                            <p>Mathematically, \(CF\) is defined in terms of Measure of Belief (\(MB\)) and Measure of Disbelief (\(MD\)):</p>
+</li>
+<li><strong>Clinical Performance:</strong> In double-blind clinical trials evaluated against panels of Stanford medical faculty, MYCIN achieved a <strong>65% prescribed therapy success rate</strong>, outperforming non-specialist physicians (approx. 50%) and equaling top infectious disease specialists.</li>
+</ul>
+</div>
+<div class="topic-block" id="sec-es-cf">
+<h3>1.9 Certainty Factors (CF) &amp; Uncertainty Calculus</h3>
+<p>In domains like medicine and geology, assertions are rarely binary absolute truths. A physician cannot say with 100% mathematical certainty that a specific rash implies measles. Shortliffe and Buchanan invented the <strong>Certainty Factor (CF)</strong> model for MYCIN to represent heuristic confidence numerically without requiring unrealistic joint probability distributions.</p>
+<div class="callout callout-def">
+<h4>Definition &amp; Range of Certainty Factor</h4>
+<p>A Certainty Factor \(CF \in [-1.0, +1.0]\) quantifies the degree of belief or disbelief in a hypothesis \(H\) given clinical evidence \(E\):</p>
+<ul>
+<li>\(CF = +1.0\): Absolutely proven / definitive fact.</li>
+<li>\(CF = 0.0\): Complete ignorance / no evidence either way.</li>
+<li>\(CF = -1.0\): Absolutely disproven / conclusively refuted.</li>
+</ul>
+<p>Mathematically, \(CF\) is defined in terms of Measure of Belief (\(MB\)) and Measure of Disbelief (\(MD\)):</p>
                             $$CF(H, E) = MB(H, E) - MD(H, E)$$
-                            <p>where \(MB, MD \in [0, 1]\). At any moment, either \(MB > 0\) or \(MD > 0\) (mutually exclusive evidence).</p>
-                        </div>
-
-                        <h4>The Three Core Certainty Factor Combination Rules:</h4>
-                        
-                        <h5>Rule 1: Conjunction (AND) of Premises</h5>
-                        <p>If a rule's antecedent requires multiple conditions connected by logical AND:</p>
+                            <p>where \(MB, MD \in [0, 1]\). At any moment, either \(MB &gt; 0\) or \(MD &gt; 0\) (mutually exclusive evidence).</p>
+</div>
+<h4>The Three Core Certainty Factor Combination Rules:</h4>
+<h5>Rule 1: Conjunction (AND) of Premises</h5>
+<p>If a rule's antecedent requires multiple conditions connected by logical AND:</p>
                         $$CF(E_1 \land E_2) = \min(CF(E_1), CF(E_2))$$
 
                         <h5>Rule 2: Disjunction (OR) of Premises</h5>
-                        <p>If conditions are connected by logical OR:</p>
+<p>If conditions are connected by logical OR:</p>
                         $$CF(E_1 \lor E_2) = \max(CF(E_1), CF(E_2))$$
 
                         <h5>Rule 3: Rule Propagation</h5>
-                        <p>When a rule states <code>IF E THEN H (with confidence CF_rule)</code>, the concluded hypothesis receives certainty:</p>
+<p>When a rule states <code>IF E THEN H (with confidence CF_rule)</code>, the concluded hypothesis receives certainty:</p>
                         $$CF(H) = CF(E) \times CF_{\text{rule}}$$
 
                         <h5>Rule 4: Combination of Multiple Independent Rules for the Same Hypothesis</h5>
-                        <p>When two independent rules \(R_1\) and \(R_2\) both conclude hypothesis \(H\) with certainties \(CF_1\) and \(CF_2\):</p>
-                        <ul>
-                            <li><strong>Both Positive (\(CF_1 > 0, CF_2 > 0\)):</strong>
+<p>When two independent rules \(R_1\) and \(R_2\) both conclude hypothesis \(H\) with certainties \(CF_1\) and \(CF_2\):</p>
+<ul>
+<li><strong>Both Positive (\(CF_1 &gt; 0, CF_2 &gt; 0\)):</strong>
                             $$CF_{\text{combine}}(CF_1, CF_2) = CF_1 + CF_2 - (CF_1 \times CF_2)$$
                             </li>
-                            <li><strong>Both Negative (\(CF_1 < 0, CF_2 < 0\)):</strong>
+<li><strong>Both Negative (\(CF_1 &lt; 0, CF_2 &lt; 0\)):</strong>
                             $$CF_{\text{combine}}(CF_1, CF_2) = CF_1 + CF_2 + (CF_1 \times CF_2)$$
                             </li>
-                            <li><strong>Opposite Signs (One Positive, One Negative):</strong>
+<li><strong>Opposite Signs (One Positive, One Negative):</strong>
                             $$CF_{\text{combine}}(CF_1, CF_2) = \frac{CF_1 + CF_2}{1 - \min(|CF_1|, |CF_2|)}$$
                             </li>
-                        </ul>
-                    </div>
-                </section>
-
-                <!-- SECTION 2: STEP-BY-STEP NUMERICALS -->
-                <section id="numerical-section" class="module-section">
-                    <div class="section-title">
-                        <h2>2. In-Depth Numerical Explanations (Step-by-Step)</h2>
-                        <span class="cross-ref-badge">3 Tiered Solved Problems</span>
-                    </div>
-
-                    <!-- NUMERICAL 1: SIMPLE -->
-                    <div id="num-1" class="problem-card">
-                        <div class="problem-header">
-                            <span class="difficulty easy">Simple Example</span>
-                            <h3>Problem 6.1: Combining Certainty Factors for Co-Occurring Rules</h3>
-                        </div>
-                        <p><strong>Problem Statement:</strong> An expert system evaluates whether an incoming email is phishing. Two independent diagnostic rules fire for the same email:</p>
-                        <ul>
-                            <li>Rule 1 concludes: \(\text{Phishing}\) with certainty \(CF_1 = +0.70\).</li>
-                            <li>Rule 2 concludes: \(\text{Phishing}\) with certainty \(CF_2 = +0.50\).</li>
-                        </ul>
-                        <p>Calculate the combined certainty factor \(CF_{\text{combine}}\) that the email is phishing.</p>
-
-                        <div class="solution-flow">
-                            <div class="step-row">
-                                <span class="step-badge">GIVEN</span>
-                                <div>
-                                    <p>\(CF_1 = 0.70\)</p>
-                                    <p>\(CF_2 = 0.50\)</p>
-                                    <p>Both certainty factors are strictly positive (\(CF_1 > 0, CF_2 > 0\)).</p>
-                                </div>
-                            </div>
-
-                            <div class="step-row">
-                                <span class="step-badge">FORMULA</span>
-                                <div>
+</ul>
+</div>
+</section>
+<!-- SECTION 2: STEP-BY-STEP NUMERICALS -->
+<section class="module-section" id="numerical-section">
+<div class="section-title">
+<h2>2. In-Depth Numerical Explanations (Step-by-Step)</h2>
+<span class="cross-ref-badge">3 Tiered Solved Problems</span>
+</div>
+<!-- NUMERICAL 1: SIMPLE -->
+<div class="problem-card" id="num-1">
+<div class="problem-header">
+<span class="difficulty easy">Simple Example</span>
+<h3>Problem 6.1: Combining Certainty Factors for Co-Occurring Rules</h3>
+</div>
+<p><strong>Problem Statement:</strong> An expert system evaluates whether an incoming email is phishing. Two independent diagnostic rules fire for the same email:</p>
+<ul>
+<li>Rule 1 concludes: \(\text{Phishing}\) with certainty \(CF_1 = +0.70\).</li>
+<li>Rule 2 concludes: \(\text{Phishing}\) with certainty \(CF_2 = +0.50\).</li>
+</ul>
+<p>Calculate the combined certainty factor \(CF_{\text{combine}}\) that the email is phishing.</p>
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">GIVEN</span>
+<div>
+<p>\(CF_1 = 0.70\)</p>
+<p>\(CF_2 = 0.50\)</p>
+<p>Both certainty factors are strictly positive (\(CF_1 &gt; 0, CF_2 &gt; 0\)).</p>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge">FORMULA</span>
+<div>
                                     $$CF_{\text{combine}}(CF_1, CF_2) = CF_1 + CF_2 - (CF_1 \times CF_2)$$
                                 </div>
-                            </div>
-
-                            <div class="step-row">
-                                <span class="step-badge">STEPS</span>
-                                <div>
-                                    <p><strong>Step 1: Compute product of the two certainties:</strong></p>
+</div>
+<div class="step-row">
+<span class="step-badge">STEPS</span>
+<div>
+<p><strong>Step 1: Compute product of the two certainties:</strong></p>
                                     $$CF_1 \times CF_2 = 0.70 \times 0.50 = 0.35$$
                                     <p><strong>Step 2: Apply the positive combination formula:</strong></p>
                                     $$CF_{\text{combine}} = 0.70 + 0.50 - 0.35$$
                                     $$CF_{\text{combine}} = 1.20 - 0.35 = 0.85$$
                                 </div>
-                            </div>
-
-                            <div class="step-row">
-                                <span class="step-badge answer">FINAL ANSWER</span>
-                                <div>
-                                    <p class="final-box">\(\mathbf{CF_{\text{combine}} = +0.85 \quad (85\% \text{ confidence})}\)</p>
-                                    <p class="hint">Interpretation: Independent affirmative evidence reinforces belief. Notice that \(0.85\) is greater than either individual confidence (\(0.70\) and \(0.50\)), accurately mirroring human intuition.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- NUMERICAL 2: MEDIUM -->
-                    <div id="num-2" class="problem-card">
-                        <div class="problem-header">
-                            <span class="difficulty medium">Medium Example</span>
-                            <h3>Problem 6.2: Forward Chaining Automotive Diagnostic Rule Execution Trace</h3>
-                        </div>
-                        <p><strong>Problem Statement:</strong> An automotive troubleshooting expert system has the following production rules in its Knowledge Base:</p>
-                        <ul>
-                            <li><strong>R1:</strong> IF \(\text{EngineCranks} = \text{No}\) AND \(\text{LightsWork} = \text{No}\) THEN \(\text{Problem} = \text{BatteryDead}\)</li>
-                            <li><strong>R2:</strong> IF \(\text{Problem} = \text{BatteryDead}\) THEN \(\text{Action} = \text{JumpStartOrReplaceBattery}\)</li>
-                            <li><strong>R3:</strong> IF \(\text{EngineCranks} = \text{Yes}\) AND \(\text{FuelGauge} = \text{Empty}\) THEN \(\text{Problem} = \text{OutOfFuel}\)</li>
-                            <li><strong>R4:</strong> IF \(\text{Problem} = \text{OutOfFuel}\) THEN \(\text{Action} = \text{Refuel}\)</li>
-                        </ul>
-                        <p>Given the initial working memory facts:
+</div>
+<div class="step-row">
+<span class="step-badge answer">FINAL ANSWER</span>
+<div>
+<p class="final-box">\(\mathbf{CF_{\text{combine}} = +0.85 \quad (85\% \text{ confidence})}\)</p>
+<p class="hint">Interpretation: Independent affirmative evidence reinforces belief. Notice that \(0.85\) is greater than either individual confidence (\(0.70\) and \(0.50\)), accurately mirroring human intuition.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- NUMERICAL 2: MEDIUM -->
+<div class="problem-card" id="num-2">
+<div class="problem-header">
+<span class="difficulty medium">Medium Example</span>
+<h3>Problem 6.2: Forward Chaining Automotive Diagnostic Rule Execution Trace</h3>
+</div>
+<p><strong>Problem Statement:</strong> An automotive troubleshooting expert system has the following production rules in its Knowledge Base:</p>
+<ul>
+<li><strong>R1:</strong> IF \(\text{EngineCranks} = \text{No}\) AND \(\text{LightsWork} = \text{No}\) THEN \(\text{Problem} = \text{BatteryDead}\)</li>
+<li><strong>R2:</strong> IF \(\text{Problem} = \text{BatteryDead}\) THEN \(\text{Action} = \text{JumpStartOrReplaceBattery}\)</li>
+<li><strong>R3:</strong> IF \(\text{EngineCranks} = \text{Yes}\) AND \(\text{FuelGauge} = \text{Empty}\) THEN \(\text{Problem} = \text{OutOfFuel}\)</li>
+<li><strong>R4:</strong> IF \(\text{Problem} = \text{OutOfFuel}\) THEN \(\text{Action} = \text{Refuel}\)</li>
+</ul>
+<p>Given the initial working memory facts:
                         $$\text{Working Memory} = \{\text{EngineCranks} = \text{No}, \, \text{LightsWork} = \text{No}\}$$
                         Trace the forward chaining execution cycle step-by-step showing the Agenda, Conflict Resolution, and Final Recommended Action.</p>
-
-                        <div class="solution-flow">
-                            <div class="step-row">
-                                <span class="step-badge">GIVEN</span>
-                                <div>
-                                    <p>Knowledge Base: Rules \(\{R_1, R_2, R_3, R_4\}\).</p>
-                                    <p>Initial Working Memory \(WM_0 = \{\text{EngineCranks} = \text{No}, \, \text{LightsWork} = \text{No}\}\).</p>
-                                </div>
-                            </div>
-
-                            <div class="step-row">
-                                <span class="step-badge">CYCLE 1</span>
-                                <div>
-                                    <p><strong>1. Pattern Matching:</strong> Check premises of all rules against \(WM_0\):</p>
-                                    <ul>
-                                        <li>\(R_1\): \(\text{EngineCranks} = \text{No}\) (&check;) AND \(\text{LightsWork} = \text{No}\) (&check;) &rarr; <strong>MATCHES!</strong></li>
-                                        <li>\(R_2\): Requires \(\text{Problem} = \text{BatteryDead}\) (&cross; Not in WM)</li>
-                                        <li>\(R_3\): Requires \(\text{EngineCranks} = \text{Yes}\) (&cross;)</li>
-                                        <li>\(R_4\): Requires \(\text{Problem} = \text{OutOfFuel}\) (&cross;)</li>
-                                    </ul>
-                                    <p><strong>2. Agenda:</strong> \(\{R_1\}\).</p>
-                                    <p><strong>3. Fire Rule \(R_1\):</strong> Assert \(\text{Problem} = \text{BatteryDead}\) into Working Memory.</p>
-                                    <p><strong>Updated Working Memory:</strong></p>
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">GIVEN</span>
+<div>
+<p>Knowledge Base: Rules \(\{R_1, R_2, R_3, R_4\}\).</p>
+<p>Initial Working Memory \(WM_0 = \{\text{EngineCranks} = \text{No}, \, \text{LightsWork} = \text{No}\}\).</p>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge">CYCLE 1</span>
+<div>
+<p><strong>1. Pattern Matching:</strong> Check premises of all rules against \(WM_0\):</p>
+<ul>
+<li>\(R_1\): \(\text{EngineCranks} = \text{No}\) (✓) AND \(\text{LightsWork} = \text{No}\) (✓) → <strong>MATCHES!</strong></li>
+<li>\(R_2\): Requires \(\text{Problem} = \text{BatteryDead}\) (✗ Not in WM)</li>
+<li>\(R_3\): Requires \(\text{EngineCranks} = \text{Yes}\) (✗)</li>
+<li>\(R_4\): Requires \(\text{Problem} = \text{OutOfFuel}\) (✗)</li>
+</ul>
+<p><strong>2. Agenda:</strong> \(\{R_1\}\).</p>
+<p><strong>3. Fire Rule \(R_1\):</strong> Assert \(\text{Problem} = \text{BatteryDead}\) into Working Memory.</p>
+<p><strong>Updated Working Memory:</strong></p>
                                     $$WM_1 = \{\text{EngineCranks} = \text{No}, \, \text{LightsWork} = \text{No}, \, \text{Problem} = \text{BatteryDead}\}$$
                                 </div>
-                            </div>
-
-                            <div class="step-row">
-                                <span class="step-badge">CYCLE 2</span>
-                                <div>
-                                    <p><strong>1. Pattern Matching:</strong> Check premises against \(WM_1\):</p>
-                                    <ul>
-                                        <li>\(R_1\): Already fired (refracted).</li>
-                                        <li>\(R_2\): Requires \(\text{Problem} = \text{BatteryDead}\) (&check; Matches!) &rarr; <strong>MATCHES!</strong></li>
-                                        <li>\(R_3\): Still unfulfilled.</li>
-                                        <li>\(R_4\): Still unfulfilled.</li>
-                                    </ul>
-                                    <p><strong>2. Agenda:</strong> \(\{R_2\}\).</p>
-                                    <p><strong>3. Fire Rule \(R_2\):</strong> Assert \(\text{Action} = \text{JumpStartOrReplaceBattery}\) into Working Memory.</p>
-                                    <p><strong>Updated Working Memory:</strong></p>
+</div>
+<div class="step-row">
+<span class="step-badge">CYCLE 2</span>
+<div>
+<p><strong>1. Pattern Matching:</strong> Check premises against \(WM_1\):</p>
+<ul>
+<li>\(R_1\): Already fired (refracted).</li>
+<li>\(R_2\): Requires \(\text{Problem} = \text{BatteryDead}\) (✓ Matches!) → <strong>MATCHES!</strong></li>
+<li>\(R_3\): Still unfulfilled.</li>
+<li>\(R_4\): Still unfulfilled.</li>
+</ul>
+<p><strong>2. Agenda:</strong> \(\{R_2\}\).</p>
+<p><strong>3. Fire Rule \(R_2\):</strong> Assert \(\text{Action} = \text{JumpStartOrReplaceBattery}\) into Working Memory.</p>
+<p><strong>Updated Working Memory:</strong></p>
                                     $$WM_2 = \{\text{EngineCranks} = \text{No}, \, \text{LightsWork} = \text{No}, \, \text{Problem} = \text{BatteryDead}, \, \mathbf{\text{Action} = \text{JumpStartOrReplaceBattery}}\}$$
                                 </div>
-                            </div>
-
-                            <div class="step-row">
-                                <span class="step-badge">CYCLE 3</span>
-                                <div>
-                                    <p><strong>Pattern Matching:</strong> No new rules match the updated Working Memory. Agenda is empty \(\emptyset\). The inference engine halts.</p>
-                                </div>
-                            </div>
-
-                            <div class="step-row">
-                                <span class="step-badge answer">FINAL ANSWER</span>
-                                <div>
-                                    <p class="final-box">\(\mathbf{\text{Recommended Action: JumpStartOrReplaceBattery}}\)</p>
-                                    <p class="hint">Inference Trail: \(R_1 \to R_2\). This is a purely data-driven (forward chaining) inference sequence.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- NUMERICAL 3: COMPLEX -->
-                    <div id="num-3" class="problem-card">
-                        <div class="problem-header">
-                            <span class="difficulty hard">Complex Example</span>
-                            <h3>Problem 6.3: Complete Backward Chaining Goal Tree with Uncertainty Calculus</h3>
-                        </div>
-                        <p><strong>Problem Statement:</strong> A medical diagnostic expert system has the following Knowledge Base with rule certainties:</p>
-                        <ul>
-                            <li><strong>Rule 1:</strong> IF \(\text{Fever}\) AND \(\text{KoplikSpots}\) THEN \(\text{Diagnosis} = \text{Measles} \quad [CF = 0.90]\)</li>
-                            <li><strong>Rule 2:</strong> IF \(\text{Fever}\) AND \(\text{Rash}\) THEN \(\text{Diagnosis} = \text{Measles} \quad [CF = 0.60]\)</li>
-                            <li><strong>Rule 3:</strong> IF \(\text{HighTemp}\) THEN \(\text{Fever} \quad [CF = 0.80]\)</li>
-                        </ul>
-                        <p>The system establishes the top-level goal: <strong>Evaluate Hypothesis: \(\text{Diagnosis} = \text{Measles}\)</strong>.</p>
-                        <p>During user consultation, the system queries the doctor and acquires the following clinical evidence:</p>
-                        <ul>
-                            <li>Patient has \(\text{HighTemp}\) with user certainty \(CF(\text{HighTemp}) = 1.0\).</li>
-                            <li>Patient has \(\text{KoplikSpots}\) with user certainty \(CF(\text{KoplikSpots}) = 0.70\).</li>
-                            <li>Patient has \(\text{Rash}\) with user certainty \(CF(\text{Rash}) = 0.50\).</li>
-                        </ul>
-                        <p>Perform the full backward chaining goal stack trace, propagate certainties through conjunctions and rules, and calculate the final combined certainty factor for \(\text{Diagnosis} = \text{Measles}\).</p>
-
-                        <div class="solution-flow">
-                            <div class="step-row">
-                                <span class="step-badge">GOAL STACK</span>
-                                <div>
-                                    <p><strong>Top Goal:</strong> \(\text{Diagnosis} = \text{Measles}\).</p>
-                                    <p>Candidate Rules that conclude this goal: \(\{R_1, R_2\}\).</p>
-                                    <p>To evaluate \(R_1\), subgoals required: \(\text{Fever}\) and \(\text{KoplikSpots}\).</p>
-                                    <p>To evaluate \(\text{Fever}\), candidate rule: \(R_3\) requiring subgoal \(\text{HighTemp}\).</p>
-                                </div>
-                            </div>
-
-                            <div class="step-row">
-                                <span class="step-badge">STEP 1</span>
-                                <div>
-                                    <p><strong>Evaluate Subgoal \(\text{Fever}\) via Rule 3:</strong></p>
-                                    <p>Premise of \(R_3\) is \(\text{HighTemp}\). Direct user evidence: \(CF(\text{HighTemp}) = 1.0\).</p>
-                                    <p>Rule 3 has \(CF_{\text{rule3}} = 0.80\):</p>
+</div>
+<div class="step-row">
+<span class="step-badge">CYCLE 3</span>
+<div>
+<p><strong>Pattern Matching:</strong> No new rules match the updated Working Memory. Agenda is empty \(\emptyset\). The inference engine halts.</p>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge answer">FINAL ANSWER</span>
+<div>
+<p class="final-box">\(\mathbf{\text{Recommended Action: JumpStartOrReplaceBattery}}\)</p>
+<p class="hint">Inference Trail: \(R_1 \to R_2\). This is a purely data-driven (forward chaining) inference sequence.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- NUMERICAL 3: COMPLEX -->
+<div class="problem-card" id="num-3">
+<div class="problem-header">
+<span class="difficulty hard">Complex Example</span>
+<h3>Problem 6.3: Complete Backward Chaining Goal Tree with Uncertainty Calculus</h3>
+</div>
+<p><strong>Problem Statement:</strong> A medical diagnostic expert system has the following Knowledge Base with rule certainties:</p>
+<ul>
+<li><strong>Rule 1:</strong> IF \(\text{Fever}\) AND \(\text{KoplikSpots}\) THEN \(\text{Diagnosis} = \text{Measles} \quad [CF = 0.90]\)</li>
+<li><strong>Rule 2:</strong> IF \(\text{Fever}\) AND \(\text{Rash}\) THEN \(\text{Diagnosis} = \text{Measles} \quad [CF = 0.60]\)</li>
+<li><strong>Rule 3:</strong> IF \(\text{HighTemp}\) THEN \(\text{Fever} \quad [CF = 0.80]\)</li>
+</ul>
+<p>The system establishes the top-level goal: <strong>Evaluate Hypothesis: \(\text{Diagnosis} = \text{Measles}\)</strong>.</p>
+<p>During user consultation, the system queries the doctor and acquires the following clinical evidence:</p>
+<ul>
+<li>Patient has \(\text{HighTemp}\) with user certainty \(CF(\text{HighTemp}) = 1.0\).</li>
+<li>Patient has \(\text{KoplikSpots}\) with user certainty \(CF(\text{KoplikSpots}) = 0.70\).</li>
+<li>Patient has \(\text{Rash}\) with user certainty \(CF(\text{Rash}) = 0.50\).</li>
+</ul>
+<p>Perform the full backward chaining goal stack trace, propagate certainties through conjunctions and rules, and calculate the final combined certainty factor for \(\text{Diagnosis} = \text{Measles}\).</p>
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">GOAL STACK</span>
+<div>
+<p><strong>Top Goal:</strong> \(\text{Diagnosis} = \text{Measles}\).</p>
+<p>Candidate Rules that conclude this goal: \(\{R_1, R_2\}\).</p>
+<p>To evaluate \(R_1\), subgoals required: \(\text{Fever}\) and \(\text{KoplikSpots}\).</p>
+<p>To evaluate \(\text{Fever}\), candidate rule: \(R_3\) requiring subgoal \(\text{HighTemp}\).</p>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge">STEP 1</span>
+<div>
+<p><strong>Evaluate Subgoal \(\text{Fever}\) via Rule 3:</strong></p>
+<p>Premise of \(R_3\) is \(\text{HighTemp}\). Direct user evidence: \(CF(\text{HighTemp}) = 1.0\).</p>
+<p>Rule 3 has \(CF_{\text{rule3}} = 0.80\):</p>
                                     $$CF(\text{Fever}) = CF(\text{HighTemp}) \times CF_{\text{rule3}} = 1.0 \times 0.80 = \mathbf{0.80}$$
                                     <p>Working Memory now asserts: \(CF(\text{Fever}) = 0.80\).</p>
-                                </div>
-                            </div>
-
-                            <div class="step-row">
-                                <span class="step-badge">STEP 2</span>
-                                <div>
-                                    <p><strong>Evaluate Rule 1 for \(\text{Measles}\):</strong></p>
-                                    <p>Premises: \(\text{Fever}\) (\(CF = 0.80\)) AND \(\text{KoplikSpots}\) (\(CF = 0.70\)).</p>
-                                    <p>Apply Conjunction Rule (minimum):</p>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge">STEP 2</span>
+<div>
+<p><strong>Evaluate Rule 1 for \(\text{Measles}\):</strong></p>
+<p>Premises: \(\text{Fever}\) (\(CF = 0.80\)) AND \(\text{KoplikSpots}\) (\(CF = 0.70\)).</p>
+<p>Apply Conjunction Rule (minimum):</p>
                                     $$CF(\text{Premise}_1) = \min(CF(\text{Fever}), CF(\text{KoplikSpots})) = \min(0.80, 0.70) = 0.70$$
                                     <p>Propagate through Rule 1 (\(CF_{\text{rule1}} = 0.90\)):</p>
                                     $$CF_1(\text{Measles}) = CF(\text{Premise}_1) \times CF_{\text{rule1}} = 0.70 \times 0.90 = \mathbf{0.63}$$
                                 </div>
-                            </div>
-
-                            <div class="step-row">
-                                <span class="step-badge">STEP 3</span>
-                                <div>
-                                    <p><strong>Evaluate Rule 2 for \(\text{Measles}\):</strong></p>
-                                    <p>Premises: \(\text{Fever}\) (\(CF = 0.80\)) AND \(\text{Rash}\) (\(CF = 0.50\)).</p>
-                                    <p>Apply Conjunction Rule (minimum):</p>
+</div>
+<div class="step-row">
+<span class="step-badge">STEP 3</span>
+<div>
+<p><strong>Evaluate Rule 2 for \(\text{Measles}\):</strong></p>
+<p>Premises: \(\text{Fever}\) (\(CF = 0.80\)) AND \(\text{Rash}\) (\(CF = 0.50\)).</p>
+<p>Apply Conjunction Rule (minimum):</p>
                                     $$CF(\text{Premise}_2) = \min(CF(\text{Fever}), CF(\text{Rash})) = \min(0.80, 0.50) = 0.50$$
                                     <p>Propagate through Rule 2 (\(CF_{\text{rule2}} = 0.60\)):</p>
                                     $$CF_2(\text{Measles}) = CF(\text{Premise}_2) \times CF_{\text{rule2}} = 0.50 \times 0.60 = \mathbf{0.30}$$
                                 </div>
-                            </div>
-
-                            <div class="step-row">
-                                <span class="step-badge">STEP 4</span>
-                                <div>
-                                    <p><strong>Combine Evidence from Rule 1 and Rule 2:</strong></p>
-                                    <p>We have two independent positive certainties for the same goal hypothesis: \(CF_1 = 0.63\) and \(CF_2 = 0.30\).</p>
-                                    <p>Apply the co-occurring positive combination rule:</p>
+</div>
+<div class="step-row">
+<span class="step-badge">STEP 4</span>
+<div>
+<p><strong>Combine Evidence from Rule 1 and Rule 2:</strong></p>
+<p>We have two independent positive certainties for the same goal hypothesis: \(CF_1 = 0.63\) and \(CF_2 = 0.30\).</p>
+<p>Apply the co-occurring positive combination rule:</p>
                                     $$CF_{\text{final}}(\text{Measles}) = CF_1 + CF_2 - (CF_1 \times CF_2)$$
                                     $$CF_{\text{final}}(\text{Measles}) = 0.63 + 0.30 - (0.63 \times 0.30)$$
                                     $$CF_{\text{final}}(\text{Measles}) = 0.93 - 0.189 = \mathbf{0.741}$$
                                 </div>
-                            </div>
-
-                            <div class="step-row">
-                                <span class="step-badge answer">FINAL ANSWER</span>
-                                <div>
-                                    <p class="final-box">\(\mathbf{CF(\text{Diagnosis = Measles}) = +0.741 \quad (74.1\% \text{ Certainty})}\)</p>
-                                    <p class="hint">Goal resolution succeeded via backward chaining goal decomposition and MYCIN certainty factor propagation.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- SECTION 3: COMPARATIVE STUDIES -->
-                <section id="comparison-section" class="module-section">
-                    <div class="section-title">
-                        <h2>3. Comparative Studies</h2>
-                        <span class="cross-ref-badge">Exam-Focused Tabular Comparisons</span>
-                    </div>
-
-                    <h3>Table 6.1: Conventional Software Programs vs. Expert Systems</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Comparison Dimension</th>
-                                <th>Conventional Software (e.g., C++, Java, Python)</th>
-                                <th>Expert Systems (e.g., JESS, CLIPS, MYCIN)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Knowledge &amp; Control</strong></td>
-                                <td>Tightly coupled; data and procedural algorithm are blended inside code</td>
-                                <td>Strictly decoupled; Knowledge Base is independent of the Inference Engine</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Processing Style</strong></td>
-                                <td>Algorithmic, repetitive, step-by-step sequential execution</td>
-                                <td>Heuristic, symbolic, pattern-matching inference over production rules</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Explanation Facility</strong></td>
-                                <td>Opaque; cannot articulate <em>why</em> a computation occurred</td>
-                                <td>Fully transparent; built-in explanation facility (answers WHY and HOW)</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Handling Uncertainty</strong></td>
-                                <td>Requires precise, complete numerical inputs (fails or crashes on missing data)</td>
-                                <td>Natively handles ambiguous, noisy, or incomplete data via Certainty Factors</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Modifiability</strong></td>
-                                <td>Cumbersome; altering business rules requires recompiling and retesting code</td>
-                                <td>Effortless; new rules can be added to the Knowledge Base dynamically</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <h3>Table 6.2: Forward Chaining vs. Backward Chaining Inference Strategies</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Comparison Dimension</th>
-                                <th>Forward Chaining (Data-Driven)</th>
-                                <th>Backward Chaining (Goal-Driven)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Starting Point</strong></td>
-                                <td>Starts with known initial raw facts in Working Memory</td>
-                                <td>Starts with a hypothetical conclusion or top-level goal query</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Direction of Search</strong></td>
-                                <td>Bottom-up: matches facts against rule IF-conditions to generate new facts</td>
-                                <td>Top-down: looks for rules whose THEN-consequents match the target goal</td>
-                            </tr>
-                            <tr>
-                                <td><strong>User Interaction</strong></td>
-                                <td>Passive; user inputs all known data upfront</td>
-                                <td>Interactive; queries user only for facts needed to evaluate active subgoals</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Best Suited Domains</strong></td>
-                                <td>Monitoring, real-time control, automated configuration (e.g., R1/XCON)</td>
-                                <td>Medical diagnosis, fault isolation, criminal investigation (e.g., MYCIN)</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Efficiency Risk</strong></td>
-                                <td>May fire dozens of irrelevant rules that never lead to an actionable conclusion</td>
-                                <td>Focuses exclusively on relevant rules, but can get stuck in deep recursive search paths</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-
-                <!-- SECTION 4: CASE STUDIES & REAL-WORLD APPLICATIONS -->
-                <section id="case-section" class="module-section">
-                    <div class="section-title">
-                        <h2>4. Real-World Case Studies &amp; Practical Systems</h2>
-                        <span class="cross-ref-badge">Historical &amp; Industrial Milestones</span>
-                    </div>
-
-                    <div class="case-card">
-                        <div class="case-header">
-                            <span class="case-tag">Landmark Medical AI</span>
-                            <h3>MYCIN (Stanford University, 1972–1976)</h3>
-                        </div>
-                        <p><strong>System Genesis:</strong> Developed at Stanford University by Dr. Edward Shortliffe in collaboration with infectious disease clinicians, MYCIN was designed to assist doctors in prescribing appropriate antimicrobial therapy for patients with bacteremia (bloodstream bacterial infections) and meningitis.</p>
-                        <ul>
-                            <li><strong>Key Architecture:</strong> Employed backward-chaining inference over ~450 LISP production rules and pioneered the Certainty Factor calculus.</li>
-                            <li><strong>Clinical Impact:</strong> Evaluated in double-blind clinical trials where therapy recommendations were submitted to expert panels without revealing whether the prescriber was a human faculty member or MYCIN. MYCIN scored a 65% rating—statistically identical to Stanford's top specialists and far superior to general resident doctors.</li>
-                        </ul>
-                    </div>
-
-                    <div class="case-card">
-                        <div class="case-header">
-                            <span class="case-tag">Industrial Manufacturing Milestone</span>
-                            <h3>R1 / XCON (Digital Equipment Corporation &amp; CMU, 1980)</h3>
-                        </div>
-                        <p><strong>System Genesis:</strong> Built by John McDermott at Carnegie Mellon University for Digital Equipment Corporation (DEC), R1 (later named XCON - eXpert CONfigurer) automated the complex physical configuration of VAX-11 computer systems based on customer orders.</p>
-                        <ul>
-                            <li><strong>Engineering Problem:</strong> A VAX computer contained hundreds of inter-dependent cabinets, memory boards, power supplies, cables, and bus slots. Human order clerks frequently made wiring and component sizing errors, resulting in costly shipment delays and field rework.</li>
-                            <li><strong>Rule-Based Forward Chaining:</strong> Utilizing over 2,500 forward-chaining rules in OPS5, XCON parsed customer orders and generated exact cabinet layout blueprints and cabling diagrams.</li>
-                            <li><strong>Economic Value:</strong> XCON achieved a 98% configuration accuracy rate and saved DEC an estimated <strong>$40 million annually</strong> by drastically reducing erroneous component shipments.</li>
-                        </ul>
-                    </div>
-
-                    <div class="case-card">
-                        <div class="case-header">
-                            <span class="case-tag">Geological Exploration</span>
-                            <h3>PROSPECTOR (SRI International, 1978)</h3>
-                        </div>
-                        <p><strong>System Genesis:</strong> Developed by Richard Duda, Peter Hart, and colleagues at Stanford Research Institute (SRI) to assist field geologists in evaluating the likelihood of mineral deposits at exploration sites.</p>
-                        <ul>
-                            <li><strong>Historic Success:</strong> In 1982, PROSPECTOR accurately predicted the location of a previously undiscovered, multi-million-dollar molybdenum deposit at Mount Tolman in Washington state, validating the commercial capability of expert systems.</li>
-                        </ul>
-                    </div>
-                </section>
-
-                <!-- SECTION 5: EXAM QUESTIONS -->
-                <section id="questions-section" class="module-section">
-                    <div class="section-title">
-                        <h2>5. Possible University Exam Questions &amp; Marking Guide</h2>
-                        <span class="cross-ref-badge">NMIMS Pattern: 4, 6, 8, 10 Marks</span>
-                    </div>
-
-                    <div class="question-item">
-                        <div class="q-header">
-                            <span class="marks-badge">4 Marks</span>
-                            <h4>Q1. Define an Expert System. State the foundational equation and explain what is meant by an Expert System Shell.</h4>
-                        </div>
-                        <div class="q-answer">
-                            <p><strong>Marking Scheme:</strong> 1.5 marks for formal definition; 1 mark for foundational equation; 1.5 marks for shell definition.</p>
-                            <p><strong>Model Answer Key:</strong> An Expert System is an interactive, computer-based decision-making tool that uses facts, heuristics, and symbolic reasoning to solve complex problems in a specific domain at an expert level. Foundational equation: \(\text{Expert System} = \text{Knowledge Base} + \text{Inference Engine}\). An Expert System Shell is a complete ES with the domain-specific Knowledge Base emptied, providing a reusable inference engine, explanation facility, and UI framework.</p>
-                        </div>
-                    </div>
-
-                    <div class="question-item">
-                        <div class="q-header">
-                            <span class="marks-badge">6 Marks</span>
-                            <h4>Q2. Differentiate between Conventional Programming and Expert Systems across five distinct parameters.</h4>
-                        </div>
-                        <div class="q-answer">
-                            <p><strong>Marking Scheme:</strong> 1 mark per valid comparative point with concise explanation (max 6 marks).</p>
-                            <p><strong>Model Answer Key:</strong> Tabulate differences across: (1) Coupling of knowledge and control, (2) Algorithmic vs Heuristic reasoning, (3) Presence of Explanation Facility (Why/How), (4) Ability to handle uncertain/incomplete data, (5) Ease of updating domain rules.</p>
-                        </div>
-                    </div>
-
-                    <div class="question-item">
-                        <div class="q-header">
-                            <span class="marks-badge">8 Marks</span>
-                            <h4>Q3. Draw the block diagram representing the complete architecture of an Expert System. Explain the function of each component.</h4>
-                        </div>
-                        <div class="q-answer">
-                            <p><strong>Marking Scheme:</strong> 3 marks for neat, correctly labeled architecture diagram; 5 marks for explaining Knowledge Base, Working Memory, Inference Engine, Explanation Subsystem, and KB Editor.</p>
-                            <p><strong>Model Answer Key:</strong> Draw Figure 6.1 showing Knowledge Base, Fact DB, Inference Engine, Explanation Facility, KB Editor, and User Interface. Detail the responsibilities of each component as described in Section 1.3.</p>
-                        </div>
-                    </div>
-
-                    <div class="question-item">
-                        <div class="q-header">
-                            <span class="marks-badge">10 Marks</span>
-                            <h4>Q4. (Comprehensive Numerical on Uncertainty) Explain the Certainty Factor (CF) model used in MYCIN. If Rule 1 concludes H with CF = +0.8 and Rule 2 concludes H with CF = +0.6, calculate the combined CF. What happens if Rule 2 had CF = -0.4?</h4>
-                        </div>
-                        <div class="q-answer">
-                            <p><strong>Marking Scheme:</strong> 3 marks for explaining CF definition (\(MB - MD\)) and range \([-1, +1]\); 3.5 marks for positive combination calculation; 3.5 marks for opposite-signs combination calculation.</p>
-                            <p><strong>Model Answer Key:</strong></p>
-                            <ul>
-                                <li>Explain \(CF(H, E) = MB(H, E) - MD(H, E)\) with range \([-1, 1]\).</li>
-                                <li><strong>Case 1 (Both Positive):</strong>
+</div>
+<div class="step-row">
+<span class="step-badge answer">FINAL ANSWER</span>
+<div>
+<p class="final-box">\(\mathbf{CF(\text{Diagnosis = Measles}) = +0.741 \quad (74.1\% \text{ Certainty})}\)</p>
+<p class="hint">Goal resolution succeeded via backward chaining goal decomposition and MYCIN certainty factor propagation.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: COMPARATIVE STUDIES -->
+<section class="module-section" id="comparison-section">
+<div class="section-title">
+<h2>3. Comparative Studies</h2>
+<span class="cross-ref-badge">Exam-Focused Tabular Comparisons</span>
+</div>
+<h3>Table 6.1: Conventional Software Programs vs. Expert Systems</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Comparison Dimension</th>
+<th>Conventional Software (e.g., C++, Java, Python)</th>
+<th>Expert Systems (e.g., JESS, CLIPS, MYCIN)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Knowledge &amp; Control</strong></td>
+<td>Tightly coupled; data and procedural algorithm are blended inside code</td>
+<td>Strictly decoupled; Knowledge Base is independent of the Inference Engine</td>
+</tr>
+<tr>
+<td><strong>Processing Style</strong></td>
+<td>Algorithmic, repetitive, step-by-step sequential execution</td>
+<td>Heuristic, symbolic, pattern-matching inference over production rules</td>
+</tr>
+<tr>
+<td><strong>Explanation Facility</strong></td>
+<td>Opaque; cannot articulate <em>why</em> a computation occurred</td>
+<td>Fully transparent; built-in explanation facility (answers WHY and HOW)</td>
+</tr>
+<tr>
+<td><strong>Handling Uncertainty</strong></td>
+<td>Requires precise, complete numerical inputs (fails or crashes on missing data)</td>
+<td>Natively handles ambiguous, noisy, or incomplete data via Certainty Factors</td>
+</tr>
+<tr>
+<td><strong>Modifiability</strong></td>
+<td>Cumbersome; altering business rules requires recompiling and retesting code</td>
+<td>Effortless; new rules can be added to the Knowledge Base dynamically</td>
+</tr>
+</tbody>
+</table>
+<h3>Table 6.2: Forward Chaining vs. Backward Chaining Inference Strategies</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Comparison Dimension</th>
+<th>Forward Chaining (Data-Driven)</th>
+<th>Backward Chaining (Goal-Driven)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Starting Point</strong></td>
+<td>Starts with known initial raw facts in Working Memory</td>
+<td>Starts with a hypothetical conclusion or top-level goal query</td>
+</tr>
+<tr>
+<td><strong>Direction of Search</strong></td>
+<td>Bottom-up: matches facts against rule IF-conditions to generate new facts</td>
+<td>Top-down: looks for rules whose THEN-consequents match the target goal</td>
+</tr>
+<tr>
+<td><strong>User Interaction</strong></td>
+<td>Passive; user inputs all known data upfront</td>
+<td>Interactive; queries user only for facts needed to evaluate active subgoals</td>
+</tr>
+<tr>
+<td><strong>Best Suited Domains</strong></td>
+<td>Monitoring, real-time control, automated configuration (e.g., R1/XCON)</td>
+<td>Medical diagnosis, fault isolation, criminal investigation (e.g., MYCIN)</td>
+</tr>
+<tr>
+<td><strong>Efficiency Risk</strong></td>
+<td>May fire dozens of irrelevant rules that never lead to an actionable conclusion</td>
+<td>Focuses exclusively on relevant rules, but can get stuck in deep recursive search paths</td>
+</tr>
+</tbody>
+</table>
+</section>
+<!-- SECTION 4: CASE STUDIES & REAL-WORLD APPLICATIONS -->
+<section class="module-section" id="case-section">
+<div class="section-title">
+<h2>4. Real-World Case Studies &amp; Practical Systems</h2>
+<span class="cross-ref-badge">Historical &amp; Industrial Milestones</span>
+</div>
+<div class="case-card">
+<div class="case-header">
+<span class="case-tag">Landmark Medical AI</span>
+<h3>MYCIN (Stanford University, 1972–1976)</h3>
+</div>
+<p><strong>System Genesis:</strong> Developed at Stanford University by Dr. Edward Shortliffe in collaboration with infectious disease clinicians, MYCIN was designed to assist doctors in prescribing appropriate antimicrobial therapy for patients with bacteremia (bloodstream bacterial infections) and meningitis.</p>
+<ul>
+<li><strong>Key Architecture:</strong> Employed backward-chaining inference over ~450 LISP production rules and pioneered the Certainty Factor calculus.</li>
+<li><strong>Clinical Impact:</strong> Evaluated in double-blind clinical trials where therapy recommendations were submitted to expert panels without revealing whether the prescriber was a human faculty member or MYCIN. MYCIN scored a 65% rating—statistically identical to Stanford's top specialists and far superior to general resident doctors.</li>
+</ul>
+</div>
+<div class="case-card">
+<div class="case-header">
+<span class="case-tag">Industrial Manufacturing Milestone</span>
+<h3>R1 / XCON (Digital Equipment Corporation &amp; CMU, 1980)</h3>
+</div>
+<p><strong>System Genesis:</strong> Built by John McDermott at Carnegie Mellon University for Digital Equipment Corporation (DEC), R1 (later named XCON - eXpert CONfigurer) automated the complex physical configuration of VAX-11 computer systems based on customer orders.</p>
+<ul>
+<li><strong>Engineering Problem:</strong> A VAX computer contained hundreds of inter-dependent cabinets, memory boards, power supplies, cables, and bus slots. Human order clerks frequently made wiring and component sizing errors, resulting in costly shipment delays and field rework.</li>
+<li><strong>Rule-Based Forward Chaining:</strong> Utilizing over 2,500 forward-chaining rules in OPS5, XCON parsed customer orders and generated exact cabinet layout blueprints and cabling diagrams.</li>
+<li><strong>Economic Value:</strong> XCON achieved a 98% configuration accuracy rate and saved DEC an estimated <strong>$40 million annually</strong> by drastically reducing erroneous component shipments.</li>
+</ul>
+</div>
+<div class="case-card">
+<div class="case-header">
+<span class="case-tag">Geological Exploration</span>
+<h3>PROSPECTOR (SRI International, 1978)</h3>
+</div>
+<p><strong>System Genesis:</strong> Developed by Richard Duda, Peter Hart, and colleagues at Stanford Research Institute (SRI) to assist field geologists in evaluating the likelihood of mineral deposits at exploration sites.</p>
+<ul>
+<li><strong>Historic Success:</strong> In 1982, PROSPECTOR accurately predicted the location of a previously undiscovered, multi-million-dollar molybdenum deposit at Mount Tolman in Washington state, validating the commercial capability of expert systems.</li>
+</ul>
+</div>
+</section>
+<!-- SECTION 5: EXAM QUESTIONS -->
+<section class="module-section" id="questions-section">
+<div class="section-title">
+<h2>5. Possible University Exam Questions &amp; Marking Guide</h2>
+<span class="cross-ref-badge">NMIMS Pattern: 4, 6, 8, 10 Marks</span>
+</div>
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">4 Marks</span>
+<h4>Q1. Define an Expert System. State the foundational equation and explain what is meant by an Expert System Shell.</h4>
+</div>
+<div class="q-answer">
+<p><strong>Marking Scheme:</strong> 1.5 marks for formal definition; 1 mark for foundational equation; 1.5 marks for shell definition.</p>
+<p><strong>Model Answer Key:</strong> An Expert System is an interactive, computer-based decision-making tool that uses facts, heuristics, and symbolic reasoning to solve complex problems in a specific domain at an expert level. Foundational equation: \(\text{Expert System} = \text{Knowledge Base} + \text{Inference Engine}\). An Expert System Shell is a complete ES with the domain-specific Knowledge Base emptied, providing a reusable inference engine, explanation facility, and UI framework.</p>
+</div>
+</div>
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">6 Marks</span>
+<h4>Q2. Differentiate between Conventional Programming and Expert Systems across five distinct parameters.</h4>
+</div>
+<div class="q-answer">
+<p><strong>Marking Scheme:</strong> 1 mark per valid comparative point with concise explanation (max 6 marks).</p>
+<p><strong>Model Answer Key:</strong> Tabulate differences across: (1) Coupling of knowledge and control, (2) Algorithmic vs Heuristic reasoning, (3) Presence of Explanation Facility (Why/How), (4) Ability to handle uncertain/incomplete data, (5) Ease of updating domain rules.</p>
+</div>
+</div>
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">8 Marks</span>
+<h4>Q3. Draw the block diagram representing the complete architecture of an Expert System. Explain the function of each component.</h4>
+</div>
+<div class="q-answer">
+<p><strong>Marking Scheme:</strong> 3 marks for neat, correctly labeled architecture diagram; 5 marks for explaining Knowledge Base, Working Memory, Inference Engine, Explanation Subsystem, and KB Editor.</p>
+<p><strong>Model Answer Key:</strong> Draw Figure 6.1 showing Knowledge Base, Fact DB, Inference Engine, Explanation Facility, KB Editor, and User Interface. Detail the responsibilities of each component as described in Section 1.3.</p>
+</div>
+</div>
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">10 Marks</span>
+<h4>Q4. (Comprehensive Numerical on Uncertainty) Explain the Certainty Factor (CF) model used in MYCIN. If Rule 1 concludes H with CF = +0.8 and Rule 2 concludes H with CF = +0.6, calculate the combined CF. What happens if Rule 2 had CF = -0.4?</h4>
+</div>
+<div class="q-answer">
+<p><strong>Marking Scheme:</strong> 3 marks for explaining CF definition (\(MB - MD\)) and range \([-1, +1]\); 3.5 marks for positive combination calculation; 3.5 marks for opposite-signs combination calculation.</p>
+<p><strong>Model Answer Key:</strong></p>
+<ul>
+<li>Explain \(CF(H, E) = MB(H, E) - MD(H, E)\) with range \([-1, 1]\).</li>
+<li><strong>Case 1 (Both Positive):</strong>
                                 $$CF_{\text{combine}} = 0.8 + 0.6 - (0.8 \times 0.6) = 1.4 - 0.48 = \mathbf{+0.92}$$
                                 </li>
-                                <li><strong>Case 2 (Opposite Signs: \(CF_1 = +0.8, CF_2 = -0.4\)):</strong>
+<li><strong>Case 2 (Opposite Signs: \(CF_1 = +0.8, CF_2 = -0.4\)):</strong>
                                 $$CF_{\text{combine}} = \frac{CF_1 + CF_2}{1 - \min(|CF_1|, |CF_2|)} = \frac{0.8 + (-0.4)}{1 - \min(0.8, 0.4)} = \frac{0.4}{1 - 0.4} = \frac{0.4}{0.6} = \mathbf{+0.67}$$
                                 </li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Navigation Footer -->
-                <nav class="unit-pagination">
-                    <a href="unit_5.html" class="btn btn-outline">&larr; Previous: Unit 5 (Machine Learning)</a>
-                    <a href="../index.html" class="btn btn-primary">Return to Syllabus Hub &uarr;</a>
-                </nav>
-            </article>
-        </main>
-    </div>
+</ul>
+</div>
+</div>
+</section>
+<!-- Navigation Footer -->
+<nav class="unit-pagination">
+<a class="btn btn-outline" href="unit_5.html">← Previous: Unit 5 (Machine Learning)</a>
+<a class="btn btn-primary" href="../index.html">Return to Syllabus Hub ↑</a>
+</nav>
+</article>
+</main>
+</div>
 </body>
 </html>

@@ -4,668 +4,1032 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Unit 2 – Solving Problems by Searching | Lecture Study Guide</title>
-<style>
-:root{--ink:#172435;--muted:#536578;--line:#d7e0e7;--accent:#087e8b;--paper:#fff;--wash:#f3f7f8}
-*{box-sizing:border-box}
-body{margin:0;background:var(--wash);color:var(--ink);font:17px/1.68 system-ui,-apple-system,Segoe UI,sans-serif}
-header,main,footer{max-width:1050px;margin:auto;padding:28px}
-header{padding-top:54px;padding-bottom:20px}
-h1{font-size:2.5rem;line-height:1.12;margin:.2em 0}
-.sub{color:var(--muted);font-size:1.05rem}
-section{background:var(--paper);padding:24px 30px;margin:18px 0;border-top:3px solid var(--accent);box-shadow:0 2px 10px #142b3a0c}
-h2{font-size:1.65rem;margin:.2em 0 .55em}
-h3{font-size:1.2rem;margin:1.2em 0 .3em}
-p{margin:.6em 0}
-li{margin:.28em 0}
-table{border-collapse:collapse;width:100%;margin:14px 0}
-th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
-th{background:#eaf2f3}
-code,.math{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#eef3f4;padding:.08em .3em;border-radius:3px}
-.diagram{background:#f2f7f8;border-left:4px solid var(--accent);padding:14px 18px;overflow:auto;white-space:pre-wrap;font-family:ui-monospace,monospace;line-height:1.55}
-.exam{background:#fff8e7;border-left:4px solid #d69b14;padding:12px 16px;margin:12px 0}
-.step{font-weight:700;color:var(--accent)}
-.tag{color:var(--muted);font-size:.9rem}
-a{color:#006b78}
-footer{color:var(--muted)}
-.unit-controls{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap;width:100%;max-width:1050px;height:46px;margin:0 auto;padding:5px 0;background:#f3f7f8ed;backdrop-filter:blur(8px)}
-.unit-controls a{display:inline-block;background:#087e8b;color:#fff;text-decoration:none;padding:6px 10px;border-radius:6px;font-size:.88rem;font-weight:650;line-height:1.3}
-.unit-controls a:hover{background:#075d67}
-.unit-controls .home{background:#43586c}
-.unit-controls .disabled{display:inline-block;color:#718092;background:#edf1f4;padding:6px 10px;border-radius:6px;font-size:.88rem;font-weight:600;line-height:1.3}
-.toc-panel{position:fixed;z-index:90;top:62px;left:max(12px,calc((100vw - 1050px)/2 - 252px));width:232px;max-height:calc(100vh - 74px);overflow:auto;margin:0;background:#fff;border:1px solid #d7e0e7;border-radius:10px;box-shadow:0 8px 28px #17243518}
-.toc-panel details>summary{list-style:none;cursor:pointer;padding:10px 13px;font-weight:700;color:#172435;font-size:.94rem}
-.toc-panel details>summary::-webkit-details-marker{display:none}
-.toc-panel details>summary:after{content:"▼";float:right;color:#087e8b}
-.toc-panel details:not([open])>summary:after{content:"▶"}
-.toc-panel .toc{display:block;padding:0 8px 10px}
-.toc-panel .toc a{display:block;margin:2px 0;padding:7px 8px;color:#176778;text-decoration:none;font-size:.9rem;line-height:1.35;border-radius:6px}
-.toc-panel .toc a:hover{background:#eef6f6}
-.lesson-layout{display:block;width:100%;max-width:1050px;margin:0 auto;padding:0}
-.lesson-layout main{width:100%;max-width:1050px;min-width:0;margin:0 auto;padding:28px 0}
-.category>section{box-shadow:none;border-top:1px solid var(--line);padding:18px 2px;margin:10px 0;background:transparent}
-.category>section>h2{font-size:1.22rem;color:#087e8b}
-.category>h2{margin-bottom:14px}
-.point-list{margin:.45em 0 .9em;padding-left:1.35em;list-style:disc}
-.point-list li{padding-left:.18em;margin:.28em 0;line-height:1.55}
-.point-list li::marker{color:#087e8b}
-.numerical-guide{padding:13px 16px;margin:12px 0 16px;background:#e8f4f4;border:1px solid #c8e2e3;border-left:5px solid #087e8b;border-radius:7px;color:#173748}
-.numerical-guide strong{display:block;letter-spacing:.04em;color:#075d67}
-.numerical-guide span{display:block;margin-top:3px;font-size:.93rem}
-.numerical-tag{display:inline-block;padding:4px 8px;border-radius:4px;background:#087e8b;color:#fff;font-size:.76rem;letter-spacing:.05em;font-weight:800;line-height:1.25}
-.worked-block{padding:15px 18px 18px;margin:16px 0;background:#fff;border:1px solid #d7e0e7;border-left:4px solid #087e8b;border-radius:8px;box-shadow:0 2px 10px #17243508}
-.worked-block h3{margin:.1em 0 .85em;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.given-box,.formula-box,.answer-box{padding:10px 13px;margin:10px 0;border-radius:6px}
-.given-box{background:#f3f6f9}
-.formula-box{background:#edf5f6}
-.answer-box{background:#fff7e3;border-left:4px solid #d69b14}
-.given-box>b,.formula-box>b,.answer-box>b{display:block;margin-bottom:4px;font-size:.8rem;letter-spacing:.06em;color:#43586c}
-.solution-steps{margin:.65em 0 1em;padding-left:1.6em}
-.solution-steps>li{margin:.5em 0;padding-left:.25em;line-height:1.6}
-.figure{margin:18px 0;padding:12px 16px;background:#f2f7f8;border-left:4px solid #087e8b;overflow:auto}
-.figure svg{display:block;width:100%;max-width:900px;height:auto;margin:auto}
-.figure figcaption{text-align:center;color:#536578;font-size:.92rem;margin-top:5px}
-.svg-label{font:600 15px system-ui,sans-serif;fill:#172435}
-.svg-note{font:14px system-ui,sans-serif;fill:#536578}
-.related{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0 0 12px;color:#657586;font-size:.9rem}
-.related a{white-space:nowrap}
-@media print{body{background:white;font-size:11pt}section{box-shadow:none;break-inside:avoid}a{color:inherit;text-decoration:none}}
-@media(max-width:900px){.lesson-layout{max-width:100%;padding:0 16px}.lesson-layout main{max-width:100%;padding:20px 0}.toc-panel{left:12px;top:58px;width:min(232px,calc(100vw - 24px));max-height:calc(100vh - 68px)}.unit-controls{max-width:100%;padding:5px 12px}}
-</style>
-<style>.pyq-focus{margin:1.25rem 0 1.6rem;padding:1.1rem 1.25rem;border:1px solid #9bcbd0;border-left:5px solid #087f8c;border-radius:10px;background:#f1f8f8;color:#172638}.pyq-focus h3{margin:.1rem 0 .7rem}.pyq-focus h4{margin:1.15rem 0 .5rem;color:#075c66}.pyq-focus li{margin:.35rem 0}.pyq-focus .source-note,.source-note{font-size:.92em;color:#52677a;margin-top:.8rem}.pyq-focus .number-steps li{padding:.25rem 0}.pyq-focus .visual-example{margin:1rem 0;padding:.75rem;background:#fff;border:1px solid #d7e3e8;border-radius:8px}.pyq-focus svg{display:block;width:100%;height:auto;max-height:300px}.pyq-focus figcaption,.pyq-focus .visual-example p{font-size:.9em;color:#52677a}.pyq-focus .table-wrap{overflow-x:auto;margin:.75rem 0}.pyq-focus table{width:100%;border-collapse:collapse;background:#fff}.pyq-focus th,.pyq-focus td{border:1px solid #cfdae0;padding:.45rem .55rem;text-align:left}.pyq-focus th{background:#e5f1f3}.pyq-note{padding:.75rem 1rem;border-radius:8px;background:#fff4df;border-left:4px solid #da9f35}.pyq-focus ol{padding-left:1.5rem}</style>
+<title>Unit 2: Problem Solving &amp; Search - NMIMS Master Class Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <script>
-window.MathJax = {
-  tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']],
-    displayMath: [['$$', '$$'], ['\\[', '\\]']],
-    processEscapes: true
-  },
-  options: {
-    processHtmlClass: 'tex2jax_process|math'
-  }
-};
-</script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        processHtmlClass: 'tex2jax_process|math'
+      }
+    };
+    </script>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="ai-formatting-polish">/* AI unit pages: formatting-only polish */
+:root {
+  --ai-content-width: 980px;
+}
 
-</head>
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  min-width: 320px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.layout-container,
+.main-content,
+.content-wrapper {
+  min-width: 0;
+}
+
+.main-content {
+  width: calc(100% - 290px);
+  max-width: none;
+}
+
+.content-wrapper {
+  max-width: var(--ai-content-width);
+}
+
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  min-height: 52px;
+  padding: 12px 0;
+  margin-top: -32px;
+  background: color-mix(in srgb, var(--bg-main) 94%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.unit-hero {
+  padding-top: 6px;
+  margin-bottom: clamp(26px, 4vw, 42px);
+}
+
+.unit-hero h1 {
+  max-width: 24ch;
+  font-size: clamp(1.8rem, 3.3vw, 2.45rem);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.unit-hero .lead {
+  max-width: 75ch;
+}
+
+.module-section {
+  scroll-margin-top: 76px;
+  padding: clamp(20px, 3vw, 34px);
+  margin-bottom: clamp(24px, 4vw, 40px);
+}
+
+.section-title {
+  align-items: flex-start;
+}
+
+.section-title h2 {
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+.topic-block {
+  scroll-margin-top: 76px;
+}
+
+.topic-block p,
+.topic-block li,
+.q-answer p,
+.callout p {
+  max-width: 82ch;
+  line-height: 1.72;
+}
+
+.topic-block ul,
+.topic-block ol,
+.callout ul,
+.callout ol {
+  padding-left: 0.35rem;
+}
+
+.callout,
+.case-card,
+.problem-card,
+.question-item,
+.final-box {
+  overflow-wrap: anywhere;
+}
+
+.callout {
+  padding: 18px 20px;
+  border-radius: 10px;
+}
+
+.problem-card {
+  padding: clamp(16px, 2.5vw, 25px);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.035);
+}
+
+.problem-header {
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.problem-header h3,
+.q-header h4,
+.case-header h3 {
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.step-row {
+  min-width: 0;
+}
+
+.step-row > :last-child {
+  min-width: 0;
+}
+
+.step-badge {
+  flex: 0 0 auto;
+}
+
+.final-box {
+  margin-top: 14px;
+  line-height: 1.65;
+}
+
+.diagram-wrapper {
+  max-width: 100%;
+  padding: 4px 0;
+  overscroll-behavior-inline: contain;
+  scrollbar-color: #94a3b8 #eef2f7;
+}
+
+.diagram-wrapper svg,
+.module-section svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.diagram-caption {
+  max-width: 72ch;
+  margin-right: auto;
+  margin-left: auto;
+  line-height: 1.55;
+}
+
+.data-table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  scrollbar-color: #94a3b8 #eef2f7;
+  overscroll-behavior-inline: contain;
+}
+
+.data-table th,
+.data-table td {
+  min-width: 7rem;
+  vertical-align: top;
+  line-height: 1.55;
+}
+
+.data-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.data-table tr:hover td {
+  background-color: #f8fafc;
+}
+
+code,
+kbd,
+pre {
+  font-family: var(--font-mono);
+}
+
+code {
+  overflow-wrap: anywhere;
+}
+
+pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 14px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: #f8fafc;
+  line-height: 1.6;
+  scrollbar-color: #94a3b8 #eef2f7;
+}
+
+.MathJax,
+.MathJax_Display,
+mjx-container {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 0;
+}
+
+.q-header {
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.marks-badge {
+  margin-top: 2px;
+}
+
+.q-answer {
+  line-height: 1.7;
+}
+
+.unit-pagination {
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.35;
+}
+
+.sidebar-nav a:focus-visible,
+.btn:focus-visible,
+a:focus-visible {
+  outline: 3px solid #f2bd48;
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    max-height: 34vh;
+    padding: 16px;
+    overscroll-behavior: contain;
+  }
+
+  .sidebar-header {
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+
+  .sidebar-nav h3 {
+    margin-top: 14px;
+  }
+
+  .main-content {
+    width: 100%;
+    padding: 24px 16px 56px;
+  }
+
+  .top-bar {
+    margin-top: -24px;
+  }
+
+  .module-section {
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 15px;
+  }
+
+  .top-bar {
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    font-size: 0.82rem;
+  }
+
+  .meta-tag {
+    font-size: 0.72rem;
+  }
+
+  .unit-hero h1 {
+    font-size: clamp(1.65rem, 8vw, 2.05rem);
+  }
+
+  .unit-hero .lead {
+    font-size: 1rem;
+  }
+
+  .section-title {
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+
+  .section-title h2 {
+    font-size: 1.25rem;
+  }
+
+  .cross-ref-badge {
+    font-size: 0.7rem;
+  }
+
+  .step-row {
+    gap: 10px;
+  }
+
+  .step-badge {
+    white-space: normal;
+  }
+
+  .data-table {
+    font-size: 0.84rem;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 9px 10px;
+    min-width: 6.25rem;
+  }
+
+  .unit-pagination {
+    justify-content: stretch;
+  }
+
+  .unit-pagination .btn {
+    flex: 1 1 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media print {
+  .sidebar,
+  .top-bar,
+  .unit-pagination {
+    display: none !important;
+  }
+
+  .main-content {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .module-section,
+  .problem-card,
+  .case-card,
+  .callout {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+}
+</style></head>
 <body>
-<nav class="unit-controls">
-<a href="unit_1.html">← Previous unit</a>
-<a href="unit_3.html">Next unit →</a>
-<a class="home" href="../index.html">NMIMS-STUDY home</a>
-</nav>
-<nav class="toc-panel">
-<details open="">
-<summary>Unit 2 — Contents</summary>
-<div class="toc">
-<a href="#theory-section">📖 Comprehensive Theory</a>
-<a href="#t-problem-solving">  Problem-Solving Agents</a>
-<a href="#t-problem-formulation">  4 Components of a Problem</a>
-<a href="#t-toy-real">  Toy vs Real-World Problems</a>
-<a href="#t-eval-criteria">  Performance Evaluation (4 Metrics)</a>
-<a href="#t-uninformed">  Uninformed Search (BFS, DFS, UCS)</a>
-<a href="#t-informed">  Informed Search &amp; Heuristics</a>
-<a href="#t-greedy-astar">  Greedy Best-First &amp; A* Search</a>
-<a href="#t-hill-climbing">  Hill Climbing &amp; Its Pitfalls</a>
-<a href="#t-genetic-algo">  Genetic Algorithms</a>
-<a href="#t-adversarial">  Adversarial Games &amp; Minimax</a>
-<a href="#t-alpha-beta">  Alpha-Beta (α-β) Pruning</a>
-<a href="#numerical-section">🧮 Worked Numerical Problems</a>
-<a href="#num-simple">  Simple: BFS vs DFS Traversal Trace</a>
-<a href="#num-medium">  Medium: Full A* Graph Trace f(n)=g(n)+h(n)</a>
-<a href="#num-complex">  Complex: Minimax with Alpha-Beta Cuts</a>
-<a href="#comparison-section">⚖️ Comparative Studies</a>
-<a href="#case-section">🏢 Case Studies &amp; Examples</a>
-<a href="#questions-section">❓ Exam Questions Bank</a>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · AI Master</a>
+<span class="badge">Semester Exam Prep</span>
 </div>
-</details>
-</nav>
-<div class="lesson-layout">
-<main>
-<header>
-<p class="tag">ARTIFICIAL INTELLIGENCE · UNIT 2 COMPREHENSIVE LECTURE STUDY GUIDE</p>
-<h1>Unit 2: Solving Problems by Searching</h1>
-<p class="sub">Prof. Jesleena Gonsalves · Complete Classroom Notes, Uninformed vs Informed Strategies, Local Search Landscapes, Genetic Operators, Game Tree Minimax &amp; Alpha-Beta Pruning</p>
-</header>
-<section class="category" id="theory-section">
-<h2>1. In-Depth Theory &amp; Concepts (Classroom Lecture Style)</h2>
-<p class="related">Related: <a href="#numerical-section">Worked Examples</a> · <a href="#comparison-section">Comparative Studies</a> · <a href="#case-section">Case Studies</a></p>
-<div id="t-problem-solving">
-<h3>2.1 Problem-Solving Agents &amp; The Solution Search Process</h3>
-<p>In Unit 1, we introduced goal-based agents. In this unit, we address how an agent actually accomplishes a goal when no immediate action presents an obvious answer: <strong>Problem Solving by Search</strong>.</p>
-<p>A <strong>Problem-Solving Agent</strong> is a goal-based agent that decides what to do by finding sequences of actions that lead to desirable goal states.</p>
-<ul class="point-list">
-<li><strong>Goal Formulation:</strong> The first step in problem solving. Based on the current situation and the agent's performance measure, the agent formulates a goal. A goal is defined as a set of world states in which the target objective is completely satisfied.</li>
-<li><strong>Problem Formulation:</strong> The process of deciding what actions and states to consider, given a goal. It involves abstracting away irrelevant real-world details.</li>
-<li><strong>Search:</strong> The computational process of looking for a sequence of actions that reaches a goal state. A search algorithm takes a formulated problem as input and returns a <strong>solution</strong> in the form of an action sequence.</li>
-<li><strong>Execution:</strong> Once a solution sequence is found, the agent carries out the prescribed actions one by one in the environment.</li>
-</ul>
-</div>
-<div id="t-problem-formulation">
-<h3>2.2 The Four Formal Components of a Problem</h3>
-<p>In your NMIMS university exams, a frequent 4-to-6 mark question asks to <em>"Formally define a search problem with its components."</em> Every problem is formally defined by four components:</p>
-<table>
-<tr>
-<th>Component</th>
-<th>Mathematical Symbol</th>
-<th>Definition &amp; Operational Meaning</th>
-<th>8-Puzzle Example</th>
-</tr>
-<tr>
-<td><strong>1. Initial State</strong></td>
-<td><span class="math">\(s_0\)</span></td>
-<td>The state the agent starts in within the state space.</td>
-<td>Any designated arrangement of 8 numbered tiles and 1 blank space on a 3×3 grid.</td>
-</tr>
-<tr>
-<td><strong>2. Successor Function (Actions + Transition Model)</strong></td>
-<td><span class="math">\(\text{SUCCESSOR}(s) 	o \{(a, s')\}\)</span></td>
-<td>Generates the legal actions executable in state $s$ and returns the resulting successor states $s'$.</td>
-<td>Moving the blank space: <code>Left</code>, <code>Right</code>, <code>Up</code>, or <code>Down</code>.</td>
-</tr>
-<tr>
-<td><strong>3. Goal Test</strong></td>
-<td><span class="math">\(\text{GOAL-TEST}(s) 	o \{\text{True}, \text{False}\}\)</span></td>
-<td>Determines whether a given state matches the desired goal configuration. Can be explicit (matching a specific state) or implicit (satisfying a property).</td>
-<td>Checks whether the current board tiles exactly match the standard configuration: [Blank, 1, 2, 3, 4, 5, 6, 7, 8].</td>
-</tr>
-<tr>
-<td><strong>4. Path Cost</strong></td>
-<td><span class="math">\(c(s, a, s') \text{ and } g(n)\)</span></td>
-<td>A numeric cost function that assigns a cost to each step along a path. The path cost $g(n)$ is the sum of step costs from initial state to node $n$.</td>
-<td>Each slide move costs 1, so the total path cost equals the total number of moves in the path.</td>
-</tr>
-</table>
-</div>
-<div id="t-toy-real">
-<h3>2.3 Toy Problems vs. Real-World Problems</h3>
-<p>The AI problem-solving approach distinguishes between two broad classes of problems:</p>
+<nav class="sidebar-nav">
+<h3>Syllabus Units</h3>
 <ul>
-<li><strong>Toy Problems:</strong> Intended to illustrate, test, or exercise various problem-solving methods. They have concise, exact mathematical descriptions that make them easy for researchers to compare algorithm benchmarks.
-        <ul>
-<li><strong>The 8-Puzzle:</strong> 3×3 board with 8 numbered sliding tiles and a blank space. State space: $9! / 2 = 181,440$ reachable states.</li>
-<li><strong>The 8-Queens Problem:</strong> Place 8 queens on an 8×8 chessboard such that no two queens attack each other (same row, column, or diagonal).</li>
+<li><a href="unit_1.html"><span class="unit-num">01</span> Intro to AI &amp; Intelligent Agents</a></li>
+<li><a class="active" href="unit_2.html"><span class="unit-num">02</span> Problem Solving &amp; Adversarial Search</a></li>
+<li><a href="unit_3.html"><span class="unit-num">03</span> Knowledge Representation &amp; Logic</a></li>
+<li><a href="unit_4.html"><span class="unit-num">04</span> Constraint Satisfaction Problems</a></li>
+<li><a href="unit_5.html"><span class="unit-num">05</span> Machine Learning &amp; Clustering</a></li>
+<li><a href="unit_6.html"><span class="unit-num">06</span> Expert Systems &amp; Shells</a></li>
 </ul>
-</li>
-<li><strong>Real-World Problems:</strong> Problems whose solutions people actually care about in industry and life. They have messy, complex, non-standard formulations:
-        <ul>
-<li><strong>Traveling Salesperson Problem (TSP):</strong> A touring problem where a salesman must visit each of $N$ cities exactly once and return to the start city, minimizing total travel distance. NP-hard problem with $(N-1)! / 2$ tours.</li>
-<li><strong>Route Finding &amp; Navigation:</strong> Used in Google Maps and autonomous driving networks.</li>
-<li><strong>VLSI Layout &amp; Robot Motion Planning:</strong> Placing millions of circuit gates without wire overlaps.</li>
+<h3>Unit 2 Contents</h3>
+<ul>
+<li><a href="#theory-section">1. In-Depth Lecture &amp; Theory</a></li>
+<li><a href="#sec-problem-formulation">1.1 Formal Problem Formulation (4 Components)</a></li>
+<li><a href="#sec-eval-metrics">1.2 The 4 Search Evaluation Criteria (b, d, m)</a></li>
+<li><a href="#sec-uninformed-search">1.3 Uninformed Search: BFS, DFS, UCS</a></li>
+<li><a href="#sec-informed-search">1.4 Informed Search: Greedy &amp; A* Search</a></li>
+<li><a href="#sec-local-search">1.5 Local Search &amp; Hill Climbing Pitfalls</a></li>
+<li><a href="#sec-genetic-algos">1.6 Genetic Algorithms (Selection, Crossover)</a></li>
+<li><a href="#sec-adversarial-search">1.7 Adversarial Search: Minimax &amp; Alpha-Beta</a></li>
+<li><a href="#numerical-section">2. Step-by-Step Numericals</a></li>
+<li><a href="#num-1">2.1 Simple: BFS vs. DFS State Space Traversal Trace</a></li>
+<li><a href="#num-2">2.2 Medium: Full A* Search Graph Evaluation Trace</a></li>
+<li><a href="#num-3">2.3 Complex: 3-Ply Minimax Game Tree with Alpha-Beta Pruning</a></li>
+<li><a href="#comparison-section">3. Comparative Studies</a></li>
+<li><a href="#case-section">4. Case Studies &amp; Applications</a></li>
+<li><a href="#questions-section">5. Exam Questions &amp; Marking Guide</a></li>
 </ul>
-</li>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 2: Problem Solving &amp; Search</span>
+</div>
+<div class="meta-tag">Unit 2 · 100% PPT Faithful · Comprehensive Lecture</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>Unit 2: Problem Solving &amp; Adversarial Search</h1>
+<p class="lead">A complete examination preparation guide covering formal state space formulation, uninformed search (BFS, DFS, UCS), informed heuristic search (Greedy, A* admissibility and consistency), local optimization (Hill Climbing, Genetic Algorithms), and two-player adversarial Minimax with Alpha-Beta pruning.</p>
+</header>
+<!-- SECTION 1: IN-DEPTH THEORY -->
+<section class="module-section" id="theory-section">
+<div class="section-title">
+<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+<span class="cross-ref-badge">Strictly Faithful to Slides &amp; Numericals</span>
+</div>
+<div class="topic-block" id="sec-problem-formulation">
+<h3>1.1 Formal Problem Formulation (The 4 Core Components)</h3>
+<p>In classical AI, a problem is formally defined as a collection of four mathematical components that define a <strong>State Space</strong>:</p>
+<div class="callout callout-def">
+<h4>The 4 Formal Components of a Problem:</h4>
+<ol>
+<li><strong>Initial State \(s_0\):</strong> The state the agent starts in (e.g., in the 8-puzzle, the scrambled starting tile arrangement).</li>
+<li><strong>Successor Function \(\text{Successor}(s)\):</strong> A transition function returning a set of ordered pairs \(\langle \text{action}, \text{result\_state} \rangle\) denoting legal actions from current state \(s\).</li>
+<li><strong>Goal Test \(\text{Goal-Test}(s)\):</strong> A boolean function returning <code>True</code> if state \(s\) matches the goal configuration, or an explicit test condition.</li>
+<li><strong>Path Cost Function \(c(s, a, s')\):</strong> A function that assigns a numeric cost to taking action \(a\) from state \(s\) to reach state \(s'\). The step costs sum up to the total path cost \(g(n)\).</li>
+</ol>
+</div>
+<h4>The 8-Puzzle Problem Formulation:</h4>
+<p>The 8-puzzle consists of a \(3 \times 3\) grid with 8 numbered sliding tiles and one empty space (blank). A tile adjacent to the blank space can slide into the blank.</p>
+<ul>
+<li><strong>States:</strong> Any configuration of the 8 tiles and 1 blank across the 9 cells (Total state space: \(\frac{9!}{2} = 181,440\) reachable states).</li>
+<li><strong>Initial State:</strong> Any specified scrambled configuration.</li>
+<li><strong>Successor Function:</strong> Move blank <code>{Left, Right, Up, Down}</code>.</li>
+<li><strong>Goal Test:</strong> Matches the standard numerical ordering: tiles 1 to 8 sorted with blank at top-left or bottom-right.</li>
+<li><strong>Path Cost:</strong> Each tile move costs 1 unit (path cost equals total moves).</li>
 </ul>
-<!-- SVG: 8-Puzzle Visual Representation -->
-<div class="figure">
-<svg viewbox="0 0 650 250" xmlns="http://www.w3.org/2000/svg">
-<text class="svg-label" font-size="16" text-anchor="middle" x="160" y="30">Start State</text>
+<!-- SVG: 8-Puzzle Start to Goal State -->
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:650px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewbox="0 0 650 250" xmlns="http://www.w3.org/2000/svg">
+<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="16" font-weight="700" text-anchor="middle" x="160" y="30">Start State</text>
 <g transform="translate(70, 45)">
-<rect fill="#fff" height="180" stroke="#087e8b" stroke-width="2.5" width="180" x="0" y="0"></rect>
+<rect fill="#ffffff" height="180" stroke="#087e8b" stroke-width="2.5" width="180"></rect>
 <line stroke="#087e8b" stroke-width="1.5" x1="60" x2="60" y1="0" y2="180"></line>
 <line stroke="#087e8b" stroke-width="1.5" x1="120" x2="120" y1="0" y2="180"></line>
 <line stroke="#087e8b" stroke-width="1.5" x1="0" x2="180" y1="60" y2="60"></line>
 <line stroke="#087e8b" stroke-width="1.5" x1="0" x2="180" y1="120" y2="120"></line>
-<text font-size="20" font-weight="700" text-anchor="middle" x="30" y="40">7</text>
-<text font-size="20" font-weight="700" text-anchor="middle" x="90" y="40">2</text>
-<text font-size="20" font-weight="700" text-anchor="middle" x="150" y="40">4</text>
-<text font-size="20" font-weight="700" text-anchor="middle" x="30" y="100">5</text>
+<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="30" y="42">7</text>
+<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="90" y="42">2</text>
+<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="150" y="42">4</text>
+<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="30" y="102">5</text>
 <rect fill="#eaf2f3" height="56" width="56" x="62" y="62"></rect>
-<text font-size="20" font-weight="700" text-anchor="middle" x="150" y="100">6</text>
-<text font-size="20" font-weight="700" text-anchor="middle" x="30" y="160">8</text>
-<text font-size="20" font-weight="700" text-anchor="middle" x="90" y="160">3</text>
-<text font-size="20" font-weight="700" text-anchor="middle" x="150" y="160">1</text>
+<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="150" y="102">6</text>
+<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="30" y="162">8</text>
+<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="90" y="162">3</text>
+<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="150" y="162">1</text>
 </g>
 <path d="M 280 135 L 370 135" marker-end="url(#arrAr)" stroke="#087e8b" stroke-width="3"></path>
-<text fill="#087e8b" font-size="13" font-weight="600" text-anchor="middle" x="325" y="125">Search Path</text>
-<text class="svg-label" font-size="16" text-anchor="middle" x="490" y="30">Goal State</text>
+<text fill="#087e8b" font-family="'Inter', sans-serif" font-size="13" font-weight="600" text-anchor="middle" x="325" y="125">Search Path</text>
+<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="16" font-weight="700" text-anchor="middle" x="490" y="30">Goal State</text>
 <g transform="translate(400, 45)">
-<rect fill="#fff" height="180" stroke="#087e8b" stroke-width="2.5" width="180" x="0" y="0"></rect>
+<rect fill="#ffffff" height="180" stroke="#087e8b" stroke-width="2.5" width="180"></rect>
 <line stroke="#087e8b" stroke-width="1.5" x1="60" x2="60" y1="0" y2="180"></line>
 <line stroke="#087e8b" stroke-width="1.5" x1="120" x2="120" y1="0" y2="180"></line>
 <line stroke="#087e8b" stroke-width="1.5" x1="0" x2="180" y1="60" y2="60"></line>
 <line stroke="#087e8b" stroke-width="1.5" x1="0" x2="180" y1="120" y2="120"></line>
 <rect fill="#eaf2f3" height="56" width="56" x="2" y="2"></rect>
-<text fill="#087e8b" font-size="20" font-weight="700" text-anchor="middle" x="90" y="40">1</text>
-<text fill="#087e8b" font-size="20" font-weight="700" text-anchor="middle" x="150" y="40">2</text>
-<text fill="#087e8b" font-size="20" font-weight="700" text-anchor="middle" x="30" y="100">3</text>
-<text fill="#087e8b" font-size="20" font-weight="700" text-anchor="middle" x="90" y="100">4</text>
-<text fill="#087e8b" font-size="20" font-weight="700" text-anchor="middle" x="150" y="100">5</text>
-<text fill="#087e8b" font-size="20" font-weight="700" text-anchor="middle" x="30" y="160">6</text>
-<text fill="#087e8b" font-size="20" font-weight="700" text-anchor="middle" x="90" y="160">7</text>
-<text fill="#087e8b" font-size="20" font-weight="700" text-anchor="middle" x="150" y="160">8</text>
+<text fill="#087e8b" font-family="'Inter', sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="90" y="42">1</text>
+<text fill="#087e8b" font-family="'Inter', sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="150" y="42">2</text>
+<text fill="#087e8b" font-family="'Inter', sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="30" y="102">3</text>
+<text fill="#087e8b" font-family="'Inter', sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="90" y="102">4</text>
+<text fill="#087e8b" font-family="'Inter', sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="150" y="102">5</text>
+<text fill="#087e8b" font-family="'Inter', sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="30" y="162">6</text>
+<text fill="#087e8b" font-family="'Inter', sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="90" y="162">7</text>
+<text fill="#087e8b" font-family="'Inter', sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="150" y="162">8</text>
 </g>
-<defs><marker id="arrAr" markerheight="6" markerwidth="8" orient="auto" refx="8" refy="3"><path d="M0,0 L8,3 L0,6Z" fill="#087e8b"></path></marker></defs>
+<defs>
+<marker id="arrAr" markerheight="6" markerwidth="8" orient="auto" refx="8" refy="3">
+<path d="M0,0 L8,3 L0,6Z" fill="#087e8b"></path>
+</marker>
+</defs>
 </svg>
-<figcaption>Fig 2.1 — 8-Puzzle Problem: Start State to Standard Goal State</figcaption>
+<p class="diagram-caption">Figure 2.1: The 8-Puzzle Problem: Scrambled Start State transformed into Standard Goal State.</p>
 </div>
 </div>
-<div id="t-eval-criteria">
-<h3>2.4 Measuring Problem-Solving Performance (The 4 Evaluation Metrics)</h3>
-<p>We evaluate any search algorithm using four rigorous computational dimensions:</p>
+<div class="topic-block" id="sec-eval-metrics">
+<h3>1.2 The Four Search Algorithm Evaluation Criteria</h3>
+<p>Search algorithms are evaluated based on four fundamental performance criteria parameterized by:
+                        $$\mathbf{b} = \text{Branching factor (maximum successors of any node)}, \quad \mathbf{d} = \text{Depth of shallowest goal node}, \quad \mathbf{m} = \text{Maximum depth of state space}$$</p>
 <ol>
-<li><strong>Completeness:</strong> Is the algorithm guaranteed to find a solution when at least one solution exists in the state space?</li>
-<li><strong>Optimality:</strong> Does the strategy find the highest quality (lowest path cost) solution among all existing valid solutions?</li>
-<li><strong>Time Complexity:</strong> How long (or how many node expansions) does it take to find a solution? Expressed in big-O notation using branching factor $b$ and depth $d$.</li>
-<li><strong>Space Complexity:</strong> How much memory (maximum number of nodes kept in the frontier/queue at any moment) is required?</li>
+<li><strong>Completeness:</strong> Is the algorithm guaranteed to find a solution when one exists?</li>
+<li><strong>Optimality:</strong> Does the strategy find the lowest path cost solution among all possible solutions?</li>
+<li><strong>Time Complexity:</strong> How many nodes are generated or expanded before finding a solution?</li>
+<li><strong>Space Complexity:</strong> How much maximum memory is required in the frontier / explored set during search?</li>
 </ol>
 </div>
-<div id="t-uninformed">
-<h3>2.5 Uninformed Search Strategies (Blind Search)</h3>
-<p><strong>Uninformed search</strong> (also called Blind Search) means the algorithm possesses no domain-specific knowledge regarding how close a state is to the goal. It only knows how to generate successor states and test whether a state is a goal.</p>
-<h4>1. Breadth-First Search (BFS)</h4>
-<p>Expands the root node first, then expands all direct successors of the root, then their successors in turn. In general, all nodes are expanded at depth $d$ before any nodes at depth $d+1$ are touched.</p>
-<ul class="point-list">
-<li><strong>Implementation:</strong> FIFO (First-In, First-Out) Queue. Newly generated child nodes are pushed to the tail.</li>
-<li><strong>Completeness:</strong> Yes (if branching factor $b$ is finite).</li>
-<li><strong>Optimality:</strong> Optimal if all step costs are equal (finds the shallowest goal). Non-optimal if edge costs vary.</li>
-<li><strong>Time Complexity:</strong> $O(b^d)$ — exponential.</li>
-<li><strong>Space Complexity:</strong> $O(b^d)$ — keeps every generated node in memory. Memory exhaustion is the primary failure mode of BFS.</li>
-</ul>
-<h4>2. Depth-First Search (DFS)</h4>
-<p>Expands the deepest unexpanded node in the current search frontier. It plunges straight down along a single branch until reaching a leaf node or goal; if a dead-end is hit, it backtracks to the next shallowest node with unexplored successors.</p>
-<ul class="point-list">
-<li><strong>Implementation:</strong> LIFO (Last-In, First-Out) Queue / Stack, or recursive function calls.</li>
-<li><strong>Completeness:</strong> No in infinite-depth spaces or spaces with cycles (unless graph search with visited states). Yes in finite spaces.</li>
-<li><strong>Optimality:</strong> No (it returns the first solution it stumbles upon, which may be vastly deeper and costlier than a shallow optimal path).</li>
-<li><strong>Time Complexity:</strong> $O(b^m)$, where $m$ is the maximum depth. Terrible if $m \gg d$.</li>
-<li><strong>Space Complexity:</strong> $O(b  \times  m)$ — <strong>linear space!</strong> Only stores path from root to current node plus siblings. This is the massive advantage of DFS over BFS.</li>
-</ul>
-<h4>3. Uniform Cost Search (UCS)</h4>
-<p>While BFS finds the shallowest path, the shallowest path is not necessarily the cheapest path when edge costs vary. <strong>Uniform Cost Search</strong> expands the node with the lowest cumulative path cost $g(n)$ first.</p>
-<ul class="point-list">
-<li><strong>Implementation:</strong> Priority Queue ordered by $g(n)$ (cumulative cost from start).</li>
-<li><strong>Equivalence:</strong> UCS is identical to Dijkstra's algorithm. When all step costs are equal, UCS behaves exactly like BFS.</li>
-<li><strong>Completeness &amp; Optimality:</strong> Complete and Optimal provided every step cost is strictly positive: $c(s, a, s') \ge \epsilon &gt; 0$.</li>
-</ul>
-<!-- SVG: Uninformed Search Tree BFS vs DFS -->
-<div class="figure">
-<svg viewbox="0 0 700 240" xmlns="http://www.w3.org/2000/svg">
-<text class="svg-label" font-size="16" text-anchor="middle" x="350" y="25">Traversal Comparison: Node (1) to Successors</text>
-<circle cx="350" cy="60" fill="#eaf2f3" r="18" stroke="#087e8b" stroke-width="2"></circle>
-<text font-weight="700" text-anchor="middle" x="350" y="66">1</text>
-<circle cx="200" cy="120" fill="#eaf2f3" r="18" stroke="#087e8b" stroke-width="2"></circle>
-<text font-weight="700" text-anchor="middle" x="200" y="126">2</text>
-<circle cx="500" cy="120" fill="#eaf2f3" r="18" stroke="#087e8b" stroke-width="2"></circle>
-<text font-weight="700" text-anchor="middle" x="500" y="126">3</text>
-<circle cx="130" cy="190" fill="#fff" r="18" stroke="#087e8b" stroke-width="2"></circle>
-<text font-weight="700" text-anchor="middle" x="130" y="196">4</text>
-<circle cx="270" cy="190" fill="#fff" r="18" stroke="#087e8b" stroke-width="2"></circle>
-<text font-weight="700" text-anchor="middle" x="270" y="196">5</text>
-<circle cx="430" cy="190" fill="#fff" r="18" stroke="#087e8b" stroke-width="2"></circle>
-<text font-weight="700" text-anchor="middle" x="430" y="196">6</text>
-<circle cx="570" cy="190" fill="#fff" r="18" stroke="#087e8b" stroke-width="2"></circle>
-<text font-weight="700" text-anchor="middle" x="570" y="196">7</text>
-<line stroke="#087e8b" stroke-width="2" x1="337" x2="213" y1="73" y2="107"></line>
-<line stroke="#087e8b" stroke-width="2" x1="363" x2="487" y1="73" y2="107"></line>
-<line stroke="#087e8b" stroke-width="2" x1="187" x2="143" y1="133" y2="177"></line>
-<line stroke="#087e8b" stroke-width="2" x1="213" x2="257" y1="133" y2="177"></line>
-<line stroke="#087e8b" stroke-width="2" x1="487" x2="443" y1="133" y2="177"></line>
-<line stroke="#087e8b" stroke-width="2" x1="513" x2="557" y1="133" y2="177"></line>
-<text class="svg-label" fill="#087e8b" text-anchor="middle" x="180" y="230">BFS (Level-Order): 1, 2, 3, 4, 5, 6, 7</text>
-<text class="svg-label" fill="#d69b14" text-anchor="middle" x="520" y="230">DFS (Pre-Order): 1, 2, 4, 5, 3, 6, 7</text>
-</svg>
-<figcaption>Fig 2.2 — Visual Comparison of Search Expansions: BFS vs DFS</figcaption>
-</div>
-</div>
-<div id="t-informed">
-<h3>2.6 Informed (Heuristic) Search Strategies</h3>
-<p>Unlike blind search, <strong>informed search</strong> uses problem-specific knowledge beyond the problem definition itself. This knowledge is supplied via a <strong>Heuristic Function</strong>, denoted <span class="math">\(h(n)\)</span>:</p>
-<div class="exam">
-<strong>Heuristic Function:</strong><br/>
-<span class="math">\(h(n) = \text{estimated cost of the cheapest path from node } n \text{ to a goal state.}\)</span>
-<br/>If $n$ is a goal node, then $h(n) = 0$.
-    </div>
-<ul class="point-list">
-<li><strong>8-Puzzle Heuristics:</strong>
-<ol>
-<li><span class="math">\(h_1(n)\)</span>: The number of misplaced tiles relative to the goal state.</li>
-<li><span class="math">\(h_2(n)\)</span>: Manhattan Distance — the sum of horizontal and vertical distances of each tile from its target position.</li>
-</ol>
-</li>
-<li><strong>Admissible Heuristic:</strong> A heuristic $h(n)$ is <em>admissible</em> if it <strong>never overestimates</strong> the true cost to reach the goal. That is, <span class="math">\(h(n) \le h^*(n)\)</span>, where $h^*(n)$ is the true optimal cost. Admissible heuristics are optimistic.</li>
-</ul>
-</div>
-<div id="t-greedy-astar">
-<h3>2.7 Greedy Best-First Search vs. A* Search</h3>
-<h4>1. Greedy Best-First Search</h4>
-<p>Evaluates nodes using solely the heuristic function: <span class="math">\(f(n) = h(n)\)</span>. It greedily expands the node that appears to be closest to the goal.</p>
-<div class="exam"><strong>Fatal Flaw:</strong> It completely ignores the accumulated path cost $g(n)$ from the start. Like DFS, it can be led down an arbitrarily expensive or false path. It is neither complete nor optimal.</div>
-<h4>2. A* Search (The King of Heuristic Search)</h4>
-<p>A* combines the proven optimality of Uniform Cost Search with the goal-oriented velocity of Greedy Best-First Search:</p>
-<div class="exam">
-<strong>Evaluation Function of A*:</strong><br/>
-<span class="math">\(f(n) = g(n) + h(n)\)</span><br/>
-      where:
-      <ul>
-<li><span class="math">\(g(n)\)</span> = exact path cost from initial start state to current node $n$.</li>
-<li><span class="math">\(h(n)\)</span> = estimated heuristic cost from node $n$ to the goal.</li>
-<li><span class="math">\(f(n)\)</span> = estimated total cost of the cheapest solution passing through node $n$.</li>
-</ul>
-</div>
-<p><strong>Optimality Theorem of A*:</strong> Tree-search A* is optimal if <span class="math">\(h(n)\)</span> is <strong>admissible</strong>. Graph-search A* is optimal if <span class="math">\(h(n)\)</span> is <strong>consistent (monotonic)</strong> (<span class="math">\(h(n) \le c(n, a, n') + h(n')\)</span>).</p>
-</div>
-<div id="t-hill-climbing">
-<h3>2.8 Hill Climbing Search &amp; The 3 Landscape Pitfalls</h3>
-<p><strong>Hill Climbing</strong> is a local search algorithm that continuously moves in the direction of increasing elevation (heuristic value or fitness) to find the peak of a state-space landscape. It keeps only the current state in memory—it does not maintain a search tree!</p>
-<ul class="point-list">
-<li><strong>Simple Hill Climbing:</strong> Evaluates neighbors one-by-one and greedily selects the <em>very first</em> neighbor that improves over the current state.</li>
-<li><strong>Steepest-Ascent Hill Climbing:</strong> Evaluates <em>all</em> neighboring states first, and selects the single neighbor that yields the greatest improvement.</li>
-<li><strong>Stochastic Hill Climbing:</strong> Selects a neighbor at random and accepts it based on the probability of improvement.</li>
-</ul>
-<h4>The Three Major Pitfalls of Hill Climbing</h4>
-<ol>
-<li><strong>Local Maxima:</strong> A peak that is higher than all its immediate neighbors, but significantly lower than the global maximum. The algorithm terminates prematurely thinking it has found the solution.</li>
-<li><strong>Plateau (Flat Area):</strong> A flat region of the state space where all neighboring states possess the identical heuristic value. The algorithm has no gradient to decide which direction to move.</li>
-<li><strong>Ridge:</strong> A sequence of local maxima joined by a narrow crest. The steep sides slope down in every orthogonal search direction, causing the algorithm to oscillate helplessly without progressing along the ridge crest.</li>
-</ol>
-<!-- SVG: Hill Climbing Landscape Pitfalls -->
-<div class="figure">
-<svg viewbox="0 0 750 250" xmlns="http://www.w3.org/2000/svg">
-<line stroke="#172435" stroke-width="2" x1="50" x2="700" y1="210" y2="210"></line>
-<line stroke="#172435" stroke-width="2" x1="50" x2="50" y1="210" y2="30"></line>
-<text class="svg-label" text-anchor="middle" x="375" y="240">State Space Landscape</text>
-<text class="svg-label" text-anchor="middle" transform="rotate(-90 25 110)" x="25" y="110">Objective Function Value</text>
-<!-- Landscape curve -->
-<path d="M 60 200 Q 110 80 160 120 T 260 140 H 340 Q 400 30 460 30 Q 520 30 560 160 Q 610 90 640 100 L 680 200" fill="none" stroke="#087e8b" stroke-width="3"></path>
-<!-- Annotations -->
-<circle cx="160" cy="120" fill="#d69b14" r="5"></circle>
-<text fill="#d69b14" font-weight="700" text-anchor="middle" x="160" y="105">Local Maxima</text>
-<line stroke="#d69b14" stroke-width="3" x1="260" x2="340" y1="140" y2="140"></line>
-<text fill="#d69b14" font-weight="700" text-anchor="middle" x="300" y="165">Plateau / Flat Area</text>
-<circle cx="460" cy="30" fill="#087e8b" r="6"></circle>
-<text fill="#087e8b" font-weight="700" text-anchor="middle" x="460" y="18">Global Maximum</text>
-<circle cx="640" cy="100" fill="#d69b14" r="5"></circle>
-<text fill="#d69b14" font-weight="700" text-anchor="middle" x="640" y="85">Ridge Peak</text>
-</svg>
-<figcaption>Fig 2.3 — The 1D State Space Landscape: Global Maxima vs Local Maxima, Plateau, and Ridge</figcaption>
-</div>
-</div>
-<div id="t-genetic-algo">
-<h3>2.9 Genetic Algorithms (GA)</h3>
-<p>A <strong>Genetic Algorithm</strong> is a global stochastic search heuristic inspired by Charles Darwin's theory of biological evolution: <em>"Survival of the Fittest."</em></p>
-<ul class="point-list">
-<li><strong>Chromosome / String Representation:</strong> A potential solution is encoded as a fixed-length character or bit string (e.g., <code>10100110</code>).</li>
-<li><strong>Fitness Function:</strong> A mathematical scoring function that evaluates how well each individual string solves the optimization problem.</li>
-</ul>
-<h4>The Three Basic Operators of GA</h4>
-<ol class="solution-steps">
-<li><strong>Selection (Reproduction):</strong> Selects the best parent chromosomes from the population based on fitness. High-fitness individuals have a higher probability of passing genetic traits to the next generation.</li>
-<li><strong>Crossover (Recombination):</strong> The primary exploration operator. A crossover point is chosen at random within the mating pool, and string segments between two parent chromosomes are swapped to produce new child offspring.</li>
-<li><strong>Mutation:</strong> A background operator. Flips random bits (changing 0 → 1 or 1 → 0) with a low probability. <em>Crucial Purpose:</em> It injects genetic diversity and prevents premature convergence into a local optimum.</li>
-</ol>
-</div>
-<div id="t-adversarial">
-<h3>2.10 Adversarial Search: Game Playing &amp; The Minimax Algorithm</h3>
-<p>In multi-agent competitive environments, agents have conflicting goals. One player's win is the other player's loss (Zero-Sum Games). Games are formalized with 4 components:</p>
-<ol>
-<li><strong>Initial State:</strong> Board position and which player's turn it is.</li>
-<li><strong>Successor Function:</strong> Legal moves and resulting board states.</li>
-<li><strong>Terminal State:</strong> Checks whether the game has ended (win, loss, or draw).</li>
-<li><strong>Utility Function:</strong> Assigns numeric value to terminal states (e.g., +1 for win, -1 for loss, 0 for draw).</li>
-</ol>
-<h4>The Minimax Algorithm</h4>
-<p>Assuming both players play optimally, <strong>MAX</strong> wants to maximize the utility value, while <strong>MIN</strong> wants to minimize it.</p>
-<div class="exam">
-<strong>Minimax Decision Rule:</strong><br/>
-<span class="math">\[	ext{Minimax}(s) = \begin{cases} 
-	ext{Utility}(s) & 	ext{if } s 	ext{ is Terminal} \\ 
-\max_{a} 	ext{Minimax}(	ext{Result}(s, a)) & 	ext{if } 	ext{Player}(s) = 	ext{MAX} \\ 
-\min_{a} 	ext{Minimax}(	ext{Result}(s, a)) & 	ext{if } 	ext{Player}(s) = 	ext{MIN}
-\end{cases}\]</span>
-</div>
-</div>
-<div id="t-alpha-beta">
-<h3>2.11 Alpha-Beta (α-β) Pruning</h3>
-<p>The problem with minimax is exponential complexity: $O(b^m)$ evaluations. <strong>Alpha-Beta Pruning</strong> is an optimal pruning technique that computes the exact identical minimax value at the root while pruning away branches that cannot possibly influence the final decision.</p>
-<ul class="point-list">
-<li><strong>$\alpha$ (Alpha):</strong> The value of the best choice found so far along the path for <strong>MAX</strong> (initially $-\infty$).</li>
-<li><strong>$\beta$ (Beta):</strong> The value of the best choice found so far along the path for <strong>MIN</strong> (initially $+\infty$).</li>
-<li><strong>Pruning Condition:</strong> Whenever <span class="math">\(\alpha \ge \beta\)</span> at any node, prune all remaining unexplored branches below that node!
-        <ul>
-<li><strong>Alpha Cut:</strong> Occurs when exploring a MIN node, if its backed-up value $\beta \le \alpha$.</li>
-<li><strong>Beta Cut:</strong> Occurs when exploring a MAX node, if its backed-up value $\alpha \ge \beta$.</li>
+<div class="topic-block" id="sec-uninformed-search">
+<h3>1.3 Uninformed (Blind) Search Strategies</h3>
+<p>Uninformed search algorithms have no information about how close a given state is to the goal. They can only distinguish between goal and non-goal states.</p>
+<h4>1. Breadth-First Search (BFS):</h4>
+<ul>
+<li><strong>Mechanism:</strong> Expands shallowest unexpanded node first. Implemented using a <strong>FIFO Queue</strong> (First-In, First-Out).</li>
+<li><strong>Properties:</strong>
+<ul>
+<li><em>Complete:</em> Yes (if \(b\) is finite).</li>
+<li><em>Optimal:</em> Yes (if all step costs are equal or non-decreasing).</li>
+<li><em>Time Complexity:</em> \(O(b^d)\).</li>
+<li><em>Space Complexity:</em> \(O(b^d)\) — <strong>Major Bottleneck!</strong> Memory exhausts long before CPU time.</li>
 </ul>
 </li>
 </ul>
+<h4>2. Depth-First Search (DFS):</h4>
+<ul>
+<li><strong>Mechanism:</strong> Expands deepest unexpanded node first. Implemented using a <strong>LIFO Queue / Stack</strong> or recursion.</li>
+<li><strong>Properties:</strong>
+<ul>
+<li><em>Complete:</em> No (fails in infinite state spaces or graph loops without cycle checks).</li>
+<li><em>Optimal:</em> No (may return a deep path when a shallow goal exists).</li>
+<li><em>Time Complexity:</em> \(O(b^m)\) (terrible if \(m \gg d\)).</li>
+<li><em>Space Complexity:</em> \(O(b \cdot m)\) — <strong>Linear memory!</strong> Highly space-efficient.</li>
+</ul>
+</li>
+</ul>
+<h4>3. Uniform Cost Search (UCS / Dijkstra's Algorithm):</h4>
+<ul>
+<li><strong>Mechanism:</strong> Expands node with lowest cumulative path cost \(g(n)\). Implemented using a <strong>Priority Queue</strong> ordered by \(g(n)\).</li>
+<li><strong>Properties:</strong> Complete and optimal for any positive step costs (\(c \ge \epsilon &gt; 0\)). Time and space: \(O(b^{1 + \lfloor C^* / \epsilon \rfloor})\).</li>
+</ul>
+</div>
+<div class="topic-block" id="sec-informed-search">
+<h3>1.4 Informed (Heuristic) Search: Greedy &amp; A*</h3>
+<p>Informed search uses domain-specific knowledge via a <strong>Heuristic Function \(h(n)\)</strong>: an estimated cost of the cheapest path from node \(n\) to a goal state (\(h(\text{goal}) = 0\)).</p>
+<h4>1. Greedy Best-First Search:</h4>
+<p>Expands the node that appears closest to the goal using evaluation function \(f(n) = h(n)\). Not optimal and not complete in graph loops, as it is susceptible to false leads.</p>
+<h4>2. A* Search (The Industry Standard):</h4>
+<p>Combines path cost so far \(g(n)\) with estimated future cost \(h(n)\):</p>
+                        $$\mathbf{f(n) = g(n) + h(n)}$$
+                        <ul>
+<li>\(g(n)\): Exact cost incurred from the start state to reach node \(n\).</li>
+<li>\(h(n)\): Estimated cost from node \(n\) to the nearest goal state.</li>
+<li>\(f(n)\): Estimated total cost of cheapest solution path passing through node \(n\).</li>
+</ul>
+<div class="callout callout-def">
+<h4>Heuristic Conditions for Optimality in A*:</h4>
+<ul>
+<li><strong>Admissibility (for Tree Search):</strong> A heuristic \(h(n)\) is admissible if it <em>never overestimates</em> the true cost to reach the goal:
+                                $$h(n) \le h^*(n) \quad \forall n, \quad \text{where } h^*(n) \text{ is true optimal cost.}$$
+                                </li>
+<li><strong>Consistency / Monotonicity (for Graph Search):</strong> For every node \(n\) and successor \(n'\) generated by action \(a\):
+                                $$h(n) \le c(n, a, n') + h(n')$$
+                                <em>Theorem:</em> If \(h(n)\) is consistent, A* graph search is guaranteed to be optimal and never reopens closed nodes.</li>
+</ul>
+</div>
+</div>
+<div class="topic-block" id="sec-local-search">
+<h3>1.5 Local Search &amp; Hill Climbing Pitfalls</h3>
+<p>In optimization problems where the path is irrelevant and only the final state matters (e.g., 8-Queens, VLSI layout, TSP), <strong>Local Search</strong> operates using a single current state, moving only to neighbors.</p>
+<h4>Hill Climbing (Greedy Local Search):</h4>
+<p>Continually moves in the direction of increasing value / decreasing cost. Terminates when no neighbor has a better value.</p>
+<!-- SVG: 3 Pitfalls of Hill Climbing -->
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:700px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewbox="0 0 700 240" xmlns="http://www.w3.org/2000/svg">
+<!-- Local Maxima Peak -->
+<path d="M 40 200 Q 140 180, 180 80 T 260 170" fill="none" stroke="#ef4444" stroke-width="3"></path>
+<circle cx="180" cy="80" fill="#ef4444" r="5"></circle>
+<text fill="#b91c1c" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="180" y="65">1. Local Maximum</text>
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="10.5" text-anchor="middle" x="180" y="225">Trapped: all neighbors worse</text>
+<!-- Plateau Flat Surface -->
+<path d="M 260 170 L 420 170" fill="none" stroke="#eab308" stroke-width="3"></path>
+<circle cx="340" cy="170" fill="#eab308" r="5"></circle>
+<text fill="#a16207" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="340" y="150">2. Plateau / Flat Surface</text>
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="10.5" text-anchor="middle" x="340" y="225">Zero gradient: random walk</text>
+<!-- Global Maxima Peak -->
+<path d="M 420 170 Q 480 160, 540 30 T 660 200" fill="none" stroke="#22c55e" stroke-width="3"></path>
+<circle cx="540" cy="30" fill="#22c55e" r="5"></circle>
+<text fill="#15803d" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="540" y="20">Global Maximum</text>
+<text fill="#64748b" font-family="'Inter', sans-serif" font-size="10.5" text-anchor="middle" x="540" y="225">Optimal target state</text>
+</svg>
+<p class="diagram-caption">Figure 2.2: The primary state-space landscape pitfalls in Hill Climbing search.</p>
+</div>
+<h4>The 3 Major Pitfalls:</h4>
+<ol>
+<li><strong>Local Maxima:</strong> A peak that is higher than all its neighboring states, but lower than the global maximum. The algorithm terminates prematurely thinking it has succeeded.</li>
+<li><strong>Plateau / Shoulders:</strong> A flat area of the state space where all neighboring states have identical evaluation values. The gradient is zero, causing the search to wander aimlessly in a random walk.</li>
+<li><strong>Ridges:</strong> A sequence of local maxima joined by steep slopes. Steep sides make navigation difficult because uphill movements require zig-zagging.</li>
+</ol>
+</div>
+<div class="topic-block" id="sec-genetic-algos">
+<h3>1.6 Genetic Algorithms (GA)</h3>
+<p>Genetic Algorithms are stochastic local beam search algorithms inspired by Darwinian natural selection:</p>
+<ul>
+<li><strong>Representation:</strong> A state is represented as a string or chromosome over a finite alphabet (typically a bit string of 0s and 1s).</li>
+<li><strong>Fitness Function:</strong> A mathematical evaluation scoring each individual's suitability (higher fitness = higher survival probability).</li>
+<li><strong>Core Operators:</strong>
+<ol>
+<li><em>Selection:</em> Proportionate roulette-wheel selection where probability of selection is \(P(i) = \frac{\text{fitness}(i)}{\sum \text{fitness}}\).</li>
+<li><em>Crossover:</em> Mating two high-fitness parents by splitting chromosomes at a random crossover point and exchanging segments.</li>
+<li><em>Mutation:</em> Randomly flipping individual bits with a small independent probability (e.g., \(0.01\)) to restore lost genetic diversity.</li>
+</ol>
+</li>
+</ul>
+</div>
+<div class="topic-block" id="sec-adversarial-search">
+<h3>1.7 Adversarial Search: Minimax &amp; Alpha-Beta Pruning</h3>
+<p>In two-player, competitive, zero-sum, perfect information games (Chess, Checkers, Tic-Tac-Toe), two agents with opposing utility functions play against each other: <strong>MAX</strong> seeks to maximize utility, while <strong>MIN</strong> seeks to minimize utility.</p>
+<div class="callout callout-def">
+<h4>The Minimax Decision Rule</h4>
+                            $$\text{Minimax}(s) = \begin{cases} 
+                            \text{Utility}(s) &amp; \text{if } s \text{ is Terminal} \\
+                            \max_{a} \text{Minimax}(\text{Result}(s, a)) &amp; \text{if } \text{Player}(s) = \text{MAX} \\
+                            \min_{a} \text{Minimax}(\text{Result}(s, a)) &amp; \text{if } \text{Player}(s) = \text{MIN}
+                            \end{cases}$$
+                        </div>
+<h4>Alpha-Beta (\(\alpha\)-\(\beta\)) Pruning:</h4>
+<p>Standard Minimax has an exponential time complexity of \(O(b^m)\), rendering it unusable for deep game trees. Alpha-Beta pruning returns the <em>exact same move</em> as Minimax while pruning away entire branches that cannot possibly influence the final decision.</p>
+<ul>
+<li>\(\alpha\) = The highest-value choice found so far along the path for MAX (initialized to \(-\infty\)).</li>
+<li>\(\beta\) = The lowest-value choice found so far along the path for MIN (initialized to \(+\infty\)).</li>
+<li><strong>Pruning Condition:</strong> Prune search below current node as soon as:
+                            $$\mathbf{\alpha \ge \beta}$$
+                            </li>
+</ul>
 </div>
 </section>
-<!-- ══════════ SECTION 2: WORKED NUMERICALS ══════════ -->
-<section class="category" id="numerical-section">
-<h2>2. Step-by-Step Worked Problem Examples</h2><aside class="pyq-focus"><h3>PYQ-style search traces · show the frontier, not just the path</h3><p>The paper explicitly allocates <b>3 of 5 marks to A* approach and 2 to the correct answer</b>; its 10-mark alpha–beta task expects the tree trace and pruning. Write each state’s values, selection reason, and frontier update so method marks remain visible.</p>
-<h4>Worked A* trace matching the paper’s graph</h4>
-<p><b>Given:</b> start A; goal H; edge costs and heuristic values are shown. Use <b>f(n)=g(n)+h(n)</b>. Break ties by insertion order.</p>
-<figure class="visual-example"><svg aria-label="A-star graph from A to H with weighted edges" role="img" viewbox="0 0 760 240"><defs><marker id="arrpyq" markerheight="8" markerwidth="8" orient="auto" refx="6" refy="3"><path d="M0,0 L0,6 L7,3 z" fill="#52677a"></path></marker></defs><g fill="none" marker-end="url(#arrpyq)" stroke="#52677a" stroke-width="2"><path d="M90 110 L215 55"></path><path d="M90 110 L215 165"></path><path d="M255 55 L385 35"></path><path d="M255 55 L385 85"></path><path d="M255 165 L385 145"></path><path d="M255 165 L385 195"></path><path d="M425 85 L565 110"></path><path d="M425 145 L565 110"></path><path d="M425 195 L565 110"></path></g><g fill="#172638" font-family="sans-serif" font-size="15"><text x="144" y="68">1</text><text x="144" y="158">2</text><text x="316" y="32">3</text><text x="316" y="75">4</text><text x="316" y="137">1</text><text x="316" y="202">2</text><text x="492" y="93">3</text><text x="492" y="137">4</text><text x="492" y="185">2</text></g><g fill="#eaf6f6" stroke="#087f8c" stroke-width="2"><circle cx="70" cy="110" r="25"></circle><circle cx="235" cy="55" r="25"></circle><circle cx="235" cy="165" r="25"></circle><circle cx="405" cy="35" r="25"></circle><circle cx="405" cy="85" r="25"></circle><circle cx="405" cy="145" r="25"></circle><circle cx="405" cy="195" r="25"></circle><circle cx="585" cy="110" r="25"></circle></g><g fill="#172638" font-family="sans-serif" font-size="17" font-weight="bold" text-anchor="middle"><text x="70" y="116">A</text><text x="235" y="61">B</text><text x="235" y="171">C</text><text x="405" y="41">D</text><text x="405" y="91">E</text><text x="405" y="151">F</text><text x="405" y="201">G</text><text x="585" y="116">H</text></g></svg><figcaption>Paper graph, redrawn cleanly. Heuristics: A13, B12, C4, D7, E3, F8, G2, H0. The path A–C–G–H is highlighted by the trace below.</figcaption></figure>
-<ol class="number-steps"><li><b>Initialize:</b> A has (g,h,f)=(0,13,13). Expand A; frontier B=(1,12,13), C=(2,4,6).</li><li><b>Select minimum f:</b> choose C (6). Expand it: F=(3,8,11), G=(4,2,6). Frontier also contains B=(1,12,13).</li><li><b>Select G:</b> f=6. Generate H=(6,0,6).</li><li><b>Select H:</b> it is the goal. Reconstruct parents: <b>A→C→G→H; total cost 2+2+2=6.</b></li><li><b>Explain limitation:</b> h(B)=12 exceeds the actual cheapest B-to-H cost 7 (B→E→H costs 4+3). This heuristic is not admissible, so A*’s general optimality guarantee does not apply. The returned path is still cost 6 in this instance.</li></ol>
-<p><b>Mark-ready conclusion:</b> state the path, cost, and whether the heuristic supports an optimality guarantee. A path alone misses the trace marks.</p>
-<p class="source-note">Question style: <a href="PYQ/QP_Final-Exam_Artificial%20Intelligence%28702CO0C032%29_Semester%20V_2025-2026.pdf">Q3(a), A* (5 marks)</a>; diagram/solution style cross-checked against <a href="PYQ/ANS_Final-Exam_Artificial%20Intelligence%28702CO0C032%29_Semester%20V_2025-2026.pdf">the answer key</a>.</p></aside>
-<article class="worked-block" id="num-simple">
-<h3><span class="numerical-tag">SIMPLE</span> BFS vs DFS Search Traversal Tracing</h3>
-<div class="given-box">
-<b>GIVEN:</b>
-      A binary tree with Root node 1 having children Left=2, Right=3. Node 2 has children 4, 5. Node 3 has children 6, 7.
-      Determine the exact node expansion sequence for both BFS and DFS.
-    </div>
-<div class="calc-work">
-<b>STEPWISE WORKING:</b>
-<ol class="solution-steps">
-<li><strong>Breadth-First Search (FIFO Queue):</strong>
-<br/>Initial Queue: <code>[1]</code>.
-          <br/>Pop 1 → Add 2, 3 → Queue: <code>[2, 3]</code>.
-          <br/>Pop 2 → Add 4, 5 → Queue: <code>[3, 4, 5]</code>.
-          <br/>Pop 3 → Add 6, 7 → Queue: <code>[4, 5, 6, 7]</code>.
-          <br/>Pop 4, 5, 6, 7 → Sequence: <strong>1, 2, 3, 4, 5, 6, 7</strong> (Level Order).
-        </li>
-<li><strong>Depth-First Search (LIFO Stack):</strong>
-<br/>Initial Stack: <code>[1]</code>.
-          <br/>Pop 1 → Push right child 3, left child 2 → Stack: <code>[3, 2]</code>.
-          <br/>Pop 2 → Push right child 5, left child 4 → Stack: <code>[3, 5, 4]</code>.
-          <br/>Pop 4 → Stack: <code>[3, 5]</code>. Pop 5 → Stack: <code>[3]</code>.
-          <br/>Pop 3 → Push 7, 6 → Pop 6, Pop 7 → Sequence: <strong>1, 2, 4, 5, 3, 6, 7</strong> (Pre-Order).
-        </li>
-</ol>
+<!-- SECTION 2: STEP-BY-STEP NUMERICALS -->
+<section class="module-section" id="numerical-section">
+<div class="section-title">
+<h2>2. In-Depth Numerical Explanations (Step-by-Step)</h2>
+<span class="cross-ref-badge">3 Tiered Solved Problems</span>
 </div>
-<div class="answer-box">
-<b>FINAL ANSWER:</b>
-      BFS traversal: <strong>1, 2, 3, 4, 5, 6, 7</strong> | DFS traversal: <strong>1, 2, 4, 5, 3, 6, 7</strong>.
-    </div>
-</article>
-<article class="worked-block" id="num-medium">
-<h3><span class="numerical-tag">MEDIUM</span> Step-by-Step A* Search Graph Trace</h3>
-<div class="given-box">
-<b>GIVEN:</b>
-      Find the shortest path from start node <strong>S</strong> to goal node <strong>G</strong> using A* search.
-      Graph edges with step costs:
-      <ul>
-<li>S → A (cost 1), S → G (cost 10)</li>
-<li>A → B (cost 2), A → C (cost 1)</li>
-<li>B → D (cost 5)</li>
-<li>C → D (cost 3), C → G (cost 4)</li>
-<li>D → G (cost 2)</li>
+<!-- NUMERICAL 1: SIMPLE -->
+<div class="problem-card" id="num-1">
+<div class="problem-header">
+<span class="difficulty easy">Simple Example</span>
+<h3>Problem 2.1: BFS vs. DFS State Space Traversal Trace</h3>
+</div>
+<p><strong>Problem Statement:</strong> Consider a search tree rooted at node \(A\):
+                        $$\text{Children of } A: [B, C], \quad \text{Children of } B: [D, E], \quad \text{Children of } C: [F, G]$$
+                        Goal node is \(G\). Assuming ties are broken alphabetically (left-to-right), determine:
+                        (1) The node visitation sequence for Breadth-First Search (BFS), and
+                        (2) The node visitation sequence for Depth-First Search (DFS).</p>
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">BFS TRACE</span>
+<div>
+<p>BFS uses a <strong>FIFO Queue</strong>:</p>
+<ol>
+<li>Start: Queue \(= [A]\). Pop \(A\), expand: Queue \(= [B, C]\). Visited: <code>A</code>.</li>
+<li>Pop \(B\), expand: Queue \(= [C, D, E]\). Visited: <code>B</code>.</li>
+<li>Pop \(C\), expand: Queue \(= [D, E, F, G]\). Visited: <code>C</code>.</li>
+<li>Pop \(D\), leaf. Visited: <code>D</code>.</li>
+<li>Pop \(E\), leaf. Visited: <code>E</code>.</li>
+<li>Pop \(F\), leaf. Visited: <code>F</code>.</li>
+<li>Pop \(G\): Goal reached! Stop search.</li>
+</ol>
+<p><strong>BFS Order:</strong> <code>A → B → C → D → E → F → G</code> (7 nodes visited).</p>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge">DFS TRACE</span>
+<div>
+<p>DFS uses a <strong>LIFO Stack</strong>:</p>
+<ol>
+<li>Start: Stack \(= [A]\). Pop \(A\), push right-to-left: Stack \(= [B, C]\). Visited: <code>A</code>.</li>
+<li>Pop \(B\), push children: Stack \(= [D, E, C]\). Visited: <code>B</code>.</li>
+<li>Pop \(D\), leaf. Visited: <code>D</code>.</li>
+<li>Pop \(E\), leaf. Visited: <code>E</code>.</li>
+<li>Pop \(C\), push children: Stack \(= [F, G]\). Visited: <code>C</code>.</li>
+<li>Pop \(F\), leaf. Visited: <code>F</code>.</li>
+<li>Pop \(G\): Goal reached! Stop search.</li>
+</ol>
+<p><strong>DFS Order:</strong> <code>A → B → D → E → C → F → G</code> (7 nodes visited).</p>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge answer">FINAL ANSWER</span>
+<div>
+<div class="final-box">
+<p><strong>BFS Path:</strong> A → B → C → D → E → F → G (Level-by-level exploration)</p>
+<p><strong>DFS Path:</strong> A → B → D → E → C → F → G (Deepest-first exploration)</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- NUMERICAL 2: MEDIUM -->
+<div class="problem-card" id="num-2">
+<div class="problem-header">
+<span class="difficulty medium">Medium Example</span>
+<h3>Problem 2.2: Full A* Search Graph Evaluation Trace</h3>
+</div>
+<p><strong>Problem Statement:</strong> An agent searches from Start node \(S\) to Goal node \(G\) on a weighted graph with step costs \(c(u, v)\) and heuristic estimates \(h(u)\):</p>
+<ul>
+<li>Edges &amp; Costs: \(S \to A = 1\), \(S \to B = 4\), \(A \to B = 2\), \(A \to C = 5\), \(B \to C = 2\), \(C \to G = 3\).</li>
+<li>Heuristics: \(h(S) = 7, h(A) = 6, h(B) = 4, h(C) = 2, h(G) = 0\).</li>
 </ul>
-      Heuristic values: <span class="math">\(h(S)=5, h(A)=3, h(B)=4, h(C)=2, h(D)=6, h(G)=0\)</span>.
-    </div>
-<div class="formula-box">
-<b>FORMULA:</b>
-<span class="math">\(f(n) = g(n) + h(n)\)</span>. Expand node with minimum $f(n)$ from the Priority Queue (Open List).
-    </div>
-<div class="calc-work">
-<b>STEPWISE TRACE:</b>
-<ol class="solution-steps">
-<li><strong>Step 1:</strong> Start at S. <span class="math">\(g(S)=0, h(S)=5 \implies f(S)=5\)</span>.
-          <br/>Open List: <code>[S(5)]</code>. Closed: <code>{}</code>.
-        </li>
-<li><strong>Step 2:</strong> Expand S. Successors:
-          <br/>A: <span class="math">\(g(A) = 0 + 1 = 1\)</span>; <span class="math">\(f(A) = 1 + h(A) = 1 + 3 = 4\)</span>.
-          <br/>G: <span class="math">\(g(G) = 0 + 10 = 10\)</span>; <span class="math">\(f(G) = 10 + 0 = 10\)</span>.
-          <br/>Open List: <code>[A(4), G(10)]</code>. Closed: <code>{S}</code>.
-        </li>
-<li><strong>Step 3:</strong> Expand A (lowest $f=4$). Successors:
-          <br/>B: <span class="math">\(g(B) = 1 + 2 = 3\)</span>; <span class="math">\(f(B) = 3 + 4 = 7\)</span>.
-          <br/>C: <span class="math">\(g(C) = 1 + 1 = 2\)</span>; <span class="math">\(f(C) = 2 + 2 = 4\)</span>.
-          <br/>Open List: <code>[C(4), B(7), G(10)]</code>. Closed: <code>{S, A}</code>.
-        </li>
-<li><strong>Step 4:</strong> Expand C (lowest $f=4$). Successors:
-          <br/>D: <span class="math">\(g(D) = 2 + 3 = 5\)</span>; <span class="math">\(f(D) = 5 + 6 = 11\)</span>.
-          <br/>G: <span class="math">\(g(G) = 2 + 4 = 6\)</span>; <span class="math">\(f(G) = 6 + 0 = 6\)</span> (updates path to G from 10 down to 6!).
-          <br/>Open List: <code>[G(6), B(7), D(11)]</code>. Closed: <code>{S, A, C}</code>.
-        </li>
-<li><strong>Step 5:</strong> Expand G (lowest $f=6$). G is the goal node! Search terminates.</li>
-</ol>
-</div>
-<div class="answer-box">
-<b>FINAL ANSWER:</b>
-      Optimal Path: <strong>S → A → C → G</strong> with total path cost <span class="math">\(g(G) = \mathbf{6}\)</span>.
-    </div>
-</article>
-<article class="worked-block" id="num-complex">
-<h3><span class="numerical-tag">COMPLEX</span> Minimax Game Tree with Full Alpha-Beta Pruning Tracing</h3>
-<div class="given-box">
-<b>GIVEN:</b>
-      Game tree of depth 3 from Slide 55: Root A (MAX) has children B, C (MIN).
-      B has children D, E (MAX). C has children F, G (MAX).
-      Terminal utility values at leaf nodes:
-      <ul>
-<li>D's children: <code>[2, 3]</code></li>
-<li>E's children: <code>[5, 9]</code></li>
-<li>F's children: <code>[0, 1]</code></li>
-<li>G's children: <code>[7, 5]</code></li>
-</ul>
-      Trace DFS alpha-beta pruning. State which nodes are evaluated, which are pruned, and the root value.
-    </div>
-<div class="formula-box">
-<b>RULES:</b>
-      At MAX node: <span class="math">\(\alpha = \max(\alpha, \text{val})\)</span>. At MIN node: <span class="math">\(\beta = \min(\beta, \text{val})\)</span>. Prune if <span class="math">\(\alpha \ge \beta\)</span>.
-    </div>
-<div class="calc-work">
-<b>STEPWISE TRACE:</b>
-<ol class="solution-steps">
-<li>Initialize root A: <span class="math">\(\alpha = -\infty, \beta = +\infty\)</span>.
-          <br/>Pass down to B (<span class="math">\(\alpha = -\infty, \beta = +\infty\)</span>) and D (<span class="math">\(\alpha = -\infty, \beta = +\infty\)</span>).
-        </li>
-<li><strong>Evaluate D (MAX):</strong>
-<br/>Examines first leaf 2 → <span class="math">\(\alpha = \max(-\infty, 2) = 2\)</span>.
-          <br/>Examines second leaf 3 → <span class="math">\(\alpha = \max(2, 3) = 3\)</span>.
-          <br/>D returns value <strong>3</strong> to parent B.
-        </li>
-<li><strong>At Node B (MIN):</strong>
-<br/>Receives 3 from D → <span class="math">\(\beta = \min(+\infty, 3) = 3\)</span>.
-          <br/>Now at B: <span class="math">\(\alpha = -\infty, \beta = 3\)</span>.
-        </li>
-<li><strong>Explore Node E (MAX) under B:</strong>
-<br/>E inherits <span class="math">\(\alpha = -\infty, \beta = 3\)</span> from B.
-          <br/>Examines first leaf 5 → <span class="math">\(\alpha = \max(-\infty, 5) = 5\)</span>.
-          <br/><strong>Check Pruning Condition at E:</strong> <span class="math">\(\alpha = 5 \ge \beta = 3\)</span>!
-          <br/><strong>PRUNE!</strong> Leaf node <strong>9</strong> is pruned (Beta cut). E returns 5 to B.
-        </li>
-<li><strong>Back to B (MIN):</strong>
-<br/>B compares <span class="math">\(\min(3, 5) = 3\)</span>. B returns <strong>3</strong> to root A.
-        </li>
-<li><strong>Back to Root A (MAX):</strong>
-<br/>A receives 3 from B → <span class="math">\(\alpha = \max(-\infty, 3) = 3\)</span>. A has <span class="math">\(\alpha = 3, \beta = +\infty\)</span>.
-        </li>
-<li><strong>Explore Node C (MIN) under A:</strong>
-<br/>C inherits <span class="math">\(\alpha = 3, \beta = +\infty\)</span>. Passes down to F (<span class="math">\(\alpha = 3, \beta = +\infty\)</span>).
-          <br/><strong>At F (MAX):</strong> Examines leaf 0 → <span class="math">\(\alpha = \max(3, 0) = 3\)</span>.
-          <br/>Examines leaf 1 → <span class="math">\(\alpha = \max(3, 1) = 3\)</span>. F returns value <strong>1</strong> to C.
-        </li>
-<li><strong>Back to C (MIN):</strong>
-<br/>Receives 1 from F → <span class="math">\(\beta = \min(+\infty, 1) = 1\)</span>.
-          <br/><strong>Check Pruning Condition at C:</strong> <span class="math">\(\alpha = 3 \ge \beta = 1\)</span>!
-          <br/><strong>PRUNE!</strong> Entire subtree under <strong>G</strong> (leaves 7 and 5) is completely pruned (Alpha cut)!
-        </li>
-<li>C returns 1 to root A. Root A chooses <span class="math">\(\max(3, 1) = \mathbf{3}\)</span>.
-        </li>
-</ol>
-</div>
-<div class="answer-box">
-<b>FINAL ANSWER:</b>
-      Minimax Value at Root A = <strong>3</strong>.
-      <br/>Pruned Leaves: <strong>Leaf 9</strong> under node E, and <strong>Leaves 7 and 5</strong> under node G.
-      <br/>The algorithm saved 3 out of 8 leaf evaluations (37.5% reduction).
-    </div>
-</article>
-</section>
-<!-- ══════════ SECTION 3: COMPARATIVE STUDIES ══════════ -->
-<section class="category" id="comparison-section">
-<h2>3. Comprehensive Comparative Studies</h2>
-<table>
+<p>Trace the A* algorithm execution step-by-step using priority queue ordering \(f(n) = g(n) + h(n)\). State the optimal path and total path cost.</p>
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">TRACE TABLE</span>
+<div>
+<table class="data-table">
+<thead>
 <tr>
-<th>Search Algorithm</th>
-<th>Frontier Data Structure</th>
-<th>Completeness</th>
-<th>Optimality</th>
+<th>Iter</th>
+<th>Current Node</th>
+<th>Frontier Priority Queue [Node, g, h, f]</th>
+<th>Explored Set</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>-</td>
+<td>\([S: g=0, h=7, f=7]\)</td>
+<td>\(\emptyset\)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Pop \(S\)</td>
+<td>\([A: g=1, h=6, f=7], [B: g=4, h=4, f=8]\)</td>
+<td>\(\{S\}\)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Pop \(A\)</td>
+<td>From \(A\): \(B\) with \(g=1+2=3, f=3+4=7\) (Updates \(B\) from \(f=8\) to \(7\)!).<br/>\(C\) with \(g=1+5=6, h=2, f=8\).<br/>Frontier: \([B: g=3, h=4, f=7], [C: g=6, h=2, f=8]\)</td>
+<td>\(\{S, A\}\)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Pop \(B\)</td>
+<td>From \(B\): \(C\) with \(g=3+2=5, h=2, f=5+2=7\) (Updates \(C\) from \(f=8\) to \(7\)!).<br/>Frontier: \([C: g=5, h=2, f=7]\)</td>
+<td>\(\{S, A, B\}\)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Pop \(C\)</td>
+<td>From \(C\): \(G\) with \(g=5+3=8, h=0, f=8\).<br/>Frontier: \([G: g=8, h=0, f=8]\)</td>
+<td>\(\{S, A, B, C\}\)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Pop \(G\)</td>
+<td>Goal node popped! Terminate search.</td>
+<td>\(\{S, A, B, C, G\}\)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge answer">FINAL ANSWER</span>
+<div>
+<p class="final-box">\(\mathbf{\text{Optimal Path: } S \to A \to B \to C \to G \quad (\text{Total Cost } = 8)}\)</p>
+<p class="hint">Notice how A* dynamically relaxed the cost to node B and node C, finding the optimal solution path.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- NUMERICAL 3: COMPLEX -->
+<div class="problem-card" id="num-3">
+<div class="problem-header">
+<span class="difficulty hard">Complex Example</span>
+<h3>Problem 2.3: 3-Ply Minimax Game Tree with Alpha-Beta Pruning</h3>
+</div>
+<p><strong>Problem Statement:</strong> A two-player zero-sum game tree has root node \(A\) (MAX). MAX has two children \(B\) and \(C\) (MIN nodes):</p>
+<ul>
+<li>Node \(B\) has children \(D\) and \(E\) (MAX nodes).
+                                <ul>
+<li>Node \(D\) has static leaf utilities: \([3, 5]\).</li>
+<li>Node \(E\) has static leaf utilities: \([6, 9]\).</li>
+</ul>
+</li>
+<li>Node \(C\) has children \(F\) and \(G\) (MAX nodes).
+                                <ul>
+<li>Node \(F\) has static leaf utilities: \([1, 2]\).</li>
+<li>Node \(G\) has static leaf utilities: \([0, 8]\).</li>
+</ul>
+</li>
+</ul>
+<p>Assuming left-to-right tree evaluation, trace the Alpha-Beta pruning execution showing \([\alpha, \beta]\) bounds at every step, identify pruned branches, and state the backed-up Minimax value at root \(A\).</p>
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">STEPWISE TRACE</span>
+<div>
+<ol>
+<li><strong>Root A (MAX):</strong> \(\alpha = -\infty, \beta = +\infty\). Calls child \(B\).</li>
+<li><strong>Node B (MIN):</strong> Inherits \(\alpha = -\infty, \beta = +\infty\). Calls child \(D\).</li>
+<li><strong>Node D (MAX):</strong>
+<ul>
+<li>Inspects leaf 3 → \(\alpha = \max(-\infty, 3) = 3\).</li>
+<li>Inspects leaf 5 → \(\alpha = \max(3, 5) = 5\). Returns 5 to \(B\).</li>
+</ul>
+</li>
+<li><strong>Back to Node B (MIN):</strong>
+<p>\(\beta = \min(+\infty, 5) = 5\). Now \([\alpha = -\infty, \beta = 5]\). Calls child \(E\).</p>
+</li>
+<li><strong>Node E (MAX):</strong>
+<ul>
+<li>Inherits \(\alpha = -\infty, \beta = 5\).</li>
+<li>Inspects first leaf 6 → \(\alpha = \max(-\infty, 6) = 6\).</li>
+<li><strong>PRUNING CHECK:</strong> We now have \(\alpha = 6\) and \(\beta = 5\). Since \(\alpha \ge \beta\) (\(6 \ge 5\)), <strong>Alpha Cutoff occurs!</strong></li>
+<li>Leaf 9 is <strong>PRUNED</strong> (not evaluated). Returns 6 to \(B\).</li>
+</ul>
+</li>
+<li><strong>Back to Node B (MIN):</strong>
+<p>\(\beta = \min(5, 6) = 5\). Node \(B\) returns backed-up value 5 to Root \(A\).</p>
+</li>
+<li><strong>Back to Root A (MAX):</strong>
+<p>\(\alpha = \max(-\infty, 5) = 5\). Now at Root: \([\alpha = 5, \beta = +\infty]\). Calls child \(C\).</p>
+</li>
+<li><strong>Node C (MIN):</strong>
+<p>Inherits \(\alpha = 5, \beta = +\infty\). Calls child \(F\).</p>
+</li>
+<li><strong>Node F (MAX):</strong>
+<ul>
+<li>Inherits \(\alpha = 5, \beta = +\infty\).</li>
+<li>Inspects leaf 1 → \(\alpha = \max(5, 1) = 5\).</li>
+<li>Inspects leaf 2 → \(\alpha = \max(5, 2) = 5\). Returns 2 to \(C\).</li>
+</ul>
+</li>
+<li><strong>Back to Node C (MIN):</strong>
+<p>\(\beta = \min(+\infty, 2) = 2\). Now at \(C\): \(\alpha = 5, \beta = 2\).</p>
+<p><strong>PRUNING CHECK:</strong> Since \(\alpha \ge \beta\) (\(5 \ge 2\)), <strong>Beta Cutoff occurs!</strong></p>
+<p>Child \(G\) (and both its leaves 0 and 8) are <strong>PRUNED</strong>! Returns 2 to Root \(A\).</p>
+</li>
+<li><strong>Back to Root A (MAX):</strong>
+<p>\(\alpha = \max(5, 2) = 5\). Root \(A\) chooses move to Node \(B\).</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge answer">FINAL ANSWER</span>
+<div>
+<div class="final-box">
+<p><strong>Optimal Root Minimax Value:</strong> \(\mathbf{5}\)</p>
+<p><strong>Optimal Decision for MAX:</strong> Move to Node \(B\)</p>
+<p><strong>Pruned Leaves / Subtrees:</strong> Leaf 9 (under \(E\)) and entire subtree \(G\) (leaves 0 and 8)</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: COMPARATIVE STUDIES -->
+<section class="module-section" id="comparison-section">
+<div class="section-title">
+<h2>3. Comparative Studies</h2>
+<span class="cross-ref-badge">Exam-Focused Tabular Comparisons</span>
+</div>
+<h3>Table 2.1: Master Comparison of Search Algorithms</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Queue / Data Structure</th>
 <th>Time Complexity</th>
 <th>Space Complexity</th>
+<th>Complete?</th>
+<th>Optimal?</th>
 </tr>
+</thead>
+<tbody>
 <tr>
-<td><strong>Breadth-First Search (BFS)</strong></td>
+<td><strong>BFS</strong></td>
 <td>FIFO Queue</td>
-<td>Yes (if $b$ is finite)</td>
-<td>Optimal if all step costs equal</td>
-<td>$O(b^d)$</td>
-<td>$O(b^d)$ (Memory intensive)</td>
+<td>\(O(b^d)\)</td>
+<td>\(O(b^d)\) (Exponential)</td>
+<td>Yes (if \(b &lt; \infty\))</td>
+<td>Yes (for uniform costs)</td>
 </tr>
 <tr>
-<td><strong>Depth-First Search (DFS)</strong></td>
-<td>LIFO Stack</td>
-<td>No in infinite spaces; Yes if finite</td>
+<td><strong>DFS</strong></td>
+<td>LIFO Stack / Recursion</td>
+<td>\(O(b^m)\)</td>
+<td>\(O(b \cdot m)\) (Linear)</td>
+<td>No (fails in infinite spaces)</td>
 <td>No</td>
-<td>$O(b^m)$</td>
-<td>$O(b  \times  m)$ (Linear memory)</td>
 </tr>
 <tr>
-<td><strong>Uniform Cost Search (UCS)</strong></td>
-<td>Priority Queue by $g(n)$</td>
-<td>Yes (if step cost $\ge \epsilon$)</td>
+<td><strong>UCS</strong></td>
+<td>Priority Queue by \(g(n)\)</td>
+<td>\(O(b^{1 + \lfloor C^* / \epsilon \rfloor})\)</td>
+<td>\(O(b^{1 + \lfloor C^* / \epsilon \rfloor})\)</td>
+<td>Yes (if \(c \ge \epsilon &gt; 0\))</td>
 <td>Yes</td>
-<td>$O(b^{1 + \lfloor C^* / \epsilon 
-floor})$</td>
-<td>$O(b^{1 + \lfloor C^* / \epsilon 
-floor})$</td>
 </tr>
 <tr>
 <td><strong>Greedy Best-First</strong></td>
-<td>Priority Queue by $h(n)$</td>
-<td>No (can loop)</td>
+<td>Priority Queue by \(h(n)\)</td>
+<td>\(O(b^m)\)</td>
+<td>\(O(b^m)\)</td>
 <td>No</td>
-<td>$O(b^m)$</td>
-<td>$O(b^m)$</td>
+<td>No</td>
 </tr>
 <tr>
 <td><strong>A* Search</strong></td>
-<td>Priority Queue by $g(n) + h(n)$</td>
+<td>Priority Queue by \(g(n)+h(n)\)</td>
+<td>\(O(b^d)\)</td>
+<td>\(O(b^d)\)</td>
 <td>Yes</td>
-<td>Yes (if $h$ is admissible)</td>
-<td>$O(b^d)$</td>
-<td>$O(b^d)$</td>
+<td>Yes (if \(h\) admissible)</td>
 </tr>
+</tbody>
 </table>
 </section>
-<!-- ══════════ SECTION 4: CASE STUDIES ══════════ -->
-<section class="category" id="case-section">
-<h2>4. Real-World Case Studies &amp; Concrete Examples</h2>
-<h3>Case 1: Deep Blue vs. Garry Kasparov (Adversarial Minimax in Action)</h3>
-<ul class="point-list">
-<li>In 1997, IBM's Deep Blue defeated World Chess Champion Garry Kasparov.</li>
-<li>Deep Blue utilized massively parallel alpha-beta search capable of evaluating 200,000,000 board positions per second to an effective depth of 6 to 8 moves (and up to 20 or more moves in tactical endgames).</li>
+<!-- SECTION 4: CASE STUDIES & REAL-WORLD APPLICATIONS -->
+<section class="module-section" id="case-section">
+<div class="section-title">
+<h2>4. Real-World Case Studies &amp; Practical Systems</h2>
+<span class="cross-ref-badge">Adversarial &amp; Search Milestones</span>
+</div>
+<div class="case-card">
+<div class="case-header">
+<span class="case-tag">Adversarial Game AI Milestone</span>
+<h3>IBM Deep Blue vs. Garry Kasparov (1997)</h3>
+</div>
+<p><strong>System Genesis:</strong> In May 1997, IBM's Deep Blue became the first computer chess system to defeat a reigning world chess champion, Garry Kasparov, in a 6-game match under standard tournament time controls.</p>
+<ul>
+<li><strong>Search Engine Architecture:</strong> Deep Blue utilized hardware-accelerated massively parallel Minimax search with Alpha-Beta pruning, searching approximately <strong>200 million positions per second</strong>.</li>
+<li><strong>Selective Deep Search:</strong> Utilized non-uniform depth search extending up to 40 plies deep in tactical exchanges, demonstrating the power of adversarial pruning when coupled with specialized evaluation hardware.</li>
 </ul>
+</div>
+<div class="case-card">
+<div class="case-header">
+<span class="case-tag">Navigation &amp; Routing</span>
+<h3>Google Maps / GPS Turn-by-Turn Navigation</h3>
+</div>
+<p><strong>System Genesis:</strong> Real-time road navigation software uses hierarchical variants of A* Search (Contraction Hierarchies and Transit Node Routing) with Euclidean distance as the admissible heuristic \(h(n)\) to compute shortest paths across Continental road networks (millions of nodes) in milliseconds.</p>
+</div>
 </section>
-<!-- ══════════ SECTION 5: QUESTIONS BANK ══════════ -->
-<section class="category" id="questions-section">
-<h2>5. Possible University Exam Questions Bank</h2><p class="pyq-note"><b>Past-paper calibration:</b> practise the answer formats shown in the PYQ lens under Section 2, then answer the remaining questions across every syllabus topic. The paper is a guide to depth and marking style, not a boundary on what to study. <a href="PYQ/QP_Final-Exam_Artificial%20Intelligence%28702CO0C032%29_Semester%20V_2025-2026.pdf">Question paper</a> · <a href="PYQ/ANS_Final-Exam_Artificial%20Intelligence%28702CO0C032%29_Semester%20V_2025-2026.pdf">answer key</a>.</p>
-<ol>
-<li>Define a problem-solving agent and explain the four components of a problem. Formulate the 8-puzzle. (10 Marks)</li>
-<li>Compare BFS and DFS in terms of completeness, optimality, time and space complexity. (6 Marks)</li>
-<li>Explain the concept of admissibility and consistency of a heuristic function. Why is A* optimal? (6 Marks)</li>
-<li>Explain Hill Climbing and describe with diagrams the three obstacles: Local Maxima, Plateau, and Ridge. (8 Marks)</li>
-<li>What are Genetic Algorithms? Explain the operators: Selection, Crossover, and Mutation. (8 Marks)</li>
-<li>Explain the Minimax algorithm. Demonstrate Alpha-Beta pruning on a sample game tree. (10 Marks)</li>
-</ol>
+<!-- SECTION 5: EXAM QUESTIONS -->
+<section class="module-section" id="questions-section">
+<div class="section-title">
+<h2>5. Possible University Exam Questions &amp; Marking Guide</h2>
+<span class="cross-ref-badge">NMIMS Pattern: 4, 6, 8, 10 Marks</span>
+</div>
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">4 Marks</span>
+<h4>Q1. Formulate the 8-Puzzle Problem using the four components of a formal problem definition.</h4>
+</div>
+<div class="q-answer">
+<p><strong>Marking Scheme:</strong> 1 mark per correct component (Initial state, Successor function, Goal test, Path cost).</p>
+<p><strong>Model Answer Key:</strong> State configuration of 8 tiles and 1 blank; Initial state: specified scrambled matrix; Successor: move blank {Left, Right, Up, Down}; Goal test: tiles in sorted order 1 to 8; Path cost: 1 per move.</p>
+</div>
+</div>
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">6 Marks</span>
+<h4>Q2. Differentiate between BFS and DFS across the four search evaluation criteria.</h4>
+</div>
+<div class="q-answer">
+<p><strong>Marking Scheme:</strong> 1.5 marks each for Completeness, Optimality, Time Complexity, and Space Complexity.</p>
+<p><strong>Model Answer Key:</strong> State completeness (BFS yes, DFS no), optimality (BFS yes for uniform costs, DFS no), time complexity (\(O(b^d)\) vs \(O(b^m)\)), and space complexity (\(O(b^d)\) exponential memory vs \(O(b \cdot m)\) linear memory).</p>
+</div>
+</div>
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">8 Marks</span>
+<h4>Q3. Define A* Search. What is an admissible heuristic? What is a consistent heuristic? Prove why A* is optimal if h(n) is admissible.</h4>
+</div>
+<div class="q-answer">
+<p><strong>Marking Scheme:</strong> 2 marks for \(f(n) = g(n) + h(n)\); 2 marks for admissibility condition; 2 marks for consistency; 2 marks for optimality proof outline.</p>
+<p><strong>Model Answer Key:</strong> Explain \(f(n) = g(n) + h(n)\). State \(h(n) \le h^*(n)\) for admissibility. State triangle inequality \(h(n) \le c(n, a, n') + h(n')\) for consistency. Outline proof: if sub-optimal goal \(G_2\) is in queue, its \(f(G_2) = g(G_2) &gt; C^*\); any node \(n\) on optimal path has \(f(n) = g(n) + h(n) \le C^* &lt; f(G_2)\), so \(n\) is always expanded before \(G_2\).</p>
+</div>
+</div>
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">10 Marks</span>
+<h4>Q4. Explain the Minimax algorithm with an example. How does Alpha-Beta pruning improve Minimax? Explain the pruning conditions with a neat game tree.</h4>
+</div>
+<div class="q-answer">
+<p><strong>Marking Scheme:</strong> 3 marks for Minimax concept and recursive formula; 3 marks for \(\alpha\) and \(\beta\) definitions; 4 marks for tree diagram illustrating \(\alpha\)-cutoff and \(\beta\)-cutoff.</p>
+<p><strong>Model Answer Key:</strong> Detail the Minimax decision rule. Define \(\alpha\) (best for MAX) and \(\beta\) (best for MIN). State the pruning condition \(\alpha \ge \beta\). Provide worked trace showing how branches are eliminated without altering root decision.</p>
+</div>
+</div>
 </section>
+<!-- Navigation Footer -->
+<nav class="unit-pagination">
+<a class="btn btn-outline" href="unit_1.html">← Previous: Unit 1 (Intro)</a>
+<a class="btn btn-primary" href="unit_3.html">Next: Unit 3 (Knowledge &amp; Logic) →</a>
+</nav>
+</article>
 </main>
 </div>
-<footer>
-<p>NMIMS AI Study Portal · Unit 2 Comprehensive Lecture Notes Prepared According to University Curriculum.</p>
-</footer>
 </body>
 </html>
