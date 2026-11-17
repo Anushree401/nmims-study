@@ -1,0 +1,222 @@
+/* AI notes theme: light sidebar by default, with a coordinated dark palette. */
+:root {
+  color-scheme: light;
+  --bg-main: #f7f9fc;
+  --bg-sidebar: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --secondary: #10233f;
+  --card-bg: #ffffff;
+  --border-color: #e2e8f0;
+}
+
+.sidebar {
+  background: var(--bg-sidebar);
+  color: var(--text-main);
+  border-right: 1px solid var(--border-color);
+  box-shadow: 4px 0 18px rgba(15, 23, 42, 0.035);
+}
+
+.sidebar-header {
+  border-bottom-color: var(--border-color);
+}
+
+.sidebar-header .logo {
+  color: var(--secondary);
+}
+
+.sidebar-header .badge {
+  color: #087e8b;
+  background: #e6f6f7;
+}
+
+.sidebar-nav h3 {
+  color: var(--text-muted);
+}
+
+.sidebar-nav a {
+  color: #475569;
+}
+
+.sidebar-nav a:hover {
+  color: var(--secondary);
+  background: #f1f5f9;
+}
+
+.sidebar-nav a.active {
+  color: #ffffff;
+  background: var(--primary);
+}
+
+.theme-toggle {
+  width: 100%;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 9px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-main);
+  color: var(--text-main);
+  font: 600 0.88rem/1.3 var(--font-main);
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--primary);
+  background: #eaf6f7;
+}
+
+.theme-toggle:focus-visible {
+  outline: 3px solid #d69b14;
+  outline-offset: 3px;
+}
+
+.theme-icon {
+  width: 1.25rem;
+  text-align: center;
+  font-size: 1.05rem;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-main: #101722;
+  --bg-sidebar: #151f2c;
+  --text-main: #e3eaf2;
+  --text-muted: #a4b2c2;
+  --secondary: #edf4fb;
+  --card-bg: #182331;
+  --border-color: #2d3a49;
+  --primary: #31aab5;
+  --primary-hover: #24929d;
+}
+
+html[data-theme="dark"] body {
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+html[data-theme="dark"] .sidebar {
+  color: var(--text-main);
+  box-shadow: 4px 0 18px rgba(0, 0, 0, 0.14);
+}
+
+html[data-theme="dark"] .sidebar-header .badge {
+  color: #74d4dc;
+  background: #1c3b45;
+}
+
+html[data-theme="dark"] .sidebar-nav a {
+  color: #c2cedb;
+}
+
+html[data-theme="dark"] .sidebar-nav a:hover {
+  color: #ffffff;
+  background: #253343;
+}
+
+html[data-theme="dark"] .sidebar-nav a.active {
+  color: #ffffff;
+  background: #087e8b;
+}
+
+html[data-theme="dark"] .top-bar {
+  background: rgba(16, 23, 34, 0.94);
+  border-bottom-color: var(--border-color);
+}
+
+html[data-theme="dark"] .breadcrumb,
+html[data-theme="dark"] .hint,
+html[data-theme="dark"] .diagram-caption {
+  color: var(--text-muted);
+}
+
+html[data-theme="dark"] .meta-tag,
+html[data-theme="dark"] .cross-ref-badge,
+html[data-theme="dark"] .marks-badge {
+  color: #c5e9ec;
+  background: #203542;
+  border-color: #37505f;
+}
+
+html[data-theme="dark"] .module-section,
+html[data-theme="dark"] .case-card,
+html[data-theme="dark"] .q-answer,
+html[data-theme="dark"] .problem-card,
+html[data-theme="dark"] pre {
+  color: var(--text-main);
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+html[data-theme="dark"] .callout-def {
+  color: #c9f3dc;
+  background: #173329;
+  border-left-color: #36a976;
+}
+
+html[data-theme="dark"] .callout-warn {
+  color: #ffe4aa;
+  background: #382d19;
+  border-left-color: #d69b14;
+}
+
+html[data-theme="dark"] .final-box {
+  color: #c9f3dc;
+  background: #173329;
+  border-left-color: #36a976;
+}
+
+html[data-theme="dark"] .data-table th {
+  color: var(--secondary);
+  background: #202d3b;
+  border-color: var(--border-color);
+}
+
+html[data-theme="dark"] .data-table td {
+  border-color: var(--border-color);
+}
+
+html[data-theme="dark"] .data-table tr:hover td {
+  background: #202d3b;
+}
+
+html[data-theme="dark"] .btn-outline {
+  color: var(--text-main);
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+html[data-theme="dark"] .btn-outline:hover {
+  background: #243244;
+}
+
+html[data-theme="dark"] .unit-pagination {
+  border-top-color: var(--border-color);
+}
+
+html[data-theme="dark"] .theme-toggle {
+  color: var(--text-main);
+  background: #202d3b;
+  border-color: #3a4a5d;
+}
+
+html[data-theme="dark"] .theme-toggle:hover {
+  background: #26394a;
+  border-color: #55c0c8;
+}
+
+html[data-theme="dark"] .diagram-wrapper svg {
+  border-color: #3a4a5d !important;
+  background: #ffffff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle {
+    transition: none;
+  }
+}
