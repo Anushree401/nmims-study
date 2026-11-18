@@ -252,3 +252,13 @@ html[data-theme="dark"] .callout {
     transition: none;
   }
 }
+
+/* Numbered subsection titles were falling back to the browser's tiny h5 default. */
+.topic-block h5 {
+  margin: 20px 0 9px;
+  color: var(--secondary);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+}
