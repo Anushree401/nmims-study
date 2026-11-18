@@ -262,3 +262,72 @@ html[data-theme="dark"] .callout {
   line-height: 1.45;
   letter-spacing: -0.01em;
 }
+
+/* External, textbook-style agent diagrams */
+.web-diagram-set {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  overflow: visible;
+}
+
+.web-agent-figure {
+  width: 100%;
+  max-width: 780px;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--card-bg);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+.web-agent-figure img {
+  display: block;
+  width: 100%;
+  max-height: 520px;
+  object-fit: contain;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.web-agent-figure figcaption {
+  margin-top: 11px;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.web-agent-figure figcaption strong {
+  color: var(--secondary);
+}
+
+.multi-agent-figure img {
+  max-height: 570px;
+}
+
+html[data-theme="dark"] .web-agent-figure {
+  border-color: #4a4a4a;
+  background: #242424;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+}
+
+html[data-theme="dark"] .web-agent-figure img {
+  border-color: #565656;
+  background: #ffffff;
+}
+
+html[data-theme="dark"] .web-agent-figure figcaption {
+  color: #d0d0d0;
+}
+
+html[data-theme="dark"] .web-agent-figure figcaption strong {
+  color: #ffffff;
+}
+
+@media (max-width: 600px) {
+  .web-agent-figure {
+    padding: 10px;
+  }
+}
