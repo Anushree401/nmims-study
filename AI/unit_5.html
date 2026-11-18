@@ -1,1268 +1,1502 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Unit 5: Machine Learning &amp; Unsupervised Learning - NMIMS Master Class Notes</title>
-<link href="../styles.css" rel="stylesheet"/><link href="theme.css" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<script>
-window.MathJax = {
-  tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']],
-    displayMath: [['$$', '$$'], ['\\[', '\\]']],
-    processEscapes: true
-  },
-  options: {
-    processHtmlClass: 'tex2jax_process|math'
-  }
-};
-</script>
-<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-<style id="ai-formatting-polish">/* AI unit pages: formatting-only polish */
-:root {
-  --ai-content-width: 980px;
-}
-
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 5.5rem;
-}
-
-body {
-  min-width: 320px;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-}
-
-.layout-container,
-.main-content,
-.content-wrapper {
-  min-width: 0;
-}
-
-.main-content {
-  width: calc(100% - 290px);
-  max-width: none;
-}
-
-.content-wrapper {
-  max-width: var(--ai-content-width);
-}
-
-.top-bar {
-  position: sticky;
-  top: 0;
-  z-index: 90;
-  min-height: 52px;
-  padding: 12px 0;
-  margin-top: -32px;
-  background: color-mix(in srgb, var(--bg-main) 94%, transparent);
-  backdrop-filter: blur(10px);
-}
-
-.unit-hero {
-  padding-top: 6px;
-  margin-bottom: clamp(26px, 4vw, 42px);
-}
-
-.unit-hero h1 {
-  max-width: 24ch;
-  font-size: clamp(1.8rem, 3.3vw, 2.45rem);
-  letter-spacing: -0.035em;
-  text-wrap: balance;
-}
-
-.unit-hero .lead {
-  max-width: 75ch;
-}
-
-.module-section {
-  scroll-margin-top: 76px;
-  padding: clamp(20px, 3vw, 34px);
-  margin-bottom: clamp(24px, 4vw, 40px);
-}
-
-.section-title {
-  align-items: flex-start;
-}
-
-.section-title h2 {
-  line-height: 1.35;
-  text-wrap: balance;
-}
-
-.topic-block {
-  scroll-margin-top: 76px;
-}
-
-.topic-block p,
-.topic-block li,
-.q-answer p,
-.callout p {
-  max-width: 82ch;
-  line-height: 1.72;
-}
-
-.topic-block ul,
-.topic-block ol,
-.callout ul,
-.callout ol {
-  padding-left: 0.35rem;
-}
-
-.callout,
-.case-card,
-.problem-card,
-.question-item,
-.final-box {
-  overflow-wrap: anywhere;
-}
-
-.callout {
-  padding: 18px 20px;
-  border-radius: 10px;
-}
-
-.problem-card {
-  padding: clamp(16px, 2.5vw, 25px);
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.035);
-}
-
-.problem-header {
-  align-items: flex-start;
-  flex-wrap: wrap;
-}
-
-.problem-header h3,
-.q-header h4,
-.case-header h3 {
-  line-height: 1.45;
-  text-wrap: pretty;
-}
-
-.step-row {
-  min-width: 0;
-}
-
-.step-row > :last-child {
-  min-width: 0;
-}
-
-.step-badge {
-  flex: 0 0 auto;
-}
-
-.final-box {
-  margin-top: 14px;
-  line-height: 1.65;
-}
-
-.diagram-wrapper {
-  max-width: 100%;
-  padding: 4px 0;
-  overscroll-behavior-inline: contain;
-  scrollbar-color: #94a3b8 #eef2f7;
-}
-
-.diagram-wrapper svg,
-.module-section svg {
-  max-width: 100%;
-  height: auto;
-}
-
-.diagram-caption {
-  max-width: 72ch;
-  margin-right: auto;
-  margin-left: auto;
-  line-height: 1.55;
-}
-
-.data-table {
-  display: block;
-  max-width: 100%;
-  overflow-x: auto;
-  border-collapse: separate;
-  border-spacing: 0;
-  border-radius: 8px;
-  scrollbar-color: #94a3b8 #eef2f7;
-  overscroll-behavior-inline: contain;
-}
-
-.data-table th,
-.data-table td {
-  min-width: 7rem;
-  vertical-align: top;
-  line-height: 1.55;
-}
-
-.data-table th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
-.data-table tr:hover td {
-  background-color: #f8fafc;
-}
-
-code,
-kbd,
-pre {
-  font-family: var(--font-mono);
-}
-
-code {
-  overflow-wrap: anywhere;
-}
-
-pre {
-  max-width: 100%;
-  overflow-x: auto;
-  padding: 14px 16px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background: #f8fafc;
-  line-height: 1.6;
-  scrollbar-color: #94a3b8 #eef2f7;
-}
-
-.MathJax,
-.MathJax_Display,
-mjx-container {
-  max-width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 2px 0;
-}
-
-.q-header {
-  flex-wrap: wrap;
-  align-items: flex-start;
-}
-
-.marks-badge {
-  margin-top: 2px;
-}
-
-.q-answer {
-  line-height: 1.7;
-}
-
-.unit-pagination {
-  gap: 12px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.btn {
-  min-height: 42px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1.35;
-}
-
-.sidebar-nav a:focus-visible,
-.btn:focus-visible,
-a:focus-visible {
-  outline: 3px solid #f2bd48;
-  outline-offset: 3px;
-}
-
-@media (max-width: 900px) {
-  .sidebar {
-    max-height: 34vh;
-    padding: 16px;
-    overscroll-behavior: contain;
-  }
-
-  .sidebar-header {
-    padding-bottom: 12px;
-    margin-bottom: 12px;
-  }
-
-  .sidebar-nav h3 {
-    margin-top: 14px;
-  }
-
-  .main-content {
-    width: 100%;
-    padding: 24px 16px 56px;
-  }
-
-  .top-bar {
-    margin-top: -24px;
-  }
-
-  .module-section {
-    border-radius: 10px;
-  }
-}
-
-@media (max-width: 600px) {
-  body {
-    font-size: 15px;
-  }
-
-  .top-bar {
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-    font-size: 0.82rem;
-  }
-
-  .meta-tag {
-    font-size: 0.72rem;
-  }
-
-  .unit-hero h1 {
-    font-size: clamp(1.65rem, 8vw, 2.05rem);
-  }
-
-  .unit-hero .lead {
-    font-size: 1rem;
-  }
-
-  .section-title {
-    gap: 8px;
-    margin-bottom: 22px;
-  }
-
-  .section-title h2 {
-    font-size: 1.25rem;
-  }
-
-  .cross-ref-badge {
-    font-size: 0.7rem;
-  }
-
-  .step-row {
-    gap: 10px;
-  }
-
-  .step-badge {
-    white-space: normal;
-  }
-
-  .data-table {
-    font-size: 0.84rem;
-  }
-
-  .data-table th,
-  .data-table td {
-    padding: 9px 10px;
-    min-width: 6.25rem;
-  }
-
-  .unit-pagination {
-    justify-content: stretch;
-  }
-
-  .unit-pagination .btn {
-    flex: 1 1 100%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-  }
-}
-
-@media print {
-  .sidebar,
-  .top-bar,
-  .unit-pagination {
-    display: none !important;
-  }
-
-  .main-content {
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .module-section,
-  .problem-card,
-  .case-card,
-  .callout {
-    box-shadow: none;
-    break-inside: avoid;
-  }
-}
-</style></head>
-<body>
-<div class="layout-container">
-<!-- Sidebar Navigation -->
-<aside class="sidebar">
-<div class="sidebar-header">
-<a class="logo" href="../index.html">NMIMS · AI Master</a>
-<span class="badge">Semester Exam Prep</span>
-<button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle" type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark mode</span></button></div>
-<nav class="sidebar-nav">
-<h3>Syllabus Units</h3>
-<ul>
-<li><a href="unit_1.html"><span class="unit-num">01</span> Intro to AI &amp; Intelligent Agents</a></li>
-<li><a href="unit_2.html"><span class="unit-num">02</span> Problem Solving &amp; Adversarial Search</a></li>
-<li><a href="unit_3.html"><span class="unit-num">03</span> Knowledge Representation &amp; Logic</a></li>
-<li><a href="unit_4.html"><span class="unit-num">04</span> Constraint Satisfaction Problems</a></li>
-<li><a class="active" href="unit_5.html"><span class="unit-num">05</span> Machine Learning &amp; Clustering</a></li>
-<li><a href="unit_6.html"><span class="unit-num">06</span> Expert Systems &amp; Shells</a></li>
-</ul>
-<h3>Unit 5 Contents</h3>
-<ul>
-<li><a href="#theory-section">1. In-Depth Lecture &amp; Theory</a></li>
-<li><a href="#sec-learning-foundations">1.1 Learning Foundations: Inductive vs Deductive</a></li>
-<li><a href="#sec-ml-paradigms">1.2 The 4 Machine Learning Paradigms</a></li>
-<li><a href="#sec-decision-trees">1.3 Decision Tree Induction &amp; Mathematics</a></li>
-<li><a href="#sec-overfitting">1.4 Overfitting: Causes, Bias-Variance, Pruning</a></li>
-<li><a href="#sec-kmeans">1.5 K-Means Clustering: Algorithm &amp; Metrics</a></li>
-<li><a href="#numerical-section">2. Step-by-Step Numericals</a></li>
-<li><a href="#num-1">2.1 Simple: Binary Entropy Calculation</a></li>
-<li><a href="#num-2">2.2 Medium: Information Gain for PlayGolf Root Node</a></li>
-<li><a href="#num-3">2.3 Complex: Complete 2D K-Means Clustering Trace</a></li>
-<li><a href="#comparison-section">3. Comparative Studies</a></li>
-<li><a href="#case-section">4. Case Studies &amp; Applications</a></li>
-<li><a href="#questions-section">5. Exam Questions &amp; Marking Guide</a></li>
-</ul>
-</nav>
-</aside>
-<!-- Main Content Area -->
-<main class="main-content">
-<header class="top-bar">
-<div class="breadcrumb">
-<a href="../index.html">Home</a> &gt; <span>Unit 5: Machine Learning</span>
-</div>
-<div class="meta-tag">Unit 5 · 100% PPT Faithful · Comprehensive Lecture</div>
-</header>
-<article class="content-wrapper">
-<header class="unit-hero">
-<h1>Unit 5: Machine Learning &amp; Unsupervised Learning</h1>
-<p class="lead">A rigorous examination preparation guide covering Inductive vs Deductive Learning, the four learning paradigms, Decision Tree Induction via Information Gain and Gini Index, Overfitting dynamics and Pruning, and iterative K-Means Clustering with mathematical convergence proofs.</p>
-</header>
-<!-- SECTION 1: IN-DEPTH THEORY -->
-<section class="module-section" id="theory-section">
-<div class="section-title">
-<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
-<span class="cross-ref-badge">Cross-referenced with Slides &amp; Numericals</span>
-</div>
-<div class="topic-block" id="sec-learning-foundations">
-<h3>1.1 Foundations of Learning: What is Machine Learning?</h3>
-<p>In classical symbolic AI (as studied in Units 1 to 4), an agent is supplied with deterministic rules and explicit knowledge representations authored by domain experts. However, real-world problems often defy complete explicit formalization. Machine learning (ML) shifts the paradigm: instead of explicitly programming an agent with answers, we program it with a <em>learning element</em> that infers underlying mathematical mappings from empirical training data.</p>
-<div class="callout callout-def">
-<h4>Formal Definition of Learning (Tom Mitchell, 1997)</h4>
-<p><em>"A computer program is said to learn from experience <strong>E</strong> with respect to some class of tasks <strong>T</strong> and performance measure <strong>P</strong>, if its performance at tasks in <strong>T</strong>, as measured by <strong>P</strong>, improves with experience <strong>E</strong>."</em></p>
-<ul>
-<li><strong>Task \(T\):</strong> E.g., classifying medical images or playing chess.</li>
-<li><strong>Experience \(E\):</strong> E.g., a database of historical X-ray records with labels or playing games against itself.</li>
-<li><strong>Performance Measure \(P\):</strong> E.g., diagnostic accuracy percentage or win-rate against human grandmasters.</li>
-</ul>
-</div>
-<h4>Inductive Learning vs. Deductive Learning</h4>
-<p>Human intelligence and AI agents employ two fundamental modes of inference:</p>
-<ul>
-<li><strong>Deductive Learning (Top-Down):</strong> Infers specific logical consequences from generalized universal axioms. If the premises are true, the conclusion is guaranteed to be true (soundness). For example:
-                            $$\forall x \, (\text{Bird}(x) \implies \text{CanFly}(x)), \quad \text{Bird}(\text{Tweety}) \vdash \text{CanFly}(\text{Tweety})$$
-                            Deductive reasoning preserves truth but generates no fundamentally new empirical hypothesis beyond what is already entailed.</li>
-<li><strong>Inductive Learning (Bottom-Up):</strong> Constructs a general hypothesis or mathematical function \(h\) from a finite collection of observed training examples \(\{(x_1, y_1), (x_2, y_2), \dots, (x_N, y_N)\}\). The fundamental assumption of inductive learning is:
-                            $$\text{Any hypothesis found to approximate the target function well over a sufficiently large set of training examples}$$
-                            $$\text{will also approximate the target function well over unobserved test examples.}$$
-                            Inductive reasoning generates powerful generalizable patterns, but its conclusions are probabilistic rather than logically infallible (e.g., observing 1,000 white swans induces the hypothesis that all swans are white, which is falsified upon seeing a black swan).</li>
-</ul>
-</div>
-<div class="topic-block" id="sec-ml-paradigms">
-<h3>1.2 The Four Machine Learning Paradigms</h3>
-<p>Depending on the nature of feedback and the availability of ground-truth supervisor signals, machine learning algorithms are categorized into four distinct computational paradigms:</p>
-<!-- SVG: 4 ML Paradigms Taxonomy -->
-<div class="diagram-wrapper">
-<svg style="width:100%; max-width:850px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewbox="0 0 850 320" xmlns="http://www.w3.org/2000/svg">
-<rect fill="#1e293b" height="48" rx="8" width="190" x="330" y="20"></rect>
-<text fill="#ffffff" font-family="'Inter', sans-serif" font-size="14" font-weight="700" text-anchor="middle" x="425" y="49">Machine Learning</text>
-<!-- Branching lines -->
-<path d="M425 68 L425 95 M425 95 L115 95 L115 125 M425 95 L320 95 L320 125 M425 95 L530 95 L530 125 M425 95 L735 95 L735 125" fill="none" stroke="#94a3b8" stroke-width="2"></path>
-<!-- Supervised -->
-<rect fill="#eff6ff" height="170" rx="8" stroke="#3b82f6" stroke-width="2" width="180" x="25" y="125"></rect>
-<text fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="14" font-weight="700" text-anchor="middle" x="115" y="150">1. Supervised Learning</text>
-<text fill="#475569" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="115" y="172">Labeled Data: (X, Y)</text>
-<line stroke="#bfdbfe" stroke-width="1" x1="40" x2="190" y1="185" y2="185"></line>
-<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="115" y="205">Classification</text>
-<text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="115" y="222">Discrete outputs (Spam/Not)</text>
-<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="115" y="248">Regression</text>
-<text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="115" y="265">Continuous outputs (Price, Temp)</text>
-<!-- Unsupervised -->
-<rect fill="#f0fdf4" height="170" rx="8" stroke="#22c55e" stroke-width="2" width="180" x="230" y="125"></rect>
-<text fill="#15803d" font-family="'Inter', sans-serif" font-size="14" font-weight="700" text-anchor="middle" x="320" y="150">2. Unsupervised Learning</text>
-<text fill="#475569" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="320" y="172">Unlabeled Data: (X only)</text>
-<line stroke="#bbf7d0" stroke-width="1" x1="245" x2="395" y1="185" y2="185"></line>
-<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="320" y="205">Clustering (K-Means)</text>
-<text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="320" y="222">Grouping natural clusters</text>
-<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="320" y="248">Dimensionality Reduction</text>
-<text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="320" y="265">PCA, feature compression</text>
-<!-- Semi-Supervised -->
-<rect fill="#fefce8" height="170" rx="8" stroke="#eab308" stroke-width="2" width="180" x="440" y="125"></rect>
-<text fill="#a16207" font-family="'Inter', sans-serif" font-size="14" font-weight="700" text-anchor="middle" x="530" y="150">3. Semi-Supervised</text>
-<text fill="#475569" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="530" y="172">Small Labeled + Large Unlabeled</text>
-<line stroke="#fef08a" stroke-width="1" x1="455" x2="605" y1="185" y2="185"></line>
-<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="530" y="210">Pseudo-Labeling</text>
-<text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="530" y="228">Self-training with high-confidence</text>
-<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="530" y="254">Graph-based Transduction</text>
-<text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="530" y="272">Label propagation across manifolds</text>
-<!-- Reinforcement -->
-<rect fill="#faf5ff" height="170" rx="8" stroke="#a855f7" stroke-width="2" width="180" x="645" y="125"></rect>
-<text fill="#7e22ce" font-family="'Inter', sans-serif" font-size="14" font-weight="700" text-anchor="middle" x="735" y="150">4. Reinforcement Learning</text>
-<text fill="#475569" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="735" y="172">Trial &amp; Error: State-Action-Reward</text>
-<line stroke="#e9d5ff" stroke-width="1" x1="660" x2="810" y1="185" y2="185"></line>
-<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="735" y="205">Policy &amp; Value Learning</text>
-<text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="735" y="222">Markov Decision Process (MDP)</text>
-<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="735" y="248">Reward Maximization</text>
-<text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="735" y="265">Q-Learning, Policy Gradients</text>
-</svg>
-<p class="diagram-caption">Figure 5.1: The taxonomy of Machine Learning paradigms based on training feedback and data structure.</p>
-</div>
-<h4>Detailed Breakdown of Paradigms:</h4>
-<ol>
-<li><strong>Supervised Learning:</strong> The training dataset consists of input vectors paired with correct ground-truth supervisory labels: \(D = \{(x_i, y_i)\}_{i=1}^N\). The learner adjusts its parameters to minimize a loss function \(\mathcal{L}(y_i, h(x_i))\).
-                                <ul>
-<li><em>Classification:</em> Target \(y\) belongs to a finite set of discrete category labels: \(y \in \{C_1, C_2, \dots, C_K\}\). Examples: Email spam detection (Spam / Not Spam), Disease diagnosis (Malignant / Benign). Algorithms: Decision Trees, Naive Bayes, Support Vector Machines (SVM), Logistic Regression.</li>
-<li><em>Regression:</em> Target \(y\) is a continuous real-valued number: \(y \in \mathbb{R}\). Examples: House price prediction, Stock valuation, Temperature forecasting. Algorithms: Linear Regression, Ridge/Lasso, Polynomial Regression.</li>
-</ul>
-</li>
-<li><strong>Unsupervised Learning:</strong> The training set contains only unlabeled feature vectors without any external ground truth or teacher: \(D = \{x_i\}_{i=1}^N\). The objective is to discover underlying structural properties, probability densities, or groupings:
-                                <ul>
-<li><em>Clustering:</em> Grouping samples into distinct clusters such that intra-cluster similarity is maximized and inter-cluster similarity is minimized (e.g., K-Means, Hierarchical Clustering, DBSCAN).</li>
-<li><em>Dimensionality Reduction / Feature Extraction:</em> Projecting high-dimensional spaces to lower dimensions while preserving maximum variance (e.g., Principal Component Analysis - PCA).</li>
-<li><em>Association Rule Mining:</em> Discovering co-occurrence relationships (e.g., Market Basket Analysis: If Bread and Milk \(\implies\) Butter).</li>
-</ul>
-</li>
-<li><strong>Semi-Supervised Learning:</strong> In many real-world scenarios (e.g., medical imaging or speech analysis), collecting unlabeled data is cheap and abundant, but labeling requires expensive human domain experts. Semi-supervised learning utilizes a small seed of labeled data combined with a large pool of unlabeled data to construct higher-confidence decision boundaries.</li>
-<li><strong>Reinforcement Learning (RL):</strong> An autonomous agent interacts dynamically with an uncertain environment modeled as a Markov Decision Process (MDP \(\langle S, A, P, R, \gamma 
-angle\)). At each time step \(t\), the agent observes state \(s_t\), selects action \(a_t\), receives an immediate scalar feedback signal (positive reward or negative penalty \(r_{t+1}\)), and transitions to next state \(s_{t+1}\). The agent's goal is to learn an optimal policy \(\pi^*: S 	o A\) that maximizes expected cumulative discounted reward:
-                            $$G_t = \sum_{k=0}^{\infty} \gamma^k r_{t+k+1}, \quad \text{where } \gamma \in [0, 1] \text{ is the discount factor.}$$
-                            </li>
-</ol>
-</div>
-<div class="topic-block" id="sec-decision-trees">
-<h3>1.3 Decision Tree Induction &amp; Splitting Criteria</h3>
-<p>A <strong>Decision Tree</strong> is a hierarchical, non-parametric supervised learning model that represents decisions and their potential outcomes in an intuitive flowchart structure. It recursively partitions the input feature space into rectangular homogenous subsets.</p>
-<h4>Anatomy of a Decision Tree:</h4>
-<ul>
-<li><strong>Root Node:</strong> The topmost node containing the complete dataset; it represents the first attribute test chosen via an Attribute Selection Measure (ASM).</li>
-<li><strong>Internal / Decision Nodes:</strong> Intermediate nodes that test a specific attribute condition (e.g., \(\text{Outlook} = \text{Sunny}\)). Branches outgoing from an internal node correspond to the distinct possible attribute values.</li>
-<li><strong>Leaf / Terminal Nodes:</strong> End nodes that hold no further split conditions. Each leaf node carries a final class decision label or regression value.</li>
-</ul>
-<!-- SVG: Decision Tree Structure -->
-<div class="diagram-wrapper">
-<svg style="width:100%; max-width:700px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewbox="0 0 700 280" xmlns="http://www.w3.org/2000/svg">
-<!-- Root Node -->
-<rect fill="#1e293b" height="45" rx="8" width="150" x="275" y="20"></rect>
-<text fill="#ffffff" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle" x="350" y="47">Root: Outlook?</text>
-<!-- Branches -->
-<line stroke="#64748b" stroke-width="2" x1="300" x2="160" y1="65" y2="120"></line>
-<text fill="#475569" font-family="'Inter', sans-serif" font-size="11" font-weight="600" x="210" y="90">Sunny</text>
-<line stroke="#64748b" stroke-width="2" x1="350" x2="350" y1="65" y2="120"></line>
-<text fill="#475569" font-family="'Inter', sans-serif" font-size="11" font-weight="600" x="360" y="95">Overcast</text>
-<line stroke="#64748b" stroke-width="2" x1="400" x2="540" y1="65" y2="120"></line>
-<text fill="#475569" font-family="'Inter', sans-serif" font-size="11" font-weight="600" x="490" y="90">Rain</text>
-<!-- Level 1 Nodes -->
-<rect fill="#3b82f6" height="45" rx="8" width="140" x="90" y="120"></rect>
-<text fill="#ffffff" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="160" y="147">Humidity?</text>
-<rect fill="#22c55e" height="45" rx="8" width="140" x="280" y="120"></rect>
-<text fill="#ffffff" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle" x="350" y="147">Play = Yes (100%)</text>
-<rect fill="#3b82f6" height="45" rx="8" width="140" x="470" y="120"></rect>
-<text fill="#ffffff" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="540" y="147">Windy?</text>
-<!-- Leaf Nodes from Sunny/Humidity -->
-<line stroke="#94a3b8" stroke-width="2" x1="130" x2="70" y1="165" y2="215"></line>
-<text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" x="80" y="190">High</text>
-<rect fill="#ef4444" height="35" rx="6" width="100" x="20" y="215"></rect>
-<text fill="#ffffff" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle" x="70" y="237">No</text>
-<line stroke="#94a3b8" stroke-width="2" x1="190" x2="250" y1="165" y2="215"></line>
-<text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" x="230" y="190">Normal</text>
-<rect fill="#22c55e" height="35" rx="6" width="100" x="200" y="215"></rect>
-<text fill="#ffffff" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle" x="250" y="237">Yes</text>
-<!-- Leaf Nodes from Rain/Windy -->
-<line stroke="#94a3b8" stroke-width="2" x1="510" x2="450" y1="165" y2="215"></line>
-<text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" x="460" y="190">Strong</text>
-<rect fill="#ef4444" height="35" rx="6" width="100" x="400" y="215"></rect>
-<text fill="#ffffff" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle" x="450" y="237">No</text>
-<line stroke="#94a3b8" stroke-width="2" x1="570" x2="630" y1="165" y2="215"></line>
-<text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" x="610" y="190">Weak</text>
-<rect fill="#22c55e" height="35" rx="6" width="100" x="580" y="215"></rect>
-<text fill="#ffffff" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle" x="630" y="237">Yes</text>
-</svg>
-<p class="diagram-caption">Figure 5.2: Decision Tree induced from the weather PlayGolf dataset.</p>
-</div>
-<h4>The ID3 Algorithm &amp; Attribute Selection Measures (ASM)</h4>
-<p>The standard top-down induction of decision trees (ID3 by Ross Quinlan) uses a greedy heuristic search: at each node, select the attribute that most effectively separates the classes into purest subsets.</p>
-<h5>1. Shannon Entropy (Measure of Impurity / Disorder):</h5>
-<p>Entropy \(E(S)\) quantifies the uncertainty or impurity in a sample set \(S\). If there are \(c\) distinct target classes with proportions \(p_1, p_2, \dots, p_c\):</p>
-                        $$\text{Entropy}(S) = - \sum_{i=1}^{c} p_i \log_2(p_i)$$
-                        <ul>
-<li><strong>Pure Node:</strong> If all samples belong to the same class (e.g., \(p_1 = 1, p_2 = 0\)), then \(\text{Entropy}(S) = -1 \log_2(1) - 0 = 0\) (Minimum impurity).</li>
-<li><strong>Maximum Uncertainty:</strong> In a binary classification problem where samples are evenly split (\(p_+ = 0.5, p_- = 0.5\)):
-                            $$\text{Entropy}(S) = - (0.5 \log_2 0.5 + 0.5 \log_2 0.5) = - (0.5(-1) + 0.5(-1)) = 1.0 \text{ bit}$$
-                            </li>
-</ul>
-<h5>2. Information Gain (IG):</h5>
-<p>Information Gain represents the expected reduction in entropy achieved by partitioning the dataset \(S\) along the candidate attribute \(A\). If attribute \(A\) takes distinct values \(v \in \text{Values}(A)\), and \(S_v\) is the subset where \(A = v\):</p>
-                        $$\text{Gain}(S, A) = \text{Entropy}(S) - \sum_{v \in \text{Values}(A)} \frac{|S_v|}{|S|} \cdot \text{Entropy}(S_v)$$
-                        <p>The algorithm evaluates \(\text{Gain}(S, A)\) for all unused attributes and selects the attribute that maximizes \(\text{Gain}(S, A)\) as the splitting node.</p>
-<h5>3. Gini Index / Gini Impurity (Used in CART):</h5>
-<p>The CART (Classification and Regression Trees) algorithm uses the Gini Impurity rather than logarithmic entropy for computational speed:</p>
-                        $$\text{Gini}(S) = 1 - \sum_{i=1}^{c} p_i^2$$
-                        <p>For a binary split into subsets \(S_1\) and \(S_2\), the split Gini index is:</p>
-                        $$\text{Gini}_{\text{split}}(S, A) = \frac{|S_1|}{|S|} \text{Gini}(S_1) + \frac{|S_2|}{|S|} \text{Gini}(S_2)$$
-                        <p>The attribute with the <em>lowest</em> \(\text{Gini}_{\text{split}}\) is selected for the split.</p>
-</div>
-<div class="topic-block" id="sec-overfitting">
-<h3>1.4 Overfitting in Machine Learning &amp; Mitigation Strategies</h3>
-<p>A central challenge in machine learning is ensuring that the model generalizes well to unseen real-world data rather than merely memorizing peculiarities of the training sample.</p>
-<div class="callout callout-warn">
-<h4>Definition of Overfitting</h4>
-<p>A hypothesis \(h \in H\) is said to <strong>overfit</strong> the training data if there exists an alternative hypothesis \(h' \in H\) such that \(h\) has smaller error than \(h'\) over the training data, but \(h'\) has a smaller error than \(h\) over the entire distribution of unseen test data:</p>
-                            $$\text{Error}_{\text{train}}(h) &lt; \text{Error}_{\text{train}}(h') \quad \text{AND} \quad \text{Error}_{\text{test}}(h) &gt; \text{Error}_{\text{test}}(h')$$
-                        </div>
-<h4>Root Causes of Overfitting:</h4>
-<ol>
-<li><strong>Noise and Outliers in Training Data:</strong> If the decision tree grows deep enough to isolate anomalous outliers into individual leaf nodes, it creates fractured, nonsensical decision boundaries.</li>
-<li><strong>Small Training Sample Size:</strong> Coincidental correlations appear genuine when sample sizes are small (e.g., all 3 patients with attribute \(A\) happen to have disease \(B\) purely by chance).</li>
-<li><strong>Excessive Model Complexity:</strong> A decision tree that grows until every leaf node has an entropy of 0 will produce 100% training accuracy but fail catastrophically on test data.</li>
-</ol>
-<!-- SVG: Bias-Variance / Overfitting Curve -->
-<div class="diagram-wrapper">
-<svg style="width:100%; max-width:650px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewbox="0 0 650 250" xmlns="http://www.w3.org/2000/svg">
-<!-- Axes -->
-<line stroke="#475569" stroke-width="2" x1="70" x2="590" y1="200" y2="200"></line>
-<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="12" font-weight="600" text-anchor="middle" x="330" y="235">Model Complexity (Tree Depth / Nodes) →</text>
-<line stroke="#475569" stroke-width="2" x1="70" x2="70" y1="200" y2="30"></line>
-<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="12" font-weight="600" text-anchor="middle" transform="rotate(-90 30,115)" x="30" y="115">Error Rate →</text>
-<!-- Training Error Curve (Monotonically Decreasing) -->
-<path d="M 90 170 Q 250 140, 350 80 T 570 35" fill="none" stroke="#3b82f6" stroke-width="3"></path>
-<text fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="11" font-weight="700" x="500" y="30">Training Error</text>
-<!-- Test Error Curve (U-Shape) -->
-<path d="M 90 185 Q 260 90, 340 90 T 570 180" fill="none" stroke="#ef4444" stroke-dasharray="4" stroke-width="3"></path>
-<text fill="#dc2626" font-family="'Inter', sans-serif" font-size="11" font-weight="700" x="540" y="165">Testing Error</text>
-<!-- Sweet Spot Marker -->
-<line stroke="#22c55e" stroke-dasharray="3" stroke-width="2" x1="330" x2="330" y1="30" y2="200"></line>
-<circle cx="330" cy="90" fill="#22c55e" r="5"></circle>
-<text fill="#15803d" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle" x="330" y="20">Optimal Model Capacity</text>
-<!-- Region Labels -->
-<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" font-style="italic" x="160" y="190">Underfitting (High Bias)</text>
-<text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" font-style="italic" x="470" y="190">Overfitting (High Variance)</text>
-</svg>
-<p class="diagram-caption">Figure 5.3: The Bias-Variance Tradeoff and Overfitting curve as model complexity increases.</p>
-</div>
-<h4>Mitigation &amp; Tree Pruning Techniques:</h4>
-<ul>
-<li><strong>Pre-pruning (Early Stopping):</strong> Stop growing the tree before it perfectly classifies the training set. Halting criteria include:
-                                <ul>
-<li>Setting a maximum depth limit (<code>max_depth</code>).</li>
-<li>Requiring a minimum number of samples to split an internal node (<code>min_samples_split</code>).</li>
-<li>Halting if the information gain from the best split falls below a fixed threshold \(\epsilon\).</li>
-</ul>
-</li>
-<li><strong>Post-pruning (Reduced Error Pruning):</strong> Allow the tree to grow to full depth (overfitting the data), and then prune subtrees bottom-up. For each non-leaf subtree, replace it with a single leaf node carrying the majority class label. If this replacement does not degrade performance on an independent <em>validation dataset</em>, the prune is kept permanently.</li>
-<li><strong>Ensemble Methods (Random Forests):</strong> Instead of relying on a single deep, high-variance decision tree, build an ensemble of hundreds of decorrelated trees using bootstrap aggregation (bagging) and random feature selection, averaging their votes to achieve low variance.</li>
-</ul>
-</div>
-<div class="topic-block" id="sec-kmeans">
-<h3>1.5 K-Means Clustering: Algorithm &amp; Mathematics</h3>
-<p><strong>K-Means</strong> is an iterative, distance-based partitioning algorithm for unsupervised learning. Given an unlabeled dataset \(X = \{x_1, x_2, \dots, x_N\} \subset \mathbb{R}^D\) and a user-specified hyperparameter \(K\) (the number of clusters), K-Means partitions the \(N\) observations into \(K\) disjoint clusters \(C = \{C_1, C_2, \dots, C_K\}\) such that each point belongs to the cluster with the nearest centroid.</p>
-<h4>The Objective Function (Inertia / WCSS):</h4>
-<p>K-Means seeks to find cluster assignments and centroids that minimize the <strong>Within-Cluster Sum of Squares (WCSS)</strong>, also called Inertia:</p>
-                        $$J = \sum_{k=1}^{K} \sum_{x_i \in C_k} \| x_i - \mu_k \|^2$$
-                        <p>where \(\mu_k = \frac{1}{|C_k|} \sum_{x \in C_k} x\) is the mathematical mean (centroid) of cluster \(C_k\).</p>
-<!-- SVG: K-Means Clustering Visual Trace -->
-<div class="diagram-wrapper">
-<svg style="width:100%; max-width:750px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewbox="0 0 750 260" xmlns="http://www.w3.org/2000/svg">
-<!-- Step 1 Box -->
-<g transform="translate(20, 20)">
-<rect fill="#f8fafc" height="220" rx="8" stroke="#cbd5e1" stroke-width="1.5" width="210"></rect>
-<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="105" y="25">Step 1: Init Centroids</text>
-<!-- Points -->
-<circle cx="50" cy="70" fill="#94a3b8" r="5"></circle>
-<circle cx="70" cy="90" fill="#94a3b8" r="5"></circle>
-<circle cx="60" cy="120" fill="#94a3b8" r="5"></circle>
-<circle cx="150" cy="160" fill="#94a3b8" r="5"></circle>
-<circle cx="170" cy="180" fill="#94a3b8" r="5"></circle>
-<circle cx="140" cy="190" fill="#94a3b8" r="5"></circle>
-<!-- Initial Seeds C1, C2 -->
-<rect fill="#3b82f6" height="10" width="10" x="55" y="65"></rect>
-<text fill="#1d4ed8" font-size="10" font-weight="700" x="75" y="65">m1</text>
-<rect fill="#ef4444" height="10" width="10" x="155" y="155"></rect>
-<text fill="#dc2626" font-size="10" font-weight="700" x="175" y="155">m2</text>
-</g>
-<!-- Arrow 1 -->
-<path d="M 240 130 L 265 130" marker-end="url(#arrow)" stroke="#64748b" stroke-width="2"></path>
-<!-- Step 2 Box -->
-<g transform="translate(270, 20)">
-<rect fill="#f8fafc" height="220" rx="8" stroke="#cbd5e1" stroke-width="1.5" width="210"></rect>
-<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="105" y="25">Step 2: Assign Points</text>
-<!-- Assigned Points -->
-<circle cx="50" cy="70" fill="#3b82f6" r="5"></circle>
-<circle cx="70" cy="90" fill="#3b82f6" r="5"></circle>
-<circle cx="60" cy="120" fill="#3b82f6" r="5"></circle>
-<circle cx="150" cy="160" fill="#ef4444" r="5"></circle>
-<circle cx="170" cy="180" fill="#ef4444" r="5"></circle>
-<circle cx="140" cy="190" fill="#ef4444" r="5"></circle>
-<!-- Boundary line -->
-<line stroke="#cbd5e1" stroke-dasharray="3" stroke-width="1.5" x1="30" x2="190" y1="180" y2="60"></line>
-<text fill="#64748b" font-size="10" text-anchor="middle" x="105" y="210">Voronoi Partition</text>
-</g>
-<!-- Arrow 2 -->
-<path d="M 490 130 L 515 130" stroke="#64748b" stroke-width="2"></path>
-<!-- Step 3 Box -->
-<g transform="translate(520, 20)">
-<rect fill="#f8fafc" height="220" rx="8" stroke="#cbd5e1" stroke-width="1.5" width="210"></rect>
-<text fill="#1e293b" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="105" y="25">Step 3: Recompute &amp; Converge</text>
-<circle cx="50" cy="70" fill="#3b82f6" r="5"></circle>
-<circle cx="70" cy="90" fill="#3b82f6" r="5"></circle>
-<circle cx="60" cy="120" fill="#3b82f6" r="5"></circle>
-<circle cx="150" cy="160" fill="#ef4444" r="5"></circle>
-<circle cx="170" cy="180" fill="#ef4444" r="5"></circle>
-<circle cx="140" cy="190" fill="#ef4444" r="5"></circle>
-<!-- Updated Centroids -->
-<circle cx="60" cy="93" fill="#1d4ed8" r="6" stroke="#ffffff" stroke-width="1.5"></circle>
-<text fill="#1d4ed8" font-size="10" font-weight="700" x="75" y="96">μ1*</text>
-<circle cx="153" cy="176" fill="#dc2626" r="6" stroke="#ffffff" stroke-width="1.5"></circle>
-<text fill="#dc2626" font-size="10" font-weight="700" x="168" y="180">μ2*</text>
-<text fill="#15803d" font-size="10" font-weight="700" text-anchor="middle" x="105" y="210">Δμ &lt; ε (Converged)</text>
-</g>
-</svg>
-<p class="diagram-caption">Figure 5.4: The iterative assign-and-update steps of the K-Means clustering algorithm.</p>
-</div>
-<h4>The 4 Core Steps of K-Means:</h4>
-<ol>
-<li><strong>Step 1 (Initialization):</strong> Select \(K\) points from the dataset as the initial centroids \(\mu_1^{(0)}, \mu_2^{(0)}, \dots, \mu_K^{(0)}\) (e.g., via random selection or K-Means++ initialization).</li>
-<li><strong>Step 2 (Assignment / Expectation Step):</strong> Assign each sample point \(x_i\) to its closest centroid using the Euclidean distance metric:
-                            $$C_k = \left\{ x_i : \| x_i - \mu_k \| \le \| x_i - \mu_j \| \quad \forall j \in \{1, \dots, K\} 
-ight\}$$
-                            </li>
-<li><strong>Step 3 (Update / Maximization Step):</strong> Recompute each centroid \(\mu_k\) by calculating the arithmetic mean of all data points assigned to cluster \(C_k\):
-                            $$\mu_k^{(t+1)} = \frac{1}{|C_k|} \sum_{x_i \in C_k} x_i$$
-                            </li>
-<li><strong>Step 4 (Termination / Convergence Check):</strong> Repeat Steps 2 and 3 until a stopping criterion is met:
-                                <ul>
-<li>Centroid locations do not change: \(\|\mu_k^{(t+1)} - \mu_k^{(t)}\| \le \epsilon \quad \forall k\).</li>
-<li>No sample changes cluster membership across iterations.</li>
-<li>A maximum iteration limit is reached.</li>
-</ul>
-</li>
-</ol>
-<h4>Distance Metrics in K-Means:</h4>
-<ul>
-<li><strong>Euclidean Distance (\(L_2\) norm):</strong> The standard straight-line distance in Euclidean space:
-                            $$d(p, q) = \sqrt{\sum_{j=1}^D (p_j - q_j)^2}$$
-                            </li>
-<li><strong>Manhattan Distance (\(L_1\) norm / City Block):</strong> Sum of absolute coordinate differences (used in K-Medians):
-                            $$d(p, q) = \sum_{j=1}^D |p_j - q_j|$$
-                            </li>
-</ul>
-<h4>Cluster Quality Criteria:</h4>
-<ul>
-<li><strong>High Intra-Class Similarity (Compactness):</strong> The distance between points within the same cluster should be minimal (low WCSS).</li>
-<li><strong>Low Inter-Class Similarity (Separation):</strong> The distance between distinct cluster centroids (Between-Cluster Sum of Squares, BCSS) should be maximal.</li>
-</ul>
-</div>
-</section>
-<!-- SECTION 2: STEP-BY-STEP NUMERICALS -->
-<section class="module-section" id="numerical-section">
-<div class="section-title">
-<h2>2. In-Depth Numerical Explanations (Step-by-Step)</h2>
-<span class="cross-ref-badge">3 Tiered Solved Problems</span>
-</div>
-<!-- NUMERICAL 1: SIMPLE -->
-<div class="problem-card" id="num-1">
-<div class="problem-header">
-<span class="difficulty easy">Simple Example</span>
-<h3>Problem 5.1: Shannon Entropy Calculation for Binary Target</h3>
-</div>
-<p><strong>Problem Statement:</strong> A small training dataset \(S\) for loan approval has 14 instances. Out of these, 9 applicants are approved (\(\text{Class} = \text{Yes}\)) and 5 applicants are rejected (\(\text{Class} = \text{No}\)). Calculate the Shannon Entropy \(\text{Entropy}(S)\) of this target distribution. (Note: \(\log_2 9 \approx 3.1699\), \(\log_2 5 \approx 2.3219\), \(\log_2 14 \approx 3.8074\)).</p>
-<div class="solution-flow">
-<div class="step-row">
-<span class="step-badge">GIVEN</span>
-<div>
-<p>Total instances \(|S| = 14\).</p>
-<p>Positive instances \(p_+ = \frac{9}{14} \approx 0.6429\).</p>
-<p>Negative instances \(p_- = \frac{5}{14} \approx 0.3571\).</p>
-</div>
-</div>
-<div class="step-row">
-<span class="step-badge">FORMULA</span>
-<div>
-                                    $$\text{Entropy}(S) = - p_+ \log_2(p_+) - p_- \log_2(p_-)$$
-                                </div>
-</div>
-<div class="step-row">
-<span class="step-badge">STEPS</span>
-<div>
-<p><strong>Step 1: Compute logarithmic components using log quotient rules:</strong></p>
-                                    $$\log_2(p_+) = \log_2\left(\frac{9}{14}
-\right) = \log_2(9) - \log_2(14) = 3.1699 - 3.8074 = -0.6375$$
-                                    $$\log_2(p_-) = \log_2\left(\frac{5}{14}
-\right) = \log_2(5) - \log_2(14) = 2.3219 - 3.8074 = -1.4855$$
-                                    <p><strong>Step 2: Substitute probabilities and logs into the entropy equation:</strong></p>
-                                    $$\text{Entropy}(S) = - \left[ \frac{9}{14}  \times  (-0.6375) + \frac{5}{14}  \times  (-1.4855) 
-\right]$$
-                                    $$\text{Entropy}(S) = - \left[ 0.6429 \times (-0.6375) + 0.3571 \times (-1.4855) 
-\right]$$
-                                    $$\text{Entropy}(S) = - [ -0.4098 - 0.5305 ] = - [ -0.9403 ] = 0.9403 \text{ bits}$$
-                                </div>
-</div>
-<div class="step-row">
-<span class="step-badge answer">FINAL ANSWER</span>
-<div>
-<p class="final-box">\(\mathbf{\text{Entropy}(S) = 0.940 \text{ bits}}\)</p>
-<p class="hint">Interpretation: Since the data contains a mix of both classes (not purely 14/0 or 0/14), entropy is close to 1 bit, reflecting substantial uncertainty.</p>
-</div>
-</div>
-</div>
-</div>
-<!-- NUMERICAL 2: MEDIUM -->
-<div class="problem-card" id="num-2">
-<div class="problem-header">
-<span class="difficulty medium">Medium Example</span>
-<h3>Problem 5.2: Attribute Selection &amp; Information Gain for PlayGolf Root Node</h3>
-</div>
-<p><strong>Problem Statement:</strong> In the classic 14-sample weather dataset (\(|S| = 14\), with 9 \(\text{Yes}\) and 5 \(\text{No}\), hence \(\text{Entropy}(S) = 0.940\)), consider the candidate splitting attribute <strong>Windy</strong>, which has two categorical values: \(\text{Weak}\) and \(\text{Strong}\):</p>
-<ul>
-<li>\(\text{Windy} = \text{Weak}\): 8 samples (6 \(\text{Yes}\), 2 \(\text{No}\))</li>
-<li>\(\text{Windy} = \text{Strong}\): 6 samples (3 \(\text{Yes}\), 3 \(\text{No}\))</li>
-</ul>
-<p>Calculate: (i) \(\text{Entropy}(S_{\text{Weak}})\), (ii) \(\text{Entropy}(S_{\text{Strong}})\), and (iii) the resulting \(\text{Gain}(S, \text{Windy})\).</p>
-<div class="solution-flow">
-<div class="step-row">
-<span class="step-badge">GIVEN</span>
-<div>
-<p>\(|S| = 14\), \(\text{Entropy}(S) = 0.940\).</p>
-<p>Subset \(S_{\text{Weak}}\): \(|S_{\text{Weak}}| = 8\), \(p_+ = \frac{6}{8} = 0.75\), \(p_- = \frac{2}{8} = 0.25\).</p>
-<p>Subset \(S_{\text{Strong}}\): \(|S_{\text{Strong}}| = 6\), \(p_+ = \frac{3}{6} = 0.50\), \(p_- = \frac{3}{6} = 0.50\).</p>
-</div>
-</div>
-<div class="step-row">
-<span class="step-badge">FORMULA</span>
-<div>
-                                    $$\text{Gain}(S, A) = \text{Entropy}(S) - \sum_{v \in \{\text{Weak}, \text{Strong}\}} \frac{|S_v|}{|S|} \text{Entropy}(S_v)$$
-                                </div>
-</div>
-<div class="step-row">
-<span class="step-badge">STEPS</span>
-<div>
-<p><strong>Step 1: Compute \(\text{Entropy}(S_{\text{Weak}})\):</strong></p>
-                                    $$\text{Entropy}(S_{\text{Weak}}) = - [0.75 \log_2(0.75) + 0.25 \log_2(0.25)]$$
-                                    <p>Note that \(\log_2(0.75) = -0.4150\) and \(\log_2(0.25) = -2.000\):</p>
-                                    $$\text{Entropy}(S_{\text{Weak}}) = - [0.75(-0.4150) + 0.25(-2.000)] = - [-0.3113 - 0.5000] = 0.8113 \text{ bits}$$
-
-                                    <p><strong>Step 2: Compute \(\text{Entropy}(S_{\text{Strong}})\):</strong></p>
-<p>Since the classes are split perfectly 50-50 (\(p_+ = 0.5, p_- = 0.5\)):</p>
-                                    $$\text{Entropy}(S_{\text{Strong}}) = - [0.5 \log_2(0.5) + 0.5 \log_2(0.5)] = - [0.5(-1) + 0.5(-1)] = 1.000 \text{ bit}$$
-
-                                    <p><strong>Step 3: Compute Expected Weighted Entropy of the split:</strong></p>
-                                    $$\text{Weighted Entropy} = \frac{8}{14} \text{Entropy}(S_{\text{Weak}}) + \frac{6}{14} \text{Entropy}(S_{\text{Strong}})$$
-                                    $$\text{Weighted Entropy} = \left(\frac{8}{14}  \times  0.8113
-\right) + \left(\frac{6}{14}  \times  1.000
-\right)$$
-                                    $$\text{Weighted Entropy} = 0.4636 + 0.4286 = 0.8922 \text{ bits}$$
-
-                                    <p><strong>Step 4: Compute Information Gain:</strong></p>
-                                    $$\text{Gain}(S, \text{Windy}) = 0.9403 - 0.8922 = 0.0481 \text{ bits}$$
-                                </div>
-</div>
-<div class="step-row">
-<span class="step-badge answer">FINAL ANSWER</span>
-<div>
-<p class="final-box">\(\mathbf{\text{Gain}(S, \text{Windy}) = 0.048 \text{ bits}}\)</p>
-<p class="hint">Exam Note: When compared against \(\text{Gain}(S, \text{Outlook}) = 0.246\) bits, Windy provides very low information gain and will therefore not be selected as the root node.</p>
-</div>
-</div>
-</div>
-</div>
-<!-- NUMERICAL 3: COMPLEX -->
-<div class="problem-card" id="num-3">
-<div class="problem-header">
-<span class="difficulty hard">Complex Example</span>
-<h3>Problem 5.3: Complete Iterative 2D K-Means Clustering Trace</h3>
-</div>
-<p><strong>Problem Statement:</strong> Given four 2D data points in feature space:
-                        $$P_1 = (1, 1), \quad P_2 = (2, 1), \quad P_3 = (4, 3), \quad P_4 = (5, 4)$$
-                        Perform K-Means clustering for \(K = 2\) clusters using <strong>Euclidean distance</strong>. Assume initial seed centroids are set to:
-                        $$\mu_1^{(0)} = P_1 = (1, 1), \quad \mu_2^{(0)} = P_2 = (2, 1)$$
-                        Perform <strong>Iteration 1</strong> and <strong>Iteration 2</strong> until centroid convergence. Show all distance calculation tables and cluster reassignment steps explicitly.</p>
-<div class="solution-flow">
-<div class="step-row">
-<span class="step-badge">GIVEN</span>
-<div>
-<p>Points: \(P_1(1,1), P_2(2,1), P_3(4,3), P_4(5,4)\).</p>
-<p>Initial Centroids: \(\mu_1 = (1, 1), \mu_2 = (2, 1)\).</p>
-<p>Distance Metric: \(d(P, \mu) = \sqrt{(x_P - x_\mu)^2 + (y_P - y_\mu)^2}\).</p>
-</div>
-</div>
-<div class="step-row">
-<span class="step-badge">ITERATION 1</span>
-<div>
-<p><strong>Step 1: Compute Euclidean distances from all points to initial centroids \(\mu_1(1,1)\) and \(\mu_2(2,1)\):</strong></p>
-<table class="data-table">
-<thead>
-<tr>
-<th>Point</th>
-<th>Coords</th>
-<th>\(d(P, \mu_1 = (1,1))\)</th>
-<th>\(d(P, \mu_2 = (2,1))\)</th>
-<th>Assigned Cluster</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>\(P_1\)</td>
-<td>\((1, 1)\)</td>
-<td>\(\sqrt{(1-1)^2 + (1-1)^2} = \mathbf{0.00}\)</td>
-<td>\(\sqrt{(1-2)^2 + (1-1)^2} = 1.00\)</td>
-<td><strong>Cluster 1</strong></td>
-</tr>
-<tr>
-<td>\(P_2\)</td>
-<td>\((2, 1)\)</td>
-<td>\(\sqrt{(2-1)^2 + (1-1)^2} = 1.00\)</td>
-<td>\(\sqrt{(2-2)^2 + (1-1)^2} = \mathbf{0.00}\)</td>
-<td><strong>Cluster 2</strong></td>
-</tr>
-<tr>
-<td>\(P_3\)</td>
-<td>\((4, 3)\)</td>
-<td>\(\sqrt{(4-1)^2 + (3-1)^2} = \sqrt{9+4} = \sqrt{13} \approx 3.61\)</td>
-<td>\(\sqrt{(4-2)^2 + (3-1)^2} = \sqrt{4+4} = \sqrt{8} \approx \mathbf{2.83}\)</td>
-<td><strong>Cluster 2</strong></td>
-</tr>
-<tr>
-<td>\(P_4\)</td>
-<td>\((5, 4)\)</td>
-<td>\(\sqrt{(5-1)^2 + (4-1)^2} = \sqrt{16+9} = \sqrt{25} = 5.00\)</td>
-<td>\(\sqrt{(5-2)^2 + (4-1)^2} = \sqrt{9+9} = \sqrt{18} \approx \mathbf{4.24}\)</td>
-<td><strong>Cluster 2</strong></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Step 2: Cluster Membership after Iteration 1:</strong></p>
-                                    $$C_1 = \{P_1\}, \quad C_2 = \{P_2, P_3, P_4\}$$
-
-                                    <p><strong>Step 3: Recompute Centroids \(\mu_1^{(1)}\) and \(\mu_2^{(1)}\):</strong></p>
-                                    $$\mu_1^{(1)} = P_1 = (1, 1)$$
-                                    $$\mu_2^{(1)} = \left(\frac{2 + 4 + 5}{3}, \frac{1 + 3 + 4}{3}
-\right) = \left(\frac{11}{3}, \frac{8}{3}
-\right) \approx (3.67, 2.67)$$
-                                </div>
-</div>
-<div class="step-row">
-<span class="step-badge">ITERATION 2</span>
-<div>
-<p><strong>Step 4: Compute distances with updated centroids \(\mu_1(1, 1)\) and \(\mu_2(3.67, 2.67)\):</strong></p>
-<table class="data-table">
-<thead>
-<tr>
-<th>Point</th>
-<th>Coords</th>
-<th>\(d(P, \mu_1 = (1,1))\)</th>
-<th>\(d(P, \mu_2 = (3.67, 2.67))\)</th>
-<th>Assigned Cluster</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>\(P_1\)</td>
-<td>\((1, 1)\)</td>
-<td>\(\mathbf{0.00}\)</td>
-<td>\(\sqrt{(1-3.67)^2 + (1-2.67)^2} = \sqrt{7.13 + 2.79} \approx 3.15\)</td>
-<td><strong>Cluster 1</strong></td>
-</tr>
-<tr>
-<td>\(P_2\)</td>
-<td>\((2, 1)\)</td>
-<td>\(\sqrt{(2-1)^2 + (1-1)^2} = \mathbf{1.00}\)</td>
-<td>\(\sqrt{(2-3.67)^2 + (1-2.67)^2} = \sqrt{2.79 + 2.79} \approx 2.36\)</td>
-<td><strong>Cluster 1 (Migrated!)</strong></td>
-</tr>
-<tr>
-<td>\(P_3\)</td>
-<td>\((4, 3)\)</td>
-<td>\(\sqrt{(4-1)^2 + (3-1)^2} = \sqrt{13} \approx 3.61\)</td>
-<td>\(\sqrt{(4-3.67)^2 + (3-2.67)^2} = \sqrt{0.11 + 0.11} \approx \mathbf{0.47}\)</td>
-<td><strong>Cluster 2</strong></td>
-</tr>
-<tr>
-<td>\(P_4\)</td>
-<td>\((5, 4)\)</td>
-<td>\(\sqrt{(5-1)^2 + (4-1)^2} = 5.00\)</td>
-<td>\(\sqrt{(5-3.67)^2 + (4-2.67)^2} = \sqrt{1.77 + 1.77} \approx \mathbf{1.88}\)</td>
-<td><strong>Cluster 2</strong></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Step 5: Cluster Membership after Iteration 2:</strong></p>
-                                    $$C_1 = \{P_1, P_2\}, \quad C_2 = \{P_3, P_4\}$$
-                                    <p>Notice that point \(P_2\) migrated from Cluster 2 to Cluster 1!</p>
-<p><strong>Step 6: Recompute Centroids \(\mu_1^{(2)}\) and \(\mu_2^{(2)}\):</strong></p>
-                                    $$\mu_1^{(2)} = \left(\frac{1 + 2}{2}, \frac{1 + 1}{2}
-\right) = (1.5, 1.0)$$
-                                    $$\mu_2^{(2)} = \left(\frac{4 + 5}{2}, \frac{3 + 4}{2}
-\right) = (4.5, 3.5)$$
-                                </div>
-</div>
-<div class="step-row">
-<span class="step-badge">CONVERGENCE</span>
-<div>
-<p><strong>Convergence Verification (Iteration 3 Check):</strong></p>
-<ul>
-<li>For \(P_1(1,1)\): \(d(P_1, \mu_1) = 0.5 &lt; d(P_1, \mu_2) = 4.30 \implies C_1\)</li>
-<li>For \(P_2(2,1)\): \(d(P_2, \mu_1) = 0.5 &lt; d(P_2, \mu_2) = 3.53 \implies C_1\)</li>
-<li>For \(P_3(4,3)\): \(d(P_3, \mu_1) = 3.20 &gt; d(P_3, \mu_2) = 0.71 \implies C_2\)</li>
-<li>For \(P_4(5,4)\): \(d(P_4, \mu_1) = 4.61 &gt; d(P_4, \mu_2) = 0.71 \implies C_2\)</li>
-</ul>
-<p>No data point changes cluster assignment. Centroids remain identical: \(\mu_1^{(3)} = (1.5, 1.0)\), \(\mu_2^{(3)} = (4.5, 3.5)\). The algorithm has converged.</p>
-</div>
-</div>
-<div class="step-row">
-<span class="step-badge answer">FINAL ANSWER</span>
-<div>
-<div class="final-box">
-<p><strong>Final Cluster 1:</strong> \(\{P_1(1,1), P_2(2,1)\}\) with Centroid \(\mathbf{\mu_1 = (1.5, 1.0)}\)</p>
-<p><strong>Final Cluster 2:</strong> \(\{P_3(4,3), P_4(5,4)\}\) with Centroid \(\mathbf{\mu_2 = (4.5, 3.5)}\)</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- SECTION 3: COMPARATIVE STUDIES -->
-<section class="module-section" id="comparison-section">
-<div class="section-title">
-<h2>3. Comparative Studies</h2>
-<span class="cross-ref-badge">Exam-Focused Tabular Comparisons</span>
-</div>
-<h3>Table 5.1: Comprehensive Comparison of Machine Learning Paradigms</h3>
-<table class="data-table">
-<thead>
-<tr>
-<th>Comparison Dimension</th>
-<th>Supervised Learning</th>
-<th>Unsupervised Learning</th>
-<th>Reinforcement Learning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Training Input Data</strong></td>
-<td>Labeled pairs \((x_i, y_i)\) with ground-truth supervisor</td>
-<td>Unlabeled feature vectors \(x_i\) only; no external labels</td>
-<td>States from environment; no static dataset (dynamic interaction)</td>
-</tr>
-<tr>
-<td><strong>Core Objective</strong></td>
-<td>Learn mapping function \(y = f(x)\) to predict labels on unseen data</td>
-<td>Discover intrinsic groupings, patterns, and representations</td>
-<td>Learn policy \(\pi(s)\) maximizing long-term cumulative reward</td>
-</tr>
-<tr>
-<td><strong>Feedback Signal</strong></td>
-<td>Direct error feedback \(\mathcal{L}(y, \hat{y})\) for every training sample</td>
-<td>No supervisory feedback; driven by mathematical distance/density</td>
-<td>Delayed scalar reward/penalty after sequences of actions</td>
-</tr>
-<tr>
-<td><strong>Primary Sub-tasks</strong></td>
-<td>Classification (discrete) and Regression (continuous)</td>
-<td>Clustering, Dimensionality Reduction, Association Rules</td>
-<td>Model-free control, Policy optimization, Value approximation</td>
-</tr>
-<tr>
-<td><strong>Canonical Algorithms</strong></td>
-<td>Decision Trees, SVM, Naive Bayes, Linear/Logistic Regression</td>
-<td>K-Means, Hierarchical Clustering, PCA, Apriori, DBSCAN</td>
-<td>Q-Learning, SARSA, Deep Q-Networks (DQN), PPO</td>
-</tr>
-<tr>
-<td><strong>Evaluation Metrics</strong></td>
-<td>Accuracy, Precision, Recall, F1-Score, RMSE, MAE</td>
-<td>Silhouette Score, WCSS/Inertia, Davies-Bouldin Index</td>
-<td>Cumulative episode reward, Convergence rate, Policy stability</td>
-</tr>
-</tbody>
-</table>
-<h3>Table 5.2: Attribute Selection Measures: Information Gain vs. Gini Index</h3>
-<table class="data-table">
-<thead>
-<tr>
-<th>Feature</th>
-<th>Information Gain (Shannon Entropy)</th>
-<th>Gini Index (Gini Impurity)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Mathematical Formula</strong></td>
-<td>\(E(S) = - \sum_{i=1}^c p_i \log_2(p_i)\)</td>
-<td>\(\text{Gini}(S) = 1 - \sum_{i=1}^c p_i^2\)</td>
-</tr>
-<tr>
-<td><strong>Originating Algorithm</strong></td>
-<td>ID3, C4.5 (Ross Quinlan)</td>
-<td>CART (Breiman et al.)</td>
-</tr>
-<tr>
-<td><strong>Computational Cost</strong></td>
-<td>Higher (requires computing base-2 logarithms)</td>
-<td>Lower (only involves squarings and subtractions)</td>
-</tr>
-<tr>
-<td><strong>Range for Binary Class</strong></td>
-<td>\([0.0, 1.0]\) bits (peaks at \(p = 0.5\))</td>
-<td>\([0.0, 0.5]\) (peaks at \(p = 0.5\))</td>
-</tr>
-<tr>
-<td><strong>Bias Tendency</strong></td>
-<td>Biased toward attributes with many distinct values (addressed by Gain Ratio in C4.5)</td>
-<td>Favors larger partitions; very robust for binary recursive splits</td>
-</tr>
-</tbody>
-</table>
-</section>
-<!-- SECTION 4: CASE STUDIES & REAL-WORLD APPLICATIONS -->
-<section class="module-section" id="case-section">
-<div class="section-title">
-<h2>4. Real-World Case Studies &amp; Practical Systems</h2>
-<span class="cross-ref-badge">Industry Implementations</span>
-</div>
-<div class="case-card">
-<div class="case-header">
-<span class="case-tag">Supervised Learning Case Study</span>
-<h3>Credit Scoring &amp; Loan Default Prediction (Banking &amp; FinTech)</h3>
-</div>
-<p><strong>System Context:</strong> Commercial banks evaluate hundreds of thousands of personal loan applications daily. Loan approval officers use supervised Decision Tree ensembles (e.g., XGBoost, Random Forests) to predict the binary probability of borrower default (\(Y \in \{\text{Default}, \text{Non-Default}\}\)).</p>
-<ul>
-<li><strong>Feature Vector \(X\):</strong> Credit history score (CIBIL), debt-to-income ratio (DTI), annual income, employment tenure, requested loan amount, and existing revolving credit utilization.</li>
-<li><strong>Why Decision Trees?</strong> Explainability is a strict regulatory mandate (e.g., under FCRA and RBI fair lending directives). Black-box models (such as deep neural networks) cannot easily explain why an applicant was rejected. A Decision Tree provides a transparent decision path (e.g., <em>"If Debt-to-Income &gt; 45% and Credit Score &lt; 650 \(\implies\) Reject"</em>), enabling regulatory compliance and transparent adverse-action notifications.</li>
-</ul>
-</div>
-<div class="case-card">
-<div class="case-header">
-<span class="case-tag">Unsupervised Learning Case Study</span>
-<h3>E-Commerce Customer Segmentation (Retail &amp; Marketing Analytics)</h3>
-</div>
-<p><strong>System Context:</strong> Online retail platforms like Amazon analyze transaction records of millions of users without manual labels to discover natural buying cohorts for hyper-targeted marketing campaigns.</p>
-<ul>
-<li><strong>Feature Space (RFM Model):</strong>
-<ul>
-<li><strong>Recency (\(R\)):</strong> Days since last purchase.</li>
-<li><strong>Frequency (\(F\)):</strong> Total number of purchases in the last 12 months.</li>
-<li><strong>Monetary (\(M\)):</strong> Total revenue generated by the customer.</li>
-</ul>
-</li>
-<li><strong>Clustering via K-Means:</strong> By running K-Means with \(K=4\) on normalized RFM vectors, the system automatically discovers:
-                                <ol>
-<li><em>Champions / VIPs (Low R, High F, High M):</em> Given exclusive loyalty rewards and early product access.</li>
-<li><em>At-Risk / Churning (High R, High F, High M):</em> Targeted with aggressive re-engagement discounts.</li>
-<li><em>Promising Newbies (Low R, Low F, Medium M):</em> Sent onboarding recommendations and nurture sequences.</li>
-<li><em>Lost Bargain Hunters (High R, Low F, Low M):</em> Excluded from costly ad retargeting.</li>
-</ol>
-</li>
-</ul>
-</div>
-</section>
-<!-- SECTION 5: EXAM QUESTIONS -->
-<section class="module-section" id="questions-section">
-<div class="section-title">
-<h2>5. Possible University Exam Questions &amp; Marking Guide</h2>
-<span class="cross-ref-badge">NMIMS Pattern: 4, 6, 8, 10 Marks</span>
-</div>
-<div class="question-item">
-<div class="q-header">
-<span class="marks-badge">4 Marks</span>
-<h4>Q1. Differentiate between Inductive Learning and Deductive Learning with suitable examples.</h4>
-</div>
-<div class="q-answer">
-<p><strong>Marking Scheme:</strong> 2 marks for core definitions/conceptual direction; 2 marks for clear domain examples.</p>
-<p><strong>Model Answer Key:</strong> Deductive learning works top-down from general axioms to specific conclusions without generating new hypotheses (\(\text{All humans are mortal} 	o \text{Socrates is human} 	o \text{Socrates is mortal}\)). Inductive learning works bottom-up, inferring generalized predictive models \(h(x)\) from finite specific training observations (\(\text{100 observed swans are white} 	o \text{Hypothesis: All swans are white}\)).</p>
-</div>
-</div>
-<div class="question-item">
-<div class="q-header">
-<span class="marks-badge">6 Marks</span>
-<h4>Q2. Explain the concept of Overfitting in Decision Trees. What are its causes, and how do pre-pruning and post-pruning mitigate it?</h4>
-</div>
-<div class="q-answer">
-<p><strong>Marking Scheme:</strong> 2 marks for formal definition and bias-variance curve; 2 marks for causes (noise, small data, deep trees); 2 marks for pruning techniques.</p>
-<p><strong>Model Answer Key:</strong> Define overfitting: \(\text{Error}_{\text{train}}(h) &lt; \text{Error}_{\text{train}}(h')\) but \(\text{Error}_{\text{test}}(h) &gt; \text{Error}_{\text{test}}(h')\). Explain causes: capturing random noise, small sample size, unrestricted tree depth. Detail pre-pruning (stopping criteria like <code>max_depth</code>, min gain threshold) and post-pruning (reduced error pruning bottom-up on validation data).</p>
-</div>
-</div>
-<div class="question-item">
-<div class="q-header">
-<span class="marks-badge">8 Marks</span>
-<h4>Q3. Describe the K-Means clustering algorithm step-by-step. State its objective function, convergence conditions, and two limitations.</h4>
-</div>
-<div class="q-answer">
-<p><strong>Marking Scheme:</strong> 2 marks for objective function (WCSS formula); 3 marks for 4 algorithmic steps (Init, Assign, Update, Repeat); 2 marks for convergence criteria; 1 mark for limitations.</p>
-<p><strong>Model Answer Key:</strong> State WCSS \(J = \sum_{k=1}^K \sum_{x_i \in C_k} \| x_i - \mu_k \|^2\). Detail 4 steps (initial centroid selection, Euclidean assignment, centroid recalculation via mean, convergence check). Convergence occurs when \(\Delta \mu = 0\) or assignments do not change. Limitations: Sensitive to initial seed selection (leads to local minima), requires specifying \(K\) in advance, struggles with non-spherical clusters and outliers.</p>
-</div>
-</div>
-<div class="question-item">
-<div class="q-header">
-<span class="marks-badge">10 Marks</span>
-<h4>Q4. (Comprehensive Numerical) In a classification dataset of 14 examples with 9 Yes and 5 No, compute Entropy(S). If an attribute 'Humidity' splits the set into 'High' (3 Yes, 4 No) and 'Normal' (6 Yes, 1 No), calculate Gain(S, Humidity) step-by-step.</h4>
-</div>
-<div class="q-answer">
-<p><strong>Marking Scheme:</strong> 3 marks for \(\text{Entropy}(S) = 0.940\); 3 marks for \(\text{Entropy}(S_{\text{High}})\) and \(\text{Entropy}(S_{\text{Normal}})\); 4 marks for weighted sum and \(\text{Gain}(S, \text{Humidity})\) calculation.</p>
-<p><strong>Model Answer Key:</strong></p>
-<ul>
-<li>\(\text{Entropy}(S) = -\frac{9}{14}\log_2\frac{9}{14} - \frac{5}{14}\log_2\frac{5}{14} = 0.940\) bits.</li>
-<li>\(\text{Entropy}(S_{\text{High}}) = -\frac{3}{7}\log_2\frac{3}{7} - \frac{4}{7}\log_2\frac{4}{7} = 0.985\) bits.</li>
-<li>\(\text{Entropy}(S_{\text{Normal}}) = -\frac{6}{7}\log_2\frac{6}{7} - \frac{1}{7}\log_2\frac{1}{7} = 0.592\) bits.</li>
-<li>\(\text{Weighted Entropy} = \frac{7}{14}(0.985) + \frac{7}{14}(0.592) = 0.4925 + 0.296 = 0.7885\) bits.</li>
-<li>\(\text{Gain}(S, \text{Humidity}) = 0.940 - 0.7885 = 0.1515 \text{ bits}\).</li>
-</ul>
-</div>
-</div>
-</section>
-<!-- Navigation Footer -->
-<nav class="unit-pagination">
-<a class="btn btn-outline" href="unit_4.html">← Previous: Unit 4 (CSPs)</a>
-<a class="btn btn-primary" href="unit_6.html">Next: Unit 6 (Expert Systems) →</a>
-</nav>
-</article>
-</main>
-</div>
-<script id="ai-theme-toggle">(() => {
-  const root = document.documentElement;
-  const key = 'nmims-ai-color-theme';
-  const button = document.getElementById('theme-toggle');
-  const icon = button && button.querySelector('.theme-icon');
-  const label = button && button.querySelector('.theme-label');
-  let saved = null;
-  try { saved = localStorage.getItem(key); } catch (_) {}
-  const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  const apply = (theme) => {
-    root.dataset.theme = theme;
-    const dark = theme === 'dark';
-    if (button) {
-      button.setAttribute('aria-pressed', String(dark));
-      button.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Unit 5: Machine Learning &amp; Unsupervised Learning - NMIMS Master Class Notes</title>
+  <link href="../styles.css" rel="stylesheet" />
+  <link href="theme.css" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&amp;family=Inter:wght@400;500;600;700&amp;display=swap"
+    rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        processHtmlClass: 'tex2jax_process|math'
+      }
+    };
+  </script>
+  <script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style id="ai-formatting-polish">
+    /* AI unit pages: formatting-only polish */
+    :root {
+      --ai-content-width: 980px;
     }
-    if (icon) icon.textContent = dark ? '☀' : '☾';
-    if (label) label.textContent = dark ? 'Light mode' : 'Dark mode';
-  };
-  apply(initial);
-  if (button) button.addEventListener('click', () => {
-    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
-    try { localStorage.setItem(key, next); } catch (_) {}
-    apply(next);
-  });
-})();</script></body>
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 5.5rem;
+    }
+
+    body {
+      min-width: 320px;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .layout-container,
+    .main-content,
+    .content-wrapper {
+      min-width: 0;
+    }
+
+    .main-content {
+      width: calc(100% - 290px);
+      max-width: none;
+    }
+
+    .content-wrapper {
+      max-width: var(--ai-content-width);
+    }
+
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      min-height: 52px;
+      padding: 12px 0;
+      margin-top: -32px;
+      background: color-mix(in srgb, var(--bg-main) 94%, transparent);
+      backdrop-filter: blur(10px);
+    }
+
+    .unit-hero {
+      padding-top: 6px;
+      margin-bottom: clamp(26px, 4vw, 42px);
+    }
+
+    .unit-hero h1 {
+      max-width: 24ch;
+      font-size: clamp(1.8rem, 3.3vw, 2.45rem);
+      letter-spacing: -0.035em;
+      text-wrap: balance;
+    }
+
+    .unit-hero .lead {
+      max-width: 75ch;
+    }
+
+    .module-section {
+      scroll-margin-top: 76px;
+      padding: clamp(20px, 3vw, 34px);
+      margin-bottom: clamp(24px, 4vw, 40px);
+    }
+
+    .section-title {
+      align-items: flex-start;
+    }
+
+    .section-title h2 {
+      line-height: 1.35;
+      text-wrap: balance;
+    }
+
+    .topic-block {
+      scroll-margin-top: 76px;
+    }
+
+    .topic-block p,
+    .topic-block li,
+    .q-answer p,
+    .callout p {
+      max-width: 82ch;
+      line-height: 1.72;
+    }
+
+    .topic-block ul,
+    .topic-block ol,
+    .callout ul,
+    .callout ol {
+      padding-left: 0.35rem;
+    }
+
+    .callout,
+    .case-card,
+    .problem-card,
+    .question-item,
+    .final-box {
+      overflow-wrap: anywhere;
+    }
+
+    .callout {
+      padding: 18px 20px;
+      border-radius: 10px;
+    }
+
+    .problem-card {
+      padding: clamp(16px, 2.5vw, 25px);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.035);
+    }
+
+    .problem-header {
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .problem-header h3,
+    .q-header h4,
+    .case-header h3 {
+      line-height: 1.45;
+      text-wrap: pretty;
+    }
+
+    .step-row {
+      min-width: 0;
+    }
+
+    .step-row> :last-child {
+      min-width: 0;
+    }
+
+    .step-badge {
+      flex: 0 0 auto;
+    }
+
+    .final-box {
+      margin-top: 14px;
+      line-height: 1.65;
+    }
+
+    .diagram-wrapper {
+      max-width: 100%;
+      padding: 4px 0;
+      overscroll-behavior-inline: contain;
+      scrollbar-color: #94a3b8 #eef2f7;
+    }
+
+    .diagram-wrapper svg,
+    .module-section svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .diagram-caption {
+      max-width: 72ch;
+      margin-right: auto;
+      margin-left: auto;
+      line-height: 1.55;
+    }
+
+    .data-table {
+      display: block;
+      max-width: 100%;
+      overflow-x: auto;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 8px;
+      scrollbar-color: #94a3b8 #eef2f7;
+      overscroll-behavior-inline: contain;
+    }
+
+    .data-table th,
+    .data-table td {
+      min-width: 7rem;
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    .data-table th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .data-table tr:hover td {
+      background-color: #f8fafc;
+    }
+
+    code,
+    kbd,
+    pre {
+      font-family: var(--font-mono);
+    }
+
+    code {
+      overflow-wrap: anywhere;
+    }
+
+    pre {
+      max-width: 100%;
+      overflow-x: auto;
+      padding: 14px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: #f8fafc;
+      line-height: 1.6;
+      scrollbar-color: #94a3b8 #eef2f7;
+    }
+
+    .MathJax,
+    .MathJax_Display,
+    mjx-container {
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 2px 0;
+    }
+
+    .q-header {
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    .marks-badge {
+      margin-top: 2px;
+    }
+
+    .q-answer {
+      line-height: 1.7;
+    }
+
+    .unit-pagination {
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.35;
+    }
+
+    .sidebar-nav a:focus-visible,
+    .btn:focus-visible,
+    a:focus-visible {
+      outline: 3px solid #f2bd48;
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 900px) {
+      .sidebar {
+        max-height: 34vh;
+        padding: 16px;
+        overscroll-behavior: contain;
+      }
+
+      .sidebar-header {
+        padding-bottom: 12px;
+        margin-bottom: 12px;
+      }
+
+      .sidebar-nav h3 {
+        margin-top: 14px;
+      }
+
+      .main-content {
+        width: 100%;
+        padding: 24px 16px 56px;
+      }
+
+      .top-bar {
+        margin-top: -24px;
+      }
+
+      .module-section {
+        border-radius: 10px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        font-size: 15px;
+      }
+
+      .top-bar {
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+        font-size: 0.82rem;
+      }
+
+      .meta-tag {
+        font-size: 0.72rem;
+      }
+
+      .unit-hero h1 {
+        font-size: clamp(1.65rem, 8vw, 2.05rem);
+      }
+
+      .unit-hero .lead {
+        font-size: 1rem;
+      }
+
+      .section-title {
+        gap: 8px;
+        margin-bottom: 22px;
+      }
+
+      .section-title h2 {
+        font-size: 1.25rem;
+      }
+
+      .cross-ref-badge {
+        font-size: 0.7rem;
+      }
+
+      .step-row {
+        gap: 10px;
+      }
+
+      .step-badge {
+        white-space: normal;
+      }
+
+      .data-table {
+        font-size: 0.84rem;
+      }
+
+      .data-table th,
+      .data-table td {
+        padding: 9px 10px;
+        min-width: 6.25rem;
+      }
+
+      .unit-pagination {
+        justify-content: stretch;
+      }
+
+      .unit-pagination .btn {
+        flex: 1 1 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+
+    @media print {
+
+      .sidebar,
+      .top-bar,
+      .unit-pagination {
+        display: none !important;
+      }
+
+      .main-content {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .module-section,
+      .problem-card,
+      .case-card,
+      .callout {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <a class="logo" href="../index.html">NMIMS · AI Master</a>
+        <span class="badge">Semester Exam Prep</span>
+        <button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle"
+          type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark
+            mode</span></button>
+      </div>
+      <nav class="sidebar-nav">
+        <h3>Syllabus Units</h3>
+        <ul>
+          <li><a href="unit_1.html"><span class="unit-num">01</span> Intro to AI &amp; Intelligent Agents</a></li>
+          <li><a href="unit_2.html"><span class="unit-num">02</span> Problem Solving &amp; Adversarial Search</a></li>
+          <li><a href="unit_3.html"><span class="unit-num">03</span> Knowledge Representation &amp; Logic</a></li>
+          <li><a href="unit_4.html"><span class="unit-num">04</span> Constraint Satisfaction Problems</a></li>
+          <li><a class="active" href="unit_5.html"><span class="unit-num">05</span> Machine Learning &amp;
+              Clustering</a></li>
+          <li><a href="unit_6.html"><span class="unit-num">06</span> Expert Systems &amp; Shells</a></li>
+        </ul>
+        <h3>Unit 5 Contents</h3>
+        <ul>
+          <li><a href="#theory-section">1. In-Depth Lecture &amp; Theory</a></li>
+          <li><a href="#sec-learning-foundations">1.1 Learning Foundations: Inductive vs Deductive</a></li>
+          <li><a href="#sec-ml-paradigms">1.2 The 4 Machine Learning Paradigms</a></li>
+          <li><a href="#sec-decision-trees">1.3 Decision Tree Induction &amp; Mathematics</a></li>
+          <li><a href="#sec-overfitting">1.4 Overfitting: Causes, Bias-Variance, Pruning</a></li>
+          <li><a href="#sec-kmeans">1.5 K-Means Clustering: Algorithm &amp; Metrics</a></li>
+          <li><a href="#numerical-section">2. Step-by-Step Numericals</a></li>
+          <li><a href="#num-1">2.1 Simple: Binary Entropy Calculation</a></li>
+          <li><a href="#num-2">2.2 Medium: Information Gain for PlayGolf Root Node</a></li>
+          <li><a href="#num-3">2.3 Complex: Complete 2D K-Means Clustering Trace</a></li>
+          <li><a href="#comparison-section">3. Comparative Studies</a></li>
+          <li><a href="#case-section">4. Case Studies &amp; Applications</a></li>
+          <li><a href="#questions-section">5. Exam Questions &amp; Marking Guide</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <header class="top-bar">
+        <div class="breadcrumb">
+          <a href="../index.html">Home</a> &gt; <span>Unit 5: Machine Learning</span>
+        </div>
+        <div class="meta-tag">Unit 5 · 100% PPT Faithful · Comprehensive Lecture</div>
+      </header>
+      <article class="content-wrapper">
+        <header class="unit-hero">
+          <h1>Unit 5: Machine Learning &amp; Unsupervised Learning</h1>
+          <p class="lead">A rigorous examination preparation guide covering Inductive vs Deductive Learning, the four
+            learning paradigms, Decision Tree Induction via Information Gain and Gini Index, Overfitting dynamics and
+            Pruning, and iterative K-Means Clustering with mathematical convergence proofs.</p>
+        </header>
+        <!-- SECTION 1: IN-DEPTH THEORY -->
+        <section class="module-section" id="theory-section">
+          <div class="section-title">
+            <h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+            <span class="cross-ref-badge">Cross-referenced with Slides &amp; Numericals</span>
+          </div>
+          <div class="topic-block" id="sec-learning-foundations">
+            <h3>1.1 Foundations of Learning: What is Machine Learning?</h3>
+            <p>In classical symbolic AI (as studied in Units 1 to 4), an agent is supplied with deterministic rules and
+              explicit knowledge representations authored by domain experts. However, real-world problems often defy
+              complete explicit formalization. Machine learning (ML) shifts the paradigm: instead of explicitly
+              programming an agent with answers, we program it with a <em>learning element</em> that infers underlying
+              mathematical mappings from empirical training data.</p>
+            <div class="callout callout-def">
+              <h4>Formal Definition of Learning (Tom Mitchell, 1997)</h4>
+              <p><em>"A computer program is said to learn from experience <strong>E</strong> with respect to some class
+                  of tasks <strong>T</strong> and performance measure <strong>P</strong>, if its performance at tasks in
+                  <strong>T</strong>, as measured by <strong>P</strong>, improves with experience
+                  <strong>E</strong>."</em></p>
+              <ul>
+                <li><strong>Task \(T\):</strong> E.g., classifying medical images or playing chess.</li>
+                <li><strong>Experience \(E\):</strong> E.g., a database of historical X-ray records with labels or
+                  playing games against itself.</li>
+                <li><strong>Performance Measure \(P\):</strong> E.g., diagnostic accuracy percentage or win-rate against
+                  human grandmasters.</li>
+              </ul>
+            </div>
+            <h4>Inductive Learning vs. Deductive Learning</h4>
+            <p>Human intelligence and AI agents employ two fundamental modes of inference:</p>
+            <ul>
+              <li><strong>Deductive Learning (Top-Down):</strong> Infers specific logical consequences from generalized
+                universal axioms. If the premises are true, the conclusion is guaranteed to be true (soundness). For
+                example:
+                $$\forall x \, (\text{Bird}(x) \implies \text{CanFly}(x)), \quad \text{Bird}(\text{Tweety}) \vdash
+                \text{CanFly}(\text{Tweety})$$
+                Deductive reasoning preserves truth but generates no fundamentally new empirical hypothesis beyond what
+                is already entailed.</li>
+              <li><strong>Inductive Learning (Bottom-Up):</strong> Constructs a general hypothesis or mathematical
+                function \(h\) from a finite collection of observed training examples \(\{(x_1, y_1), (x_2, y_2), \dots,
+                (x_N, y_N)\}\). The fundamental assumption of inductive learning is:
+                $$\text{Any hypothesis found to approximate the target function well over a sufficiently large set of
+                training examples}$$
+                $$\text{will also approximate the target function well over unobserved test examples.}$$
+                Inductive reasoning generates powerful generalizable patterns, but its conclusions are probabilistic
+                rather than logically infallible (e.g., observing 1,000 white swans induces the hypothesis that all
+                swans are white, which is falsified upon seeing a black swan).</li>
+            </ul>
+          </div>
+          <div class="topic-block" id="sec-ml-paradigms">
+            <h3>1.2 The Four Machine Learning Paradigms</h3>
+            <p>Depending on the nature of feedback and the availability of ground-truth supervisor signals, machine
+              learning algorithms are categorized into four distinct computational paradigms:</p>
+            <!-- SVG: 4 ML Paradigms Taxonomy -->
+            <div class="diagram-wrapper">
+              <svg
+                style="width:100%; max-width:850px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);"
+                viewbox="0 0 850 320" xmlns="http://www.w3.org/2000/svg">
+                <rect fill="#1e293b" height="48" rx="8" width="190" x="330" y="20"></rect>
+                <text fill="#ffffff" font-family="'Inter', sans-serif" font-size="14" font-weight="700"
+                  text-anchor="middle" x="425" y="49">Machine Learning</text>
+                <!-- Branching lines -->
+                <path
+                  d="M425 68 L425 95 M425 95 L115 95 L115 125 M425 95 L320 95 L320 125 M425 95 L530 95 L530 125 M425 95 L735 95 L735 125"
+                  fill="none" stroke="#94a3b8" stroke-width="2"></path>
+                <!-- Supervised -->
+                <rect fill="#eff6ff" height="170" rx="8" stroke="#3b82f6" stroke-width="2" width="180" x="25" y="125">
+                </rect>
+                <text fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="14" font-weight="700"
+                  text-anchor="middle" x="115" y="150">1. Supervised Learning</text>
+                <text fill="#475569" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="115"
+                  y="172">Labeled Data: (X, Y)</text>
+                <line stroke="#bfdbfe" stroke-width="1" x1="40" x2="190" y1="185" y2="185"></line>
+                <text fill="#1e293b" font-family="'Inter', sans-serif" font-size="11" font-weight="600"
+                  text-anchor="middle" x="115" y="205">Classification</text>
+                <text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="115"
+                  y="222">Discrete outputs (Spam/Not)</text>
+                <text fill="#1e293b" font-family="'Inter', sans-serif" font-size="11" font-weight="600"
+                  text-anchor="middle" x="115" y="248">Regression</text>
+                <text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="115"
+                  y="265">Continuous outputs (Price, Temp)</text>
+                <!-- Unsupervised -->
+                <rect fill="#f0fdf4" height="170" rx="8" stroke="#22c55e" stroke-width="2" width="180" x="230" y="125">
+                </rect>
+                <text fill="#15803d" font-family="'Inter', sans-serif" font-size="14" font-weight="700"
+                  text-anchor="middle" x="320" y="150">2. Unsupervised Learning</text>
+                <text fill="#475569" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="320"
+                  y="172">Unlabeled Data: (X only)</text>
+                <line stroke="#bbf7d0" stroke-width="1" x1="245" x2="395" y1="185" y2="185"></line>
+                <text fill="#1e293b" font-family="'Inter', sans-serif" font-size="11" font-weight="600"
+                  text-anchor="middle" x="320" y="205">Clustering (K-Means)</text>
+                <text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="320"
+                  y="222">Grouping natural clusters</text>
+                <text fill="#1e293b" font-family="'Inter', sans-serif" font-size="11" font-weight="600"
+                  text-anchor="middle" x="320" y="248">Dimensionality Reduction</text>
+                <text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="320"
+                  y="265">PCA, feature compression</text>
+                <!-- Semi-Supervised -->
+                <rect fill="#fefce8" height="170" rx="8" stroke="#eab308" stroke-width="2" width="180" x="440" y="125">
+                </rect>
+                <text fill="#a16207" font-family="'Inter', sans-serif" font-size="14" font-weight="700"
+                  text-anchor="middle" x="530" y="150">3. Semi-Supervised</text>
+                <text fill="#475569" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="530"
+                  y="172">Small Labeled + Large Unlabeled</text>
+                <line stroke="#fef08a" stroke-width="1" x1="455" x2="605" y1="185" y2="185"></line>
+                <text fill="#1e293b" font-family="'Inter', sans-serif" font-size="11" font-weight="600"
+                  text-anchor="middle" x="530" y="210">Pseudo-Labeling</text>
+                <text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="530"
+                  y="228">Self-training with high-confidence</text>
+                <text fill="#1e293b" font-family="'Inter', sans-serif" font-size="11" font-weight="600"
+                  text-anchor="middle" x="530" y="254">Graph-based Transduction</text>
+                <text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="530"
+                  y="272">Label propagation across manifolds</text>
+                <!-- Reinforcement -->
+                <rect fill="#faf5ff" height="170" rx="8" stroke="#a855f7" stroke-width="2" width="180" x="645" y="125">
+                </rect>
+                <text fill="#7e22ce" font-family="'Inter', sans-serif" font-size="14" font-weight="700"
+                  text-anchor="middle" x="735" y="150">4. Reinforcement Learning</text>
+                <text fill="#475569" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle" x="735"
+                  y="172">Trial &amp; Error: State-Action-Reward</text>
+                <line stroke="#e9d5ff" stroke-width="1" x1="660" x2="810" y1="185" y2="185"></line>
+                <text fill="#1e293b" font-family="'Inter', sans-serif" font-size="11" font-weight="600"
+                  text-anchor="middle" x="735" y="205">Policy &amp; Value Learning</text>
+                <text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="735"
+                  y="222">Markov Decision Process (MDP)</text>
+                <text fill="#1e293b" font-family="'Inter', sans-serif" font-size="11" font-weight="600"
+                  text-anchor="middle" x="735" y="248">Reward Maximization</text>
+                <text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle" x="735"
+                  y="265">Q-Learning, Policy Gradients</text>
+              </svg>
+              <p class="diagram-caption">Figure 5.1: The taxonomy of Machine Learning paradigms based on training
+                feedback and data structure.</p>
+            </div>
+            <h4>Detailed Breakdown of Paradigms:</h4>
+            <ol>
+              <li><strong>Supervised Learning:</strong> The training dataset consists of input vectors paired with
+                correct ground-truth supervisory labels: \(D = \{(x_i, y_i)\}_{i=1}^N\). The learner adjusts its
+                parameters to minimize a loss function \(\mathcal{L}(y_i, h(x_i))\).
+                <ul>
+                  <li><em>Classification:</em> Target \(y\) belongs to a finite set of discrete category labels: \(y \in
+                    \{C_1, C_2, \dots, C_K\}\). Examples: Email spam detection (Spam / Not Spam), Disease diagnosis
+                    (Malignant / Benign). Algorithms: Decision Trees, Naive Bayes, Support Vector Machines (SVM),
+                    Logistic Regression.</li>
+                  <li><em>Regression:</em> Target \(y\) is a continuous real-valued number: \(y \in \mathbb{R}\).
+                    Examples: House price prediction, Stock valuation, Temperature forecasting. Algorithms: Linear
+                    Regression, Ridge/Lasso, Polynomial Regression.</li>
+                </ul>
+              </li>
+              <li><strong>Unsupervised Learning:</strong> The training set contains only unlabeled feature vectors
+                without any external ground truth or teacher: \(D = \{x_i\}_{i=1}^N\). The objective is to discover
+                underlying structural properties, probability densities, or groupings:
+                <ul>
+                  <li><em>Clustering:</em> Grouping samples into distinct clusters such that intra-cluster similarity is
+                    maximized and inter-cluster similarity is minimized (e.g., K-Means, Hierarchical Clustering,
+                    DBSCAN).</li>
+                  <li><em>Dimensionality Reduction / Feature Extraction:</em> Projecting high-dimensional spaces to
+                    lower dimensions while preserving maximum variance (e.g., Principal Component Analysis - PCA).</li>
+                  <li><em>Association Rule Mining:</em> Discovering co-occurrence relationships (e.g., Market Basket
+                    Analysis: If Bread and Milk \(\implies\) Butter).</li>
+                </ul>
+              </li>
+              <li><strong>Semi-Supervised Learning:</strong> In many real-world scenarios (e.g., medical imaging or
+                speech analysis), collecting unlabeled data is cheap and abundant, but labeling requires expensive human
+                domain experts. Semi-supervised learning utilizes a small seed of labeled data combined with a large
+                pool of unlabeled data to construct higher-confidence decision boundaries.</li>
+              <li><strong>Reinforcement Learning (RL):</strong> An autonomous agent interacts dynamically with an
+                uncertain environment modeled as a Markov Decision Process (MDP \(\langle S, A, P, R, \gamma
+                angle\)). At each time step \(t\), the agent observes state \(s_t\), selects action \(a_t\), receives an
+                immediate scalar feedback signal (positive reward or negative penalty \(r_{t+1}\)), and transitions to
+                next state \(s_{t+1}\). The agent's goal is to learn an optimal policy \(\pi^*: S o A\) that maximizes
+                expected cumulative discounted reward:
+                $$G_t = \sum_{k=0}^{\infty} \gamma^k r_{t+k+1}, \quad \text{where } \gamma \in [0, 1] \text{ is the
+                discount factor.}$$
+              </li>
+            </ol>
+          </div>
+          <div class="topic-block" id="sec-decision-trees">
+            <h3>1.3 Decision Tree Induction &amp; Splitting Criteria</h3>
+            <p>A <strong>Decision Tree</strong> is a hierarchical, non-parametric supervised learning model that
+              represents decisions and their potential outcomes in an intuitive flowchart structure. It recursively
+              partitions the input feature space into rectangular homogenous subsets.</p>
+            <h4>Anatomy of a Decision Tree:</h4>
+            <ul>
+              <li><strong>Root Node:</strong> The topmost node containing the complete dataset; it represents the first
+                attribute test chosen via an Attribute Selection Measure (ASM).</li>
+              <li><strong>Internal / Decision Nodes:</strong> Intermediate nodes that test a specific attribute
+                condition (e.g., \(\text{Outlook} = \text{Sunny}\)). Branches outgoing from an internal node correspond
+                to the distinct possible attribute values.</li>
+              <li><strong>Leaf / Terminal Nodes:</strong> End nodes that hold no further split conditions. Each leaf
+                node carries a final class decision label or regression value.</li>
+            </ul>
+            <!-- SVG: Decision Tree Structure -->
+            <div class="diagram-wrapper">
+              <svg
+                style="width:100%; max-width:700px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);"
+                viewbox="0 0 700 280" xmlns="http://www.w3.org/2000/svg">
+                <!-- Root Node -->
+                <rect fill="#1e293b" height="45" rx="8" width="150" x="275" y="20"></rect>
+                <text fill="#ffffff" font-family="'Inter', sans-serif" font-size="13" font-weight="700"
+                  text-anchor="middle" x="350" y="47">Root: Outlook?</text>
+                <!-- Branches -->
+                <line stroke="#64748b" stroke-width="2" x1="300" x2="160" y1="65" y2="120"></line>
+                <text fill="#475569" font-family="'Inter', sans-serif" font-size="11" font-weight="600" x="210"
+                  y="90">Sunny</text>
+                <line stroke="#64748b" stroke-width="2" x1="350" x2="350" y1="65" y2="120"></line>
+                <text fill="#475569" font-family="'Inter', sans-serif" font-size="11" font-weight="600" x="360"
+                  y="95">Overcast</text>
+                <line stroke="#64748b" stroke-width="2" x1="400" x2="540" y1="65" y2="120"></line>
+                <text fill="#475569" font-family="'Inter', sans-serif" font-size="11" font-weight="600" x="490"
+                  y="90">Rain</text>
+                <!-- Level 1 Nodes -->
+                <rect fill="#3b82f6" height="45" rx="8" width="140" x="90" y="120"></rect>
+                <text fill="#ffffff" font-family="'Inter', sans-serif" font-size="12" font-weight="700"
+                  text-anchor="middle" x="160" y="147">Humidity?</text>
+                <rect fill="#22c55e" height="45" rx="8" width="140" x="280" y="120"></rect>
+                <text fill="#ffffff" font-family="'Inter', sans-serif" font-size="13" font-weight="700"
+                  text-anchor="middle" x="350" y="147">Play = Yes (100%)</text>
+                <rect fill="#3b82f6" height="45" rx="8" width="140" x="470" y="120"></rect>
+                <text fill="#ffffff" font-family="'Inter', sans-serif" font-size="12" font-weight="700"
+                  text-anchor="middle" x="540" y="147">Windy?</text>
+                <!-- Leaf Nodes from Sunny/Humidity -->
+                <line stroke="#94a3b8" stroke-width="2" x1="130" x2="70" y1="165" y2="215"></line>
+                <text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" x="80" y="190">High</text>
+                <rect fill="#ef4444" height="35" rx="6" width="100" x="20" y="215"></rect>
+                <text fill="#ffffff" font-family="'Inter', sans-serif" font-size="11" font-weight="700"
+                  text-anchor="middle" x="70" y="237">No</text>
+                <line stroke="#94a3b8" stroke-width="2" x1="190" x2="250" y1="165" y2="215"></line>
+                <text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" x="230" y="190">Normal</text>
+                <rect fill="#22c55e" height="35" rx="6" width="100" x="200" y="215"></rect>
+                <text fill="#ffffff" font-family="'Inter', sans-serif" font-size="11" font-weight="700"
+                  text-anchor="middle" x="250" y="237">Yes</text>
+                <!-- Leaf Nodes from Rain/Windy -->
+                <line stroke="#94a3b8" stroke-width="2" x1="510" x2="450" y1="165" y2="215"></line>
+                <text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" x="460" y="190">Strong</text>
+                <rect fill="#ef4444" height="35" rx="6" width="100" x="400" y="215"></rect>
+                <text fill="#ffffff" font-family="'Inter', sans-serif" font-size="11" font-weight="700"
+                  text-anchor="middle" x="450" y="237">No</text>
+                <line stroke="#94a3b8" stroke-width="2" x1="570" x2="630" y1="165" y2="215"></line>
+                <text fill="#64748b" font-family="'Inter', sans-serif" font-size="10" x="610" y="190">Weak</text>
+                <rect fill="#22c55e" height="35" rx="6" width="100" x="580" y="215"></rect>
+                <text fill="#ffffff" font-family="'Inter', sans-serif" font-size="11" font-weight="700"
+                  text-anchor="middle" x="630" y="237">Yes</text>
+              </svg>
+              <p class="diagram-caption">Figure 5.2: Decision Tree induced from the weather PlayGolf dataset.</p>
+            </div>
+            <h4>The ID3 Algorithm &amp; Attribute Selection Measures (ASM)</h4>
+            <p>The standard top-down induction of decision trees (ID3 by Ross Quinlan) uses a greedy heuristic search:
+              at each node, select the attribute that most effectively separates the classes into purest subsets.</p>
+            <h5>1. Shannon Entropy (Measure of Impurity / Disorder):</h5>
+            <p>Entropy \(E(S)\) quantifies the uncertainty or impurity in a sample set \(S\). If there are \(c\)
+              distinct target classes with proportions \(p_1, p_2, \dots, p_c\):</p>
+            $$\text{Entropy}(S) = - \sum_{i=1}^{c} p_i \log_2(p_i)$$
+            <ul>
+              <li><strong>Pure Node:</strong> If all samples belong to the same class (e.g., \(p_1 = 1, p_2 = 0\)), then
+                \(\text{Entropy}(S) = -1 \log_2(1) - 0 = 0\) (Minimum impurity).</li>
+              <li><strong>Maximum Uncertainty:</strong> In a binary classification problem where samples are evenly
+                split (\(p_+ = 0.5, p_- = 0.5\)):
+                $$\text{Entropy}(S) = - (0.5 \log_2 0.5 + 0.5 \log_2 0.5) = - (0.5(-1) + 0.5(-1)) = 1.0 \text{ bit}$$
+              </li>
+            </ul>
+            <h5>2. Information Gain (IG):</h5>
+            <p>Information Gain represents the expected reduction in entropy achieved by partitioning the dataset \(S\)
+              along the candidate attribute \(A\). If attribute \(A\) takes distinct values \(v \in \text{Values}(A)\),
+              and \(S_v\) is the subset where \(A = v\):</p>
+            $$\text{Gain}(S, A) = \text{Entropy}(S) - \sum_{v \in \text{Values}(A)} \frac{|S_v|}{|S|} \cdot
+            \text{Entropy}(S_v)$$
+            <p>The algorithm evaluates \(\text{Gain}(S, A)\) for all unused attributes and selects the attribute that
+              maximizes \(\text{Gain}(S, A)\) as the splitting node.</p>
+            <h5>3. Gini Index / Gini Impurity (Used in CART):</h5>
+            <p>The CART (Classification and Regression Trees) algorithm uses the Gini Impurity rather than logarithmic
+              entropy for computational speed:</p>
+            $$\text{Gini}(S) = 1 - \sum_{i=1}^{c} p_i^2$$
+            <p>For a binary split into subsets \(S_1\) and \(S_2\), the split Gini index is:</p>
+            $$\text{Gini}_{\text{split}}(S, A) = \frac{|S_1|}{|S|} \text{Gini}(S_1) + \frac{|S_2|}{|S|}
+            \text{Gini}(S_2)$$
+            <p>The attribute with the <em>lowest</em> \(\text{Gini}_{\text{split}}\) is selected for the split.</p>
+          </div>
+          <div class="topic-block" id="sec-overfitting">
+            <h3>1.4 Overfitting in Machine Learning &amp; Mitigation Strategies</h3>
+            <p>A central challenge in machine learning is ensuring that the model generalizes well to unseen real-world
+              data rather than merely memorizing peculiarities of the training sample.</p>
+            <div class="callout callout-warn">
+              <h4>Definition of Overfitting</h4>
+              <p>A hypothesis \(h \in H\) is said to <strong>overfit</strong> the training data if there exists an
+                alternative hypothesis \(h' \in H\) such that \(h\) has smaller error than \(h'\) over the training
+                data, but \(h'\) has a smaller error than \(h\) over the entire distribution of unseen test data:</p>
+              $$\text{Error}_{\text{train}}(h) &lt; \text{Error}_{\text{train}}(h') \quad \text{AND} \quad
+              \text{Error}_{\text{test}}(h) &gt; \text{Error}_{\text{test}}(h')$$
+            </div>
+            <h4>Root Causes of Overfitting:</h4>
+            <ol>
+              <li><strong>Noise and Outliers in Training Data:</strong> If the decision tree grows deep enough to
+                isolate anomalous outliers into individual leaf nodes, it creates fractured, nonsensical decision
+                boundaries.</li>
+              <li><strong>Small Training Sample Size:</strong> Coincidental correlations appear genuine when sample
+                sizes are small (e.g., all 3 patients with attribute \(A\) happen to have disease \(B\) purely by
+                chance).</li>
+              <li><strong>Excessive Model Complexity:</strong> A decision tree that grows until every leaf node has an
+                entropy of 0 will produce 100% training accuracy but fail catastrophically on test data.</li>
+            </ol>
+            <!-- SVG: Bias-Variance / Overfitting Curve -->
+            <div class="diagram-wrapper">
+              <svg
+                style="width:100%; max-width:650px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);"
+                viewbox="0 0 650 250" xmlns="http://www.w3.org/2000/svg">
+                <!-- Axes -->
+                <line stroke="#475569" stroke-width="2" x1="70" x2="590" y1="200" y2="200"></line>
+                <text fill="#1e293b" font-family="'Inter', sans-serif" font-size="12" font-weight="600"
+                  text-anchor="middle" x="330" y="235">Model Complexity (Tree Depth / Nodes) →</text>
+                <line stroke="#475569" stroke-width="2" x1="70" x2="70" y1="200" y2="30"></line>
+                <text fill="#1e293b" font-family="'Inter', sans-serif" font-size="12" font-weight="600"
+                  text-anchor="middle" transform="rotate(-90 30,115)" x="30" y="115">Error Rate →</text>
+                <!-- Training Error Curve (Monotonically Decreasing) -->
+                <path d="M 90 170 Q 250 140, 350 80 T 570 35" fill="none" stroke="#3b82f6" stroke-width="3"></path>
+                <text fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="11" font-weight="700" x="500"
+                  y="30">Training Error</text>
+                <!-- Test Error Curve (U-Shape) -->
+                <path d="M 90 185 Q 260 90, 340 90 T 570 180" fill="none" stroke="#ef4444" stroke-dasharray="4"
+                  stroke-width="3"></path>
+                <text fill="#dc2626" font-family="'Inter', sans-serif" font-size="11" font-weight="700" x="540"
+                  y="165">Testing Error</text>
+                <!-- Sweet Spot Marker -->
+                <line stroke="#22c55e" stroke-dasharray="3" stroke-width="2" x1="330" x2="330" y1="30" y2="200"></line>
+                <circle cx="330" cy="90" fill="#22c55e" r="5"></circle>
+                <text fill="#15803d" font-family="'Inter', sans-serif" font-size="11" font-weight="700"
+                  text-anchor="middle" x="330" y="20">Optimal Model Capacity</text>
+                <!-- Region Labels -->
+                <text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" font-style="italic" x="160"
+                  y="190">Underfitting (High Bias)</text>
+                <text fill="#64748b" font-family="'Inter', sans-serif" font-size="11" font-style="italic" x="470"
+                  y="190">Overfitting (High Variance)</text>
+              </svg>
+              <p class="diagram-caption">Figure 5.3: The Bias-Variance Tradeoff and Overfitting curve as model
+                complexity increases.</p>
+            </div>
+            <h4>Mitigation &amp; Tree Pruning Techniques:</h4>
+            <ul>
+              <li><strong>Pre-pruning (Early Stopping):</strong> Stop growing the tree before it perfectly classifies
+                the training set. Halting criteria include:
+                <ul>
+                  <li>Setting a maximum depth limit (<code>max_depth</code>).</li>
+                  <li>Requiring a minimum number of samples to split an internal node (<code>min_samples_split</code>).
+                  </li>
+                  <li>Halting if the information gain from the best split falls below a fixed threshold \(\epsilon\).
+                  </li>
+                </ul>
+              </li>
+              <li><strong>Post-pruning (Reduced Error Pruning):</strong> Allow the tree to grow to full depth
+                (overfitting the data), and then prune subtrees bottom-up. For each non-leaf subtree, replace it with a
+                single leaf node carrying the majority class label. If this replacement does not degrade performance on
+                an independent <em>validation dataset</em>, the prune is kept permanently.</li>
+              <li><strong>Ensemble Methods (Random Forests):</strong> Instead of relying on a single deep, high-variance
+                decision tree, build an ensemble of hundreds of decorrelated trees using bootstrap aggregation (bagging)
+                and random feature selection, averaging their votes to achieve low variance.</li>
+            </ul>
+          </div>
+          <div class="topic-block" id="sec-kmeans">
+            <h3>1.5 K-Means Clustering: Algorithm &amp; Mathematics</h3>
+            <p><strong>K-Means</strong> is an iterative, distance-based partitioning algorithm for unsupervised
+              learning. Given an unlabeled dataset \(X = \{x_1, x_2, \dots, x_N\} \subset \mathbb{R}^D\) and a
+              user-specified hyperparameter \(K\) (the number of clusters), K-Means partitions the \(N\) observations
+              into \(K\) disjoint clusters \(C = \{C_1, C_2, \dots, C_K\}\) such that each point belongs to the cluster
+              with the nearest centroid.</p>
+            <h4>The Objective Function (Inertia / WCSS):</h4>
+            <p>K-Means seeks to find cluster assignments and centroids that minimize the <strong>Within-Cluster Sum of
+                Squares (WCSS)</strong>, also called Inertia:</p>
+            $$J = \sum_{k=1}^{K} \sum_{x_i \in C_k} \| x_i - \mu_k \|^2$$
+            <p>where \(\mu_k = \frac{1}{|C_k|} \sum_{x \in C_k} x\) is the mathematical mean (centroid) of cluster
+              \(C_k\).</p>
+            <!-- SVG: K-Means Clustering Visual Trace -->
+            <div class="diagram-wrapper">
+              <svg
+                style="width:100%; max-width:750px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);"
+                viewbox="0 0 750 260" xmlns="http://www.w3.org/2000/svg">
+                <!-- Step 1 Box -->
+                <g transform="translate(20, 20)">
+                  <rect fill="#f8fafc" height="220" rx="8" stroke="#cbd5e1" stroke-width="1.5" width="210"></rect>
+                  <text fill="#1e293b" font-family="'Inter', sans-serif" font-size="12" font-weight="700"
+                    text-anchor="middle" x="105" y="25">Step 1: Init Centroids</text>
+                  <!-- Points -->
+                  <circle cx="50" cy="70" fill="#94a3b8" r="5"></circle>
+                  <circle cx="70" cy="90" fill="#94a3b8" r="5"></circle>
+                  <circle cx="60" cy="120" fill="#94a3b8" r="5"></circle>
+                  <circle cx="150" cy="160" fill="#94a3b8" r="5"></circle>
+                  <circle cx="170" cy="180" fill="#94a3b8" r="5"></circle>
+                  <circle cx="140" cy="190" fill="#94a3b8" r="5"></circle>
+                  <!-- Initial Seeds C1, C2 -->
+                  <rect fill="#3b82f6" height="10" width="10" x="55" y="65"></rect>
+                  <text fill="#1d4ed8" font-size="10" font-weight="700" x="75" y="65">m1</text>
+                  <rect fill="#ef4444" height="10" width="10" x="155" y="155"></rect>
+                  <text fill="#dc2626" font-size="10" font-weight="700" x="175" y="155">m2</text>
+                </g>
+                <!-- Arrow 1 -->
+                <path d="M 240 130 L 265 130" marker-end="url(#arrow)" stroke="#64748b" stroke-width="2"></path>
+                <!-- Step 2 Box -->
+                <g transform="translate(270, 20)">
+                  <rect fill="#f8fafc" height="220" rx="8" stroke="#cbd5e1" stroke-width="1.5" width="210"></rect>
+                  <text fill="#1e293b" font-family="'Inter', sans-serif" font-size="12" font-weight="700"
+                    text-anchor="middle" x="105" y="25">Step 2: Assign Points</text>
+                  <!-- Assigned Points -->
+                  <circle cx="50" cy="70" fill="#3b82f6" r="5"></circle>
+                  <circle cx="70" cy="90" fill="#3b82f6" r="5"></circle>
+                  <circle cx="60" cy="120" fill="#3b82f6" r="5"></circle>
+                  <circle cx="150" cy="160" fill="#ef4444" r="5"></circle>
+                  <circle cx="170" cy="180" fill="#ef4444" r="5"></circle>
+                  <circle cx="140" cy="190" fill="#ef4444" r="5"></circle>
+                  <!-- Boundary line -->
+                  <line stroke="#cbd5e1" stroke-dasharray="3" stroke-width="1.5" x1="30" x2="190" y1="180" y2="60">
+                  </line>
+                  <text fill="#64748b" font-size="10" text-anchor="middle" x="105" y="210">Voronoi Partition</text>
+                </g>
+                <!-- Arrow 2 -->
+                <path d="M 490 130 L 515 130" stroke="#64748b" stroke-width="2"></path>
+                <!-- Step 3 Box -->
+                <g transform="translate(520, 20)">
+                  <rect fill="#f8fafc" height="220" rx="8" stroke="#cbd5e1" stroke-width="1.5" width="210"></rect>
+                  <text fill="#1e293b" font-family="'Inter', sans-serif" font-size="12" font-weight="700"
+                    text-anchor="middle" x="105" y="25">Step 3: Recompute &amp; Converge</text>
+                  <circle cx="50" cy="70" fill="#3b82f6" r="5"></circle>
+                  <circle cx="70" cy="90" fill="#3b82f6" r="5"></circle>
+                  <circle cx="60" cy="120" fill="#3b82f6" r="5"></circle>
+                  <circle cx="150" cy="160" fill="#ef4444" r="5"></circle>
+                  <circle cx="170" cy="180" fill="#ef4444" r="5"></circle>
+                  <circle cx="140" cy="190" fill="#ef4444" r="5"></circle>
+                  <!-- Updated Centroids -->
+                  <circle cx="60" cy="93" fill="#1d4ed8" r="6" stroke="#ffffff" stroke-width="1.5"></circle>
+                  <text fill="#1d4ed8" font-size="10" font-weight="700" x="75" y="96">μ1*</text>
+                  <circle cx="153" cy="176" fill="#dc2626" r="6" stroke="#ffffff" stroke-width="1.5"></circle>
+                  <text fill="#dc2626" font-size="10" font-weight="700" x="168" y="180">μ2*</text>
+                  <text fill="#15803d" font-size="10" font-weight="700" text-anchor="middle" x="105" y="210">Δμ &lt; ε
+                    (Converged)</text>
+                </g>
+              </svg>
+              <p class="diagram-caption">Figure 5.4: The iterative assign-and-update steps of the K-Means clustering
+                algorithm.</p>
+            </div>
+            <h4>The 4 Core Steps of K-Means:</h4>
+            <ol>
+              <li><strong>Step 1 (Initialization):</strong> Select \(K\) points from the dataset as the initial
+                centroids \(\mu_1^{(0)}, \mu_2^{(0)}, \dots, \mu_K^{(0)}\) (e.g., via random selection or K-Means++
+                initialization).</li>
+              <li><strong>Step 2 (Assignment / Expectation Step):</strong> Assign each sample point \(x_i\) to its
+                closest centroid using the Euclidean distance metric:
+                $$C_k = \left\{ x_i : \| x_i - \mu_k \| \le \| x_i - \mu_j \| \quad \forall j \in \{1, \dots, K\}
+                \right\}$$
+              </li>
+              <li><strong>Step 3 (Update / Maximization Step):</strong> Recompute each centroid \(\mu_k\) by calculating
+                the arithmetic mean of all data points assigned to cluster \(C_k\):
+                $$\mu_k^{(t+1)} = \frac{1}{|C_k|} \sum_{x_i \in C_k} x_i$$
+              </li>
+              <li><strong>Step 4 (Termination / Convergence Check):</strong> Repeat Steps 2 and 3 until a stopping
+                criterion is met:
+                <ul>
+                  <li>Centroid locations do not change: \(\|\mu_k^{(t+1)} - \mu_k^{(t)}\| \le \epsilon \quad \forall
+                    k\).</li>
+                  <li>No sample changes cluster membership across iterations.</li>
+                  <li>A maximum iteration limit is reached.</li>
+                </ul>
+              </li>
+            </ol>
+            <h4>Distance Metrics in K-Means:</h4>
+            <ul>
+              <li><strong>Euclidean Distance (\(L_2\) norm):</strong> The standard straight-line distance in Euclidean
+                space:
+                $$d(p, q) = \sqrt{\sum_{j=1}^D (p_j - q_j)^2}$$
+              </li>
+              <li><strong>Manhattan Distance (\(L_1\) norm / City Block):</strong> Sum of absolute coordinate
+                differences (used in K-Medians):
+                $$d(p, q) = \sum_{j=1}^D |p_j - q_j|$$
+              </li>
+            </ul>
+            <h4>Cluster Quality Criteria:</h4>
+            <ul>
+              <li><strong>High Intra-Class Similarity (Compactness):</strong> The distance between points within the
+                same cluster should be minimal (low WCSS).</li>
+              <li><strong>Low Inter-Class Similarity (Separation):</strong> The distance between distinct cluster
+                centroids (Between-Cluster Sum of Squares, BCSS) should be maximal.</li>
+            </ul>
+          </div>
+        </section>
+        <!-- SECTION 2: STEP-BY-STEP NUMERICALS -->
+        <section class="module-section" id="numerical-section">
+          <div class="section-title">
+            <h2>2. In-Depth Numerical Explanations (Step-by-Step)</h2>
+            <span class="cross-ref-badge">3 Tiered Solved Problems</span>
+          </div>
+          <!-- NUMERICAL 1: SIMPLE -->
+          <div class="problem-card" id="num-1">
+            <div class="problem-header">
+              <span class="difficulty easy">Simple Example</span>
+              <h3>Problem 5.1: Shannon Entropy Calculation for Binary Target</h3>
+            </div>
+            <p><strong>Problem Statement:</strong> A small training dataset \(S\) for loan approval has 14 instances.
+              Out of these, 9 applicants are approved (\(\text{Class} = \text{Yes}\)) and 5 applicants are rejected
+              (\(\text{Class} = \text{No}\)). Calculate the Shannon Entropy \(\text{Entropy}(S)\) of this target
+              distribution. (Note: \(\log_2 9 \approx 3.1699\), \(\log_2 5 \approx 2.3219\), \(\log_2 14 \approx
+              3.8074\)).</p>
+            <div class="solution-flow">
+              <div class="step-row">
+                <span class="step-badge">GIVEN</span>
+                <div>
+                  <p>Total instances \(|S| = 14\).</p>
+                  <p>Positive instances \(p_+ = \frac{9}{14} \approx 0.6429\).</p>
+                  <p>Negative instances \(p_- = \frac{5}{14} \approx 0.3571\).</p>
+                </div>
+              </div>
+              <div class="step-row">
+                <span class="step-badge">FORMULA</span>
+                <div>
+                  $$\text{Entropy}(S) = - p_+ \log_2(p_+) - p_- \log_2(p_-)$$
+                </div>
+              </div>
+              <div class="step-row">
+                <span class="step-badge">STEPS</span>
+                <div>
+                  <p><strong>Step 1: Compute logarithmic components using log quotient rules:</strong></p>
+                  $$\log_2(p_+) = \log_2\left(\frac{9}{14}
+                  \right) = \log_2(9) - \log_2(14) = 3.1699 - 3.8074 = -0.6375$$
+                  $$\log_2(p_-) = \log_2\left(\frac{5}{14}
+                  \right) = \log_2(5) - \log_2(14) = 2.3219 - 3.8074 = -1.4855$$
+                  <p><strong>Step 2: Substitute probabilities and logs into the entropy equation:</strong></p>
+                  $$\text{Entropy}(S) = - \left[ \frac{9}{14} \times (-0.6375) + \frac{5}{14} \times (-1.4855)
+                  \right]$$
+                  $$\text{Entropy}(S) = - \left[ 0.6429 \times (-0.6375) + 0.3571 \times (-1.4855)
+                  \right]$$
+                  $$\text{Entropy}(S) = - [ -0.4098 - 0.5305 ] = - [ -0.9403 ] = 0.9403 \text{ bits}$$
+                </div>
+              </div>
+              <div class="step-row">
+                <span class="step-badge answer">FINAL ANSWER</span>
+                <div>
+                  <p class="final-box">\(\mathbf{\text{Entropy}(S) = 0.940 \text{ bits}}\)</p>
+                  <p class="hint">Interpretation: Since the data contains a mix of both classes (not purely 14/0 or
+                    0/14), entropy is close to 1 bit, reflecting substantial uncertainty.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- NUMERICAL 2: MEDIUM -->
+          <div class="problem-card" id="num-2">
+            <div class="problem-header">
+              <span class="difficulty medium">Medium Example</span>
+              <h3>Problem 5.2: Attribute Selection &amp; Information Gain for PlayGolf Root Node</h3>
+            </div>
+            <p><strong>Problem Statement:</strong> In the classic 14-sample weather dataset (\(|S| = 14\), with 9
+              \(\text{Yes}\) and 5 \(\text{No}\), hence \(\text{Entropy}(S) = 0.940\)), consider the candidate splitting
+              attribute <strong>Windy</strong>, which has two categorical values: \(\text{Weak}\) and \(\text{Strong}\):
+            </p>
+            <ul>
+              <li>\(\text{Windy} = \text{Weak}\): 8 samples (6 \(\text{Yes}\), 2 \(\text{No}\))</li>
+              <li>\(\text{Windy} = \text{Strong}\): 6 samples (3 \(\text{Yes}\), 3 \(\text{No}\))</li>
+            </ul>
+            <p>Calculate: (i) \(\text{Entropy}(S_{\text{Weak}})\), (ii) \(\text{Entropy}(S_{\text{Strong}})\), and (iii)
+              the resulting \(\text{Gain}(S, \text{Windy})\).</p>
+            <div class="solution-flow">
+              <div class="step-row">
+                <span class="step-badge">GIVEN</span>
+                <div>
+                  <p>\(|S| = 14\), \(\text{Entropy}(S) = 0.940\).</p>
+                  <p>Subset \(S_{\text{Weak}}\): \(|S_{\text{Weak}}| = 8\), \(p_+ = \frac{6}{8} = 0.75\), \(p_- =
+                    \frac{2}{8} = 0.25\).</p>
+                  <p>Subset \(S_{\text{Strong}}\): \(|S_{\text{Strong}}| = 6\), \(p_+ = \frac{3}{6} = 0.50\), \(p_- =
+                    \frac{3}{6} = 0.50\).</p>
+                </div>
+              </div>
+              <div class="step-row">
+                <span class="step-badge">FORMULA</span>
+                <div>
+                  $$\text{Gain}(S, A) = \text{Entropy}(S) - \sum_{v \in \{\text{Weak}, \text{Strong}\}}
+                  \frac{|S_v|}{|S|} \text{Entropy}(S_v)$$
+                </div>
+              </div>
+              <div class="step-row">
+                <span class="step-badge">STEPS</span>
+                <div>
+                  <p><strong>Step 1: Compute \(\text{Entropy}(S_{\text{Weak}})\):</strong></p>
+                  $$\text{Entropy}(S_{\text{Weak}}) = - [0.75 \log_2(0.75) + 0.25 \log_2(0.25)]$$
+                  <p>Note that \(\log_2(0.75) = -0.4150\) and \(\log_2(0.25) = -2.000\):</p>
+                  $$\text{Entropy}(S_{\text{Weak}}) = - [0.75(-0.4150) + 0.25(-2.000)] = - [-0.3113 - 0.5000] = 0.8113
+                  \text{ bits}$$
+
+                  <p><strong>Step 2: Compute \(\text{Entropy}(S_{\text{Strong}})\):</strong></p>
+                  <p>Since the classes are split perfectly 50-50 (\(p_+ = 0.5, p_- = 0.5\)):</p>
+                  $$\text{Entropy}(S_{\text{Strong}}) = - [0.5 \log_2(0.5) + 0.5 \log_2(0.5)] = - [0.5(-1) + 0.5(-1)] =
+                  1.000 \text{ bit}$$
+
+                  <p><strong>Step 3: Compute Expected Weighted Entropy of the split:</strong></p>
+                  $$\text{Weighted Entropy} = \frac{8}{14} \text{Entropy}(S_{\text{Weak}}) + \frac{6}{14}
+                  \text{Entropy}(S_{\text{Strong}})$$
+                  $$\text{Weighted Entropy} = \left(\frac{8}{14} \times 0.8113
+                  \right) + \left(\frac{6}{14} \times 1.000
+                  \right)$$
+                  $$\text{Weighted Entropy} = 0.4636 + 0.4286 = 0.8922 \text{ bits}$$
+
+                  <p><strong>Step 4: Compute Information Gain:</strong></p>
+                  $$\text{Gain}(S, \text{Windy}) = 0.9403 - 0.8922 = 0.0481 \text{ bits}$$
+                </div>
+              </div>
+              <div class="step-row">
+                <span class="step-badge answer">FINAL ANSWER</span>
+                <div>
+                  <p class="final-box">\(\mathbf{\text{Gain}(S, \text{Windy}) = 0.048 \text{ bits}}\)</p>
+                  <p class="hint">Exam Note: When compared against \(\text{Gain}(S, \text{Outlook}) = 0.246\) bits,
+                    Windy provides very low information gain and will therefore not be selected as the root node.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- NUMERICAL 3: COMPLEX -->
+          <div class="problem-card" id="num-3">
+            <div class="problem-header">
+              <span class="difficulty hard">Complex Example</span>
+              <h3>Problem 5.3: Complete Iterative 2D K-Means Clustering Trace</h3>
+            </div>
+            <p><strong>Problem Statement:</strong> Given four 2D data points in feature space:
+              $$P_1 = (1, 1), \quad P_2 = (2, 1), \quad P_3 = (4, 3), \quad P_4 = (5, 4)$$
+              Perform K-Means clustering for \(K = 2\) clusters using <strong>Euclidean distance</strong>. Assume
+              initial seed centroids are set to:
+              $$\mu_1^{(0)} = P_1 = (1, 1), \quad \mu_2^{(0)} = P_2 = (2, 1)$$
+              Perform <strong>Iteration 1</strong> and <strong>Iteration 2</strong> until centroid convergence. Show all
+              distance calculation tables and cluster reassignment steps explicitly.</p>
+            <div class="solution-flow">
+              <div class="step-row">
+                <span class="step-badge">GIVEN</span>
+                <div>
+                  <p>Points: \(P_1(1,1), P_2(2,1), P_3(4,3), P_4(5,4)\).</p>
+                  <p>Initial Centroids: \(\mu_1 = (1, 1), \mu_2 = (2, 1)\).</p>
+                  <p>Distance Metric: \(d(P, \mu) = \sqrt{(x_P - x_\mu)^2 + (y_P - y_\mu)^2}\).</p>
+                </div>
+              </div>
+              <div class="step-row">
+                <span class="step-badge">ITERATION 1</span>
+                <div>
+                  <p><strong>Step 1: Compute Euclidean distances from all points to initial centroids \(\mu_1(1,1)\) and
+                      \(\mu_2(2,1)\):</strong></p>
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Point</th>
+                        <th>Coords</th>
+                        <th>\(d(P, \mu_1 = (1,1))\)</th>
+                        <th>\(d(P, \mu_2 = (2,1))\)</th>
+                        <th>Assigned Cluster</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>\(P_1\)</td>
+                        <td>\((1, 1)\)</td>
+                        <td>\(\sqrt{(1-1)^2 + (1-1)^2} = \mathbf{0.00}\)</td>
+                        <td>\(\sqrt{(1-2)^2 + (1-1)^2} = 1.00\)</td>
+                        <td><strong>Cluster 1</strong></td>
+                      </tr>
+                      <tr>
+                        <td>\(P_2\)</td>
+                        <td>\((2, 1)\)</td>
+                        <td>\(\sqrt{(2-1)^2 + (1-1)^2} = 1.00\)</td>
+                        <td>\(\sqrt{(2-2)^2 + (1-1)^2} = \mathbf{0.00}\)</td>
+                        <td><strong>Cluster 2</strong></td>
+                      </tr>
+                      <tr>
+                        <td>\(P_3\)</td>
+                        <td>\((4, 3)\)</td>
+                        <td>\(\sqrt{(4-1)^2 + (3-1)^2} = \sqrt{9+4} = \sqrt{13} \approx 3.61\)</td>
+                        <td>\(\sqrt{(4-2)^2 + (3-1)^2} = \sqrt{4+4} = \sqrt{8} \approx \mathbf{2.83}\)</td>
+                        <td><strong>Cluster 2</strong></td>
+                      </tr>
+                      <tr>
+                        <td>\(P_4\)</td>
+                        <td>\((5, 4)\)</td>
+                        <td>\(\sqrt{(5-1)^2 + (4-1)^2} = \sqrt{16+9} = \sqrt{25} = 5.00\)</td>
+                        <td>\(\sqrt{(5-2)^2 + (4-1)^2} = \sqrt{9+9} = \sqrt{18} \approx \mathbf{4.24}\)</td>
+                        <td><strong>Cluster 2</strong></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p><strong>Step 2: Cluster Membership after Iteration 1:</strong></p>
+                  $$C_1 = \{P_1\}, \quad C_2 = \{P_2, P_3, P_4\}$$
+
+                  <p><strong>Step 3: Recompute Centroids \(\mu_1^{(1)}\) and \(\mu_2^{(1)}\):</strong></p>
+                  $$\mu_1^{(1)} = P_1 = (1, 1)$$
+                  $$\mu_2^{(1)} = \left(\frac{2 + 4 + 5}{3}, \frac{1 + 3 + 4}{3}
+                  \right) = \left(\frac{11}{3}, \frac{8}{3}
+                  \right) \approx (3.67, 2.67)$$
+                </div>
+              </div>
+              <div class="step-row">
+                <span class="step-badge">ITERATION 2</span>
+                <div>
+                  <p><strong>Step 4: Compute distances with updated centroids \(\mu_1(1, 1)\) and \(\mu_2(3.67,
+                      2.67)\):</strong></p>
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Point</th>
+                        <th>Coords</th>
+                        <th>\(d(P, \mu_1 = (1,1))\)</th>
+                        <th>\(d(P, \mu_2 = (3.67, 2.67))\)</th>
+                        <th>Assigned Cluster</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>\(P_1\)</td>
+                        <td>\((1, 1)\)</td>
+                        <td>\(\mathbf{0.00}\)</td>
+                        <td>\(\sqrt{(1-3.67)^2 + (1-2.67)^2} = \sqrt{7.13 + 2.79} \approx 3.15\)</td>
+                        <td><strong>Cluster 1</strong></td>
+                      </tr>
+                      <tr>
+                        <td>\(P_2\)</td>
+                        <td>\((2, 1)\)</td>
+                        <td>\(\sqrt{(2-1)^2 + (1-1)^2} = \mathbf{1.00}\)</td>
+                        <td>\(\sqrt{(2-3.67)^2 + (1-2.67)^2} = \sqrt{2.79 + 2.79} \approx 2.36\)</td>
+                        <td><strong>Cluster 1 (Migrated!)</strong></td>
+                      </tr>
+                      <tr>
+                        <td>\(P_3\)</td>
+                        <td>\((4, 3)\)</td>
+                        <td>\(\sqrt{(4-1)^2 + (3-1)^2} = \sqrt{13} \approx 3.61\)</td>
+                        <td>\(\sqrt{(4-3.67)^2 + (3-2.67)^2} = \sqrt{0.11 + 0.11} \approx \mathbf{0.47}\)</td>
+                        <td><strong>Cluster 2</strong></td>
+                      </tr>
+                      <tr>
+                        <td>\(P_4\)</td>
+                        <td>\((5, 4)\)</td>
+                        <td>\(\sqrt{(5-1)^2 + (4-1)^2} = 5.00\)</td>
+                        <td>\(\sqrt{(5-3.67)^2 + (4-2.67)^2} = \sqrt{1.77 + 1.77} \approx \mathbf{1.88}\)</td>
+                        <td><strong>Cluster 2</strong></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p><strong>Step 5: Cluster Membership after Iteration 2:</strong></p>
+                  $$C_1 = \{P_1, P_2\}, \quad C_2 = \{P_3, P_4\}$$
+                  <p>Notice that point \(P_2\) migrated from Cluster 2 to Cluster 1!</p>
+                  <p><strong>Step 6: Recompute Centroids \(\mu_1^{(2)}\) and \(\mu_2^{(2)}\):</strong></p>
+                  $$\mu_1^{(2)} = \left(\frac{1 + 2}{2}, \frac{1 + 1}{2}
+                  \right) = (1.5, 1.0)$$
+                  $$\mu_2^{(2)} = \left(\frac{4 + 5}{2}, \frac{3 + 4}{2}
+                  \right) = (4.5, 3.5)$$
+                </div>
+              </div>
+              <div class="step-row">
+                <span class="step-badge">CONVERGENCE</span>
+                <div>
+                  <p><strong>Convergence Verification (Iteration 3 Check):</strong></p>
+                  <ul>
+                    <li>For \(P_1(1,1)\): \(d(P_1, \mu_1) = 0.5 &lt; d(P_1, \mu_2) = 4.30 \implies C_1\)</li>
+                    <li>For \(P_2(2,1)\): \(d(P_2, \mu_1) = 0.5 &lt; d(P_2, \mu_2) = 3.53 \implies C_1\)</li>
+                    <li>For \(P_3(4,3)\): \(d(P_3, \mu_1) = 3.20 &gt; d(P_3, \mu_2) = 0.71 \implies C_2\)</li>
+                    <li>For \(P_4(5,4)\): \(d(P_4, \mu_1) = 4.61 &gt; d(P_4, \mu_2) = 0.71 \implies C_2\)</li>
+                  </ul>
+                  <p>No data point changes cluster assignment. Centroids remain identical: \(\mu_1^{(3)} = (1.5, 1.0)\),
+                    \(\mu_2^{(3)} = (4.5, 3.5)\). The algorithm has converged.</p>
+                </div>
+              </div>
+              <div class="step-row">
+                <span class="step-badge answer">FINAL ANSWER</span>
+                <div>
+                  <div class="final-box">
+                    <p><strong>Final Cluster 1:</strong> \(\{P_1(1,1), P_2(2,1)\}\) with Centroid \(\mathbf{\mu_1 =
+                      (1.5, 1.0)}\)</p>
+                    <p><strong>Final Cluster 2:</strong> \(\{P_3(4,3), P_4(5,4)\}\) with Centroid \(\mathbf{\mu_2 =
+                      (4.5, 3.5)}\)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- SECTION 3: COMPARATIVE STUDIES -->
+        <section class="module-section" id="comparison-section">
+          <div class="section-title">
+            <h2>3. Comparative Studies</h2>
+            <span class="cross-ref-badge">Exam-Focused Tabular Comparisons</span>
+          </div>
+          <h3>Table 5.1: Comprehensive Comparison of Machine Learning Paradigms</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Comparison Dimension</th>
+                <th>Supervised Learning</th>
+                <th>Unsupervised Learning</th>
+                <th>Reinforcement Learning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Training Input Data</strong></td>
+                <td>Labeled pairs \((x_i, y_i)\) with ground-truth supervisor</td>
+                <td>Unlabeled feature vectors \(x_i\) only; no external labels</td>
+                <td>States from environment; no static dataset (dynamic interaction)</td>
+              </tr>
+              <tr>
+                <td><strong>Core Objective</strong></td>
+                <td>Learn mapping function \(y = f(x)\) to predict labels on unseen data</td>
+                <td>Discover intrinsic groupings, patterns, and representations</td>
+                <td>Learn policy \(\pi(s)\) maximizing long-term cumulative reward</td>
+              </tr>
+              <tr>
+                <td><strong>Feedback Signal</strong></td>
+                <td>Direct error feedback \(\mathcal{L}(y, \hat{y})\) for every training sample</td>
+                <td>No supervisory feedback; driven by mathematical distance/density</td>
+                <td>Delayed scalar reward/penalty after sequences of actions</td>
+              </tr>
+              <tr>
+                <td><strong>Primary Sub-tasks</strong></td>
+                <td>Classification (discrete) and Regression (continuous)</td>
+                <td>Clustering, Dimensionality Reduction, Association Rules</td>
+                <td>Model-free control, Policy optimization, Value approximation</td>
+              </tr>
+              <tr>
+                <td><strong>Canonical Algorithms</strong></td>
+                <td>Decision Trees, SVM, Naive Bayes, Linear/Logistic Regression</td>
+                <td>K-Means, Hierarchical Clustering, PCA, Apriori, DBSCAN</td>
+                <td>Q-Learning, SARSA, Deep Q-Networks (DQN), PPO</td>
+              </tr>
+              <tr>
+                <td><strong>Evaluation Metrics</strong></td>
+                <td>Accuracy, Precision, Recall, F1-Score, RMSE, MAE</td>
+                <td>Silhouette Score, WCSS/Inertia, Davies-Bouldin Index</td>
+                <td>Cumulative episode reward, Convergence rate, Policy stability</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Table 5.2: Attribute Selection Measures: Information Gain vs. Gini Index</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Information Gain (Shannon Entropy)</th>
+                <th>Gini Index (Gini Impurity)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Mathematical Formula</strong></td>
+                <td>\(E(S) = - \sum_{i=1}^c p_i \log_2(p_i)\)</td>
+                <td>\(\text{Gini}(S) = 1 - \sum_{i=1}^c p_i^2\)</td>
+              </tr>
+              <tr>
+                <td><strong>Originating Algorithm</strong></td>
+                <td>ID3, C4.5 (Ross Quinlan)</td>
+                <td>CART (Breiman et al.)</td>
+              </tr>
+              <tr>
+                <td><strong>Computational Cost</strong></td>
+                <td>Higher (requires computing base-2 logarithms)</td>
+                <td>Lower (only involves squarings and subtractions)</td>
+              </tr>
+              <tr>
+                <td><strong>Range for Binary Class</strong></td>
+                <td>\([0.0, 1.0]\) bits (peaks at \(p = 0.5\))</td>
+                <td>\([0.0, 0.5]\) (peaks at \(p = 0.5\))</td>
+              </tr>
+              <tr>
+                <td><strong>Bias Tendency</strong></td>
+                <td>Biased toward attributes with many distinct values (addressed by Gain Ratio in C4.5)</td>
+                <td>Favors larger partitions; very robust for binary recursive splits</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <!-- SECTION 4: CASE STUDIES & REAL-WORLD APPLICATIONS -->
+        <section class="module-section" id="case-section">
+          <div class="section-title">
+            <h2>4. Real-World Case Studies &amp; Practical Systems</h2>
+            <span class="cross-ref-badge">Industry Implementations</span>
+          </div>
+          <div class="case-card">
+            <div class="case-header">
+              <span class="case-tag">Supervised Learning Case Study</span>
+              <h3>Credit Scoring &amp; Loan Default Prediction (Banking &amp; FinTech)</h3>
+            </div>
+            <p><strong>System Context:</strong> Commercial banks evaluate hundreds of thousands of personal loan
+              applications daily. Loan approval officers use supervised Decision Tree ensembles (e.g., XGBoost, Random
+              Forests) to predict the binary probability of borrower default (\(Y \in \{\text{Default},
+              \text{Non-Default}\}\)).</p>
+            <ul>
+              <li><strong>Feature Vector \(X\):</strong> Credit history score (CIBIL), debt-to-income ratio (DTI),
+                annual income, employment tenure, requested loan amount, and existing revolving credit utilization.</li>
+              <li><strong>Why Decision Trees?</strong> Explainability is a strict regulatory mandate (e.g., under FCRA
+                and RBI fair lending directives). Black-box models (such as deep neural networks) cannot easily explain
+                why an applicant was rejected. A Decision Tree provides a transparent decision path (e.g., <em>"If
+                  Debt-to-Income &gt; 45% and Credit Score &lt; 650 \(\implies\) Reject"</em>), enabling regulatory
+                compliance and transparent adverse-action notifications.</li>
+            </ul>
+          </div>
+          <div class="case-card">
+            <div class="case-header">
+              <span class="case-tag">Unsupervised Learning Case Study</span>
+              <h3>E-Commerce Customer Segmentation (Retail &amp; Marketing Analytics)</h3>
+            </div>
+            <p><strong>System Context:</strong> Online retail platforms like Amazon analyze transaction records of
+              millions of users without manual labels to discover natural buying cohorts for hyper-targeted marketing
+              campaigns.</p>
+            <ul>
+              <li><strong>Feature Space (RFM Model):</strong>
+                <ul>
+                  <li><strong>Recency (\(R\)):</strong> Days since last purchase.</li>
+                  <li><strong>Frequency (\(F\)):</strong> Total number of purchases in the last 12 months.</li>
+                  <li><strong>Monetary (\(M\)):</strong> Total revenue generated by the customer.</li>
+                </ul>
+              </li>
+              <li><strong>Clustering via K-Means:</strong> By running K-Means with \(K=4\) on normalized RFM vectors,
+                the system automatically discovers:
+                <ol>
+                  <li><em>Champions / VIPs (Low R, High F, High M):</em> Given exclusive loyalty rewards and early
+                    product access.</li>
+                  <li><em>At-Risk / Churning (High R, High F, High M):</em> Targeted with aggressive re-engagement
+                    discounts.</li>
+                  <li><em>Promising Newbies (Low R, Low F, Medium M):</em> Sent onboarding recommendations and nurture
+                    sequences.</li>
+                  <li><em>Lost Bargain Hunters (High R, Low F, Low M):</em> Excluded from costly ad retargeting.</li>
+                </ol>
+              </li>
+            </ul>
+          </div>
+        </section>
+        <!-- SECTION 5: EXAM QUESTIONS -->
+        <section class="module-section" id="questions-section">
+          <div class="section-title">
+            <h2>5. Possible University Exam Questions &amp; Marking Guide</h2>
+            <span class="cross-ref-badge">NMIMS Pattern: 4, 6, 8, 10 Marks</span>
+          </div>
+          <div class="question-item">
+            <div class="q-header">
+              <span class="marks-badge">4 Marks</span>
+              <h4>Q1. Differentiate between Inductive Learning and Deductive Learning with suitable examples.</h4>
+            </div>
+            <div class="q-answer">
+              <p><strong>Marking Scheme:</strong> 2 marks for core definitions/conceptual direction; 2 marks for clear
+                domain examples.</p>
+              <p><strong>Model Answer Key:</strong> Deductive learning works top-down from general axioms to specific
+                conclusions without generating new hypotheses (\(\text{All humans are mortal} o \text{Socrates is human}
+                o \text{Socrates is mortal}\)). Inductive learning works bottom-up, inferring generalized predictive
+                models \(h(x)\) from finite specific training observations (\(\text{100 observed swans are white} o
+                \text{Hypothesis: All swans are white}\)).</p>
+            </div>
+          </div>
+          <div class="question-item">
+            <div class="q-header">
+              <span class="marks-badge">6 Marks</span>
+              <h4>Q2. Explain the concept of Overfitting in Decision Trees. What are its causes, and how do pre-pruning
+                and post-pruning mitigate it?</h4>
+            </div>
+            <div class="q-answer">
+              <p><strong>Marking Scheme:</strong> 2 marks for formal definition and bias-variance curve; 2 marks for
+                causes (noise, small data, deep trees); 2 marks for pruning techniques.</p>
+              <p><strong>Model Answer Key:</strong> Define overfitting: \(\text{Error}_{\text{train}}(h) &lt;
+                \text{Error}_{\text{train}}(h')\) but \(\text{Error}_{\text{test}}(h) &gt;
+                \text{Error}_{\text{test}}(h')\). Explain causes: capturing random noise, small sample size,
+                unrestricted tree depth. Detail pre-pruning (stopping criteria like <code>max_depth</code>, min gain
+                threshold) and post-pruning (reduced error pruning bottom-up on validation data).</p>
+            </div>
+          </div>
+          <div class="question-item">
+            <div class="q-header">
+              <span class="marks-badge">8 Marks</span>
+              <h4>Q3. Describe the K-Means clustering algorithm step-by-step. State its objective function, convergence
+                conditions, and two limitations.</h4>
+            </div>
+            <div class="q-answer">
+              <p><strong>Marking Scheme:</strong> 2 marks for objective function (WCSS formula); 3 marks for 4
+                algorithmic steps (Init, Assign, Update, Repeat); 2 marks for convergence criteria; 1 mark for
+                limitations.</p>
+              <p><strong>Model Answer Key:</strong> State WCSS \(J = \sum_{k=1}^K \sum_{x_i \in C_k} \| x_i - \mu_k
+                \|^2\). Detail 4 steps (initial centroid selection, Euclidean assignment, centroid recalculation via
+                mean, convergence check). Convergence occurs when \(\Delta \mu = 0\) or assignments do not change.
+                Limitations: Sensitive to initial seed selection (leads to local minima), requires specifying \(K\) in
+                advance, struggles with non-spherical clusters and outliers.</p>
+            </div>
+          </div>
+          <div class="question-item">
+            <div class="q-header">
+              <span class="marks-badge">10 Marks</span>
+              <h4>Q4. (Comprehensive Numerical) In a classification dataset of 14 examples with 9 Yes and 5 No, compute
+                Entropy(S). If an attribute 'Humidity' splits the set into 'High' (3 Yes, 4 No) and 'Normal' (6 Yes, 1
+                No), calculate Gain(S, Humidity) step-by-step.</h4>
+            </div>
+            <div class="q-answer">
+              <p><strong>Marking Scheme:</strong> 3 marks for \(\text{Entropy}(S) = 0.940\); 3 marks for
+                \(\text{Entropy}(S_{\text{High}})\) and \(\text{Entropy}(S_{\text{Normal}})\); 4 marks for weighted sum
+                and \(\text{Gain}(S, \text{Humidity})\) calculation.</p>
+              <p><strong>Model Answer Key:</strong></p>
+              <ul>
+                <li>\(\text{Entropy}(S) = -\frac{9}{14}\log_2\frac{9}{14} - \frac{5}{14}\log_2\frac{5}{14} = 0.940\)
+                  bits.</li>
+                <li>\(\text{Entropy}(S_{\text{High}}) = -\frac{3}{7}\log_2\frac{3}{7} - \frac{4}{7}\log_2\frac{4}{7} =
+                  0.985\) bits.</li>
+                <li>\(\text{Entropy}(S_{\text{Normal}}) = -\frac{6}{7}\log_2\frac{6}{7} - \frac{1}{7}\log_2\frac{1}{7} =
+                  0.592\) bits.</li>
+                <li>\(\text{Weighted Entropy} = \frac{7}{14}(0.985) + \frac{7}{14}(0.592) = 0.4925 + 0.296 = 0.7885\)
+                  bits.</li>
+                <li>\(\text{Gain}(S, \text{Humidity}) = 0.940 - 0.7885 = 0.1515 \text{ bits}\).</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        <!-- Navigation Footer -->
+        <nav class="unit-pagination">
+          <a class="btn btn-outline" href="unit_4.html">← Previous: Unit 4 (CSPs)</a>
+          <a class="btn btn-primary" href="unit_6.html">Next: Unit 6 (Expert Systems) →</a>
+        </nav>
+      </article>
+    </main>
+  </div>
+  <script id="ai-theme-toggle">(() => {
+      const root = document.documentElement;
+      const key = 'nmims-ai-color-theme';
+      const button = document.getElementById('theme-toggle');
+      const icon = button && button.querySelector('.theme-icon');
+      const label = button && button.querySelector('.theme-label');
+      let saved = null;
+      try { saved = localStorage.getItem(key); } catch (_) { }
+      const initial = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      const apply = (theme) => {
+        root.dataset.theme = theme;
+        const dark = theme === 'dark';
+        if (button) {
+          button.setAttribute('aria-pressed', String(dark));
+          button.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+        }
+        if (icon) icon.textContent = dark ? '☀' : '☾';
+        if (label) label.textContent = dark ? 'Light mode' : 'Dark mode';
+      };
+      apply(initial);
+      if (button) button.addEventListener('click', () => {
+        const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        try { localStorage.setItem(key, next); } catch (_) { }
+        apply(next);
+      });
+    })();</script>
+</body>
+
 </html>
