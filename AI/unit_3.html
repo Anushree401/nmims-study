@@ -401,6 +401,37 @@ a:focus-visible {
     break-inside: avoid;
   }
 }
+
+/* Keep long final-answer expressions inside their cards and let prose wrap. */
+.step-row,
+.step-row > div {
+  min-width: 0;
+}
+.step-row > div {
+  flex: 1 1 0%;
+  width: 0;
+  max-width: 100%;
+}
+.final-box {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+.final-box .answer-math {
+  display: inline-block;
+  max-width: 100%;
+  vertical-align: middle;
+}
+.final-box mjx-container {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  vertical-align: middle;
+}
+
 </style></head>
 <body>
 <div class="layout-container">
@@ -762,7 +793,7 @@ a:focus-visible {
 <div class="step-row">
 <span class="step-badge answer">FINAL ANSWER</span>
 <div>
-<p class="final-box">\(\mathbf{((P \to Q) \wedge P) \to Q \text{ evaluates to True under ALL interpretations (Tautology / Valid).}}\)</p>
+<p class="final-box"><span class="answer-math">\(((P \to Q) \wedge P) \to Q\)</span> evaluates to True under all interpretations (tautology / valid).</p>
 </div>
 </div>
 </div>
@@ -866,7 +897,7 @@ a:focus-visible {
 <div class="step-row">
 <span class="step-badge answer">FINAL ANSWER</span>
 <div>
-<p class="final-box">\(\mathbf{\text{Since the negated goal leads directly to an empty clause } \square, \text{ the query "Marcus hated Caesar" is proven True.}}\)</p>
+<p class="final-box">Since the negated goal leads directly to an empty clause \(\square\), the query “Marcus hated Caesar” is proven true.</p>
 </div>
 </div>
 </div>
