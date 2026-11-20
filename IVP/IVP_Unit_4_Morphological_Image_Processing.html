@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unit 4: Morphological Image Processing - NMIMS Master Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="theme.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="ivp-custom-polish">
+:root { --ai-content-width: 980px; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+body { min-width: 320px; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+.main-content { width: calc(100% - 290px); max-width: none; }
+.content-wrapper { max-width: var(--ai-content-width); }
+.top-bar { position: sticky; top: 0; z-index: 90; min-height: 52px; padding: 12px 0; margin-top: -32px; background: color-mix(in srgb, var(--bg-main) 94%, transparent); backdrop-filter: blur(10px); }
+.unit-hero { padding-top: 6px; margin-bottom: clamp(26px, 4vw, 42px); }
+.unit-hero h1 { font-size: clamp(1.8rem, 3.3vw, 2.45rem); letter-spacing: -0.035em; text-wrap: balance; }
+.module-section { scroll-margin-top: 76px; padding: clamp(20px, 3vw, 34px); margin-bottom: clamp(24px, 4vw, 40px); }
+.topic-block { scroll-margin-top: 76px; margin-bottom: 2.2rem; }
+.topic-block p, .topic-block li, .q-answer p, .callout p { max-width: 82ch; line-height: 1.72; }
+.callout { padding: 18px 20px; border-radius: 10px; margin: 16px 0; border-left: 4px solid var(--primary); background: #f1f5f9; }
+.callout-def { border-left-color: #2563eb; background: #eff6ff; }
+.callout-warn { border-left-color: #f59e0b; background: #fffbeb; }
+.callout-tip { border-left-color: #10b981; background: #ecfdf5; }
+.data-table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+.data-table th, .data-table td { border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; }
+.data-table th { background: #f8fafc; font-weight: 600; }
+.problem-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+.problem-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.difficulty.easy { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.medium { background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.hard { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.solution-flow { display: flex; flex-direction: column; gap: 14px; }
+.step-row { display: flex; gap: 16px; align-items: flex-start; }
+.step-badge { font-size: 0.72rem; font-weight: 700; padding: 4px 8px; background: #e2e8f0; color: #334155; border-radius: 4px; white-space: nowrap; }
+.step-badge.answer { background: #dcfce7; color: #166534; }
+.final-box { background: #ecfdf5; border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 6px; font-weight: 600; color: #065f46; }
+.unit-pagination { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+.btn { padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-outline { border: 1px solid var(--border-color); color: var(--text-main); }
+@media (max-width: 900px) { .sidebar { max-height: 34vh; padding: 16px; } .main-content { width: 100%; padding: 24px 16px 56px; } }
+</style>
+</head>
+<body>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · IVP Master</a>
+<span class="badge">Semester Exam Prep</span>
+<button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle" type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark mode</span></button>
+</div>
+<nav class="sidebar-nav">
+<h3>All Units &amp; Guides</h3>
+<ul>
+<li><a href="IVP_Unit_1_Image_Fundamentals.html"><span class="unit-num">01</span> Image Fundamentals</a></li>
+<li><a href="IVP_Unit_2_Image_Enhancement.html"><span class="unit-num">02</span> Image Enhancement</a></li>
+<li><a href="IVP_Unit_3_Image_Transforms.html"><span class="unit-num">03</span> Image Transforms</a></li>
+<li><a class="active" href="IVP_Unit_4_Morphological_Image_Processing.html"><span class="unit-num">04</span> Morphological Processing</a></li>
+<li><a href="IVP_Unit_5_Edge_Detection.html"><span class="unit-num">05</span> Edge Detection</a></li>
+<li><a href="IVP_Unit_6_Image_Segmentation.html"><span class="unit-num">06</span> Image Segmentation</a></li>
+<li><a href="IVP_Unit_7_Colour_Image_Processing.html"><span class="unit-num">07</span> Colour Image Processing</a></li>
+<li><a href="IVP_Unit_8_Digital_Video_and_Compression.html"><span class="unit-num">08</span> Video &amp; Compression</a></li>
+<li><a href="IVP_Numericals_and_Problem_Solving.html"><span class="unit-num">09</span> Master Problem-Solving Guide</a></li>
+<li><a href="IVP_Solved_Examples.html"><span class="unit-num">10</span> Comprehensive Solved Bank</a></li>
+<li><a href="IVP_Topic_Checklist.html"><span class="unit-num">11</span> Final Topic Checklist</a></li>
+</ul>
+</nav>
+</aside>
+
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 4: Morphological Processing</span>
+</div>
+<div class="meta-tag">Unit 4 · Mathematical Morphology Masterclass</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>Unit 4: Morphological Image Processing &amp; Structuring Elements</h1>
+<p class="lead">An exhaustive masterclass on set theory operations in images, Structuring Elements (SE), binary Dilation and Erosion, morphological Opening and Closing, Hit-or-Miss transformation (HMT), morphological Boundary Extraction (\(\beta(A) = A - (A \ominus B)\)), Region Filling, Thinning, Thickening, and Gray-Scale Morphology (dilation and erosion surfaces).</p>
+</header>
+<section class="theory-sources" aria-label="Original theory files"><h2>Original theory files</h2><p>Open the unchanged lecture source or expand its preview here.</p><ul><li><a href="theory/UNIT%204%20Morphology.ppt" target="_blank" rel="noopener">Open original: UNIT 4 Morphology.ppt</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of UNIT 4 Morphology.ppt" src="theory/previews/UNIT%204%20Morphology.pdf"></iframe></div><p><a href="theory/previews/UNIT%204%20Morphology.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li></ul></section>
+
+
+<!-- SECTION 1: IN-DEPTH THEORY -->
+<section class="module-section" id="theory-section">
+<div class="section-title">
+<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+<span class="cross-ref-badge">Faithful to UNIT 4 Morphology.ppt &amp; Syllabus</span>
+</div>
+
+<div class="topic-block" id="sec-se">
+<h3>1.1 Structuring Elements (SE) &amp; Set Operations</h3>
+<p>Mathematical morphology treats binary images as sets in 2D integer space \(\mathbb{Z}^2\). A <strong>Structuring Element (SE)</strong> \(B\) is a small shape matrix (e.g., \(3 \times 3\) cross or square) with a specified coordinate origin, probe-tested across image set \(A\).</p>
+</div>
+
+<div class="topic-block" id="sec-dilation-erosion">
+<h3>1.2 Fundamental Operations: Dilation &amp; Erosion</h3>
+<h4>1. Dilation (\(A \oplus B\)):</h4>
+<p>Grows or thickens foreground objects. Mathematically defined as the set of all displacements \(z\) such that the reflected structuring element \(\hat{B}\) overlaps \(A\) by at least one pixel:</p>
+$$\mathbf{A \oplus B = \{z \mid (\hat{B})_z \cap A 
+eq \emptyset\}}$$
+<p><em>Effect:</em> Fills small holes, bridges narrow gaps between adjacent components.</p>
+
+<h4>2. Erosion (\(A \ominus B\)):</h4>
+<p>Shrinks or thins foreground objects. Defined as the set of all displacements \(z\) such that structuring element \(B\) is <strong>completely contained</strong> inside \(A\):</p>
+$$\mathbf{A \ominus B = \{z \mid (B)_z \subseteq A\}}$$
+<p><em>Effect:</em> Strips away boundary pixel layers, eliminates isolated background noise specks.</p>
+</div>
+
+<div class="topic-block" id="sec-open-close">
+<h3>1.3 Morphological Opening &amp; Closing</h3>
+<ul>
+<li><strong>Opening (\(A \circ B = (A \ominus B) \oplus B\)):</strong> Erosion followed by Dilation.
+  <br/><em>Geometric property:</em> Smooths object contours, breaks narrow isthmuses, and eliminates thin outer protrusions without noticeably altering overall object area. (Idempotent: \((A \circ B) \circ B = A \circ B\)).</li>
+<li><strong>Closing (\(A \bullet B = (A \oplus B) \ominus B\)):</strong> Dilation followed by Erosion.
+  <br/><em>Geometric property:</em> Smooths contours, fuses narrow breaks, fills long thin gulfs, and eliminates small internal dark holes. (Idempotent: \((A \bullet B) \bullet B = A \bullet B\)).</li>
+</ul>
+</div>
+
+<div class="topic-block" id="sec-boundary-extraction">
+<h3>1.4 Morphological Boundary Extraction</h3>
+<p>To extract the exact boundary contour of binary object \(A\), erode \(A\) by structuring element \(B\) (stripping off the outer boundary layer), and subtract the eroded image from the original set \(A\):</p>
+$$\mathbf{\beta(A) = A - (A \ominus B)}$$
+</div>
+</section>
+
+<!-- SECTION 2: NUMERICALS -->
+<section class="module-section" id="numerical-section">
+<div class="section-title">
+<h2>2. In-Depth Morphological Numericals</h2>
+<span class="cross-ref-badge">Step-by-Step Grid Traces</span>
+</div>
+
+<div class="problem-card" id="num-boundary">
+<div class="problem-header">
+<span class="difficulty medium">Boundary Extraction Trace</span>
+<h3>Problem 4.1: Morphological Boundary Extraction on a Binary Grid</h3>
+</div>
+<p><strong>Problem Statement:</strong> Consider a \(5 \times 5\) binary image \(A\) containing a solid \(3 \times 3\) square of 1s in rows 1 to 3 and columns 1 to 3. Using a \(3 \times 3\) cross structuring element \(B\) with origin at center, compute the boundary \(\beta(A) = A - (A \ominus B)\).</p>
+<div class="solution-flow">
+<div class="step-row"><span class="step-badge">EROSION STEP</span>
+<div>
+<p>Structuring element \(B\) fits completely inside \(A\) ONLY at coordinate \((2, 2)\) (the absolute center pixel!).
+<br/>Thus, \(A \ominus B\) contains a single pixel: \(\text{only pixel } (2, 2) = 1\).</p>
+</div>
+</div>
+<div class="step-row"><span class="step-badge">SET SUBTRACTION</span>
+<div>
+<p>\(\beta(A) = A - (A \ominus B)\): Subtracts the center pixel \((2, 2)\) from the \(3 \times 3\) block of 1s.
+<br/>Result: An 8-pixel hollow boundary square!</p>
+<pre>
+Output Boundary beta(A):
+0  0  0  0  0
+0  1  1  1  0
+0  1  0  1  0  <-- Center pixel cleared!
+0  1  1  1  0
+0  0  0  0  0
+</pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 3: WHAT TO KNOW FOR THE EXAM -->
+<section class="module-section" id="exam-checklist">
+<div class="section-title">
+<h2>What to Know for the Exam &amp; Coverage Checklist</h2>
+<span class="cross-ref-badge">Final Revision Anchor</span>
+</div>
+
+<div class="callout callout-tip">
+<h4>Core Exam Takeaways:</h4>
+<ul>
+<li><strong>Dilation:</strong> \(A \oplus B\) (grows, fills holes). Erosion: \(A \ominus B\) (shrinks, removes small noise).</li>
+<li><strong>Opening:</strong> \((A \ominus B) \oplus B\) (breaks isthmuses, smooths outer peaks).</li>
+<li><strong>Closing:</strong> \((A \oplus B) \ominus B\) (fuses breaks, fills internal holes).</li>
+<li><strong>Boundary Formula:</strong> \(\beta(A) = A - (A \ominus B)\).</li>
+<li><strong>Hit-or-Miss:</strong> Detects specific shape configurations using foreground \(B_1\) and background \(B_2\).</li>
+</ul>
+</div>
+</section>
+
+<!-- Unit Pagination -->
+<div class="unit-pagination">
+<a class="btn btn-outline" href="IVP_Unit_3_Image_Transforms.html">← Previous: Unit 3 - Image Transforms</a>
+<a class="btn btn-primary" href="IVP_Unit_5_Edge_Detection.html">Next: Unit 5 - Edge Detection →</a>
+</div>
+
+</article>
+</main>
+</div>
+
+<script>
+const toggleBtn = document.getElementById('theme-toggle');
+if (toggleBtn) {
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    toggleBtn.setAttribute('aria-pressed', 'true');
+  }
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.setAttribute('aria-pressed', !isDark);
+  });
+}
+</script>
+</body>
+</html>

@@ -1,21 +1,615 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script>
-try{const t=localStorage.getItem('nmims-ai-color-theme');const d=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(!t&&d))document.documentElement.dataset.theme='dark'}catch(_){}
-</script><title>Paging and Page Replacement Algorithms</title><style>:root{color-scheme:light;--ink:#17243b;--muted:#53647a;--blue:#155eef;--pale:#eef4ff;--line:#d9e2ef;--gold:#fff4d6}*{box-sizing:border-box}body{margin:0;background:#f6f8fb;color:var(--ink);font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:980px;margin:auto;padding:32px 22px 70px}header{background:linear-gradient(125deg,#102b52,#155eef);color:white;padding:32px;border-radius:18px;margin-bottom:24px}h1{line-height:1.15;margin:0 0 10px}header p{margin:0;color:#e7efff}section,article{background:white;border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0}h2{margin-top:0;color:#173e74}h3{color:#244f86}li{margin:.28em 0}.callout{background:var(--pale);border-left:4px solid var(--blue);padding:12px 16px;border-radius:8px}.warn{background:var(--gold);padding:12px 16px;border-radius:8px}table{border-collapse:collapse;width:100%;margin:12px 0}td,th{border:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}th{background:#eef4ff}code,.formula{background:#f1f4f8;padding:2px 5px;border-radius:4px}.diagram{font-family:ui-monospace,monospace;background:#f3f6fa;padding:14px;border-radius:8px;white-space:pre-wrap}details{border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:8px 0}summary{font-weight:650;cursor:pointer}footer{font-size:.9em;color:var(--muted);padding:16px;text-align:center}@media print{body{background:white}main{max-width:none;padding:0}header,section,article{break-inside:avoid}}
-/* Shared NMIMS light/dark theme */
-html{color-scheme:light;--os-bg:#f6f8fb;--os-ink:#17243b;--os-muted:#53647a;--os-card:#fff;--os-line:#d9e2ef;--os-pale:#eef4ff;--os-gold:#fff4d6;--os-code:#f1f4f8;--os-diagram:#f3f6fa}
-html[data-theme="dark"]{color-scheme:dark;--os-bg:#171b20;--os-ink:#edf2f8;--os-muted:#b4c0ce;--os-card:#222a33;--os-line:#3c4856;--os-pale:#263645;--os-gold:#433923;--os-code:#303a46;--os-diagram:#202a34}
-html[data-theme="dark"] body{background:var(--os-bg);color:var(--os-ink)}
-html[data-theme="dark"] section,html[data-theme="dark"] article{background:var(--os-card);border-color:var(--os-line)}
-html[data-theme="dark"] h2,html[data-theme="dark"] h3{color:#9bc5ff}
-html[data-theme="dark"] .callout,html[data-theme="dark"] th{background:var(--os-pale)}
-html[data-theme="dark"] .warn{background:var(--os-gold)}
-html[data-theme="dark"] td,html[data-theme="dark"] th,html[data-theme="dark"] details{border-color:var(--os-line)}
-html[data-theme="dark"] code,html[data-theme="dark"] .formula{background:var(--os-code)}
-html[data-theme="dark"] .diagram{background:var(--os-diagram)}
-html[data-theme="dark"] footer{color:var(--os-muted)}
-.theme-bar{display:flex;justify-content:flex-end;margin:0 0 10px}
-.theme-switch{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--os-line);border-radius:9px;background:var(--os-card);color:var(--os-ink);padding:8px 12px;font:600 .9rem/1.2 system-ui,-apple-system,Segoe UI,sans-serif;cursor:pointer}
-.theme-switch:hover{filter:brightness(.96)}
-.theme-switch:focus-visible{outline:3px solid #6ca8ff;outline-offset:2px}
-</style><main><div class="theme-bar"><button class="theme-switch" id="shared-theme-toggle" type="button" aria-pressed="false"><span class="theme-icon" aria-hidden="true">☾</span><span class="theme-label">Dark mode</span></button></div><header><h1>Paging and Page Replacement Algorithms</h1><p>Companion deck | pages, frames, FIFO, optimal, and LRU</p></header><div class="warn"><b>Scope note:</b> No Operating Systems course policy was present in OS. The only syllabus PDF found is for Artificial Intelligence and does not apply to these slides. Therefore the checklist follows the OS slide decks; exam format, weighting, exclusions, and instructor-specific marking rules could not be verified. Assumptions and ambiguous source points are flagged below.</div><section><h2>1. Pages, frames, and a page fault</h2><p>Paging maps fixed-sized virtual <b>pages</b> to same-sized physical <b>frames</b>. The process issues a page-reference sequence. If the referenced page is not resident, it is a page fault. If frames are full, replacement chooses a victim; count faults consistently, including initial loads.</p><div class="diagram">Reference: 2, 1, 2, 3<br>3 frames: [2, -, -] → [2,1,-] → hit → [2,1,3]<br>Misses/faults occur only when requested page is absent.</div></section><section><h2>2. Replacement policies</h2><table><tr><th>Policy</th><th>Victim rule</th><th>Key issue</th></tr><tr><td>FIFO</td><td>Oldest loaded page</td><td>Simple; may exhibit Belady’s anomaly.</td></tr><tr><td>Optimal (OPT)</td><td>Page whose next use is farthest in future (or never used again)</td><td>Not implementable online; benchmark lower bound.</td></tr><tr><td>LRU</td><td>Least recently referenced page</td><td>Uses past behavior as a proxy; ties are impossible under exact reference order.</td></tr></table><p>Simulation: write the frame contents after every reference, mark hit/fault, and track FIFO arrival order or LRU last-use order separately. Never confuse FIFO age with least recent use.</p></section><section><h2>3. Belady’s anomaly and checking</h2><p>FIFO can incur more faults with more frames; this is Belady’s anomaly. LRU and OPT are stack algorithms and do not have that anomaly. Sanity checks: faults cannot exceed reference count; initial faults occur until frames fill (unless duplicate page hits); count hit/fault separately from replacement; every victim must actually be resident.</p><p>The deck’s sample sequence is <code>1,2,3,2,1,4,3,5,6,4,3,5,3,5,6,7,2,1,5,7</code> with three frames, to compare OPT, FIFO, LRU.</p></section><section><h2>Recap and self-test</h2><h3>Self-test (answers follow)</h3><details><summary>Which policy needs future knowledge?</summary><p>Optimal.</p></details><details><summary>Which policy removes the page loaded earliest?</summary><p>FIFO.</p></details><details><summary>What history does LRU use?</summary><p>The most recent past reference time for each resident page.</p></details><details><summary>Can FIFO faults rise when frame count rises?</summary><p>Yes; Belady’s anomaly.</p></details><details><summary>A referenced page is resident. Fault or hit?</summary><p>Hit; do not increment the fault count.</p></details></section><section><h2>4. Demand paging and replacement beyond the basic trio</h2><p>A valid-invalid page-table bit can mean resident versus not resident (the slides also use valid to mean legal address-space page; distinguish these meanings by the stated scheme). A page fault traps to the OS, which validates the reference, finds/allocates a frame, performs I/O, updates tables and restarts the instruction. A dirty victim must be written back; replacement may require two transfers and increase effective access time.</p><p><b>Second chance/clock:</b> FIFO plus reference bit. If the candidate bit is 0, replace it; if 1, clear it and skip to the next candidate. Global replacement can take frames from any process; local replacement restricts a process to its assigned frames. Global tends to improve overall throughput but can make a process’s behavior vary; local gives more predictable per-process allocation but may leave memory underused.</p><p>Frame allocation decides how many frames each process gets; replacement chooses which resident page leaves. These are related but distinct decisions. Reclaiming pages can maintain a free-frame reserve.</p></section>
-<section><h2>5. Source traces worth knowing</h2><p>The Unit 5 deck gives the reference string <code>7,0,1,2,0,3,0,4,2,3,0,3,0,3,2,1,2,0,1,7,0,1</code> and reports FIFO with three frames as 15 faults, OPT as 9, and LRU as 12. It also gives the Belady string <code>1,2,3,4,1,2,5,1,2,3,4,5</code>. Be prepared to trace every reference, not memorize the totals alone.</p></section><section><h2>What to know for the exam</h2><p>Be ready to define the central terms, compare mechanisms using their assumptions and trade-offs, trace a process or algorithm step by step, and justify the result. State units and conventions whenever a question supplies them.</p></section><section><h2>Final coverage checklist</h2><table><tr><th>Source section</th><th>Coverage in this file</th></tr><tr><td>Paging companion slides 1–4</td><td>Need for paging, page/frame distinction, why replacement is needed</td></tr><tr><td>Slides 5–8</td><td>FIFO and algorithm examples; OPT/FIFO/LRU sequence</td></tr></table></section><footer>Prepared from the OS course files in NMIMS-STUDY/OS/theory. Past papers were treated as exam-pattern context only.</footer></main></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unit 6: Paging, TLB &amp; Page Replacement - NMIMS Master Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="theme.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="os-custom-polish">
+:root { --ai-content-width: 980px; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+body { min-width: 320px; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+.main-content { width: calc(100% - 290px); max-width: none; }
+.content-wrapper { max-width: var(--ai-content-width); }
+.top-bar { position: sticky; top: 0; z-index: 90; min-height: 52px; padding: 12px 0; margin-top: -32px; background: color-mix(in srgb, var(--bg-main) 94%, transparent); backdrop-filter: blur(10px); }
+.unit-hero { padding-top: 6px; margin-bottom: clamp(26px, 4vw, 42px); }
+.unit-hero h1 { font-size: clamp(1.8rem, 3.3vw, 2.45rem); letter-spacing: -0.035em; text-wrap: balance; }
+.module-section { scroll-margin-top: 76px; padding: clamp(20px, 3vw, 34px); margin-bottom: clamp(24px, 4vw, 40px); }
+.topic-block { scroll-margin-top: 76px; margin-bottom: 2.2rem; }
+.topic-block p, .topic-block li, .q-answer p, .callout p { max-width: 82ch; line-height: 1.72; }
+.callout { padding: 18px 20px; border-radius: 10px; margin: 16px 0; border-left: 4px solid var(--primary); background: #f1f5f9; }
+.callout-def { border-left-color: #2563eb; background: #eff6ff; }
+.callout-warn { border-left-color: #f59e0b; background: #fffbeb; }
+.callout-tip { border-left-color: #10b981; background: #ecfdf5; }
+.data-table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+.data-table th, .data-table td { border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; }
+.data-table th { background: #f8fafc; font-weight: 600; }
+.diagram-wrapper { margin: 20px 0; text-align: center; }
+.diagram-caption { font-size: 0.88rem; color: var(--text-muted); margin-top: 8px; font-style: italic; }
+.problem-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+.problem-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.difficulty.easy { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.medium { background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.hard { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.solution-flow { display: flex; flex-direction: column; gap: 14px; }
+.step-row { display: flex; gap: 16px; align-items: flex-start; }
+.step-badge { font-size: 0.72rem; font-weight: 700; padding: 4px 8px; background: #e2e8f0; color: #334155; border-radius: 4px; white-space: nowrap; }
+.step-badge.answer { background: #dcfce7; color: #166534; }
+.final-box { background: #ecfdf5; border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 6px; font-weight: 600; color: #065f46; }
+.question-item { border-bottom: 1px solid var(--border-color); padding: 20px 0; }
+.question-item:last-child { border-bottom: none; }
+.q-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+.marks-badge { font-size: 0.75rem; font-weight: 700; background: #f1f5f9; color: var(--secondary); border: 1px solid #cbd5e1; padding: 2px 7px; border-radius: 4px; }
+.q-answer { background: #f8fafc; padding: 14px 18px; border-radius: 6px; }
+.unit-pagination { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+.btn { padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-outline { border: 1px solid var(--border-color); color: var(--text-main); }
+@media (max-width: 900px) { .sidebar { max-height: 34vh; padding: 16px; } .main-content { width: 100%; padding: 24px 16px 56px; } }
+</style>
+</head>
+<body>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · OS Master</a>
+<span class="badge">Semester Exam Prep</span>
+<button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle" type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark mode</span></button>
+</div>
+<nav class="sidebar-nav">
+<h3>All Units &amp; Guides</h3>
+<ul>
+<li><a href="01-os-foundations.html"><span class="unit-num">01</span> OS Overview &amp; Architecture</a></li>
+<li><a href="02-processes-and-cpu-scheduling.html"><span class="unit-num">02</span> Processes &amp; CPU Scheduling</a></li>
+<li><a href="03-concurrency-and-synchronization.html"><span class="unit-num">03</span> Concurrency &amp; Synchronization</a></li>
+<li><a href="04-deadlocks.html"><span class="unit-num">04</span> Deadlocks &amp; Banker's Algorithm</a></li>
+<li><a href="05-memory-management.html"><span class="unit-num">05</span> Memory Management &amp; Fitting</a></li>
+<li><a class="active" href="06-paging-and-replacement.html"><span class="unit-num">06</span> Paging &amp; Virtual Memory</a></li>
+<li><a href="07-io-and-disk-scheduling.html"><span class="unit-num">07</span> I/O &amp; Disk Scheduling</a></li>
+<li><a href="08-file-systems.html"><span class="unit-num">08</span> File System Interface &amp; Storage</a></li>
+<li><a href="09-numericals-and-problem-solving.html"><span class="unit-num">09</span> Master Problem-Solving Guide</a></li>
+<li><a href="10-solved-examples.html"><span class="unit-num">10</span> Comprehensive Solved Bank</a></li>
+<li><a href="11-topic-checklist.html"><span class="unit-num">11</span> Final Topic Checklist</a></li>
+</ul>
+<h3>Unit 6 Sections</h3>
+<ul>
+<li><a href="#theory-section">1. In-Depth Lecture &amp; Theory</a></li>
+<li><a href="#sec-paging-concept">1.1 Paging: Pages, Frames &amp; Mapping</a></li>
+<li><a href="#sec-tlb">1.2 Translation Lookaside Buffer (TLB) &amp; EAT</a></li>
+<li><a href="#sec-page-fault">1.3 Demand Paging &amp; Page Fault Lifecycle</a></li>
+<li><a href="#sec-replacement-algos">1.4 Page Replacement Algorithms</a></li>
+<li><a href="#sec-belady">1.5 Belady's Anomaly Explained</a></li>
+<li><a href="#sec-thrashing">1.6 Thrashing &amp; Working-Set Model</a></li>
+<li><a href="#numerical-section">2. In-Depth Paging &amp; Fault Numericals</a></li>
+<li><a href="#num-eat">2.1 Effective Access Time (EAT) Calculation</a></li>
+<li><a href="#num-replacement-trace">2.2 FIFO vs. LRU vs. Optimal String Trace</a></li>
+<li><a href="#comparison-section">3. Comparative Studies</a></li>
+<li><a href="#case-section">4. Production Virtual Memory (x86_64)</a></li>
+<li><a href="#questions-section">5. NMIMS Exam Questions &amp; Marking Guide</a></li>
+</ul>
+</nav>
+</aside>
+
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 6: Paging &amp; Replacement</span>
+</div>
+<div class="meta-tag">Unit 6 · 100% Lecture &amp; PYQ Faithful Masterclass</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>Unit 6: Paging, TLB, Virtual Memory &amp; Page Replacement</h1>
+<p class="lead">An exhaustive masterclass on non-contiguous memory management, hardware page-to-frame address translation, Page Tables, Translation Lookaside Buffer (TLB) associative caching, Effective Access Time (EAT) formulas, demand paging and the 6-step page fault handling sequence, page replacement algorithms (FIFO, Optimal, LRU, Second-Chance), Belady's Anomaly, and thrashing prevention via the Working-Set model.</p>
+</header>
+<section class="theory-sources" aria-label="Original theory files"><h2>Original theory files</h2><p>Open the unchanged lecture source or expand its preview here.</p><ul><li><a href="theory/Paging%20and%20page%20replacement%20algorithms.pptx" target="_blank" rel="noopener">Open original: Paging and page replacement algorithms.pptx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of Paging and page replacement algorithms.pptx" src="theory/previews/Paging%20and%20page%20replacement%20algorithms.pdf"></iframe></div><p><a href="theory/previews/Paging%20and%20page%20replacement%20algorithms.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li><li><a href="theory/Unit%205.pptx" target="_blank" rel="noopener">Open original: Unit 5.pptx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of Unit 5.pptx" src="theory/previews/Unit%205.pdf"></iframe></div><p><a href="theory/previews/Unit%205.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li></ul></section>
+
+
+<!-- SECTION 1: IN-DEPTH THEORY -->
+<section class="module-section" id="theory-section">
+<div class="section-title">
+<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+<span class="cross-ref-badge">Faithful to Paging PPTX, Unit 5 slides &amp; NMIMS Past Papers</span>
+</div>
+
+<div class="topic-block" id="sec-paging-concept">
+<h3>1.1 The Paging Concept: Pages, Frames &amp; Hardware Mapping</h3>
+<p>Contiguous memory allocation suffers from fatal external fragmentation and requires expensive compaction. <strong>Paging</strong> completely eliminates external fragmentation by allowing a process's physical memory to be completely non-contiguous.</p>
+
+<div class="callout callout-def">
+<h4>Fundamental Definitions: Pages vs. Frames</h4>
+<ul>
+<li><strong>Frames:</strong> Physical memory (RAM) is broken into fixed-sized blocks called <strong>Frames</strong> (typically powers of 2, between 512 bytes and 16 KB; standard is 4 KB).</li>
+<li><strong>Pages:</strong> Logical memory (the process address space) is broken into blocks of the <strong>exact same fixed size</strong> called <strong>Pages</strong>.</li>
+</ul>
+</div>
+
+<h4>Hardware Address Translation Architecture:</h4>
+<p>Every logical address generated by the CPU is divided by hardware bitmasking into two components:
+$$\mathbf{\text{Logical Address } = \langle \text{Page Number } p, \text{ Offset } d \rangle}$$
+If the total logical address space is \(2^m\) bytes and page size is \(2^n\) bytes:</p>
+<ul>
+<li>High-order \(m - n\) bits represent the <strong>Page Number (\(p\))</strong>.</li>
+<li>Low-order \(n\) bits represent the <strong>Page Offset (\(d\))</strong>.</li>
+</ul>
+
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:680px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewBox="0 0 680 230" xmlns="http://www.w3.org/2000/svg">
+  <!-- CPU -->
+  <rect x="30" y="80" width="70" height="45" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" rx="6"/>
+  <text x="65" y="107" fill="#1d4ed8" font-size="12" font-weight="700" text-anchor="middle">CPU</text>
+
+  <!-- Logical Address split -->
+  <rect x="130" y="80" width="70" height="45" fill="#eff6ff" stroke="#3b82f6" rx="4"/>
+  <text x="165" y="107" fill="#1d4ed8" font-size="12" font-weight="700" text-anchor="middle">p (Page)</text>
+  
+  <rect x="200" y="80" width="70" height="45" fill="#eff6ff" stroke="#3b82f6" rx="4"/>
+  <text x="235" y="107" fill="#1d4ed8" font-size="12" font-weight="700" text-anchor="middle">d (Offset)</text>
+
+  <!-- Page Table -->
+  <rect x="310" y="30" width="100" height="150" fill="#f8fafc" stroke="#334155" stroke-width="1.5" rx="6"/>
+  <text x="360" y="55" fill="#334155" font-size="11" font-weight="700" text-anchor="middle">PAGE TABLE</text>
+  <line x1="310" y1="65" x2="410" y2="65" stroke="#cbd5e1"/>
+  <text x="335" y="85" fill="#64748b" font-size="10">0: Frame 5</text>
+  <text x="335" y="105" fill="#64748b" font-size="10">1: Frame 2</text>
+  <text x="335" y="125" fill="#64748b" font-size="10">2: Frame 8</text>
+
+  <!-- Mapping arrows -->
+  <line x1="100" y1="102" x2="130" y2="102" stroke="#3b82f6" stroke-width="2"/>
+  <line x1="165" y1="125" x2="165" y2="145" stroke="#3b82f6" stroke-width="2"/>
+  <line x1="165" y1="145" x2="310" y2="145" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Physical Address concat -->
+  <rect x="460" y="80" width="70" height="45" fill="#f0fdf4" stroke="#22c55e" rx="4"/>
+  <text x="495" y="107" fill="#15803d" font-size="12" font-weight="700" text-anchor="middle">f (Frame)</text>
+  
+  <rect x="530" y="80" width="70" height="45" fill="#eff6ff" stroke="#3b82f6" rx="4"/>
+  <text x="565" y="107" fill="#1d4ed8" font-size="12" font-weight="700" text-anchor="middle">d (Offset)</text>
+
+  <line x1="410" y1="102" x2="460" y2="102" stroke="#22c55e" stroke-width="2.5"/>
+  <line x1="235" y1="125" x2="235" y2="200" stroke="#3b82f6" stroke-width="1.5"/>
+  <line x1="235" y1="200" x2="565" y2="200" stroke="#3b82f6" stroke-width="1.5"/>
+  <line x1="565" y1="200" x2="565" y2="125" stroke="#3b82f6" stroke-width="1.5"/>
+
+  <!-- RAM -->
+  <rect x="620" y="25" width="40" height="175" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5" rx="4"/>
+  <text x="640" y="115" fill="#15803d" font-size="10" font-weight="700" transform="rotate(90 640 115)" text-anchor="middle">PHYSICAL RAM</text>
+  <line x1="600" y1="102" x2="620" y2="102" stroke="#22c55e" stroke-width="2"/>
+</svg>
+<p class="diagram-caption">Figure 6.1: Paging Hardware Address Translation Architecture showing Page Table lookup and Offset concatenation.</p>
+</div>
+
+<p><strong>Step-by-Step Translation Algorithm:</strong></p>
+<ol>
+<li>Extract page number \(p\) and offset \(d\) from the logical address.</li>
+<li>Use \(p\) as an index into the process's <strong>Page Table</strong>.</li>
+<li>Retrieve corresponding physical frame number \(f\) from the page table entry.</li>
+<li>Concatenate frame number \(f\) with original offset \(d\) to produce the physical memory address: \(\mathbf{\text{Physical Address} = (f \times \text{Page Size}) + d}\).</li>
+</ol>
+</div>
+
+<div class="topic-block" id="sec-tlb">
+<h3>1.2 The Translation Lookaside Buffer (TLB) &amp; Effective Access Time (EAT)</h3>
+<p>Because page tables reside in main RAM, standard paging requires <strong>two memory accesses</strong> for every instruction: (1) access RAM to read the page table entry, and (2) access RAM to read the actual instruction/data. This slows memory execution speed by 50%!</p>
+<div class="callout callout-def">
+<h4>Hardware Solution: Translation Lookaside Buffer (TLB)</h4>
+<p>The <strong>TLB</strong> is a high-speed associative hardware cache integrated directly onto the CPU silicon. A TLB lookup is performed by associative hardware and is much faster than a main-memory access; its exact latency depends on the processor.</p>
+</div>
+
+<h4>Effective Access Time (EAT) Formula:</h4>
+<p>Let:</p>
+<ul>
+<li>\(\alpha\) = <strong>TLB Hit Ratio</strong> (percentage of times page number is found in the TLB).</li>
+<li>\(\epsilon\) = <strong>TLB Lookup Time</strong> (typically \(\approx 1\text{ to } 10\text{ ns}\)).</li>
+<li>\(t_m\) = <strong>Main Memory Access Time</strong> (typically \(\approx 100\text{ ns}\)).</li>
+</ul>
+<p>When there is a TLB Hit, physical access time is \(\epsilon + t_m\). When there is a TLB Miss, access time is \(\epsilon + 2 t_m\) (TLB search + page table RAM access + payload RAM access). Thus:</p>
+$$\mathbf{\text{EAT} = \alpha (\epsilon + t_m) + (1 - \alpha)(\epsilon + 2 t_m) = \epsilon + (2 - \alpha) t_m}$$
+</div>
+
+<div class="topic-block" id="sec-page-fault">
+<h3>1.3 Demand Paging &amp; The 6-Step Page Fault Handling Sequence</h3>
+<p>In <strong>Demand Paging</strong>, pages are brought into physical RAM only when demanded during execution (Lazy Swapper). Each page table entry contains a <strong>Valid / Invalid Bit</strong>:</p>
+<ul>
+<li><code>Bit = 1 (Valid)</code>: Page is currently loaded in physical RAM.</li>
+<li><code>Bit = 0 (Invalid)</code>: Page is not in RAM (resides on disk backing store), or address is illegal.</li>
+</ul>
+
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:680px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg">
+  <!-- 6 Step numbered circles -->
+  <circle cx="80" cy="50" r="16" fill="#ef4444"/>
+  <text x="80" y="55" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">1</text>
+  <text x="110" y="55" fill="#b91c1c" font-size="11" font-weight="700">Trap: Invalid Bit (Page Fault)</text>
+
+  <circle cx="80" cy="90" r="16" fill="#f59e0b"/>
+  <text x="80" y="95" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">2</text>
+  <text x="110" y="95" fill="#b45309" font-size="11" font-weight="700">OS verifies reference in PCB</text>
+
+  <circle cx="80" cy="130" r="16" fill="#3b82f6"/>
+  <text x="80" y="135" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">3</text>
+  <text x="110" y="135" fill="#1d4ed8" font-size="11" font-weight="700">Find free frame in RAM (or evict victim)</text>
+
+  <circle cx="80" cy="170" r="16" fill="#3b82f6"/>
+  <text x="80" y="175" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">4</text>
+  <text x="110" y="175" fill="#1d4ed8" font-size="11" font-weight="700">Schedule disk I/O to read page into frame</text>
+
+  <circle cx="80" cy="210" r="16" fill="#10b981"/>
+  <text x="80" y="215" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">5</text>
+  <text x="110" y="215" fill="#047857" font-size="11" font-weight="700">Update Page Table (Set Valid Bit = 1, Frame = f)</text>
+
+  <circle cx="480" cy="130" r="22" fill="#10b981"/>
+  <text x="480" y="136" fill="#fff" font-size="14" font-weight="800" text-anchor="middle">6</text>
+  <text x="515" y="135" fill="#047857" font-size="12" font-weight="700">Restart Instruction!</text>
+</svg>
+<p class="diagram-caption">Figure 6.2: The Complete 6-Step Operating System Page Fault Handling Sequence.</p>
+</div>
+</div>
+
+<div class="topic-block" id="sec-replacement-algos">
+<h3>1.4 Page Replacement Algorithms</h3>
+<p>When a page fault occurs and there are no free frames left in physical RAM, the OS must select a <strong>victim frame</strong> to page out to disk. This is governed by Page Replacement Algorithms:</p>
+
+<table class="data-table">
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Eviction Decision Rule</th>
+<th>Implementation Complexity</th>
+<th>Optimality / Performance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FIFO (First-In, First-Out)</strong></td>
+<td>Evicts the page that has resided in RAM for the longest elapsed time (oldest arrival).</td>
+<td><strong>Trivial:</strong> Simple FIFO queue of frames.</td>
+<td>Poor. Often replaces heavily used initialization variables; suffers from <strong>Belady's Anomaly</strong>!</td>
+</tr>
+<tr>
+<td><strong>Optimal (OPT / MIN)</strong></td>
+<td>Evicts the page that will <strong>not be used for the longest period of time in the future</strong>.</td>
+<td><strong>Impossible in practice:</strong> Requires psychic knowledge of future references. Used as optimal benchmark.</td>
+<td><strong>Provably Optimal:</strong> Guaranteed lowest possible page fault count for any fixed frame allocation.</td>
+</tr>
+<tr>
+<td><strong>LRU (Least Recently Used)</strong></td>
+<td>Evicts the page that has <strong>not been accessed for the longest period of time in the past</strong>.</td>
+<td>High: Requires hardware timestamps or an active double-linked stack updated on every memory access.</td>
+<td><strong>Excellent:</strong> Approximates Optimal algorithm by utilizing the principle of temporal locality.</td>
+</tr>
+<tr>
+<td><strong>Second-Chance (Clock)</strong></td>
+<td>FIFO with a <strong>Reference Bit</strong>. If bit = 0, evict. If bit = 1, give second chance: clear bit to 0 and advance pointer.</td>
+<td><strong>Low:</strong> Circular buffer (clock pointer) with a single hardware reference bit per frame.</td>
+<td>Good approximation of LRU with negligible hardware overhead.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="topic-block" id="sec-belady">
+<h3>1.5 Belady's Anomaly (Frequent NMIMS Exam Question)</h3>
+<div class="callout callout-warn">
+<h4>Definition: Belady's Anomaly</h4>
+<p>Intuitively, giving a process more physical page frames should decrease (or at least keep constant) the number of page faults. <strong>Belady's Anomaly</strong> is the counter-intuitive phenomenon where <em>increasing the number of page frames allocated to a process results in MORE page faults</em>!</p>
+<p><strong>Which algorithms suffer from it?</strong> First-In, First-Out (FIFO) suffers from Belady's Anomaly.
+<br/><strong>Which algorithms are immune?</strong> A class of algorithms called <strong>Stack Algorithms</strong> (such as LRU and Optimal) can mathematically NEVER suffer from Belady's Anomaly, because the set of pages in an \(n\)-frame memory is always a strict subset of the pages in an \((n+1)\)-frame memory.</p>
+</div>
+</div>
+
+<div class="topic-block" id="sec-thrashing">
+<h3>1.6 Thrashing &amp; The Working-Set Model</h3>
+<p>If a process does not have enough frames to hold its active working set of pages, it quickly faults. It evicts a page, but immediately needs that evicted page back, faulting again instantly.</p>
+<div class="callout callout-def">
+<h4>Definition: Thrashing</h4>
+<p><strong>Thrashing</strong> occurs when a system spends substantially <strong>more time paging (reading/writing to swap disk) than executing useful application instructions</strong>. CPU utilization plummets to near zero because all processes are queued waiting for the paging disk!</p>
+</div>
+<h4>Prevention via Working-Set Model (Peter Denning):</h4>
+<p>Based on the principle of <strong>Locality of Reference</strong>. The operating system defines a working-set parameter \(\Delta\) (a fixed number of recent page references). The <strong>Working Set</strong> of process \(P_i\) is the set of pages referenced in the most recent \(\Delta\) time units. If total system demand \(D = \sum |WS_i| &gt; \text{Total RAM Frames}\), thrashing will occur. The OS prevents thrashing by suspending (swapping out) one entire process until total demand \(D \le \text{RAM}\).</p>
+</div>
+</section>
+
+<!-- SECTION 2: NUMERICALS & STRING TRACES -->
+<section class="module-section" id="numerical-section">
+<div class="section-title">
+<h2>2. In-Depth Paging &amp; Replacement Numericals</h2>
+<span class="cross-ref-badge">NMIMS 10-Mark Solved Problems</span>
+</div>
+
+<div class="problem-card" id="num-eat">
+<div class="problem-header">
+<span class="difficulty easy">Effective Access Time (EAT)</span>
+<h3>Problem 6.1: TLB Hit Ratio &amp; Effective Access Time Calculation</h3>
+</div>
+<p><strong>Problem Statement:</strong> Consider a paging system where the TLB access time is \(20\text{ ns}\) and main memory access time is \(100\text{ ns}\).
+<br/>(a) Calculate Effective Access Time (EAT) if the TLB hit ratio is \(80\%\).
+<br/>(b) Calculate EAT if the TLB hit ratio is upgraded to \(98\%\).</p>
+
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">FORMULA</span>
+<div>
+$$\text{EAT} = \alpha (\text{TLB} + \text{RAM}) + (1 - \alpha)(\text{TLB} + 2 \times \text{RAM})$$
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge">CALCULATIONS</span>
+<div>
+<p><strong>Part (a): Hit Ratio \(\alpha = 0.80\):</strong></p>
+$$\text{EAT}_{80\%} = 0.80(20 + 100) + 0.20(20 + 200) = 0.80(120) + 0.20(220) = 96 + 44 = \mathbf{140\text{ ns}}$$
+<p><strong>Part (b): Hit Ratio \(\alpha = 0.98\):</strong></p>
+$$\text{EAT}_{98\%} = 0.98(120) + 0.02(220) = 117.6 + 4.4 = \mathbf{122\text{ ns}}$$
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge answer">CONCLUSION</span>
+<div>
+<p class="final-box">\(\text{EAT at } 80\% = \mathbf{140\text{ ns}} \quad \longrightarrow \quad \text{EAT at } 98\% = \mathbf{122\text{ ns}}\) (12.9% lower access time (about 14.8% higher throughput).)</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="problem-card" id="num-replacement-trace">
+<div class="problem-header">
+<span class="difficulty medium">Core 10-Mark Problem</span>
+<h3>Problem 6.2: Complete Page Replacement Trace (FIFO, LRU &amp; Optimal)</h3>
+</div>
+<p><strong>Problem Statement (From NMIMS Paper 2 &amp; Paper 4):</strong> A system allocates \(4\text{ frames}\) to a process. All frames are initially empty. Consider the page reference string:
+$$\mathbf{1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5}$$
+Compute the number of <strong>page faults</strong> and <strong>page hits</strong> for:
+<br/>(a) First-In, First-Out (FIFO)
+<br/>(b) Least Recently Used (LRU)
+<br/>(c) Optimal (OPT)</p>
+
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">PART (a) FIFO</span>
+<div>
+<p><strong>FIFO Step-by-Step Trace (4 Frames):</strong></p>
+<ul>
+<li>Refs 1, 2, 3, 4: Fill frames: \([1, 2, 3, 4]\) \(\to\) <strong>4 Faults</strong></li>
+<li>Ref 1: Already in frame \(\to\) <strong>Hit</strong></li>
+<li>Ref 2: Already in frame \(\to\) <strong>Hit</strong></li>
+<li>Ref 5: Evict oldest (1). Frames: \([5, 2, 3, 4]\) \(\to\) <strong>Fault (5)</strong></li>
+<li>Ref 1: Evict oldest (2). Frames: \([5, 1, 3, 4]\) \(\to\) <strong>Fault (6)</strong></li>
+<li>Ref 2: Evict oldest (3). Frames: \([5, 1, 2, 4]\) \(\to\) <strong>Fault (7)</strong></li>
+<li>Ref 3: Evict oldest (4). Frames: \([5, 1, 2, 3]\) \(\to\) <strong>Fault (8)</strong></li>
+<li>Ref 4: Evict oldest (5). Frames: \([4, 1, 2, 3]\) \(\to\) <strong>Fault (9)</strong></li>
+<li>Ref 5: Evict oldest (1). Frames: \([4, 5, 2, 3]\) \(\to\) <strong>Fault (10)</strong></li>
+</ul>
+<p><strong>FIFO Total Faults = 10, Hits = 2.</strong></p>
+</div>
+</div>
+
+<div class="step-row">
+<span class="step-badge">PART (b) LRU</span>
+<div>
+<p><strong>LRU Step-by-Step Trace (4 Frames):</strong></p>
+<ul>
+<li>Refs 1, 2, 3, 4: Fill frames: \([1, 2, 3, 4]\) \(\to\) <strong>4 Faults</strong></li>
+<li>Ref 1: Recent order: 2, 3, 4, 1 \(\to\) <strong>Hit</strong></li>
+<li>Ref 2: Recent order: 3, 4, 1, 2 \(\to\) <strong>Hit</strong></li>
+<li>Ref 5: Evict least recently used (3). Frames: \([1, 2, 5, 4]\) \(\to\) <strong>Fault (5)</strong></li>
+<li>Ref 1: Already in frame. Recent: 4, 2, 5, 1 \(\to\) <strong>Hit</strong></li>
+<li>Ref 2: Already in frame. Recent: 4, 5, 1, 2 \(\to\) <strong>Hit</strong></li>
+<li>Ref 3: Evict least recently used (4). Frames: \([1, 2, 5, 3]\) \(\to\) <strong>Fault (6)</strong></li>
+<li>Ref 4: Evict least recently used (5). Frames: \([1, 2, 4, 3]\) \(\to\) <strong>Fault (7)</strong></li>
+<li>Ref 5: Evict least recently used (1). Frames: \([5, 2, 4, 3]\) \(\to\) <strong>Fault (8)</strong></li>
+</ul>
+<p><strong>LRU Total Faults = 8, Hits = 4.</strong></p>
+</div>
+</div>
+
+<div class="step-row">
+<span class="step-badge">PART (c) OPTIMAL</span>
+<div>
+<p><strong>Optimal Step-by-Step Trace (4 Frames):</strong></p>
+<ul>
+<li>Refs 1, 2, 3, 4: Fill frames: \([1, 2, 3, 4]\) \(\to\) <strong>4 Faults</strong></li>
+<li>Ref 1: In frame \(\to\) <strong>Hit</strong></li>
+<li>Ref 2: In frame \(\to\) <strong>Hit</strong></li>
+<li>Ref 5: Future lookahead: 1, 2, 3, 4, 5. Page 3 and 4 appear latest. Evict 4. Frames: \([1, 2, 3, 5]\) \(\to\) <strong>Fault (5)</strong></li>
+<li>Ref 1: In frame \(\to\) <strong>Hit</strong></li>
+<li>Ref 2: In frame \(\to\) <strong>Hit</strong></li>
+<li>Ref 3: In frame \(\to\) <strong>Hit</strong></li>
+<li>Ref 4: Future lookahead: 5. Evicts 1, 2, or 3. Evict 1. Frames: \([4, 2, 3, 5]\) \(\to\) <strong>Fault (6)</strong></li>
+<li>Ref 5: In frame \(\to\) <strong>Hit</strong></li>
+</ul>
+<p><strong>Optimal Total Faults = 6, Hits = 6.</strong></p>
+</div>
+</div>
+
+<div class="step-row">
+<span class="step-badge answer">SUMMARY TABLE</span>
+<div>
+<table class="data-table">
+<thead><tr><th>Algorithm</th><th>Page Faults</th><th>Page Hits</th><th>Hit Ratio</th></tr></thead>
+<tbody>
+<tr><td><strong>FIFO</strong></td><td>10</td><td>2</td><td>\(2/12 = \mathbf{16.7\%}\)</td></tr>
+<tr><td><strong>LRU</strong></td><td>8</td><td>4</td><td>\(4/12 = \mathbf{33.3\%}\)</td></tr>
+<tr><td><strong>Optimal (OPT)</strong></td><td><strong>6</strong></td><td><strong>6</strong></td><td>\(6/12 = \mathbf{50.0\%}\)</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 3: COMPARATIVE STUDIES -->
+<section class="module-section" id="comparison-section">
+<div class="section-title">
+<h2>3. Comprehensive Comparative Studies</h2>
+<span class="cross-ref-badge">Frequent Exam Distinctions</span>
+</div>
+
+<h3>Table 6.1: Local vs. Global Page Replacement</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Local Page Replacement</th>
+<th>Global Page Replacement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Candidate Frame Pool</strong></td>
+<td>Process selects a replacement frame strictly from its <strong>own allocated set of frames</strong>.</td>
+<td>Process can select a victim frame from the <strong>entire pool of all system frames</strong> (stealing frames from other jobs).</td>
+</tr>
+<tr>
+<td><strong>Process Isolation</strong></td>
+<td><strong>High:</strong> One process thrashing does not degrade the execution speed of unrelated jobs.</td>
+<td><strong>Low:</strong> A thrashing process can steal frames from healthy jobs, spreading thrashing system-wide.</td>
+</tr>
+<tr>
+<td><strong>Throughput</strong></td>
+<td>May underutilize RAM if a process needs fewer frames than allocated.</td>
+<td><strong>Higher overall system throughput</strong> in normal non-overcommitted conditions.</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<!-- SECTION 4: CASE STUDIES -->
+<section class="module-section" id="case-section">
+<div class="section-title">
+<h2>4. Production Virtual Memory (x86_64)</h2>
+<span class="cross-ref-badge">Modern CPU Architecture</span>
+</div>
+<div class="problem-card">
+<span class="difficulty hard">x86_64 4-Level Paging</span>
+<h3>48-Bit Virtual Memory in Modern Intel / AMD Processors</h3>
+<p>Modern 64-bit processors cannot maintain a single flat page table (a \(2^{64}\) entry table would consume billions of gigabytes of RAM!). Instead, x86_64 implements <strong>4-Level Hierarchical Paging</strong>:</p>
+<ul>
+<li>Virtual addresses use 48 active bits: 9 bits for PML4, 9 bits for Page Directory Pointer, 9 bits for Page Directory, 9 bits for Page Table, and 12 bits for physical 4 KB Offset.</li>
+<li>The hardware CR3 register holds the physical base address of the top-level PML4 table.</li>
+<li>Non-allocated address ranges require no sub-tables, reducing per-process page table RAM overhead to just a few kilobytes!</li>
+</ul>
+</div>
+</section>
+
+<!-- SECTION 5: EXAM QUESTIONS & MARKING GUIDE -->
+<section class="module-section" id="questions-section">
+<div class="section-title">
+<h2>5. Possible University Exam Questions &amp; Marking Guide</h2>
+<span class="cross-ref-badge">NMIMS Pattern: 5 &amp; 10 Mark Solutions</span>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">10 Marks</span>
+<h4>Q1. What is paging? Explain how the Translation Lookaside Buffer (TLB) enhances paging efficiency. Support your explanation with a well-labeled diagram and write the formula for Effective Access Time. [From NMIMS Paper 2]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong></p>
+<ul>
+<li>Paging definition, pages vs frames, and need for non-contiguous allocation: <strong>3 Marks</strong></li>
+<li>Neat hardware diagram showing CPU, TLB hit/miss paths, Page Table, and RAM: <strong>3 Marks</strong></li>
+<li>Mathematical derivation of Effective Access Time (EAT): <strong>4 Marks</strong></li>
+</ul>
+<p><strong>Model Answer Key:</strong> Detail the non-contiguous paging concepts from Section 1.1. Draw the TLB integration diagram. Write the complete EAT formula from Section 1.2: \(\text{EAT} = \alpha(\epsilon + t_m) + (1-\alpha)(\epsilon + 2t_m)\). Explain that high TLB hit rates (&gt;95%) ensure average access times approach near-native RAM bus speeds.</p>
+</div>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">5 Marks</span>
+<h4>Q2. What is Belady's Anomaly? Illustrate with an example reference string under FIFO page replacement. [From NMIMS Paper 1, 3]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong></p>
+<ul>
+<li>Definition of Belady's Anomaly: <strong>2 Marks</strong></li>
+<li>Example proof showing more faults with more frames (e.g., 3 frames vs. 4 frames): <strong>3 Marks</strong></li>
+</ul>
+<p><strong>Model Answer Key:</strong> Define Belady's anomaly as the phenomenon where allocating more frames increases page faults under FIFO. State the canonical string: \(1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5\). Show that with 3 frames it generates 9 page faults, but with 4 frames it generates <strong>10 page faults</strong>! Conclude by explaining why stack algorithms (LRU) are provably immune.</p>
+</div>
+</div>
+</section>
+
+<!-- SECTION 6: WHAT TO KNOW FOR THE EXAM & CHECKLIST -->
+<section class="module-section" id="exam-checklist">
+<div class="section-title">
+<h2>What to Know for the Exam &amp; Coverage Checklist</h2>
+<span class="cross-ref-badge">Final Revision Anchor</span>
+</div>
+
+<div class="callout callout-tip">
+<h4>Core Exam Takeaways:</h4>
+<ul>
+<li><strong>Pages vs Frames:</strong> Pages = logical chunks; Frames = physical RAM chunks. Both are the exact same byte size!</li>
+<li><strong>Physical Address:</strong> \(\text{Physical Address} = (f \times \text{Page Size}) + d\).</li>
+<li><strong>EAT Formula:</strong> \(\text{EAT} = \alpha(\epsilon + t_m) + (1-\alpha)(\epsilon + 2t_m)\).</li>
+<li><strong>Replacement Performance:</strong> Optimal \(&lt;\) LRU \(&lt;\) FIFO in page fault counts.</li>
+<li><strong>Belady's Anomaly:</strong> More frames \(\implies\) more faults. Affects FIFO; LRU/Optimal are immune.</li>
+<li><strong>Thrashing:</strong> CPU spends all time waiting for swap disk. Fixed via Working-Set Model.</li>
+</ul>
+</div>
+
+<h3>Final Unit Coverage Checklist</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Topic / Slide Reference</th><th>Coverage Status</th><th>Core Concept Mastered</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Paging PPTX Slides 1–4: Need for Paging</td><td>Complete</td><td>Non-contiguous mapping, logical \(\langle p, d \rangle\) to physical \(\langle f, d \rangle\).</td></tr>
+<tr><td>Unit 5 Slides 50–65: TLB Hardware</td><td>Complete</td><td>Associative cache, TLB hit vs miss, EAT formula and calculations.</td></tr>
+<tr><td>Unit 5 Slides 66–75: Demand Paging</td><td>Complete</td><td>Valid/Invalid bit, 6-step page fault handling sequence.</td></tr>
+<tr><td>Paging PPTX Slides 5–6: Page Replacement</td><td>Complete</td><td>FIFO, LRU, Optimal algorithms, complete string traces, Belady's anomaly.</td></tr>
+<tr><td>NMIMS Past Paper Questions (Paper 1, 2, 4, 5)</td><td>Complete</td><td>Full 10-mark string trace, TLB EAT calculations, Belady's proof.</td></tr>
+</tbody>
+</table>
+</section>
+
+<!-- Unit Pagination -->
+<div class="unit-pagination">
+<a class="btn btn-outline" href="05-memory-management.html">← Previous: Unit 5 - Memory Management</a>
+<a class="btn btn-primary" href="07-io-and-disk-scheduling.html">Next: Unit 7 - I/O &amp; Disk Scheduling →</a>
+</div>
+
+</article>
+</main>
+</div>
+
+<script>
+const toggleBtn = document.getElementById('theme-toggle');
+if (toggleBtn) {
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    toggleBtn.setAttribute('aria-pressed', 'true');
+  }
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.setAttribute('aria-pressed', !isDark);
+  });
+}
+</script>
+</body>
+</html>

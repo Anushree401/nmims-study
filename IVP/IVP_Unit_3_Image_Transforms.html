@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unit 3: Image Transforms (DFT, DCT, Hadamard) - NMIMS Master Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="theme.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="ivp-custom-polish">
+:root { --ai-content-width: 980px; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+body { min-width: 320px; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+.main-content { width: calc(100% - 290px); max-width: none; }
+.content-wrapper { max-width: var(--ai-content-width); }
+.top-bar { position: sticky; top: 0; z-index: 90; min-height: 52px; padding: 12px 0; margin-top: -32px; background: color-mix(in srgb, var(--bg-main) 94%, transparent); backdrop-filter: blur(10px); }
+.unit-hero { padding-top: 6px; margin-bottom: clamp(26px, 4vw, 42px); }
+.unit-hero h1 { font-size: clamp(1.8rem, 3.3vw, 2.45rem); letter-spacing: -0.035em; text-wrap: balance; }
+.module-section { scroll-margin-top: 76px; padding: clamp(20px, 3vw, 34px); margin-bottom: clamp(24px, 4vw, 40px); }
+.topic-block { scroll-margin-top: 76px; margin-bottom: 2.2rem; }
+.topic-block p, .topic-block li, .q-answer p, .callout p { max-width: 82ch; line-height: 1.72; }
+.callout { padding: 18px 20px; border-radius: 10px; margin: 16px 0; border-left: 4px solid var(--primary); background: #f1f5f9; }
+.callout-def { border-left-color: #2563eb; background: #eff6ff; }
+.callout-warn { border-left-color: #f59e0b; background: #fffbeb; }
+.callout-tip { border-left-color: #10b981; background: #ecfdf5; }
+.data-table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+.data-table th, .data-table td { border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; }
+.data-table th { background: #f8fafc; font-weight: 600; }
+.problem-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+.problem-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.difficulty.easy { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.medium { background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.hard { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.solution-flow { display: flex; flex-direction: column; gap: 14px; }
+.step-row { display: flex; gap: 16px; align-items: flex-start; }
+.step-badge { font-size: 0.72rem; font-weight: 700; padding: 4px 8px; background: #e2e8f0; color: #334155; border-radius: 4px; white-space: nowrap; }
+.step-badge.answer { background: #dcfce7; color: #166534; }
+.final-box { background: #ecfdf5; border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 6px; font-weight: 600; color: #065f46; }
+.question-item { border-bottom: 1px solid var(--border-color); padding: 20px 0; }
+.question-item:last-child { border-bottom: none; }
+.q-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+.marks-badge { font-size: 0.75rem; font-weight: 700; background: #f1f5f9; color: var(--secondary); border: 1px solid #cbd5e1; padding: 2px 7px; border-radius: 4px; }
+.q-answer { background: #f8fafc; padding: 14px 18px; border-radius: 6px; }
+.unit-pagination { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+.btn { padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-outline { border: 1px solid var(--border-color); color: var(--text-main); }
+@media (max-width: 900px) { .sidebar { max-height: 34vh; padding: 16px; } .main-content { width: 100%; padding: 24px 16px 56px; } }
+</style>
+</head>
+<body>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · IVP Master</a>
+<span class="badge">Semester Exam Prep</span>
+<button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle" type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark mode</span></button>
+</div>
+<nav class="sidebar-nav">
+<h3>All Units &amp; Guides</h3>
+<ul>
+<li><a href="IVP_Unit_1_Image_Fundamentals.html"><span class="unit-num">01</span> Image Fundamentals</a></li>
+<li><a href="IVP_Unit_2_Image_Enhancement.html"><span class="unit-num">02</span> Image Enhancement</a></li>
+<li><a class="active" href="IVP_Unit_3_Image_Transforms.html"><span class="unit-num">03</span> Image Transforms</a></li>
+<li><a href="IVP_Unit_4_Morphological_Image_Processing.html"><span class="unit-num">04</span> Morphological Processing</a></li>
+<li><a href="IVP_Unit_5_Edge_Detection.html"><span class="unit-num">05</span> Edge Detection</a></li>
+<li><a href="IVP_Unit_6_Image_Segmentation.html"><span class="unit-num">06</span> Image Segmentation</a></li>
+<li><a href="IVP_Unit_7_Colour_Image_Processing.html"><span class="unit-num">07</span> Colour Image Processing</a></li>
+<li><a href="IVP_Unit_8_Digital_Video_and_Compression.html"><span class="unit-num">08</span> Video &amp; Compression</a></li>
+<li><a href="IVP_Numericals_and_Problem_Solving.html"><span class="unit-num">09</span> Master Problem-Solving Guide</a></li>
+<li><a href="IVP_Solved_Examples.html"><span class="unit-num">10</span> Comprehensive Solved Bank</a></li>
+<li><a href="IVP_Topic_Checklist.html"><span class="unit-num">11</span> Final Topic Checklist</a></li>
+</ul>
+</nav>
+</aside>
+
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 3: Image Transforms</span>
+</div>
+<div class="meta-tag">Unit 3 · 100% Transform Mathematics Masterclass</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>Unit 3: 2D Image Transforms (DFT, DCT &amp; Hadamard)</h1>
+<p class="lead">An exhaustive mathematical masterclass exploring 2D unitary and orthogonal transforms, kernel separability and symmetry, the 2D Discrete Fourier Transform (DFT), energy compaction and DCT basis matrices in JPEG compression, and recursive Kronecker product construction of Hadamard matrices with complete 2D matrix transform calculations.</p>
+</header>
+<section class="theory-sources" aria-label="Original theory files"><h2>Original theory files</h2><p>Open the unchanged lecture source or expand its preview here.</p><ul><li><a href="theory/IVP_Unit-3_Image%20Transform.pptx" target="_blank" rel="noopener">Open original: IVP_Unit-3_Image Transform.pptx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of IVP_Unit-3_Image Transform.pptx" src="theory/previews/IVP_Unit-3_Image%20Transform.pdf"></iframe></div><p><a href="theory/previews/IVP_Unit-3_Image%20Transform.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li></ul></section>
+
+
+<!-- SECTION 1: IN-DEPTH THEORY -->
+<section class="module-section" id="theory-section">
+<div class="section-title">
+<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+<span class="cross-ref-badge">Faithful to IVP_Unit-3_Image Transform.pptx &amp; Syllabus</span>
+</div>
+
+<div class="topic-block" id="sec-transform-basics">
+<h3>1.1 General 2D Linear Image Transform Model</h3>
+<p>An image transform maps spatial domain pixels \(f(x, y)\) into transform domain coefficients \(F(u, v)\):</p>
+$$F(u, v) = \sum_{x=0}^{N-1} \sum_{y=0}^{N-1} f(x, y) \cdot g(x, y, u, v)$$
+<p>where \(g(x, y, u, v)\) is the <strong>Forward Transformation Kernel</strong>. The inverse transform reconstructs the spatial image:</p>
+$$f(x, y) = \sum_{u=0}^{N-1} \sum_{v=0}^{N-1} F(u, v) \cdot h(x, y, u, v)$$
+<p>where \(h(x, y, u, v)\) is the <strong>Inverse Transformation Kernel</strong>.</p>
+
+<div class="callout callout-def">
+<h4>Separability and Symmetry: Matrix Formulation</h4>
+<p>A kernel is <strong>Separable</strong> if it can be factored into a product of 1D kernels: \(g(x, y, u, v) = g_1(x, u) \cdot g_2(y, v)\).
+<br/>A kernel is <strong>Symmetric</strong> if \(g_1\) and \(g_2\) are identical: \(g(x, y, u, v) = g_1(x, u) \cdot g_1(y, v)\).
+<br/>When a transform kernel is separable and symmetric, the 2D transform can be computed via blazing-fast <strong>Matrix Multiplication</strong>:</p>
+$$\mathbf{F = A \cdot f \cdot A^T} \qquad \mathbf{f = A^{*T} \cdot F \cdot A^*}$$
+<p>where \(A\) is the unitary transform basis matrix, \(f\) is the spatial image matrix, and \(F\) is the output transform coefficient matrix!</p>
+</div>
+</div>
+
+<div class="topic-block" id="sec-dct">
+<h3>1.2 The Discrete Cosine Transform (DCT) &amp; Energy Compaction</h3>
+<p>The 2D Discrete Cosine Transform is the absolute core of JPEG image and MPEG video compression. For an \(N \times N\) image:</p>
+$$F(u, v) = \alpha(u) \alpha(v) \sum_{x=0}^{N-1} \sum_{y=0}^{N-1} f(x, y) \cos\left[\frac{(2x+1)u\pi}{2N}\right] \cos\left[\frac{(2y+1)v\pi}{2N}\right]$$
+$$\text{where } \alpha(u) = \begin{cases} \sqrt{\frac{1}{N}} & \text{for } u = 0 \\ \sqrt{\frac{2}{N}} & \text{for } u = 1, 2, \dots, N-1 \end{cases}$$
+
+<h4>Why DCT is Chosen Over DFT for Image Compression:</h4>
+<ol>
+<li><strong>Superb Energy Compaction:</strong> The DCT packs the vast majority of visual signal energy into the top-left low-frequency coefficients (especially the DC coefficient \(F(0, 0)\)). High-frequency coefficients are near-zero and can be aggressively quantized.</li>
+<li><strong>Real-Valued Arithmetic:</strong> Unlike the complex-valued DFT (\(e^{-j2\pi}\)), the DCT uses purely real cosine numbers, eliminating imaginary parts and cutting computational storage in half.</li>
+<li><strong>Boundary Continuity:</strong> The DCT implicitly assumes even-symmetric boundary reflection, avoiding the harsh artificial boundary jump discontinuities created by the DFT's periodic assumption.</li>
+</ol>
+</div>
+
+<div class="topic-block" id="sec-hadamard">
+<h3>1.3 The 2D Hadamard Transform</h3>
+<p>The Hadamard transform is a fast orthogonal transform whose basis vectors consist exclusively of binary values: \(\mathbf{+1}\) and \(\mathbf{-1}\). It requires <strong>zero multiplications</strong>—only simple hardware additions and subtractions!</p>
+
+<h4>Recursive Construction of Hadamard Matrices:</h4>
+$$H_1 = [1] \qquad H_2 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}$$
+$$H_{2N} = \frac{1}{\sqrt{2}} \begin{bmatrix} H_N & H_N \\ H_N & -H_N \end{bmatrix}$$
+<p>For a \(2 \times 2\) image matrix \(f\), the 2D Hadamard Transform is given by:</p>
+$$\mathbf{F = H_2 \cdot f \cdot H_2^T = H_2 \cdot f \cdot H_2}$$
+<p>(since \(H_2\) is real and symmetric, \(H_2^T = H_2\)).</p>
+</div>
+</section>
+
+<!-- SECTION 2: NUMERICALS -->
+<section class="module-section" id="numerical-section">
+<div class="section-title">
+<h2>2. In-Depth Transform Numericals</h2>
+<span class="cross-ref-badge">NMIMS 10-Mark Solved Calculations</span>
+</div>
+
+<div class="problem-card" id="num-hadamard">
+<div class="problem-header">
+<span class="difficulty medium">Core 10-Mark Problem</span>
+<h3>Problem 3.1: 2D Hadamard Transform of a \(2 \times 2\) Image</h3>
+</div>
+<p><strong>Problem Statement (From NMIMS Paper 1 Q2):</strong> Find the 2D Hadamard Transform of the following image \(f\):
+$$f = \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix}$$</p>
+
+<div class="solution-flow">
+<div class="step-row"><span class="step-badge">FORMULA</span>
+<div>
+$$F = H_2 \cdot f \cdot H_2 \qquad \text{where } H_2 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}$$
+</div>
+</div>
+<div class="step-row"><span class="step-badge">CALCULATION</span>
+<div>
+<p><strong>Step 1: Compute intermediate product \(M = f \cdot H_2\):</strong></p>
+$$M = \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix} \cdot \frac{1}{\sqrt{2}} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix} = \frac{1}{\sqrt{2}} \begin{bmatrix} (2\cdot 1 + 1\cdot 1) & (2\cdot 1 + 1\cdot -1) \\ (1\cdot 1 + 2\cdot 1) & (1\cdot 1 + 2\cdot -1) \end{bmatrix} = \frac{1}{\sqrt{2}} \begin{bmatrix} 3 & 1 \\ 3 & -1 \end{bmatrix}$$
+<p><strong>Step 2: Multiply by \(H_2\) on the left: \(F = H_2 \cdot M\):</strong></p>
+$$F = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix} \cdot \frac{1}{\sqrt{2}} \begin{bmatrix} 3 & 1 \\ 3 & -1 \end{bmatrix} = \frac{1}{2} \begin{bmatrix} (1\cdot 3 + 1\cdot 3) & (1\cdot 1 + 1\cdot -1) \\ (1\cdot 3 + -1\cdot 3) & (1\cdot 1 + -1\cdot -1) \end{bmatrix}$$
+$$F = \frac{1}{2} \begin{bmatrix} 6 & 0 \\ 0 & 2 \end{bmatrix} = \begin{bmatrix} 3 & 0 \\ 0 & 1 \end{bmatrix}$$
+</div>
+</div>
+<div class="step-row"><span class="step-badge answer">FINAL RESULT</span>
+<div>
+<p class="final-box">\(\mathbf{F = \begin{bmatrix} 3 & 0 \\ 0 & 1 \end{bmatrix}}\)</p>
+<p class="hint">Energy Conservation Check (Parseval's Theorem): Sum of squares in spatial: \(2^2 + 1^2 + 1^2 + 2^2 = 4 + 1 + 1 + 4 = 10\). Sum of squares in transform: \(3^2 + 0^2 + 0^2 + 1^2 = 9 + 0 + 0 + 1 = 10\). Exactly conserved!</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="problem-card" id="num-dct">
+<div class="problem-header">
+<span class="difficulty hard">2D DCT Calculation</span>
+<h3>Problem 3.2: 2D Discrete Cosine Transform (DCT) of a \(2 \times 2\) Image</h3>
+</div>
+<p><strong>Problem Statement (From NMIMS Paper 1 Q4):</strong> Compute the 2-dimensional DCT of image \(f = \begin{bmatrix} 4 & 2 \\ 2 & 1 \end{bmatrix}\) using the \(2 \times 2\) DCT matrix.</p>
+<div class="solution-flow">
+<div class="step-row"><span class="step-badge">BASIS MATRIX</span>
+<div>
+<p>For \(N = 2\), the 1D DCT matrix \(A\) is:
+$$A = \begin{bmatrix} \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}} & -\frac{1}{\sqrt{2}} \end{bmatrix} = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}$$
+<em>(Notice: For \(N = 2\), the normalized DCT matrix is identical to the Hadamard matrix \(H_2\)!).</em></p>
+</div>
+</div>
+<div class="step-row"><span class="step-badge">CALCULATION</span>
+<div>
+$$F = A \cdot f \cdot A^T = \frac{1}{2} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix} \begin{bmatrix} 4 & 2 \\ 2 & 1 \end{bmatrix} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}$$
+$$\text{Product } f \cdot A^T = \frac{1}{\sqrt{2}} \begin{bmatrix} 6 & 2 \\ 3 & 1 \end{bmatrix}$$
+$$F = \frac{1}{2} \begin{bmatrix} 9 & 3 \\ 3 & 1 \end{bmatrix} = \begin{bmatrix} 4.5 & 1.5 \\ 1.5 & 0.5 \end{bmatrix}$$
+<p class="final-box">\(\mathbf{F = \begin{bmatrix} 4.5 & 1.5 \\ 1.5 & 0.5 \end{bmatrix}}\)</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 3: COMPARATIVE STUDIES -->
+<section class="module-section" id="comparison-section">
+<div class="section-title">
+<h2>3. Comprehensive Comparative Studies</h2>
+<span class="cross-ref-badge">Frequent Exam Distinctions</span>
+</div>
+
+<h3>Table 3.1: DFT vs. DCT vs. Hadamard Transform</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Discrete Fourier Transform (DFT)</th>
+<th>Discrete Cosine Transform (DCT)</th>
+<th>Hadamard Transform</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kernel Basis Functions</strong></td>
+<td>Complex exponentials (\(\cos - j\sin\)).</td>
+<td>Real-valued Cosine functions.</td>
+<td>Binary orthogonal square waves (\(+1, -1\)).</td>
+</tr>
+<tr>
+<td><strong>Arithmetic Complexity</strong></td>
+<td>High: Complex multiplications (\(O(N \log N)\) via FFT).</td>
+<td>Moderate: Real multiplications.</td>
+<td><strong>Zero multiplications!</strong> Pure hardware additions/subtractions.</td>
+</tr>
+<tr>
+<td><strong>Energy Compaction</strong></td>
+<td>Moderate.</td>
+<td><strong>Outstanding</strong> (approximates optimal Karhunen-Loève Transform).</td>
+<td>Good for binary and speech signals.</td>
+</tr>
+<tr>
+<td><strong>Primary Application</strong></td>
+<td>Frequency domain filtering, phase analysis.</td>
+<td><strong>JPEG Image &amp; MPEG/H.264 Video Compression.</strong></td>
+<td>Hardware-constrained telemetry, speech processing.</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<!-- SECTION 4: WHAT TO KNOW FOR THE EXAM -->
+<section class="module-section" id="exam-checklist">
+<div class="section-title">
+<h2>What to Know for the Exam &amp; Coverage Checklist</h2>
+<span class="cross-ref-badge">Final Revision Anchor</span>
+</div>
+
+<div class="callout callout-tip">
+<h4>Core Exam Takeaways:</h4>
+<ul>
+<li><strong>Separable 2D Transform:</strong> \(F = A \cdot f \cdot A^T\).</li>
+<li><strong>\(2 \times 2\) Basis Matrix:</strong> \(H_2 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}\).</li>
+<li><strong>Parseval's Theorem Check:</strong> Sum of squares of input pixels MUST equal sum of squares of transform coefficients!</li>
+<li><strong>DCT Superiority:</strong> High energy compaction, purely real arithmetic, no boundary edge jump ringing.</li>
+</ul>
+</div>
+</section>
+
+<!-- Unit Pagination -->
+<div class="unit-pagination">
+<a class="btn btn-outline" href="IVP_Unit_2_Image_Enhancement.html">← Previous: Unit 2 - Image Enhancement</a>
+<a class="btn btn-primary" href="IVP_Unit_4_Morphological_Image_Processing.html">Next: Unit 4 - Morphological Processing →</a>
+</div>
+
+</article>
+</main>
+</div>
+
+<script>
+const toggleBtn = document.getElementById('theme-toggle');
+if (toggleBtn) {
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    toggleBtn.setAttribute('aria-pressed', 'true');
+  }
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.setAttribute('aria-pressed', !isDark);
+  });
+}
+</script>
+</body>
+</html>

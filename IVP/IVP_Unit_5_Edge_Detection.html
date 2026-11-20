@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unit 5: Edge Detection - NMIMS Master Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="theme.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="ivp-custom-polish">
+:root { --ai-content-width: 980px; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+body { min-width: 320px; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+.main-content { width: calc(100% - 290px); max-width: none; }
+.content-wrapper { max-width: var(--ai-content-width); }
+.top-bar { position: sticky; top: 0; z-index: 90; min-height: 52px; padding: 12px 0; margin-top: -32px; background: color-mix(in srgb, var(--bg-main) 94%, transparent); backdrop-filter: blur(10px); }
+.unit-hero { padding-top: 6px; margin-bottom: clamp(26px, 4vw, 42px); }
+.unit-hero h1 { font-size: clamp(1.8rem, 3.3vw, 2.45rem); letter-spacing: -0.035em; text-wrap: balance; }
+.module-section { scroll-margin-top: 76px; padding: clamp(20px, 3vw, 34px); margin-bottom: clamp(24px, 4vw, 40px); }
+.topic-block { scroll-margin-top: 76px; margin-bottom: 2.2rem; }
+.topic-block p, .topic-block li, .q-answer p, .callout p { max-width: 82ch; line-height: 1.72; }
+.callout { padding: 18px 20px; border-radius: 10px; margin: 16px 0; border-left: 4px solid var(--primary); background: #f1f5f9; }
+.callout-def { border-left-color: #2563eb; background: #eff6ff; }
+.callout-warn { border-left-color: #f59e0b; background: #fffbeb; }
+.callout-tip { border-left-color: #10b981; background: #ecfdf5; }
+.data-table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+.data-table th, .data-table td { border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; }
+.data-table th { background: #f8fafc; font-weight: 600; }
+.problem-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+.problem-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.difficulty.easy { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.medium { background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.hard { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.solution-flow { display: flex; flex-direction: column; gap: 14px; }
+.step-row { display: flex; gap: 16px; align-items: flex-start; }
+.step-badge { font-size: 0.72rem; font-weight: 700; padding: 4px 8px; background: #e2e8f0; color: #334155; border-radius: 4px; white-space: nowrap; }
+.step-badge.answer { background: #dcfce7; color: #166534; }
+.final-box { background: #ecfdf5; border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 6px; font-weight: 600; color: #065f46; }
+.unit-pagination { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+.btn { padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-outline { border: 1px solid var(--border-color); color: var(--text-main); }
+@media (max-width: 900px) { .sidebar { max-height: 34vh; padding: 16px; } .main-content { width: 100%; padding: 24px 16px 56px; } }
+</style>
+</head>
+<body>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · IVP Master</a>
+<span class="badge">Semester Exam Prep</span>
+<button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle" type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark mode</span></button>
+</div>
+<nav class="sidebar-nav">
+<h3>All Units &amp; Guides</h3>
+<ul>
+<li><a href="IVP_Unit_1_Image_Fundamentals.html"><span class="unit-num">01</span> Image Fundamentals</a></li>
+<li><a href="IVP_Unit_2_Image_Enhancement.html"><span class="unit-num">02</span> Image Enhancement</a></li>
+<li><a href="IVP_Unit_3_Image_Transforms.html"><span class="unit-num">03</span> Image Transforms</a></li>
+<li><a href="IVP_Unit_4_Morphological_Image_Processing.html"><span class="unit-num">04</span> Morphological Processing</a></li>
+<li><a class="active" href="IVP_Unit_5_Edge_Detection.html"><span class="unit-num">05</span> Edge Detection</a></li>
+<li><a href="IVP_Unit_6_Image_Segmentation.html"><span class="unit-num">06</span> Image Segmentation</a></li>
+<li><a href="IVP_Unit_7_Colour_Image_Processing.html"><span class="unit-num">07</span> Colour Image Processing</a></li>
+<li><a href="IVP_Unit_8_Digital_Video_and_Compression.html"><span class="unit-num">08</span> Video &amp; Compression</a></li>
+<li><a href="IVP_Numericals_and_Problem_Solving.html"><span class="unit-num">09</span> Master Problem-Solving Guide</a></li>
+<li><a href="IVP_Solved_Examples.html"><span class="unit-num">10</span> Comprehensive Solved Bank</a></li>
+<li><a href="IVP_Topic_Checklist.html"><span class="unit-num">11</span> Final Topic Checklist</a></li>
+</ul>
+</nav>
+</aside>
+
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 5: Edge Detection</span>
+</div>
+<div class="meta-tag">Unit 5 · 100% Gradient &amp; Canny Masterclass</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>Unit 5: Edge Detection Operators &amp; Algorithms</h1>
+<p class="lead">An exhaustive masterclass on 1st order and 2nd order spatial derivatives, gradient magnitude and direction formulas, Prewitt, Sobel, and Robert's Cross masks, the Laplacian and Laplacian of Gaussian (LoG / Marr-Hildreth Zero-Crossings), and the 4-stage Canny Edge Detector (Gaussian smoothing, Gradient magnitude/angle, Non-Maximum Suppression, and Hysteresis Thresholding).</p>
+</header>
+<section class="theory-sources" aria-label="Original theory files"><h2>Original theory files</h2><p>Open the unchanged lecture source or expand its preview here.</p><ul><li><a href="theory/Edge%20detection.docx" target="_blank" rel="noopener">Open original: Edge detection.docx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of Edge detection.docx" src="theory/previews/Edge%20detection.pdf"></iframe></div><p><a href="theory/previews/Edge%20detection.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li><li><a href="theory/IVP%20UNIT%202.pptx" target="_blank" rel="noopener">Open original: IVP UNIT 2.pptx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of IVP UNIT 2.pptx" src="theory/previews/IVP%20UNIT%202.pdf"></iframe></div><p><a href="theory/previews/IVP%20UNIT%202.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li></ul></section>
+
+
+<!-- SECTION 1: IN-DEPTH THEORY -->
+<section class="module-section" id="theory-section">
+<div class="section-title">
+<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+<span class="cross-ref-badge">Faithful to Edge detection.docx &amp; Syllabus</span>
+</div>
+
+<div class="topic-block" id="sec-derivatives">
+<h3>1.1 Gradient-Based Edge Detection: 1st vs. 2nd Derivatives</h3>
+<p>An edge is a local discontinuity in image intensity. Edge detection relies on differential calculus:</p>
+<ul>
+<li><strong>1st Derivative (Gradient Vector \(\nabla f\)):</strong> Points in the direction of greatest rate of change of intensity:
+$$\nabla f = \begin{bmatrix} G_x \\ G_y \end{bmatrix} = \begin{bmatrix} \frac{\partial f}{\partial x} \\ \frac{\partial f}{\partial y} \end{bmatrix}$$
+$$\mathbf{\text{Gradient Magnitude } M(x, y) = \sqrt{G_x^2 + G_y^2} \approx |G_x| + |G_y|}$$
+$$\mathbf{\text{Gradient Direction } \alpha(x, y) = \tan^{-1}\left(\frac{G_y}{G_x}\right)}$$
+<p class="hint"><strong>Quadrant check:</strong> The ratio formula alone cannot distinguish all quadrants and fails when \(G_x=0\). For a signed direction use \(\operatorname{atan2}(G_y,G_x)\); if the exam uses \(\tan^{-1}(G_y/G_x)\), adjust the angle using the signs of both gradients and the course’s direction range.</p>
+<em>Property:</em> The 1st derivative produces a thick hump/ridge at step edges. The gradient direction is orthogonal (perpendicular) to the physical edge boundary.</li>
+<li><strong>2nd Derivative (Laplacian \(\nabla^2 f\)):</strong> Produces two values (a positive and negative peak) across a step transition. The true edge center corresponds to the <strong>Zero Crossing</strong> between the two peaks!</li>
+</ul>
+</div>
+
+<div class="topic-block" id="sec-operators">
+<h3>1.2 Classical 1st Order Edge Detection Operators</h3>
+<h4>1. Sobel Operator:</h4>
+<p>Weights central orthogonal pixels by a factor of 2 to provide smoothing simultaneously with differentiation:</p>
+$$G_x = \begin{bmatrix} -1 & 0 & 1 \\ -2 & 0 & 2 \\ -1 & 0 & 1 \end{bmatrix} \qquad G_y = \begin{bmatrix} -1 & -2 & -1 \\ 0 & 0 & 0 \\ 1 & 2 & 1 \end{bmatrix}$$
+
+<h4>2. Prewitt Operator:</h4>
+<p>Uniform weights of 1:</p>
+$$G_x = \begin{bmatrix} -1 & 0 & 1 \\ -1 & 0 & 1 \\ -1 & 0 & 1 \end{bmatrix} \qquad G_y = \begin{bmatrix} -1 & -1 & -1 \\ 0 & 0 & 0 \\ 1 & 1 & 1 \end{bmatrix}$$
+</div>
+
+<div class="topic-block" id="sec-canny">
+<h3>1.3 The Canny Edge Detector (The Optimal Detector)</h3>
+<p>Developed by John F. Canny in 1986 based on three optimality criteria: (1) Low error rate, (2) Edge points well localized, and (3) Single edge point response. The Canny algorithm proceeds through 4 sequential stages:</p>
+<ol>
+<li><strong>1. Gaussian Smoothing:</strong> Convolve input image with a 2D Gaussian filter \(G_\sigma(x, y)\) to suppress high-frequency noise.</li>
+<li><strong>2. Gradient Calculation:</strong> Compute horizontal and vertical gradients (\(G_x, G_y\)) using Sobel operators; compute magnitude \(M\) and quantize direction \(\alpha\) into 4 sectors (0°, 45°, 90°, 135°).</li>
+<li><strong>3. Non-Maximum Suppression (NMS):</strong> Thins the thick gradient magnitude ridges into razor-sharp 1-pixel-wide lines! For each pixel, compare its magnitude against its two spatial neighbors along the gradient normal direction \(\alpha\). If the pixel is not strictly greater than both neighbors, set its magnitude to zero!</li>
+<li><strong>4. Hysteresis Thresholding:</strong> Uses two thresholds (\(T_{\text{high}}\) and \(T_{\text{low}}\)):
+  <ul>
+    <li>Pixels with \(M &gt; T_{\text{high}}\) are marked as <strong>Definite Strong Edges</strong>.</li>
+    <li>Pixels with \(M &lt; T_{\text{low}}\) are discarded as noise.</li>
+    <li>Pixels between \(T_{\text{low}}\) and \(T_{\text{high}}\) (Weak Edges) are accepted <strong>if and only if they are connected to a Strong Edge</strong> via 8-connectivity!</li>
+  </ul>
+</li>
+</ol>
+</div>
+</section>
+
+<!-- SECTION 2: NUMERICALS -->
+<section class="module-section" id="numerical-section">
+<div class="section-title">
+<h2>2. In-Depth Edge Detection Numericals</h2>
+<span class="cross-ref-badge">NMIMS 10-Mark Solved Calculations</span>
+</div>
+
+<div class="problem-card" id="num-sobel">
+<div class="problem-header">
+<span class="difficulty medium">Sobel Gradient Calculation</span>
+<h3>Problem 5.1: Horizontal &amp; Vertical Sobel Convolutions at Center</h3>
+</div>
+<p><strong>Problem Statement (From NMIMS Paper 1 Q2):</strong> Apply the Horizontal and Vertical Sobel operators on the image region below, then compute the gradient magnitude and direction at center pixel (5):
+$$I = \begin{bmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \\ 7 & 8 & 9 \end{bmatrix}$$</p>
+
+<div class="solution-flow">
+<div class="step-row"><span class="step-badge">HORIZONTAL Gx</span>
+<div>
+$$G_x = (-1\cdot 1 + 1\cdot 3) + (-2\cdot 4 + 2\cdot 6) + (-1\cdot 7 + 1\cdot 9)$$
+$$G_x = (2) + (4) + (2) = \mathbf{+8}$$
+</div>
+</div>
+<div class="step-row"><span class="step-badge">VERTICAL Gy</span>
+<div>
+$$G_y = (-1\cdot 1 + 1\cdot 7) + (-2\cdot 2 + 2\cdot 8) + (-1\cdot 3 + 1\cdot 9)$$
+$$G_y = (6) + (12) + (6) = \mathbf{+24}$$
+</div>
+</div>
+<div class="step-row"><span class="step-badge answer">MAGNITUDE &amp; DIRECTION</span>
+<div>
+$$\mathbf{\text{Gradient Magnitude } M = \sqrt{G_x^2 + G_y^2} = \sqrt{8^2 + 24^2} = \sqrt{64 + 576} = \sqrt{640} \approx \mathbf{25.30}}$$
+$$\mathbf{\text{Gradient Direction } \alpha = \tan^{-1}\left(\frac{24}{8}\right) = \tan^{-1}(3) \approx \mathbf{71.57^\circ}}$$
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 3: WHAT TO KNOW FOR THE EXAM -->
+<section class="module-section" id="exam-checklist">
+<div class="section-title">
+<h2>What to Know for the Exam &amp; Coverage Checklist</h2>
+<span class="cross-ref-badge">Final Revision Anchor</span>
+</div>
+
+<div class="callout callout-tip">
+<h4>Core Exam Takeaways:</h4>
+<ul>
+<li><strong>1st Derivative:</strong> Produces wide ridge; peak = edge. Gradient is perpendicular to edge.</li>
+<li><strong>2nd Derivative (Laplacian):</strong> Zero-crossing = edge center. Highly noise sensitive.</li>
+<li><strong>Sobel Masks:</strong> \(G_x\) has \([-1, 0, 1]\) rows; \(G_y\) has \([-1, 0, 1]^T\) columns with center row/col multiplied by 2.</li>
+<li><strong>Canny 4 Stages:</strong> Gaussian filter \(\to\) Sobel gradient \(\to\) Non-Maximum Suppression (thins to 1-pixel) \(\to\) Hysteresis thresholding (\(T_{\text{high}}, T_{\text{low}}\)).</li>
+</ul>
+</div>
+</section>
+
+<!-- Unit Pagination -->
+<div class="unit-pagination">
+<a class="btn btn-outline" href="IVP_Unit_4_Morphological_Image_Processing.html">← Previous: Unit 4 - Morphology</a>
+<a class="btn btn-primary" href="IVP_Unit_6_Image_Segmentation.html">Next: Unit 6 - Image Segmentation →</a>
+</div>
+
+</article>
+</main>
+</div>
+
+<script>
+const toggleBtn = document.getElementById('theme-toggle');
+if (toggleBtn) {
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    toggleBtn.setAttribute('aria-pressed', 'true');
+  }
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.setAttribute('aria-pressed', !isDark);
+  });
+}
+</script>
+</body>
+</html>

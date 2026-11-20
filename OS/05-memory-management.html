@@ -1,23 +1,620 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script>
-try{const t=localStorage.getItem('nmims-ai-color-theme');const d=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(!t&&d))document.documentElement.dataset.theme='dark'}catch(_){}
-</script><title>Memory Management</title><style>:root{color-scheme:light;--ink:#17243b;--muted:#53647a;--blue:#155eef;--pale:#eef4ff;--line:#d9e2ef;--gold:#fff4d6}*{box-sizing:border-box}body{margin:0;background:#f6f8fb;color:var(--ink);font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:980px;margin:auto;padding:32px 22px 70px}header{background:linear-gradient(125deg,#102b52,#155eef);color:white;padding:32px;border-radius:18px;margin-bottom:24px}h1{line-height:1.15;margin:0 0 10px}header p{margin:0;color:#e7efff}section,article{background:white;border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0}h2{margin-top:0;color:#173e74}h3{color:#244f86}li{margin:.28em 0}.callout{background:var(--pale);border-left:4px solid var(--blue);padding:12px 16px;border-radius:8px}.warn{background:var(--gold);padding:12px 16px;border-radius:8px}table{border-collapse:collapse;width:100%;margin:12px 0}td,th{border:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}th{background:#eef4ff}code,.formula{background:#f1f4f8;padding:2px 5px;border-radius:4px}.diagram{font-family:ui-monospace,monospace;background:#f3f6fa;padding:14px;border-radius:8px;white-space:pre-wrap}details{border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:8px 0}summary{font-weight:650;cursor:pointer}footer{font-size:.9em;color:var(--muted);padding:16px;text-align:center}@media print{body{background:white}main{max-width:none;padding:0}header,section,article{break-inside:avoid}}
-/* Shared NMIMS light/dark theme */
-html{color-scheme:light;--os-bg:#f6f8fb;--os-ink:#17243b;--os-muted:#53647a;--os-card:#fff;--os-line:#d9e2ef;--os-pale:#eef4ff;--os-gold:#fff4d6;--os-code:#f1f4f8;--os-diagram:#f3f6fa}
-html[data-theme="dark"]{color-scheme:dark;--os-bg:#171b20;--os-ink:#edf2f8;--os-muted:#b4c0ce;--os-card:#222a33;--os-line:#3c4856;--os-pale:#263645;--os-gold:#433923;--os-code:#303a46;--os-diagram:#202a34}
-html[data-theme="dark"] body{background:var(--os-bg);color:var(--os-ink)}
-html[data-theme="dark"] section,html[data-theme="dark"] article{background:var(--os-card);border-color:var(--os-line)}
-html[data-theme="dark"] h2,html[data-theme="dark"] h3{color:#9bc5ff}
-html[data-theme="dark"] .callout,html[data-theme="dark"] th{background:var(--os-pale)}
-html[data-theme="dark"] .warn{background:var(--os-gold)}
-html[data-theme="dark"] td,html[data-theme="dark"] th,html[data-theme="dark"] details{border-color:var(--os-line)}
-html[data-theme="dark"] code,html[data-theme="dark"] .formula{background:var(--os-code)}
-html[data-theme="dark"] .diagram{background:var(--os-diagram)}
-html[data-theme="dark"] footer{color:var(--os-muted)}
-.theme-bar{display:flex;justify-content:flex-end;margin:0 0 10px}
-.theme-switch{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--os-line);border-radius:9px;background:var(--os-card);color:var(--os-ink);padding:8px 12px;font:600 .9rem/1.2 system-ui,-apple-system,Segoe UI,sans-serif;cursor:pointer}
-.theme-switch:hover{filter:brightness(.96)}
-.theme-switch:focus-visible{outline:3px solid #6ca8ff;outline-offset:2px}
-</style><main><div class="theme-bar"><button class="theme-switch" id="shared-theme-toggle" type="button" aria-pressed="false"><span class="theme-icon" aria-hidden="true">☾</span><span class="theme-label">Dark mode</span></button></div><header><h1>Memory Management</h1><p>Unit 5 | address binding, allocation, fragmentation, and virtual memory foundations</p></header><div class="warn"><b>Scope note:</b> No Operating Systems course policy was present in OS. The only syllabus PDF found is for Artificial Intelligence and does not apply to these slides. Therefore the checklist follows the OS slide decks; exam format, weighting, exclusions, and instructor-specific marking rules could not be verified. Assumptions and ambiguous source points are flagged below.</div><section><h2>1. Address spaces and protection</h2><p>Programs are stored on backing storage and must be loaded to run. The CPU generates logical (virtual) addresses; memory uses physical addresses. The MMU maps between them. With relocation register R, a logical address L maps to physical R+L, provided it lies inside the process limit. Base/limit protection checks each user-mode reference; loading these privileged registers is restricted.</p><p>Address binding may occur at compile time (known location; absolute code), load time (relocatable code), or execution time (dynamic mapping; process may move). Logical and physical addresses can be identical in compile/load binding; with execution-time binding they differ.</p></section><section><h2>2. Allocation and fragmentation</h2><p>Contiguous allocation gives a process one continuous region; variable partitions can leave external fragmentation (free holes between allocated blocks). Internal fragmentation is wasted space inside an allocated block. Compaction can combine holes if relocation is supported. First-fit chooses the first adequate hole, best-fit the smallest adequate hole, worst-fit the largest. These policies affect search and fragmentation; no single rule eliminates all waste.</p><p>Paging divides logical memory into fixed-size pages and physical memory into frames of the same size. A page table maps page number to frame number. For page size S, logical address A gives page number p=⌊A/S⌋ and offset d=A mod S; physical address=frame(p)×S+d. Paging removes external fragmentation but can leave internal waste in the last page and costs page-table storage/translation.</p></section><section><h2>3. Virtual memory concepts</h2><p>Virtual memory allows a process’s address space to exceed currently resident memory. Demand paging loads a page when referenced; a missing page causes a page fault, OS brings it in, updates the mapping, and restarts the instruction. If no free frame exists, a replacement algorithm selects a victim. Too many faults can cause thrashing: the system spends time paging rather than executing.</p><div class="warn">The Unit 5 deck covers a wider memory-management sequence; the separate “Paging and page replacement algorithms” deck supplies explicit algorithm detail and is handled in its own file. Verify page-table structures, segmentation, and exact allocation variants against visual slides where the source uses diagrams.</div></section><section><h2>Recap and self-test</h2><h3>Self-test (answers follow)</h3><details><summary>How does relocation translate an address?</summary><p>Physical=relocation/base value + logical address, subject to bounds protection.</p></details><details><summary>Paging uses which same-sized units?</summary><p>Logical pages and physical frames.</p></details><details><summary>What problem does paging remove, and what waste can remain?</summary><p>It removes external fragmentation; internal fragmentation, especially in the final page, can remain.</p></details><details><summary>How are page and offset computed for page size S?</summary><p>p=floor(A/S), d=A mod S.</p></details><details><summary>What is thrashing?</summary><p>Excessive paging/page faults that consume time and impair useful execution.</p></details></section><section><h2>4. Variable partitions and fit policies</h2><p>Variable-sized partitions are carved from free holes. First-fit takes the first sufficiently large hole; best-fit takes the smallest adequate hole; worst-fit takes the largest. After allocation, subtract the requested size from that hole; merge adjacent free holes when a process exits. External fragmentation means total free space is sufficient but split across noncontiguous holes. Internal fragmentation is unused space inside an allocated partition. Compaction gathers holes and requires dynamic relocation; I/O to a process being moved must be handled safely.</p><p><b>Slide example (K):</b> holes 100, 500, 200, 300, 600; requests 212, 417, 112, 426, in that order. First-fit leaves after each allocation: (100,288,200,300,600) → (100,288,200,300,183) → (100,176,200,300,183); 426 cannot fit. Best-fit: 212 uses 300 (88 left); 417 uses 500 (83 left); 112 uses 200 (88 left); 426 uses 600 (174 left). Worst-fit: 212 uses 600 (388 left); 417 uses 500 (83 left); 112 uses remaining 388 (276 left); 426 cannot fit. Best-fit places all four requests, but “most efficient” depends on the chosen measure and future requests; do not claim a universal winner.</p></section>
-<section><h2>5. Segmentation</h2><p>Segmentation reflects the programmer’s logical view: a program consists of variable-sized units such as procedures, functions, stack, arrays, and data. A logical address is &lt;segment s, offset d&gt;. The segment-table entry supplies base and limit. Check s&lt;STLR and d&lt;limit; then physical address=base[s]+d. Out-of-range segment or offset traps. Unlike paging, segment sizes vary and external fragmentation can occur.</p></section>
-<section><h2>6. Paging hardware, TLB, protection, and EAT</h2><p>Page tables map page numbers to frame numbers. PTBR points to the table; PTLR gives its length. Without a TLB, translation may require a page-table memory access plus the actual memory access. A TLB is a small associative cache of translations; ASIDs tag entries by process, otherwise context switches may flush it. Valid/invalid bits distinguish legal address-space pages; protection bits can encode read/write/execute rights.</p><p>If memory access time is m and TLB hit ratio is h, with no TLB lookup cost and one memory access on hit/two on miss: EAT=h·m+(1−h)·2m. For m=10 ns,h=.80: EAT=12 ns. At h=.99: EAT=10.1 ns. If lookup time is supplied, include it according to hit/miss path.</p><p>Large page tables motivate hierarchical, hashed, or inverted page-table structures. The slides name these approaches but do not detail their algorithms.</p></section>
-<section><h2>7. Swapping and virtual memory</h2><p>Swapping temporarily moves a process image to backing store; transfer time depends on data size and storage rate. Example: 100 MB at 50 MB/s takes 2 s per transfer; swapping one process out and another of equal size in takes about 4 s, excluding overhead. Pending I/O complicates movement; double buffering through kernel memory adds copying. Virtual memory separates logical from physical size and loads only needed pages (demand paging), allowing sparse address spaces, shared pages, and more concurrent programs.</p><p>Demand-paging fault handling: validate reference; abort if illegal; otherwise find free frame or select victim, write dirty victim if needed, load page, update tables/valid bit, restart instruction. Pure demand paging begins with no pages resident. If a process lacks enough frames, repeated faults can cause thrashing and low CPU utilization.</p></section><section><h2>What to know for the exam</h2><p>Be ready to define the central terms, compare mechanisms using their assumptions and trade-offs, trace a process or algorithm step by step, and justify the result. State units and conventions whenever a question supplies them.</p></section><section><h2>Final coverage checklist</h2><table><tr><th>Source section</th><th>Coverage in this file</th></tr><tr><td>Unit 5 slides 1–11</td><td>Background, protection, address binding, logical/physical addresses, MMU, relocation</td></tr><tr><td>Unit 5 slides 12–81</td><td>Memory allocation and virtual-memory topics; study alongside paging companion deck; diagram-only subtopics may need visual confirmation</td></tr></table></section><footer>Prepared from the OS course files in NMIMS-STUDY/OS/theory. Past papers were treated as exam-pattern context only.</footer></main></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unit 5: Memory Management &amp; Partitioning - NMIMS Master Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="theme.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="os-custom-polish">
+:root { --ai-content-width: 980px; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+body { min-width: 320px; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+.main-content { width: calc(100% - 290px); max-width: none; }
+.content-wrapper { max-width: var(--ai-content-width); }
+.top-bar { position: sticky; top: 0; z-index: 90; min-height: 52px; padding: 12px 0; margin-top: -32px; background: color-mix(in srgb, var(--bg-main) 94%, transparent); backdrop-filter: blur(10px); }
+.unit-hero { padding-top: 6px; margin-bottom: clamp(26px, 4vw, 42px); }
+.unit-hero h1 { font-size: clamp(1.8rem, 3.3vw, 2.45rem); letter-spacing: -0.035em; text-wrap: balance; }
+.module-section { scroll-margin-top: 76px; padding: clamp(20px, 3vw, 34px); margin-bottom: clamp(24px, 4vw, 40px); }
+.topic-block { scroll-margin-top: 76px; margin-bottom: 2.2rem; }
+.topic-block p, .topic-block li, .q-answer p, .callout p { max-width: 82ch; line-height: 1.72; }
+.callout { padding: 18px 20px; border-radius: 10px; margin: 16px 0; border-left: 4px solid var(--primary); background: #f1f5f9; }
+.callout-def { border-left-color: #2563eb; background: #eff6ff; }
+.callout-warn { border-left-color: #f59e0b; background: #fffbeb; }
+.callout-tip { border-left-color: #10b981; background: #ecfdf5; }
+.data-table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+.data-table th, .data-table td { border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; }
+.data-table th { background: #f8fafc; font-weight: 600; }
+.diagram-wrapper { margin: 20px 0; text-align: center; }
+.diagram-caption { font-size: 0.88rem; color: var(--text-muted); margin-top: 8px; font-style: italic; }
+.problem-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+.problem-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.difficulty.easy { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.medium { background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.hard { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.solution-flow { display: flex; flex-direction: column; gap: 14px; }
+.step-row { display: flex; gap: 16px; align-items: flex-start; }
+.step-badge { font-size: 0.72rem; font-weight: 700; padding: 4px 8px; background: #e2e8f0; color: #334155; border-radius: 4px; white-space: nowrap; }
+.step-badge.answer { background: #dcfce7; color: #166534; }
+.final-box { background: #ecfdf5; border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 6px; font-weight: 600; color: #065f46; }
+.question-item { border-bottom: 1px solid var(--border-color); padding: 20px 0; }
+.question-item:last-child { border-bottom: none; }
+.q-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+.marks-badge { font-size: 0.75rem; font-weight: 700; background: #f1f5f9; color: var(--secondary); border: 1px solid #cbd5e1; padding: 2px 7px; border-radius: 4px; }
+.q-answer { background: #f8fafc; padding: 14px 18px; border-radius: 6px; }
+.unit-pagination { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+.btn { padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-outline { border: 1px solid var(--border-color); color: var(--text-main); }
+@media (max-width: 900px) { .sidebar { max-height: 34vh; padding: 16px; } .main-content { width: 100%; padding: 24px 16px 56px; } }
+</style>
+</head>
+<body>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · OS Master</a>
+<span class="badge">Semester Exam Prep</span>
+<button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle" type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark mode</span></button>
+</div>
+<nav class="sidebar-nav">
+<h3>All Units &amp; Guides</h3>
+<ul>
+<li><a href="01-os-foundations.html"><span class="unit-num">01</span> OS Overview &amp; Architecture</a></li>
+<li><a href="02-processes-and-cpu-scheduling.html"><span class="unit-num">02</span> Processes &amp; CPU Scheduling</a></li>
+<li><a href="03-concurrency-and-synchronization.html"><span class="unit-num">03</span> Concurrency &amp; Synchronization</a></li>
+<li><a href="04-deadlocks.html"><span class="unit-num">04</span> Deadlocks &amp; Banker's Algorithm</a></li>
+<li><a class="active" href="05-memory-management.html"><span class="unit-num">05</span> Memory Management &amp; Fitting</a></li>
+<li><a href="06-paging-and-replacement.html"><span class="unit-num">06</span> Paging &amp; Virtual Memory</a></li>
+<li><a href="07-io-and-disk-scheduling.html"><span class="unit-num">07</span> I/O &amp; Disk Scheduling</a></li>
+<li><a href="08-file-systems.html"><span class="unit-num">08</span> File System Interface &amp; Storage</a></li>
+<li><a href="09-numericals-and-problem-solving.html"><span class="unit-num">09</span> Master Problem-Solving Guide</a></li>
+<li><a href="10-solved-examples.html"><span class="unit-num">10</span> Comprehensive Solved Bank</a></li>
+<li><a href="11-topic-checklist.html"><span class="unit-num">11</span> Final Topic Checklist</a></li>
+</ul>
+<h3>Unit 5 Sections</h3>
+<ul>
+<li><a href="#theory-section">1. In-Depth Lecture &amp; Theory</a></li>
+<li><a href="#sec-address-binding">1.1 Address Binding &amp; Protection</a></li>
+<li><a href="#sec-mmu">1.2 Logical vs. Physical Addresses &amp; MMU</a></li>
+<li><a href="#sec-swapping">1.3 Swapping &amp; Backing Store</a></li>
+<li><a href="#sec-contiguous">1.4 Contiguous Allocation: Fit Strategies</a></li>
+<li><a href="#sec-fragmentation">1.5 Internal vs. External Fragmentation</a></li>
+<li><a href="#sec-segmentation">1.6 Segmentation Architecture</a></li>
+<li><a href="#numerical-section">2. In-Depth Partitioning Numericals</a></li>
+<li><a href="#num-fit-trace">2.1 First-Fit vs. Best-Fit vs. Worst-Fit</a></li>
+<li><a href="#num-frag-calc">2.2 Quantitative Fragmentation Analysis</a></li>
+<li><a href="#comparison-section">3. Comparative Studies</a></li>
+<li><a href="#case-section">4. Real-World Memory Allocators</a></li>
+<li><a href="#questions-section">5. NMIMS Exam Questions &amp; Marking Guide</a></li>
+</ul>
+</nav>
+</aside>
+
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 5: Memory Management</span>
+</div>
+<div class="meta-tag">Unit 5 · 100% Lecture &amp; PYQ Faithful Masterclass</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>Unit 5: Memory Management, Allocation &amp; Segmentation</h1>
+<p class="lead">A rigorous academic masterclass exploring hardware address protection (Base and Limit registers), address binding lifecycles (Compile, Load, and Execution time), dynamic relocation via the Memory Management Unit (MMU), contiguous memory allocation policies (First-Fit, Best-Fit, Worst-Fit), internal vs. external fragmentation, compaction, swapping mechanics, and segmentation table address translation.</p>
+</header>
+<section class="theory-sources" aria-label="Original theory files"><h2>Original theory files</h2><p>Open the unchanged lecture source or expand its preview here.</p><ul><li><a href="theory/Unit%205.pptx" target="_blank" rel="noopener">Open original: Unit 5.pptx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of Unit 5.pptx" src="theory/previews/Unit%205.pdf"></iframe></div><p><a href="theory/previews/Unit%205.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li></ul></section>
+
+
+<!-- SECTION 1: IN-DEPTH THEORY -->
+<section class="module-section" id="theory-section">
+<div class="section-title">
+<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+<span class="cross-ref-badge">Faithful to Unit 5.pptx (Slides 1–81) &amp; NMIMS Past Papers</span>
+</div>
+
+<div class="topic-block" id="sec-address-binding">
+<h3>1.1 Address Binding Lifecycles &amp; Hardware Protection</h3>
+<p>Programs are stored on secondary disk storage as binary executable files. To run, they must be brought into main physical RAM and placed inside an active process context.</p>
+
+<h4>The Three Phases of Address Binding:</h4>
+<p>Address binding is the mapping of program instructions and data to physical memory addresses. It occurs at three distinct stages:</p>
+<ol>
+<li><strong>Compile Time:</strong> If it is known at compile time where the process will reside in physical RAM, <strong>absolute machine code</strong> is generated (e.g., instructions directly reference physical address <code>0x00400000</code>).
+  <br/><em>Severe Limitation:</em> If the starting memory location changes later, the entire program must be completely recompiled! (Used historically in MS-DOS <code>.COM</code> files).</li>
+<li><strong>Load Time:</strong> If memory location is not known at compile time, the compiler generates <strong>relocatable code</strong>. Final binding of memory addresses is delayed until the loader places the program into RAM.
+  <br/><em>Limitation:</em> If the process is swapped out to disk and reloaded later into a <em>different</em> RAM partition, all internal pointers break!</li>
+<li><strong>Execution Time (Run Time - Modern Standard):</strong> If a process can be moved during its execution from one memory segment to another (e.g., via swapping), binding must be delayed until run time.
+  <br/><em>Hardware Requirement:</em> Requires special hardware support: the <strong>Memory Management Unit (MMU)</strong> with dynamic relocation registers.</li>
+</ol>
+
+<h4>Hardware Address Protection: Base and Limit Registers</h4>
+<p>To ensure a user process cannot corrupt kernel memory or read data from another process, the CPU hardware implements two dedicated registers:</p>
+<ul>
+<li><strong>Base Register:</strong> Holds the smallest legal physical memory address allocated to the process (e.g., <code>300040</code>).</li>
+<li><strong>Limit Register:</strong> Specifies the total size/range of the logical address space allocated to the process (e.g., <code>120900</code>).</li>
+</ul>
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:680px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- CPU -->
+  <rect x="30" y="70" width="80" height="50" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" rx="6"/>
+  <text x="70" y="100" fill="#1d4ed8" font-size="12" font-weight="700" text-anchor="middle">CPU</text>
+
+  <!-- Arrow to Comparator -->
+  <line x1="110" y1="95" x2="170" y2="95" stroke="#3b82f6" stroke-width="2"/>
+  <text x="140" y="85" fill="#64748b" font-size="9" text-anchor="middle">Logical Addr</text>
+
+  <!-- Comparator 1: Limit -->
+  <polygon points="210,65 250,95 210,125 170,95" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="210" y="99" fill="#b45309" font-size="11" font-weight="700" text-anchor="middle">&lt; Limit?</text>
+
+  <!-- Trap if >= Limit -->
+  <line x1="210" y1="125" x2="210" y2="175" stroke="#dc2626" stroke-width="2"/>
+  <text x="210" y="190" fill="#dc2626" font-size="10" font-weight="700" text-anchor="middle">TRAP to OS (Seg Fault)</text>
+
+  <!-- Adder: Base -->
+  <circle cx="340" cy="95" r="25" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="340" y="100" fill="#1d4ed8" font-size="16" font-weight="700" text-anchor="middle">+</text>
+  <text x="340" y="60" fill="#1d4ed8" font-size="10" font-weight="700" text-anchor="middle">Base Reg</text>
+  <line x1="340" y1="65" x2="340" y2="70" stroke="#3b82f6" stroke-width="1.5"/>
+
+  <!-- Physical Memory -->
+  <line x1="250" y1="95" x2="315" y2="95" stroke="#22c55e" stroke-width="2"/>
+  <line x1="365" y1="95" x2="480" y2="95" stroke="#22c55e" stroke-width="2"/>
+  <text x="420" y="85" fill="#15803d" font-size="9" text-anchor="middle">Physical Addr</text>
+
+  <rect x="480" y="30" width="160" height="130" fill="#f8fafc" stroke="#334155" stroke-width="2" rx="6"/>
+  <text x="560" y="55" fill="#334155" font-size="12" font-weight="700" text-anchor="middle">PHYSICAL RAM</text>
+  <rect x="500" y="70" width="120" height="70" fill="#dbeafe" stroke="#2563eb" rx="4"/>
+  <text x="560" y="105" fill="#1e40af" font-size="10" font-weight="600" text-anchor="middle">Allocated Space</text>
+  <text x="625" y="75" fill="#64748b" font-size="8">Base</text>
+  <text x="625" y="140" fill="#64748b" font-size="8">Base + Limit</text>
+</svg>
+<p class="diagram-caption">Figure 5.1: Hardware Base and Limit register protection logic enforced on every CPU memory access.</p>
+</div>
+</div>
+
+<div class="topic-block" id="sec-mmu">
+<h3>1.2 Logical vs. Physical Address Spaces &amp; Dynamic Relocation</h3>
+<div class="callout callout-def">
+<h4>Logical vs. Physical Addresses (The Essential Distinction):</h4>
+<ul>
+<li><strong>Logical Address (Virtual Address):</strong> An address generated by the CPU during instruction execution. To the program, it appears as though it owns memory starting from address <code>0x00000000</code>.</li>
+<li><strong>Physical Address:</strong> The actual physical hardware memory location loaded onto the memory address bus of the RAM chips.</li>
+</ul>
+</div>
+<p>The hardware device that performs run-time mapping from logical to physical addresses is the <strong>Memory Management Unit (MMU)</strong>.</p>
+<h4>The Relocation Register:</h4>
+<p>In the simplest dynamic relocation scheme, the Base register is called a <strong>Relocation Register</strong>. The value in the relocation register is added to every address generated by a user process at the hardware bus level:</p>
+$$\mathbf{\text{Physical Address} = \text{Logical Address} + \text{Relocation Register Value}}$$
+<p><em>Example:</em> If the Relocation Register holds <code>14000</code>, a CPU request for logical address <code>346</code> maps directly to physical RAM address \(14000 + 346 = \mathbf{14346}\). The user program never knows or cares about physical address 14346!</p>
+</div>
+
+<div class="topic-block" id="sec-swapping">
+<h3>1.3 Swapping &amp; The Backing Store</h3>
+<p>A process must reside in physical RAM to execute. However, when total memory demanded by active jobs exceeds physical RAM capacity, the operating system invokes <strong>Swapping</strong>:</p>
+<ul>
+<li>A process can be temporarily <strong>swapped out</strong> of memory to a <strong>backing store</strong> (a high-speed secondary disk partition / swap space), and later brought back (<strong>swapped in</strong>) to continue execution.</li>
+<li><strong>Context Switch Overhead in Swapping:</strong> Swapping incurs massive time overhead because disk transfer speeds are orders of magnitude slower than RAM bus transfers.
+  <br/><em>Calculation:</em> Swapping out a 100 MB process to a disk with transfer rate of 50 MB/s takes \(100\text{ MB} / 50\text{ MB/s} = 2.0\text{ seconds}\)! This dwarfs normal CPU microsecond switching.</li>
+</ul>
+</div>
+
+<div class="topic-block" id="sec-contiguous">
+<h3>1.4 Contiguous Memory Allocation &amp; Dynamic Partitioning Strategies</h3>
+<p>In contiguous memory allocation, each process is loaded into a single contiguous block of physical memory addresses. As processes enter and exit RAM, variable-sized holes (free memory blocks) are created throughout physical memory.</p>
+
+<h4>The Three Dynamic Storage Allocation Strategies:</h4>
+<table class="data-table">
+<thead>
+<tr>
+<th>Allocation Strategy</th>
+<th>Algorithmic Selection Logic</th>
+<th>Computational Search Overhead</th>
+<th>Fragmentation Characteristics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>First-Fit</strong></td>
+<td>Allocate the <strong>very first free hole</strong> that is large enough to satisfy the request. Search can start at beginning or where previous search ended.</td>
+<td><strong>Fastest.</strong> Stops searching the moment a qualifying hole is found.</td>
+<td>Generates small unusable slivers of external fragmentation at the beginning of memory.</td>
+</tr>
+<tr>
+<td><strong>Best-Fit</strong></td>
+<td>Allocate the <strong>smallest hole</strong> that is large enough. Must search the entire list unless ordered by size.</td>
+<td>Slower. Must inspect every free block in memory.</td>
+<td>Produces the smallest leftover leftover holes, which are often too tiny to ever satisfy future requests.</td>
+</tr>
+<tr>
+<td><strong>Worst-Fit</strong></td>
+<td>Allocate the <strong>largest available hole</strong> in memory. Must search the entire list unless ordered by size.</td>
+<td>Slower. Must inspect every free block to find the maximum.</td>
+<td>Leaves behind the largest remaining residual hole, which is more likely to be useful for subsequent processes.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip">
+<h4>Empirical Research Findings (Stallings &amp; Silberschatz):</h4>
+<p>Simulations prove that both <strong>First-Fit and Best-Fit are strictly superior to Worst-Fit</strong> in terms of execution speed and memory storage utilization. First-Fit is generally the fastest and most memory-efficient in practice.</p>
+</div>
+</div>
+
+<div class="topic-block" id="sec-fragmentation">
+<h3>1.5 Internal vs. External Fragmentation (NMIMS Exam Classic)</h3>
+<p>Fragmentation is the severe degradation of memory utilization where free storage is wasted.</p>
+
+<table class="data-table">
+<thead>
+<tr>
+<th>Comparison Dimension</th>
+<th>Internal Fragmentation</th>
+<th>External Fragmentation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fundamental Definition</strong></td>
+<td>Wasted storage space residing <strong>inside an allocated memory partition</strong> because the assigned block is slightly larger than the requested process payload.</td>
+<td>Wasted storage space residing <strong>outside allocated partitions</strong> (between processes). Total free memory is sufficient, but broken into non-contiguous fragments.</td>
+</tr>
+<tr>
+<td><strong>Occurs Under Which Scheme?</strong></td>
+<td>Occurs in <strong>Fixed-Partition Multiprogramming</strong> and <strong>Paging</strong> (within the final frame).</td>
+<td>Occurs in <strong>Variable-Partition Contiguous Allocation</strong> and <strong>Segmentation</strong>.</td>
+</tr>
+<tr>
+<td><strong>Root Cause</strong></td>
+<td>System allocates memory in discrete, fixed-size chunks (e.g., 4 KB pages or fixed 100 KB partitions).</td>
+<td>Continuous allocation and deallocation of variable-sized process blocks over time.</td>
+</tr>
+<tr>
+<td><strong>The 50-Percent Rule</strong></td>
+<td>Not governed by the 50% rule.</td>
+<td>Statistical analysis proves: for First-Fit, given \(N\) allocated blocks, another <strong>\(0.5 N\) blocks are lost to external fragmentation</strong> (one third of memory wasted!).</td>
+</tr>
+<tr>
+<td><strong>Remediation Strategy</strong></td>
+<td>Use smaller page sizes (e.g., 4 KB instead of 64 KB).</td>
+<td>Eliminated by <strong>Compaction</strong> (shuffling RAM contents) or by adopting <strong>Non-Contiguous Paging</strong>!</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="topic-block" id="sec-segmentation">
+<h3>1.6 Segmentation Architecture &amp; Address Translation</h3>
+<p>Users do not view memory as a linear array of bytes; they view memory as a collection of variable-length logical units: a Main Routine, Subroutines, Symbol Table, Stack, and Arrays. <strong>Segmentation</strong> is a memory management scheme that directly supports this programmer's view of memory.</p>
+
+<h4>Logical Address Structure in Segmentation:</h4>
+<p>A logical address is a 2-tuple: \(\mathbf{\langle \text{Segment Number } s, \text{ Offset } d \rangle}\).</p>
+
+<h4>The Segment Table:</h4>
+<p>Maps two-dimensional user logical addresses into one-dimensional physical memory. Each entry in the segment table contains:</p>
+<ul>
+<li><strong>Base:</strong> Starting physical address where the segment resides in RAM.</li>
+<li><strong>Limit:</strong> The exact length of the segment.</li>
+</ul>
+
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:680px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg">
+  <!-- Logical Address -->
+  <rect x="30" y="80" width="80" height="40" fill="#eff6ff" stroke="#3b82f6" rx="4"/>
+  <text x="70" y="105" fill="#1d4ed8" font-size="12" font-weight="700" text-anchor="middle">s (Seg #)</text>
+  
+  <rect x="110" y="80" width="80" height="40" fill="#eff6ff" stroke="#3b82f6" rx="4"/>
+  <text x="150" y="105" fill="#1d4ed8" font-size="12" font-weight="700" text-anchor="middle">d (Offset)</text>
+
+  <!-- Segment Table -->
+  <rect x="250" y="30" width="150" height="150" fill="#f8fafc" stroke="#334155" stroke-width="1.5" rx="6"/>
+  <text x="325" y="55" fill="#334155" font-size="12" font-weight="700" text-anchor="middle">SEGMENT TABLE</text>
+  <line x1="250" y1="65" x2="400" y2="65" stroke="#cbd5e1"/>
+  <text x="285" y="80" fill="#64748b" font-size="10" font-weight="600">Limit</text>
+  <text x="360" y="80" fill="#64748b" font-size="10" font-weight="600">Base</text>
+
+  <!-- Comparison & Addition -->
+  <line x1="150" y1="120" x2="150" y2="160" stroke="#3b82f6" stroke-width="2"/>
+  <line x1="150" y1="160" x2="460" y2="160" stroke="#3b82f6" stroke-width="2"/>
+  
+  <circle cx="500" cy="100" r="20" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="500" y="106" fill="#1d4ed8" font-size="16" font-weight="700" text-anchor="middle">+</text>
+
+  <!-- Physical Memory -->
+  <rect x="560" y="30" width="100" height="160" fill="#f0fdf4" stroke="#22c55e" stroke-width="2" rx="6"/>
+  <text x="610" y="55" fill="#15803d" font-size="11" font-weight="700" text-anchor="middle">Physical RAM</text>
+  
+  <line x1="520" y1="100" x2="560" y2="100" stroke="#22c55e" stroke-width="2.5"/>
+</svg>
+<p class="diagram-caption">Figure 5.2: Segmentation Hardware Address Translation showing Limit comparison and Base addition.</p>
+</div>
+
+<div class="callout callout-def">
+<h4>Hardware Translation Rule in Segmentation:</h4>
+<ol>
+<li>Segment number \(s\) indexes into the Segment Table.</li>
+<li>Compare offset \(d\) against the segment Limit:
+  <br/>If \(d \ge \text{Limit} \implies\) <strong>TRAP: Addressing Error (Segmentation Fault)!</strong></li>
+<li>If \(d &lt; \text{Limit} \implies\) Compute physical address:
+$$\mathbf{\text{Physical Address} = \text{Base} + d}$$</li>
+</ol>
+</div>
+</div>
+</section>
+
+<div class="topic-block" id="sec-memory-requirements-partitions">
+<h3>1.7 Memory Management Requirements and Fixed vs. Variable Partitions</h3>
+<p>Classical memory management must support <strong>relocation</strong> (processes need not load at one fixed physical address), <strong>protection</strong> (one process cannot access another's memory without authorization), <strong>sharing</strong> (controlled sharing of code/data), and a useful separation between logical program organization and physical memory organization.</p>
+<table class="data-table"><thead><tr><th>Partition scheme</th><th>Allocation and fragmentation</th><th>Trade-off</th></tr></thead><tbody>
+<tr><td>Fixed partitioning</td><td>RAM is divided into preset partitions; one process occupies a partition. Unused space inside an assigned partition is internal fragmentation.</td><td>Simple, but partition count and sizes constrain the number and size of resident processes.</td></tr>
+<tr><td>Variable (dynamic) partitioning</td><td>Partitions are created to fit incoming processes. Free holes can form between allocations, causing external fragmentation.</td><td>More flexible fit, but may need compaction and placement policies such as First/Best/Worst Fit.</td></tr>
+</tbody></table>
+</div>
+
+<!-- SECTION 2: NUMERICALS & TRACES -->
+<section class="module-section" id="numerical-section">
+<div class="section-title">
+<h2>2. In-Depth Partitioning Numericals (Step-by-Step)</h2>
+<span class="cross-ref-badge">NMIMS 10-Mark Allocation Problems</span>
+</div>
+
+<div class="problem-card" id="num-fit-trace">
+<div class="problem-header">
+<span class="difficulty medium">Core 10-Mark Problem</span>
+<h3>Problem 5.1: Process-to-Partition Allocation: First-Fit, Best-Fit &amp; Worst-Fit</h3>
+</div>
+<p><strong>Problem Statement (From NMIMS Paper 5 &amp; Paper 2):</strong> Consider five memory partitions of sizes:
+$$100\text{ KB}, \quad 500\text{ KB}, \quad 200\text{ KB}, \quad 300\text{ KB}, \quad 600\text{ KB}$$
+(in contiguous order). Consider processes arriving in sequence with memory requirements:
+$$P_1: 212\text{ KB}, \quad P_2: 417\text{ KB}, \quad P_3: 112\text{ KB}, \quad P_4: 426\text{ KB}$$
+Show the final process-to-partition allocation and remaining holes under:
+<br/>(a) First-Fit
+<br/>(b) Best-Fit
+<br/>(c) Worst-Fit
+<br/>(d) State which algorithm makes the most efficient use of memory.</p>
+
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">PART (a) FIRST-FIT</span>
+<div>
+<p>Partitions: \([100\text{ KB}, 500\text{ KB}, 200\text{ KB}, 300\text{ KB}, 600\text{ KB}]\)</p>
+<ul>
+<li>\(P_1 (212\text{ KB})\): First hole large enough is 500 KB.
+  <br/>\(\to P_1\) allocated to <strong>500 KB partition</strong> (Remaining: \(500 - 212 = 288\text{ KB}\)).</li>
+<li>\(P_2 (417\text{ KB})\): First hole large enough is 600 KB.
+  <br/>\(\to P_2\) allocated to <strong>600 KB partition</strong> (Remaining: \(600 - 417 = 183\text{ KB}\)).</li>
+<li>\(P_3 (112\text{ KB})\): First hole large enough is 200 KB.
+  <br/>\(\to P_3\) allocated to <strong>200 KB partition</strong> (Remaining: \(200 - 112 = 88\text{ KB}\)).</li>
+<li>\(P_4 (426\text{ KB})\): Needs 426 KB. Holes available: 100 KB, 288 KB, 88 KB, 300 KB, 183 KB. None \(\ge 426\) KB!
+  <br/>\(\to \mathbf{P_4 \text{ must WAIT (Cannot be allocated!)}}\)</li>
+</ul>
+</div>
+</div>
+
+<div class="step-row">
+<span class="step-badge">PART (b) BEST-FIT</span>
+<div>
+<p>Partitions: \([100\text{ KB}, 500\text{ KB}, 200\text{ KB}, 300\text{ KB}, 600\text{ KB}]\)</p>
+<ul>
+<li>\(P_1 (212\text{ KB})\): Qualifying holes: 500, 300, 600. Smallest is 300 KB.
+  <br/>\(\to P_1\) allocated to <strong>300 KB partition</strong> (Remaining: \(300 - 212 = 88\text{ KB}\)).</li>
+<li>\(P_2 (417\text{ KB})\): Qualifying holes: 500, 600. Smallest is 500 KB.
+  <br/>\(\to P_2\) allocated to <strong>500 KB partition</strong> (Remaining: \(500 - 417 = 83\text{ KB}\)).</li>
+<li>\(P_3 (112\text{ KB})\): Qualifying holes: 200, 600. Smallest is 200 KB.
+  <br/>\(\to P_3\) allocated to <strong>200 KB partition</strong> (Remaining: \(200 - 112 = 88\text{ KB}\)).</li>
+<li>\(P_4 (426\text{ KB})\): Qualifying hole: 600 KB.
+  <br/>\(\to P_4\) allocated to <strong>600 KB partition</strong> (Remaining: \(600 - 426 = 174\text{ KB}\)).</li>
+</ul>
+<p><strong>Result: ALL FOUR PROCESSES ALLOCATED SUCCESSFULLY!</strong></p>
+</div>
+</div>
+
+<div class="step-row">
+<span class="step-badge">PART (c) WORST-FIT</span>
+<div>
+<ul>
+<li>\(P_1 (212\text{ KB})\): Largest hole is 600 KB.
+  <br/>\(\to P_1\) allocated to <strong>600 KB partition</strong> (Remaining: \(600 - 212 = 388\text{ KB}\)).</li>
+<li>\(P_2 (417\text{ KB})\): Largest hole is 500 KB.
+  <br/>\(\to P_2\) allocated to <strong>500 KB partition</strong> (Remaining: \(500 - 417 = 83\text{ KB}\)).</li>
+<li>\(P_3 (112\text{ KB})\): Largest hole is 388 KB (leftover of 600 KB).
+  <br/>\(\to P_3\) allocated to <strong>388 KB partition</strong> (Remaining: \(388 - 112 = 276\text{ KB}\)).</li>
+<li>\(P_4 (426\text{ KB})\): Needs 426 KB. Holes available: 100, 83, 200, 300, 276. Largest is 300 KB.
+  <br/>\(\to \mathbf{P_4 \text{ must WAIT (Cannot be allocated!)}}\)</li>
+</ul>
+</div>
+</div>
+
+<div class="step-row">
+<span class="step-badge answer">CONCLUSION</span>
+<div>
+<p class="final-box"><strong>Best-Fit is the MOST EFFICIENT</strong> in this scenario, as it is the ONLY policy capable of allocating all four processes simultaneously without blocking \(P_4\).</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 3: COMPARATIVE STUDIES -->
+<section class="module-section" id="comparison-section">
+<div class="section-title">
+<h2>3. Comprehensive Comparative Studies</h2>
+<span class="cross-ref-badge">Frequent Exam Distinctions</span>
+</div>
+
+<h3>Table 5.1: Paging vs. Segmentation</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Paging</th>
+<th>Segmentation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Block Size</strong></td>
+<td><strong>Fixed size</strong> (typically 4 KB or 8 KB hardware pages).</td>
+<td><strong>Variable size</strong> (depends on programmer function size).</td>
+</tr>
+<tr>
+<td><strong>User Visibility</strong></td>
+<td><strong>Completely Invisible:</strong> The programmer views memory as linear; OS and hardware partition it.</td>
+<td><strong>Visible:</strong> Directly reflects the programmer's modular code organization.</td>
+</tr>
+<tr>
+<td><strong>Address Representation</strong></td>
+<td>1D address split by hardware bitmask: \(\langle p, d \rangle\).</td>
+<td>2D logical address tuple: \(\langle \text{segment}, \text{offset} \rangle\).</td>
+</tr>
+<tr>
+<td><strong>Fragmentation Type</strong></td>
+<td><strong>Internal Fragmentation</strong> only (within final page). Zero external fragmentation.</td>
+<td><strong>External Fragmentation</strong> (variable sized segments leave holes). Zero internal fragmentation.</td>
+</tr>
+<tr>
+<td><strong>Protection &amp; Sharing</strong></td>
+<td>Difficult to share logical subroutines cleanly across arbitrary page boundaries.</td>
+<td><strong>Trivial and Natural:</strong> Whole procedures (segments) shared via segment table pointers.</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<!-- SECTION 4: CASE STUDIES -->
+<section class="module-section" id="case-section">
+<div class="section-title">
+<h2>4. Real-World Memory Allocators</h2>
+<span class="cross-ref-badge">Kernel Implementation</span>
+</div>
+<div class="problem-card">
+<span class="difficulty hard">Linux Slab Allocator</span>
+<h3>The Linux Buddy System &amp; Slab Allocator</h3>
+<p>To avoid severe external fragmentation in kernel memory, Linux uses a two-tier allocator:</p>
+<ul>
+<li><strong>Buddy System:</strong> Allocates physical memory in power-of-two page frames (\(4\text{ KB}, 8\text{ KB}, 16\text{ KB}, \dots\)). When a block is released, it is merged with its adjacent "buddy" block into a larger power-of-two block in \(O(1)\) time.</li>
+<li><strong>Slab Allocator:</strong> Eliminates internal fragmentation caused by the Buddy System for small kernel data structures (such as PCBs, semaphores, and file inodes). It pre-allocates contiguous caches of identical small objects.</li>
+</ul>
+</div>
+</section>
+
+<!-- SECTION 5: EXAM QUESTIONS & MARKING GUIDE -->
+<section class="module-section" id="questions-section">
+<div class="section-title">
+<h2>5. Possible University Exam Questions &amp; Marking Guide</h2>
+<span class="cross-ref-badge">NMIMS Pattern: 5 &amp; 10 Mark Solutions</span>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">10 Marks</span>
+<h4>Q1. Explain how fragmentation affects memory management in Operating Systems. Differentiate between Internal and External fragmentation. How can external fragmentation be resolved? [From NMIMS Paper 5 &amp; 2]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong></p>
+<ul>
+<li>Definition of fragmentation and impact on utilization: <strong>2 Marks</strong></li>
+<li>Comprehensive differentiation table (Internal vs External across 5 metrics): <strong>4 Marks</strong></li>
+<li>Detailed explanation of Compaction and Non-Contiguous Paging solutions: <strong>4 Marks</strong></li>
+</ul>
+<p><strong>Model Answer Key:</strong> Provide Table 5.1 detailing the internal/external differences. Then explain the two solutions: (1) <strong>Compaction:</strong> Shuffling memory contents dynamically to place all free storage together into one large block. Note that compaction is only possible if relocation is dynamic and done at execution time via base registers. (2) <strong>Paging:</strong> Allowing process physical memory to be non-contiguous, completely eliminating external fragmentation.</p>
+</div>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">10 Marks</span>
+<h4>Q2. How will you implement segmentation in a user program? Depict logical address space, segment table, and physical memory with a neat diagram. State advantages and disadvantages. [From NMIMS Paper 1]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong></p>
+<ul>
+<li>Conceptual basis of segmentation (programmer view): <strong>2 Marks</strong></li>
+<li>Well-labeled address translation diagram with Base &amp; Limit registers: <strong>4 Marks</strong></li>
+<li>Advantages and disadvantages analysis: <strong>4 Marks</strong></li>
+</ul>
+<p><strong>Model Answer Key:</strong> Draw Figure 5.2. Detail the logical address structure \(\langle s, d \rangle\) and the hardware comparison check (\(d &lt; \text{Limit}\)). List advantages: modular protection, easy code sharing. List disadvantages: external fragmentation, variable-size allocation overhead.</p>
+</div>
+</div>
+</section>
+
+<!-- SECTION 6: WHAT TO KNOW FOR THE EXAM & CHECKLIST -->
+<section class="module-section" id="exam-checklist">
+<div class="section-title">
+<h2>What to Know for the Exam &amp; Coverage Checklist</h2>
+<span class="cross-ref-badge">Final Revision Anchor</span>
+</div>
+
+<div class="callout callout-tip">
+<h4>Core Exam Takeaways:</h4>
+<ul>
+<li><strong>Dynamic Relocation:</strong> \(\text{Physical Address} = \text{Logical Address} + \text{Base Register}\).</li>
+<li><strong>Protection Hardware:</strong> If \(\text{Logical Address} \ge \text{Limit} \implies \text{Trap (Segmentation Fault)}\).</li>
+<li><strong>Fit Policies:</strong> First-Fit is fastest; Best-Fit produces smallest leftover holes; Worst-Fit produces largest leftover holes.</li>
+<li><strong>Fragmentation:</strong> Internal = inside allocated partition (paging); External = outside partitions (contiguous allocation).</li>
+<li><strong>Segmentation:</strong> Segment Table stores \(\langle \text{Base}, \text{Limit} \rangle\); offset \(d\) must be strictly less than Limit.</li>
+</ul>
+</div>
+
+<h3>Final Unit Coverage Checklist</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Topic / Slide Reference</th><th>Coverage Status</th><th>Core Concept Mastered</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Unit 5 Slides 1–11: Address Binding &amp; Protection</td><td>Complete</td><td>Compile/Load/Execution binding, Base &amp; Limit registers, MMU relocation.</td></tr>
+<tr><td>Unit 5 Slides 12–25: Dynamic Storage Allocation</td><td>Complete</td><td>First-Fit, Best-Fit, Worst-Fit algorithms, memory compaction, swapping.</td></tr>
+<tr><td>Unit 5 Slides 26–45: Fragmentation</td><td>Complete</td><td>Internal vs. External fragmentation, 50% rule, remediation techniques.</td></tr>
+<tr><td>Unit 5 Slides 46–81: Segmentation Architecture</td><td>Complete</td><td>Programmer logical view, Segment table hardware, 2D translation logic.</td></tr>
+<tr><td>NMIMS Past Paper Questions (Paper 1, 2, 5)</td><td>Complete</td><td>Full 10-mark partition trace, fragmentation comparisons, segmentation models.</td></tr>
+</tbody>
+</table>
+</section>
+
+<!-- Unit Pagination -->
+<div class="unit-pagination">
+<a class="btn btn-outline" href="04-deadlocks.html">← Previous: Unit 4 - Deadlocks</a>
+<a class="btn btn-primary" href="06-paging-and-replacement.html">Next: Unit 6 - Paging &amp; Virtual Memory →</a>
+</div>
+
+</article>
+</main>
+</div>
+
+<script>
+const toggleBtn = document.getElementById('theme-toggle');
+if (toggleBtn) {
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    toggleBtn.setAttribute('aria-pressed', 'true');
+  }
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.setAttribute('aria-pressed', !isDark);
+  });
+}
+</script>
+</body>
+</html>

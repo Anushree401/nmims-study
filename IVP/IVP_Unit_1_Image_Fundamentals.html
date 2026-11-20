@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unit 1: Digital Image Fundamentals - NMIMS Master Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="theme.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="ivp-custom-polish">
+:root { --ai-content-width: 980px; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+body { min-width: 320px; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+.main-content { width: calc(100% - 290px); max-width: none; }
+.content-wrapper { max-width: var(--ai-content-width); }
+.top-bar { position: sticky; top: 0; z-index: 90; min-height: 52px; padding: 12px 0; margin-top: -32px; background: color-mix(in srgb, var(--bg-main) 94%, transparent); backdrop-filter: blur(10px); }
+.unit-hero { padding-top: 6px; margin-bottom: clamp(26px, 4vw, 42px); }
+.unit-hero h1 { font-size: clamp(1.8rem, 3.3vw, 2.45rem); letter-spacing: -0.035em; text-wrap: balance; }
+.module-section { scroll-margin-top: 76px; padding: clamp(20px, 3vw, 34px); margin-bottom: clamp(24px, 4vw, 40px); }
+.topic-block { scroll-margin-top: 76px; margin-bottom: 2.2rem; }
+.topic-block p, .topic-block li, .q-answer p, .callout p { max-width: 82ch; line-height: 1.72; }
+.callout { padding: 18px 20px; border-radius: 10px; margin: 16px 0; border-left: 4px solid var(--primary); background: #f1f5f9; }
+.callout-def { border-left-color: #2563eb; background: #eff6ff; }
+.callout-warn { border-left-color: #f59e0b; background: #fffbeb; }
+.callout-tip { border-left-color: #10b981; background: #ecfdf5; }
+.data-table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+.data-table th, .data-table td { border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; }
+.data-table th { background: #f8fafc; font-weight: 600; }
+.diagram-wrapper { margin: 20px 0; text-align: center; }
+.diagram-caption { font-size: 0.88rem; color: var(--text-muted); margin-top: 8px; font-style: italic; }
+.problem-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+.problem-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.difficulty.easy { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.medium { background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.hard { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.solution-flow { display: flex; flex-direction: column; gap: 14px; }
+.step-row { display: flex; gap: 16px; align-items: flex-start; }
+.step-badge { font-size: 0.72rem; font-weight: 700; padding: 4px 8px; background: #e2e8f0; color: #334155; border-radius: 4px; white-space: nowrap; }
+.step-badge.answer { background: #dcfce7; color: #166534; }
+.final-box { background: #ecfdf5; border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 6px; font-weight: 600; color: #065f46; }
+.question-item { border-bottom: 1px solid var(--border-color); padding: 20px 0; }
+.question-item:last-child { border-bottom: none; }
+.q-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+.marks-badge { font-size: 0.75rem; font-weight: 700; background: #f1f5f9; color: var(--secondary); border: 1px solid #cbd5e1; padding: 2px 7px; border-radius: 4px; }
+.q-answer { background: #f8fafc; padding: 14px 18px; border-radius: 6px; }
+.unit-pagination { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+.btn { padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-outline { border: 1px solid var(--border-color); color: var(--text-main); }
+@media (max-width: 900px) { .sidebar { max-height: 34vh; padding: 16px; } .main-content { width: 100%; padding: 24px 16px 56px; } }
+</style>
+</head>
+<body>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · IVP Master</a>
+<span class="badge">Semester Exam Prep</span>
+<button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle" type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark mode</span></button>
+</div>
+<nav class="sidebar-nav">
+<h3>All Units &amp; Guides</h3>
+<ul>
+<li><a class="active" href="IVP_Unit_1_Image_Fundamentals.html"><span class="unit-num">01</span> Image Fundamentals</a></li>
+<li><a href="IVP_Unit_2_Image_Enhancement.html"><span class="unit-num">02</span> Image Enhancement</a></li>
+<li><a href="IVP_Unit_3_Image_Transforms.html"><span class="unit-num">03</span> Image Transforms</a></li>
+<li><a href="IVP_Unit_4_Morphological_Image_Processing.html"><span class="unit-num">04</span> Morphological Processing</a></li>
+<li><a href="IVP_Unit_5_Edge_Detection.html"><span class="unit-num">05</span> Edge Detection</a></li>
+<li><a href="IVP_Unit_6_Image_Segmentation.html"><span class="unit-num">06</span> Image Segmentation</a></li>
+<li><a href="IVP_Unit_7_Colour_Image_Processing.html"><span class="unit-num">07</span> Colour Image Processing</a></li>
+<li><a href="IVP_Unit_8_Digital_Video_and_Compression.html"><span class="unit-num">08</span> Video &amp; Compression</a></li>
+<li><a href="IVP_Numericals_and_Problem_Solving.html"><span class="unit-num">09</span> Master Problem-Solving Guide</a></li>
+<li><a href="IVP_Solved_Examples.html"><span class="unit-num">10</span> Comprehensive Solved Bank</a></li>
+<li><a href="IVP_Topic_Checklist.html"><span class="unit-num">11</span> Final Topic Checklist</a></li>
+</ul>
+<h3>Unit 1 Sections</h3>
+<ul>
+<li><a href="#theory-section">1. In-Depth Lecture &amp; Theory</a></li>
+<li><a href="#sec-image-def">1.1 Digital Image: Function &amp; Matrix</a></li>
+<li><a href="#sec-sampling">1.2 Sampling &amp; Quantization</a></li>
+<li><a href="#sec-resolution">1.3 Spatial &amp; Gray-Level Resolution</a></li>
+<li><a href="#sec-pixel-relations">1.4 Pixel Relationships &amp; Neighbors</a></li>
+<li><a href="#sec-connectivity">1.5 4, 8 &amp; m-Connectivity (Paths)</a></li>
+<li><a href="#sec-distance">1.6 Distance Metrics: Euclidean, City-Block, Chessboard</a></li>
+<li><a href="#sec-formats">1.7 Image File Formats: JPEG vs PNG vs TIFF</a></li>
+<li><a href="#numerical-section">2. In-Depth Metric Numericals</a></li>
+<li><a href="#num-storage">2.1 Uncompressed Image Storage Size</a></li>
+<li><a href="#num-distance-trace">2.2 Distance Metrics &amp; Shortest m-Path Trace</a></li>
+<li><a href="#comparison-section">3. Comparative Studies</a></li>
+<li><a href="#case-section">4. Real-World Sensor Technologies</a></li>
+<li><a href="#questions-section">5. NMIMS Exam Questions &amp; Marking Guide</a></li>
+</ul>
+</nav>
+</aside>
+
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 1: Image Fundamentals</span>
+</div>
+<div class="meta-tag">Unit 1 · 100% Syllabus &amp; Gonzalez-Woods Faithful</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>Unit 1: Digital Image Fundamentals &amp; Mathematical Foundations</h1>
+<p class="lead">An exhaustive academic masterclass exploring 2D continuous light functions \(f(x, y)\), uniform and non-uniform sampling and quantization, spatial resolution (DPI) vs. intensity resolution (bit depth), 4-neighbors, 8-neighbors, diagonal neighbors, 4, 8, and m-connectivity paths, metric distance formulas (Euclidean \(D_e\), City-Block \(D_4\), Chessboard \(D_8\)), uncompressed digital image storage mathematics, and file format comparisons (JPEG, PNG, TIFF).</p>
+</header>
+<section class="theory-sources" aria-label="Original theory files"><h2>Original theory files</h2><p>Open the unchanged lecture source or expand its preview here.</p><ul><li><a href="theory/IVP%20UNIT%201.pptx" target="_blank" rel="noopener">Open original: IVP UNIT 1.pptx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of IVP UNIT 1.pptx" src="theory/previews/IVP%20UNIT%201.pdf"></iframe></div><p><a href="theory/previews/IVP%20UNIT%201.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li></ul></section>
+
+
+<!-- SECTION 1: IN-DEPTH THEORY -->
+<section class="module-section" id="theory-section">
+<div class="section-title">
+<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+<span class="cross-ref-badge">Faithful to IVP UNIT 1.pptx &amp; NMIMS Syllabus</span>
+</div>
+
+<div class="topic-block" id="sec-image-def">
+<h3>1.1 Representation of Digital Image: Image as a Function &amp; Matrix</h3>
+<p>In physical optics, an image is a 2D projection of a 3D scene. Mathematically, a monochrome continuous image is represented by a two-dimensional spatial intensity function:</p>
+$$\mathbf{f(x, y)}$$
+<p>where \(x\) and \(y\) are spatial (plane) coordinates, and the amplitude \(f\) at any coordinate pair \((x, y)\) is called the <strong>intensity</strong> or <strong>gray level</strong> of the image at that point.</p>
+
+<div class="callout callout-def">
+<h4>Physical Illumination and Reflectance Model</h4>
+<p>The intensity function \(f(x, y)\) is physically characterized by two fundamental components:</p>
+$$\mathbf{f(x, y) = i(x, y) \cdot r(x, y)}$$
+<ul>
+<li><strong>Illumination \(i(x, y)\):</strong> The amount of source incident light energy falling onto the physical object being viewed. Physical bounds: \(0 &lt; i(x, y) &lt; \infty\) (measured in lumens/\(\text{m}^2\)).</li>
+<li><strong>Reflectance \(r(x, y)\):</strong> The fraction of incident light reflected back from the object's surface into the camera sensor. Physical bounds: \(0 \le r(x, y) \le 1\) (where \(0 = \text{total absorption / pure black}\), and \(1 = \text{total reflection / pure white}\)).</li>
+</ul>
+</div>
+
+<h4>Matrix Representation of a Digital Image:</h4>
+<p>When coordinates \((x, y)\) and amplitude values \(f\) are all finite, discrete quantities, we call the image a <strong>Digital Image</strong>. A digital image with \(M\) rows and \(N\) columns is mathematically represented as an \(M \times N\) numerical matrix:</p>
+$$f(x, y) = \begin{bmatrix}
+f(0, 0) & f(0, 1) & \dots & f(0, N-1) \\
+f(1, 0) & f(1, 1) & \dots & f(1, N-1) \\
+\vdots & \vdots & \ddots & \vdots \\
+f(M-1, 0) & f(M-1, 1) & \dots & f(M-1, N-1)
+\end{bmatrix}$$
+<p>Each individual element in this 2D array is referred to as an <strong>image element</strong>, <strong>picture element</strong>, <strong>pels</strong>, or universally as a <strong>Pixel</strong>.</p>
+</div>
+
+<div class="topic-block" id="sec-sampling">
+<h3>1.2 Image Digitization: Sampling and Quantization</h3>
+<p>Physical sensors output continuous analog voltage signals. To transform continuous optical signals into digital matrix form requires two processes:</p>
+<ul>
+<li><strong>Sampling:</strong> Digitizing the continuous <strong>spatial coordinates</strong> \((x, y)\). The continuous 2D plane is partitioned into a discrete spatial grid of sampling points (pixels).</li>
+<li><strong>Quantization:</strong> Digitizing the continuous <strong>amplitude/intensity values</strong> \(f(x, y)\). Continuous voltage levels are mapped into discrete numerical integers called gray levels.</li>
+</ul>
+
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:680px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg">
+  <!-- Continuous 1D slice -->
+  <path d="M 40 160 Q 100 40, 180 120 T 300 60 T 400 150" fill="none" stroke="#94a3b8" stroke-width="2.5"/>
+  <text x="180" y="30" fill="#64748b" font-size="11" font-weight="700">Continuous Analog Signal f(x)</text>
+
+  <!-- Discrete Sample lines -->
+  <line x1="60" y1="20" x2="60" y2="190" stroke="#cbd5e1" stroke-dasharray="2,2"/>
+  <line x1="120" y1="20" x2="120" y2="190" stroke="#cbd5e1" stroke-dasharray="2,2"/>
+  <line x1="180" y1="20" x2="180" y2="190" stroke="#cbd5e1" stroke-dasharray="2,2"/>
+  <line x1="240" y1="20" x2="240" y2="190" stroke="#cbd5e1" stroke-dasharray="2,2"/>
+  <line x1="300" y1="20" x2="300" y2="190" stroke="#cbd5e1" stroke-dasharray="2,2"/>
+  <text x="180" y="205" fill="#1d4ed8" font-size="11" font-weight="700">SAMPLING GRID (Spatial X-Axis)</text>
+
+  <!-- Quantization Levels on Right -->
+  <rect x="470" y="20" width="180" height="175" fill="#f8fafc" stroke="#334155" stroke-width="1.5" rx="6"/>
+  <text x="560" y="45" fill="#334155" font-size="12" font-weight="700" text-anchor="middle">QUANTIZATION (Y-Axis)</text>
+  <line x1="470" y1="65" x2="650" y2="65" stroke="#e2e8f0"/>
+  <text x="480" y="85" fill="#15803d" font-size="10" font-weight="600">Level 7 (111 - 255 White)</text>
+  <line x1="470" y1="95" x2="650" y2="95" stroke="#e2e8f0"/>
+  <text x="480" y="115" fill="#64748b" font-size="10">Level 4 (100 - Mid Gray)</text>
+  <line x1="470" y1="125" x2="650" y2="125" stroke="#e2e8f0"/>
+  <text x="480" y="145" fill="#64748b" font-size="10">Level 1 (001 - Dark Gray)</text>
+  <line x1="470" y1="155" x2="650" y2="155" stroke="#e2e8f0"/>
+  <text x="480" y="175" fill="#000000" font-size="10" font-weight="600">Level 0 (000 - Pure Black)</text>
+</svg>
+<p class="diagram-caption">Figure 1.1: Sampling along the spatial coordinate axis vs. Quantization along the intensity amplitude scale.</p>
+</div>
+</div>
+
+<div class="topic-block" id="sec-resolution">
+<h3>1.3 Spatial Resolution vs. Gray-Level (Intensity) Resolution</h3>
+<ul>
+<li><strong>Spatial Resolution:</strong> A measure of the smallest discernible physical detail in an image. Quantitatively defined as the number of independent pixel samples per unit distance (e.g., dots per inch - <strong>DPI</strong>, pixels per millimeter, or line pairs per mm).
+  <br/><em>Under-sampling artifact:</em> If an image is under-sampled (insufficient spatial samples), fine details vanish and <strong>Checkerboarding / Pixelation</strong> occurs.</li>
+<li><strong>Gray-Level (Intensity) Resolution:</strong> Refers to the smallest discernible change in gray level/intensity. The number of discrete gray levels \(L\) is typically an integer power of 2:
+$$\mathbf{L = 2^k}$$
+where \(k\) is the <strong>bit depth</strong> (e.g., \(k = 8\text{ bits} \implies L = 256\text{ gray levels}\), from 0 to 255).
+  <br/><em>Under-quantization artifact:</em> When an image is quantized with too few bits (e.g., \(k \le 4\)), continuous smooth gradations break into visible abrupt artificial bands. This visual flaw is called <strong>False Contouring</strong>.</li>
+</ul>
+</div>
+
+<div class="topic-block" id="sec-pixel-relations">
+<h3>1.4 Basic Relationships Between Pixels: Neighborhoods</h3>
+<p>Consider a central pixel \(p\) located at spatial coordinate \((x, y)\):</p>
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:440px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewBox="0 0 440 220" xmlns="http://www.w3.org/2000/svg">
+  <!-- 3x3 Grid -->
+  <rect x="70" y="20" width="90" height="50" fill="#fef3c7" stroke="#f59e0b" rx="4"/>
+  <text x="115" y="50" fill="#b45309" font-size="10" font-weight="700" text-anchor="middle">(x-1, y-1) [D]</text>
+
+  <rect x="175" y="20" width="90" height="50" fill="#eff6ff" stroke="#3b82f6" rx="4"/>
+  <text x="220" y="50" fill="#1d4ed8" font-size="10" font-weight="700" text-anchor="middle">(x, y-1) [4]</text>
+
+  <rect x="280" y="20" width="90" height="50" fill="#fef3c7" stroke="#f59e0b" rx="4"/>
+  <text x="325" y="50" fill="#b45309" font-size="10" font-weight="700" text-anchor="middle">(x+1, y-1) [D]</text>
+
+  <rect x="70" y="80" width="90" height="50" fill="#eff6ff" stroke="#3b82f6" rx="4"/>
+  <text x="115" y="110" fill="#1d4ed8" font-size="10" font-weight="700" text-anchor="middle">(x-1, y) [4]</text>
+
+  <!-- Center P -->
+  <rect x="175" y="80" width="90" height="50" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2.5" rx="4"/>
+  <text x="220" y="110" fill="#1e3a8a" font-size="13" font-weight="800" text-anchor="middle">p (x, y)</text>
+
+  <rect x="280" y="80" width="90" height="50" fill="#eff6ff" stroke="#3b82f6" rx="4"/>
+  <text x="325" y="110" fill="#1d4ed8" font-size="10" font-weight="700" text-anchor="middle">(x+1, y) [4]</text>
+
+  <rect x="70" y="140" width="90" height="50" fill="#fef3c7" stroke="#f59e0b" rx="4"/>
+  <text x="115" y="170" fill="#b45309" font-size="10" font-weight="700" text-anchor="middle">(x-1, y+1) [D]</text>
+
+  <rect x="175" y="140" width="90" height="50" fill="#eff6ff" stroke="#3b82f6" rx="4"/>
+  <text x="220" y="170" fill="#1d4ed8" font-size="10" font-weight="700" text-anchor="middle">(x, y+1) [4]</text>
+
+  <rect x="280" y="140" width="90" height="50" fill="#fef3c7" stroke="#f59e0b" rx="4"/>
+  <text x="325" y="170" fill="#b45309" font-size="10" font-weight="700" text-anchor="middle">(x+1, y+1) [D]</text>
+</svg>
+<p class="diagram-caption">Figure 1.2: 4-Neighbors \(N_4(p)\) in blue vs. Diagonal Neighbors \(N_D(p)\) in yellow.</p>
+</div>
+
+<ul>
+<li><strong>4-Neighbors of \(p\) (\(N_4(p)\)):</strong> The four horizontal and vertical orthogonal neighbors:
+$$N_4(p) = \{(x+1, y), (x-1, y), (x, y+1), (x, y-1)\}$$</li>
+<li><strong>Diagonal Neighbors of \(p\) (\(N_D(p)\)):</strong> The four corner diagonal neighbors:
+$$N_D(p) = \{(x+1, y+1), (x+1, y-1), (x-1, y+1), (x-1, y-1)\}$$</li>
+<li><strong>8-Neighbors of \(p\) (\(N_8(p)\)):</strong> The union of 4-neighbors and diagonal neighbors:
+$$N_8(p) = N_4(p) \cup N_D(p)$$</li>
+</ul>
+</div>
+
+<div class="topic-block" id="sec-connectivity">
+<h3>1.5 Pixel Connectivity: 4-Connectivity, 8-Connectivity &amp; m-Connectivity</h3>
+<p>To establish boundaries, regions, and object contours, pixels must be connected. Two pixels \(p\) and \(q\) are connected if they are spatial neighbors AND their intensity values both satisfy a specified set of similarity values \(V\) (e.g., \(V = \{1\}\) for binary images, or \(V = \{128, 129, \dots, 255\}\) for gray-scale):</p>
+<ol>
+<li><strong>4-Connectivity:</strong> Two pixels \(p\) and \(q\) with values from \(V\) are 4-connected if \(q \in N_4(p)\).</li>
+<li><strong>8-Connectivity:</strong> Two pixels \(p\) and \(q\) with values from \(V\) are 8-connected if \(q \in N_8(p)\).</li>
+<li><strong>m-Connectivity (Mixed Connectivity):</strong> Solves the <strong>Ambiguity of Multiple Paths</strong> inherent in 8-connectivity! Two pixels \(p\) and \(q\) with values from \(V\) are m-connected if:
+  <br/>(a) \(q \in N_4(p)\), <strong>OR</strong>
+  <br/>(b) \(q \in N_D(p)\) AND the intersection set \(N_4(p) \cap N_4(q)\) contains <strong>no pixels with values from \(V\)</strong>!</li>
+</ol>
+<div class="callout callout-tip">
+<h4>Exam Crucial Rule on m-Connectivity:</h4>
+<p>m-Connectivity eliminates redundant diagonal jumps. If a diagonal neighbor can be reached via a shared 4-neighbor that also has a value from \(V\), the direct diagonal connection is strictly forbidden!</p>
+</div>
+</div>
+
+<div class="topic-block" id="sec-distance">
+<h3>1.6 Distance Metrics: Euclidean, City-Block &amp; Chessboard</h3>
+<p>For mathematical distance function \(D\) to be a true metric between pixels \(p(x, y)\), \(q(s, t)\), and \(z(u, v)\), it must satisfy four properties:
+<br/>(1) \(D(p, q) \ge 0\), (2) \(D(p, q) = 0 \iff p = q\), (3) \(D(p, q) = D(q, p)\) (Symmetry), (4) \(D(p, z) \le D(p, q) + D(q, z)\) (Triangle Inequality).</p>
+
+<h4>The Three Fundamental Distance Metrics:</h4>
+<table class="data-table">
+<thead>
+<tr>
+<th>Metric</th>
+<th>Formula</th>
+<th>Geometric Iso-Distance Contour Shape</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Euclidean Distance (\(D_e\))</strong></td>
+<td>$$D_e(p, q) = \sqrt{(x - s)^2 + (y - t)^2}$$</td>
+<td>Concentric <strong>Circles</strong> of radius \(r\).</td>
+</tr>
+<tr>
+<td><strong>City-Block Distance (\(D_4\))</strong></td>
+<td>$$D_4(p, q) = |x - s| + |y - t|$$</td>
+<td><strong>Diamond / Rhombus</strong> oriented at 45° (Manhattan grid walking).</td>
+</tr>
+<tr>
+<td><strong>Chessboard Distance (\(D_8\))</strong></td>
+<td>$$D_8(p, q) = \max(|x - s|, |y - t|)$$</td>
+<td>Concentric <strong>Squares</strong> with horizontal/vertical sides (King's move in chess).</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="topic-block" id="sec-formats">
+<h3>1.7 Image File Formats: JPEG vs. PNG vs. TIFF (From NMIMS Paper 1)</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Feature / Parameter</th>
+<th>JPEG (Joint Photographic Experts Group)</th>
+<th>PNG (Portable Network Graphics)</th>
+<th>TIFF (Tagged Image File Format)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Compression Type</strong></td>
+<td><strong>Lossy</strong> (based on Discrete Cosine Transform - DCT). High compression ratio.</td>
+<td><strong>Lossless</strong> (Deflate / LZ77 predictive compression). Preserves exact pixels.</td>
+<td>Supports <strong>Lossless (LZW), Lossy, or Uncompressed</strong> data streams.</td>
+</tr>
+<tr>
+<td><strong>Bit Depth</strong></td>
+<td>Standard 8-bit per channel (24-bit TrueColor).</td>
+<td>8-bit indexed up to 16-bit per channel (48-bit TrueColor).</td>
+<td>8-bit, 16-bit, 32-bit floating point HDR per channel.</td>
+</tr>
+<tr>
+<td><strong>Transparency Support</strong></td>
+<td><strong>No transparency support</strong> (background defaults to white).</td>
+<td><strong>Full Alpha Channel Transparency</strong> (8-bit semi-transparency).</td>
+<td>Full Alpha Channel Transparency support.</td>
+</tr>
+<tr>
+<td><strong>Primary Application</strong></td>
+<td>Final distribution of continuous-tone photographs and web graphics.</td>
+<td>Editing graphics, screenshots, logos, medical diagrams with sharp text.</td>
+<td>Professional desktop publishing, raw scanner outputs, medical archival.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<div class="topic-block" id="sec-colour-image-basics">
+<h3>1.8 Colour Image Basics</h3>
+<p>A colour image stores a vector of component values at each pixel rather than a single gray-level intensity. In the common additive RGB representation, each pixel is ((R,G,B)); the channels combine to represent colour, and channel bit depth determines the number of representable values. A colour image can also be processed as separate component planes.</p>
+<p>The exact numeric range depends on representation (for example, normalized values or 8-bit channel values). Do not confuse colour depth with spatial resolution: spatial resolution counts pixel locations; colour depth describes the values stored per pixel.</p>
+</div>
+
+<!-- SECTION 2: NUMERICALS -->
+<section class="module-section" id="numerical-section">
+<div class="section-title">
+<h2>2. In-Depth Metric Numericals</h2>
+<span class="cross-ref-badge">Step-by-Step Solved Calculations</span>
+</div>
+
+<div class="problem-card" id="num-storage">
+<div class="problem-header">
+<span class="difficulty easy">Storage Capacity Calculation</span>
+<h3>Problem 1.1: Uncompressed Image Storage Requirements</h3>
+</div>
+<p><strong>Problem Statement:</strong> Calculate the uncompressed image storage. Use binary units for the worked values: 1 MiB = 1024² bytes (often called MB in course questions).
+<br/>(a) An \(8\text{-bit}\) grayscale image of dimensions \(2048 \times 2048\) pixels.
+<br/>(b) A \(24\text{-bit}\) TrueColor RGB image of dimensions \(1920 \times 1080\) (Full HD).</p>
+<p class="hint"><strong>Assumption:</strong> Storage is uncompressed and excludes file headers, metadata, row padding, and audio. If the exam defines MB as decimal, divide by 1,000,000; the values above use MiB (1,048,576 bytes).</p>
+
+<div class="solution-flow">
+<div class="step-row"><span class="step-badge">FORMULA</span>
+<div>
+$$\mathbf{\text{Storage Size (Bytes)} = \frac{M \times N \times k}{8}} \qquad \mathbf{\text{Size in MiB} = \frac{\text{Bytes}}{1024 \times 1024}}$$
+</div>
+</div>
+<div class="step-row"><span class="step-badge">CALCULATIONS</span>
+<div>
+<p><strong>Part (a): Grayscale \(2048 \times 2048\) with \(k = 8\text{ bits}\):</strong></p>
+$$\text{Bytes} = 2048 \times 2048 \times 1\text{ byte} = 4,194,304\text{ bytes}$$
+$$\text{Size (MiB)} = \frac{4,194,304}{1024 \times 1024} = \mathbf{4.00\text{ MiB}}$$
+<p><strong>Part (b): TrueColor \(1920 \times 1080\) with \(k = 24\text{ bits} = 3\text{ bytes}\):</strong></p>
+$$\text{Bytes} = 1920 \times 1080 \times 3\text{ bytes} = 6,220,800\text{ bytes}$$
+$$\text{Size (MiB)} = \frac{6,220,800}{1024 \times 1024} \approx \mathbf{5.93\text{ MiB}}$$
+</div>
+</div>
+<div class="step-row"><span class="step-badge answer">FINAL RESULT</span>
+<div>
+<p class="final-box">\(\text{Grayscale } (2048 \times 2048): \mathbf{4.00\text{ MiB}} \quad | \quad \text{Full HD RGB } (1920 \times 1080): \mathbf{5.93\text{ MiB}}\)</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="problem-card" id="num-distance-trace">
+<div class="problem-header">
+<span class="difficulty medium">Distance Metrics Trace</span>
+<h3>Problem 1.2: Euclidean, City-Block, Chessboard &amp; Shortest m-Path Trace</h3>
+</div>
+<p><strong>Problem Statement:</strong> Consider pixels \(p(1, 1)\) and \(q(4, 5)\).
+<br/>(a) Compute \(D_e(p, q)\), \(D_4(p, q)\), and \(D_8(p, q)\).
+<br/>(b) In a binary image region, trace the shortest m-path between \((0, 0)\) and \((2, 2)\) for \(V = \{1\}\) in grid:</p>
+<pre>
+1 (p)   1       0
+0       1       1
+0       0       1 (q)
+</pre>
+<div class="solution-flow">
+<div class="step-row"><span class="step-badge">PART (a) METRICS</span>
+<div>
+<ul>
+<li>\(D_e = \sqrt{(1 - 4)^2 + (1 - 5)^2} = \sqrt{(-3)^2 + (-4)^2} = \sqrt{9 + 16} = \sqrt{25} = \mathbf{5.00}\)</li>
+<li>\(D_4 = |1 - 4| + |1 - 5| = 3 + 4 = \mathbf{7}\)</li>
+<li>\(D_8 = \max(|1 - 4|, |1 - 5|) = \max(3, 4) = \mathbf{4}\)</li>
+</ul>
+</div>
+</div>
+<div class="step-row"><span class="step-badge">PART (b) m-PATH</span>
+<div>
+<p>Start at \(p(0, 0) = 1\).
+<br/>Neighbor \((0, 1) = 1\) is in \(N_4(p)\) \(\to\) Path: \((0, 0) \to (0, 1)\).
+<br/>From \((0, 1)\), neighbor \((1, 1) = 1\) is in \(N_4(0, 1)\) \(\to\) Path: \((0, 1) \to (1, 1)\).
+<br/>From \((1, 1)\), neighbor \((1, 2) = 1\) is in \(N_4(1, 1)\) \(\to\) Path: \((1, 1) \to (1, 2)\).
+<br/>From \((1, 2)\), destination \(q(2, 2) = 1\) is in \(N_4(1, 2)\) \(\to\) Path: \((1, 2) \to (2, 2)\).
+<br/>Can we take diagonal jump \((1, 1) \to (2, 2)\)?
+<br/>Check intersection: \(N_4(1, 1) \cap N_4(2, 2)\) contains pixel \((1, 2)\). Since pixel \((1, 2)\) has value \(1 \in V\), <strong>direct diagonal jump is FORBIDDEN by m-connectivity rule</strong>!
+<br/>Thus shortest m-path has length: \(\mathbf{4\text{ steps}}\).</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 3: COMPARATIVE STUDIES -->
+<section class="module-section" id="comparison-section">
+<div class="section-title">
+<h2>3. Comprehensive Comparative Studies</h2>
+<span class="cross-ref-badge">Frequent Exam Distinctions</span>
+</div>
+
+<h3>Table 1.1: 4-Connectivity vs. 8-Connectivity vs. m-Connectivity</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Dimension</th>
+<th>4-Connectivity</th>
+<th>8-Connectivity</th>
+<th>m-Connectivity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Allowed Neighbor Types</strong></td>
+<td>Horizontal and Vertical orthogonal neighbors only (\(N_4\)).</td>
+<td>Horizontal, Vertical, and Diagonal neighbors (\(N_8\)).</td>
+<td>4-neighbors, or diagonal neighbors if no shared 4-neighbor belongs to \(V\).</td>
+</tr>
+<tr>
+<td><strong>Path Ambiguity</strong></td>
+<td>Zero diagonal paths; can disconnect diagonal boundaries.</td>
+<td><strong>Severe Ambiguity:</strong> Allows multiple redundant paths through a \(2 \times 2\) block.</td>
+<td><strong>Zero Ambiguity:</strong> Mathematically eliminates redundant diagonal pathways.</td>
+</tr>
+<tr>
+<td><strong>Shortest Path Length</strong></td>
+<td>Longest path length (constrained to Manhattan grid).</td>
+<td>Shortest path length (allows diagonal shortcuts).</td>
+<td>Intermediate path length (consistent topological boundaries).</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<!-- SECTION 4: CASE STUDIES -->
+<section class="module-section" id="case-section">
+<div class="section-title">
+<h2>4. Real-World Sensor Technologies</h2>
+<span class="cross-ref-badge">Physical Imaging Systems</span>
+</div>
+<div class="problem-card">
+<span class="difficulty easy">Camera Sensor Case Study</span>
+<h3>CCD vs. CMOS Image Sensors</h3>
+<ul>
+<li><strong>CCD (Charge-Coupled Device):</strong> Converts light into electrical charges across photo-sites, shifting analog charges sequentially down columns into a single central amplifier. Delivers outstanding dynamic range and low noise; high power consumption.</li>
+<li><strong>CMOS (Complementary Metal-Oxide Semiconductor):</strong> Each individual pixel contains its own integrated amplifier and analog-to-digital converter. Extremely low power, high readout speed (used in modern smartphones and high-speed video).</li>
+</ul>
+</div>
+</section>
+
+<!-- SECTION 5: EXAM QUESTIONS & MARKING GUIDE -->
+<section class="module-section" id="questions-section">
+<div class="section-title">
+<h2>5. Possible University Exam Questions &amp; Marking Guide</h2>
+<span class="cross-ref-badge">NMIMS Pattern: 4 &amp; 10 Mark Solutions</span>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">4 Marks</span>
+<h4>Q1. Compare JPEG and PNG image file formats with respect to features and usage. [From NMIMS Paper 1 Q1a]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong> 1 mark per valid comparison point (up to 4 marks).</p>
+<p><strong>Model Answer Key:</strong> Provide Table 1.7 contrasting: (1) Compression (JPEG lossy vs PNG lossless), (2) Transparency (JPEG lacks alpha vs PNG full alpha channel), (3) Artifacts (JPEG ringing/blockiness vs PNG pixel-perfect), (4) Applications (JPEG continuous tone photography vs PNG screenshots, diagrams, web logos).</p>
+</div>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">10 Marks</span>
+<h4>Q2. Explain what is meant by image sampling and quantization. Differentiate between spatial resolution and gray-level resolution, illustrating the artifacts produced by under-sampling and under-quantization. [From NMIMS Past Papers]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong> Sampling &amp; Quantization definitions (3 marks); Spatial vs Gray-level resolution (3 marks); Visual artifacts: Pixelation &amp; False Contouring (4 marks).</p>
+<p><strong>Model Answer Key:</strong> Detail Section 1.2 and 1.3 with Figure 1.1. Explain that under-sampling causes pixelation/checkerboarding, while under-quantization reduces bit depth below 4 bits, causing false contouring (banding).</p>
+</div>
+</div>
+</section>
+
+<!-- SECTION 6: WHAT TO KNOW FOR THE EXAM & CHECKLIST -->
+<section class="module-section" id="exam-checklist">
+<div class="section-title">
+<h2>What to Know for the Exam &amp; Coverage Checklist</h2>
+<span class="cross-ref-badge">Final Revision Anchor</span>
+</div>
+
+<div class="callout callout-tip">
+<h4>Core Exam Takeaways:</h4>
+<ul>
+<li><strong>Image Model:</strong> \(f(x, y) = i(x, y) \cdot r(x, y)\) where \(0 &lt; i &lt; \infty\) and \(0 \le r \le 1\).</li>
+<li><strong>Sampling vs Quantization:</strong> Sampling = spatial coordinates \((x, y)\); Quantization = amplitude gray levels \(f\).</li>
+<li><strong>Artifacts:</strong> Low spatial = Checkerboarding; Low intensity = False Contouring.</li>
+<li><strong>Metrics:</strong> \(D_e = \sqrt{\Delta x^2 + \Delta y^2}\), \(D_4 = |\Delta x| + |\Delta y|\), \(D_8 = \max(|\Delta x|, |\Delta y|)\).</li>
+<li><strong>Storage Size:</strong> \(\text{Bytes} = \frac{M \times N \times k}{8}\).</li>
+</ul>
+</div>
+
+<h3>Final Unit Coverage Checklist</h3>
+<table class="data-table">
+<thead><tr><th>Topic / Syllabus Section</th><th>Coverage Status</th><th>Core Concept Mastered</th></tr></thead>
+<tbody>
+<tr><td>Image Fundamentals &amp; Matrix Representation</td><td>Complete</td><td>Continuous \(f(x, y)\), matrix array, illumination and reflectance components.</td></tr>
+<tr><td>Sampling, Quantization &amp; Resolutions</td><td>Complete</td><td>Digitization, bit depth \(L=2^k\), DPI, pixelation, false contouring.</td></tr>
+<tr><td>Pixel Neighborhoods &amp; Connectivities</td><td>Complete</td><td>\(N_4\), \(N_D\), \(N_8\), 4/8/m-connectivity, resolving path ambiguity.</td></tr>
+<tr><td>Distance Metrics &amp; File Formats</td><td>Complete</td><td>\(D_e, D_4, D_8\) formulas, JPEG vs PNG vs TIFF comparison table.</td></tr>
+<tr><td>NMIMS Past Paper Questions (Paper 1 Q1a)</td><td>Complete</td><td>4-mark JPEG vs PNG comparison and distance metric numericals.</td></tr>
+</tbody>
+</table>
+</section>
+
+<!-- Unit Pagination -->
+<div class="unit-pagination">
+<a class="btn btn-outline" href="../index.html">← Back to Subjects</a>
+<a class="btn btn-primary" href="IVP_Unit_2_Image_Enhancement.html">Next: Unit 2 - Image Enhancement →</a>
+</div>
+
+</article>
+</main>
+</div>
+
+<script>
+const toggleBtn = document.getElementById('theme-toggle');
+if (toggleBtn) {
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    toggleBtn.setAttribute('aria-pressed', 'true');
+  }
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.setAttribute('aria-pressed', !isDark);
+  });
+}
+</script>
+</body>
+</html>

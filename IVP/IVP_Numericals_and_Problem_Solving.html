@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IVP Master Problem-Solving &amp; Numericals Guide - NMIMS Master Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="theme.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="ivp-custom-polish">
+:root { --ai-content-width: 980px; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+body { min-width: 320px; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+.main-content { width: calc(100% - 290px); max-width: none; }
+.content-wrapper { max-width: var(--ai-content-width); }
+.top-bar { position: sticky; top: 0; z-index: 90; min-height: 52px; padding: 12px 0; margin-top: -32px; background: color-mix(in srgb, var(--bg-main) 94%, transparent); backdrop-filter: blur(10px); }
+.unit-hero { padding-top: 6px; margin-bottom: clamp(26px, 4vw, 42px); }
+.unit-hero h1 { font-size: clamp(1.8rem, 3.3vw, 2.45rem); letter-spacing: -0.035em; text-wrap: balance; }
+.module-section { scroll-margin-top: 76px; padding: clamp(20px, 3vw, 34px); margin-bottom: clamp(24px, 4vw, 40px); }
+.data-table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+.data-table th, .data-table td { border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; }
+.data-table th { background: #f8fafc; font-weight: 600; }
+.problem-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+.problem-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.difficulty.easy { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.medium { background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.hard { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.solution-flow { display: flex; flex-direction: column; gap: 14px; }
+.step-row { display: flex; gap: 16px; align-items: flex-start; }
+.step-badge { font-size: 0.72rem; font-weight: 700; padding: 4px 8px; background: #e2e8f0; color: #334155; border-radius: 4px; white-space: nowrap; }
+.step-badge.answer { background: #dcfce7; color: #166534; }
+.final-box { background: #ecfdf5; border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 6px; font-weight: 600; color: #065f46; }
+.unit-pagination { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+.btn { padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-outline { border: 1px solid var(--border-color); color: var(--text-main); }
+@media (max-width: 900px) { .sidebar { max-height: 34vh; padding: 16px; } .main-content { width: 100%; padding: 24px 16px 56px; } }
+</style>
+</head>
+<body>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · IVP Master</a>
+<span class="badge">Semester Exam Prep</span>
+<button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle" type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark mode</span></button>
+</div>
+<nav class="sidebar-nav">
+<h3>All Units &amp; Guides</h3>
+<ul>
+<li><a href="IVP_Unit_1_Image_Fundamentals.html"><span class="unit-num">01</span> Image Fundamentals</a></li>
+<li><a href="IVP_Unit_2_Image_Enhancement.html"><span class="unit-num">02</span> Image Enhancement</a></li>
+<li><a href="IVP_Unit_3_Image_Transforms.html"><span class="unit-num">03</span> Image Transforms</a></li>
+<li><a href="IVP_Unit_4_Morphological_Image_Processing.html"><span class="unit-num">04</span> Morphological Processing</a></li>
+<li><a href="IVP_Unit_5_Edge_Detection.html"><span class="unit-num">05</span> Edge Detection</a></li>
+<li><a href="IVP_Unit_6_Image_Segmentation.html"><span class="unit-num">06</span> Image Segmentation</a></li>
+<li><a href="IVP_Unit_7_Colour_Image_Processing.html"><span class="unit-num">07</span> Colour Image Processing</a></li>
+<li><a href="IVP_Unit_8_Digital_Video_and_Compression.html"><span class="unit-num">08</span> Video &amp; Compression</a></li>
+<li><a class="active" href="IVP_Numericals_and_Problem_Solving.html"><span class="unit-num">09</span> Master Problem-Solving Guide</a></li>
+<li><a href="IVP_Solved_Examples.html"><span class="unit-num">10</span> Comprehensive Solved Bank</a></li>
+<li><a href="IVP_Topic_Checklist.html"><span class="unit-num">11</span> Final Topic Checklist</a></li>
+</ul>
+</nav>
+</aside>
+
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 9: IVP Master Numericals</span>
+</div>
+<div class="meta-tag">Master Problem-Solving Guide · All Mathematical Archetypes</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>IVP: Master Problem-Solving &amp; Numericals Guide</h1>
+<p class="lead">A complete, systematic mathematical reference gathering and organizing every single numerical problem archetype covered in the NMIMS Image and Video Processing syllabus and past university examinations. For every archetype, this guide details recognition triggers, formulas, step-by-step calculation protocols, units, common exam traps, and sanity checks.</p>
+</header>
+
+<section class="module-section">
+<div class="section-title">
+<h2>Core IVP Numerical Archetypes</h2>
+<span class="cross-ref-badge">Complete Formula &amp; Solution Protocols</span>
+</div>
+
+<div class="problem-card">
+<div class="problem-header">
+<span class="difficulty easy">Archetype 1</span>
+<h3>Distance Metrics &amp; Shortest Path Traversal</h3>
+</div>
+<p><strong>Formulas:</strong> \(D_e = \sqrt{\Delta x^2 + \Delta y^2}\), \(D_4 = |\Delta x| + |\Delta y|\), \(D_8 = \max(|\Delta x|, |\Delta y|)\).
+<br/><strong>m-Path Rule:</strong> Never take diagonal jump if shared 4-neighbor belongs to \(V\)!</p>
+</div>
+
+<div class="problem-card">
+<div class="problem-header">
+<span class="difficulty medium">Archetype 2</span>
+<h3>Histogram Equalization Formula Protocol</h3>
+</div>
+<p><strong>Step-by-Step Algorithm:</strong>
+<ol>
+<li>Compute PDF: \(p_r(r_k) = \frac{n_k}{M \cdot N}\).</li>
+<li>Compute Cumulative CDF: \(\sum_{j=0}^k p_r(r_j)\).</li>
+<li>Multiply by maximum level: \((L - 1) \times \text{CDF}\).</li>
+<li>Round to nearest integer: \(s_k = \text{round}((L - 1) \cdot \text{CDF})\).</li>
+</ol>
+</p>
+</div>
+
+<div class="problem-card">
+<div class="problem-header">
+<span class="difficulty hard">Archetype 3</span>
+<h3>2D Matrix Transforms (Hadamard &amp; DCT)</h3>
+</div>
+<p><strong>Master Transform Formula:</strong>
+$$\mathbf{F = A \cdot f \cdot A^T}$$
+For \(2 \times 2\) Hadamard / DCT: \(A = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}\).
+<br/>Always verify Parseval's energy conservation: \(\sum f_{ij}^2 = \sum F_{uv}^2\).</p>
+</div>
+
+<div class="problem-card">
+<div class="problem-header">
+<span class="difficulty medium">Archetype 4</span>
+<h3>Sobel &amp; Laplacian Spatial Convolutions</h3>
+</div>
+<p><strong>Mask Placement &amp; Sum of Products:</strong> Compute \(G_x\) and \(G_y\). Magnitude \(M = \sqrt{G_x^2 + G_y^2}\). Direction \(\alpha = \tan^{-1}(G_y / G_x)\).</p>
+</div>
+
+<div class="problem-card">
+<div class="problem-header">
+<span class="difficulty hard">Archetype 5</span>
+<h3>Otsu's Optimal Between-Class Variance Calculation</h3>
+</div>
+<p><strong>Master Formula:</strong>
+$$\sigma_B^2(k) = P_1(k) P_2(k) [m_1(k) - m_2(k)]^2 = \frac{[m_G P_1(k) - m(k)]^2}{P_1(k)[1 - P_1(k)]}$$
+Compute global mean \(m_G\) once. Find \(k\) that maximizes \(\sigma_B^2\).</p>
+</div>
+
+<div class="problem-card">
+<div class="problem-header">
+<span class="difficulty medium">Archetype 6</span>
+<h3>Video Block Matching (EBMA vs. TSS)</h3>
+</div>
+<p><strong>Full Search Evaluations:</strong> \((2p + 1)^2\). For \(p = 7 \implies 225\) checks.
+<br/><strong>Three-Step Search (TSS):</strong> \(9 + 8 + 8 = 25\) checks (\(9\times\) speedup!).</p>
+</div>
+</section>
+
+<!-- Unit Pagination -->
+<div class="unit-pagination">
+<a class="btn btn-outline" href="IVP_Unit_8_Digital_Video_and_Compression.html">← Previous: Unit 8 - Video Compression</a>
+<a class="btn btn-primary" href="IVP_Solved_Examples.html">Next: Master Solved Bank →</a>
+</div>
+
+</article>
+</main>
+</div>
+
+<script>
+const toggleBtn = document.getElementById('theme-toggle');
+if (toggleBtn) {
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    toggleBtn.setAttribute('aria-pressed', 'true');
+  }
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.setAttribute('aria-pressed', !isDark);
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unit 2: Image Enhancement - NMIMS Master Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="theme.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="ivp-custom-polish">
+:root { --ai-content-width: 980px; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+body { min-width: 320px; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+.main-content { width: calc(100% - 290px); max-width: none; }
+.content-wrapper { max-width: var(--ai-content-width); }
+.top-bar { position: sticky; top: 0; z-index: 90; min-height: 52px; padding: 12px 0; margin-top: -32px; background: color-mix(in srgb, var(--bg-main) 94%, transparent); backdrop-filter: blur(10px); }
+.unit-hero { padding-top: 6px; margin-bottom: clamp(26px, 4vw, 42px); }
+.unit-hero h1 { font-size: clamp(1.8rem, 3.3vw, 2.45rem); letter-spacing: -0.035em; text-wrap: balance; }
+.module-section { scroll-margin-top: 76px; padding: clamp(20px, 3vw, 34px); margin-bottom: clamp(24px, 4vw, 40px); }
+.topic-block { scroll-margin-top: 76px; margin-bottom: 2.2rem; }
+.topic-block p, .topic-block li, .q-answer p, .callout p { max-width: 82ch; line-height: 1.72; }
+.callout { padding: 18px 20px; border-radius: 10px; margin: 16px 0; border-left: 4px solid var(--primary); background: #f1f5f9; }
+.callout-def { border-left-color: #2563eb; background: #eff6ff; }
+.callout-warn { border-left-color: #f59e0b; background: #fffbeb; }
+.callout-tip { border-left-color: #10b981; background: #ecfdf5; }
+.data-table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+.data-table th, .data-table td { border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; }
+.data-table th { background: #f8fafc; font-weight: 600; }
+.problem-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+.problem-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.difficulty.easy { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.medium { background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.hard { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.solution-flow { display: flex; flex-direction: column; gap: 14px; }
+.step-row { display: flex; gap: 16px; align-items: flex-start; }
+.step-badge { font-size: 0.72rem; font-weight: 700; padding: 4px 8px; background: #e2e8f0; color: #334155; border-radius: 4px; white-space: nowrap; }
+.step-badge.answer { background: #dcfce7; color: #166534; }
+.final-box { background: #ecfdf5; border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 6px; font-weight: 600; color: #065f46; }
+.question-item { border-bottom: 1px solid var(--border-color); padding: 20px 0; }
+.question-item:last-child { border-bottom: none; }
+.q-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+.marks-badge { font-size: 0.75rem; font-weight: 700; background: #f1f5f9; color: var(--secondary); border: 1px solid #cbd5e1; padding: 2px 7px; border-radius: 4px; }
+.q-answer { background: #f8fafc; padding: 14px 18px; border-radius: 6px; }
+.unit-pagination { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+.btn { padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-outline { border: 1px solid var(--border-color); color: var(--text-main); }
+@media (max-width: 900px) { .sidebar { max-height: 34vh; padding: 16px; } .main-content { width: 100%; padding: 24px 16px 56px; } }
+</style>
+</head>
+<body>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · IVP Master</a>
+<span class="badge">Semester Exam Prep</span>
+<button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle" type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark mode</span></button>
+</div>
+<nav class="sidebar-nav">
+<h3>All Units &amp; Guides</h3>
+<ul>
+<li><a href="IVP_Unit_1_Image_Fundamentals.html"><span class="unit-num">01</span> Image Fundamentals</a></li>
+<li><a class="active" href="IVP_Unit_2_Image_Enhancement.html"><span class="unit-num">02</span> Image Enhancement</a></li>
+<li><a href="IVP_Unit_3_Image_Transforms.html"><span class="unit-num">03</span> Image Transforms</a></li>
+<li><a href="IVP_Unit_4_Morphological_Image_Processing.html"><span class="unit-num">04</span> Morphological Processing</a></li>
+<li><a href="IVP_Unit_5_Edge_Detection.html"><span class="unit-num">05</span> Edge Detection</a></li>
+<li><a href="IVP_Unit_6_Image_Segmentation.html"><span class="unit-num">06</span> Image Segmentation</a></li>
+<li><a href="IVP_Unit_7_Colour_Image_Processing.html"><span class="unit-num">07</span> Colour Image Processing</a></li>
+<li><a href="IVP_Unit_8_Digital_Video_and_Compression.html"><span class="unit-num">08</span> Video &amp; Compression</a></li>
+<li><a href="IVP_Numericals_and_Problem_Solving.html"><span class="unit-num">09</span> Master Problem-Solving Guide</a></li>
+<li><a href="IVP_Solved_Examples.html"><span class="unit-num">10</span> Comprehensive Solved Bank</a></li>
+<li><a href="IVP_Topic_Checklist.html"><span class="unit-num">11</span> Final Topic Checklist</a></li>
+</ul>
+</nav>
+</aside>
+
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 2: Image Enhancement</span>
+</div>
+<div class="meta-tag">Unit 2 · Spatial &amp; Frequency Domain Masterclass</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>Unit 2: Image Enhancement (Spatial &amp; Frequency Domains)</h1>
+<p class="lead">An exhaustive masterclass on point processing operations (Digital Negative, Thresholding, Contrast Stretching, Intensity Level Slicing, Log Transformations, Power-Law Gamma Transformations), spatial filtering (Smoothing linear box filters, Median non-linear filters, Laplacian and Unsharp Mask sharpening), Histogram Equalization step-by-step algorithms, and frequency domain filtering (Ideal, Butterworth, and Gaussian lowpass/highpass filters).</p>
+</header>
+<section class="theory-sources" aria-label="Original theory files"><h2>Original theory files</h2><p>Open the unchanged lecture source or expand its preview here.</p><ul><li><a href="theory/IVP%20UNIT%202.pptx" target="_blank" rel="noopener">Open original: IVP UNIT 2.pptx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of IVP UNIT 2.pptx" src="theory/previews/IVP%20UNIT%202.pdf"></iframe></div><p><a href="theory/previews/IVP%20UNIT%202.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li></ul></section>
+
+
+<!-- SECTION 1: IN-DEPTH THEORY -->
+<section class="module-section" id="theory-section">
+<div class="section-title">
+<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+<span class="cross-ref-badge">Faithful to IVP UNIT 2.pptx &amp; Syllabus</span>
+</div>
+
+<div class="topic-block" id="sec-point-processing">
+<h3>1.1 Spatial Domain: Point Processing Techniques</h3>
+<p>Spatial domain techniques operate directly on image pixels: \(g(x, y) = T[f(x, y)]\). When neighborhood size is \(1 \times 1\), the transformation depends solely on the intensity \(r\) at that point: \(\mathbf{s = T(r)}\).</p>
+
+<h4>1. Linear Transformation: Digital Negative</h4>
+$$s = L - 1 - r$$
+<p>Reverses the gray-level intensity scale (e.g., \(s = 255 - r\) for 8-bit images). Enhances white/light details embedded in predominantly black regions (used heavily in medical mammograms and X-rays).</p>
+
+<h4>2. Non-Linear: Logarithmic Transformation</h4>
+$$s = c \log(1 + r)$$
+<p>Where \(c\) is a scaling constant (\(c = \frac{L-1}{\log(1 + r_{\max})}\)). Stretches dark low-gray-level pixels while compressing high-level bright pixels. <em>Primary application:</em> Visualizing the dynamic range of Fourier transform magnitude spectrums!</p>
+
+<h4>3. Non-Linear: Power-Law (Gamma) Transformation</h4>
+$$s = c \cdot r^\gamma$$
+<ul>
+<li>\(\gamma &lt; 1\) (Fractional gamma): Stretches dark shadows and brightens midtones (Gamma correction for dark images).</li>
+<li>\(\gamma &gt; 1\): Compresses dark pixels and expands bright highlights, increasing overall contrast for washed-out overexposed images.</li>
+</ul>
+
+<h4>4. Piecewise-Linear: Contrast Stretching &amp; Intensity Slicing</h4>
+<p><strong>Contrast Stretching:</strong> Expands a narrow dynamic range \([r_{\min}, r_{\max}]\) across the full \([0, L-1]\) scale:
+$$s = \frac{r - r_{\min}}{r_{\max} - r_{\min}} \cdot (L - 1)$$
+<strong>Gray-Level Slicing:</strong> Highlights a specific band of intensities \([A, B]\) by setting them to a high value (e.g., 255), while either preserving or suppressing background pixels outside the range.</p>
+</div>
+
+<div class="topic-block" id="sec-histogram-eq">
+<h3>1.2 Histogram Processing &amp; Equalization Algorithm</h3>
+<p>The <strong>Histogram</strong> of a digital image with gray levels in \([0, L-1]\) is a discrete function: \(h(r_k) = n_k\), where \(n_k\) is the number of pixels having gray level \(r_k\). The normalized histogram represents a probability density function (PDF):
+$$p_r(r_k) = \frac{n_k}{M \cdot N}$$</p>
+
+<div class="callout callout-def">
+<h4>Histogram Equalization Transformation Formula</h4>
+<p>Histogram Equalization uses the <strong>Cumulative Distribution Function (CDF)</strong> to spread pixel intensities uniformly across the full dynamic range:</p>
+$$\mathbf{s_k = T(r_k) = \text{round}\left( (L - 1) \sum_{j=0}^{k} p_r(r_j) \right) = \text{round}\left( \frac{L - 1}{M \cdot N} \sum_{j=0}^{k} n_j \right)}$$
+</div>
+</div>
+
+<div class="topic-block" id="sec-spatial-filtering">
+<h3>1.3 Neighborhood Processing: Spatial Filtering</h3>
+<p>A spatial filter consists of a neighborhood (typically a \(3 \times 3\) odd-sized window) and a predefined mask \(w\):
+$$g(x, y) = \sum_{s=-a}^{a} \sum_{t=-b}^{b} w(s, t) \cdot f(x+s, y+t)$$</p>
+
+<h4>1. Smoothing Filters (Lowpass):</h4>
+<ul>
+<li><strong>Box Average Filter:</strong> Uniform weights (all \(1/9\) for \(3 \times 3\)). Blurs noise and edges equally.</li>
+<li><strong>Gaussian Filter:</strong> Bell-shaped weights giving higher prominence to central pixels. Smoothes noise while preserving natural edges.</li>
+<li><strong>Median Filter (Non-linear):</strong> Replaces the center pixel with the statistical <strong>median</strong> of sorted neighborhood pixels:
+$$\mathbf{g(x, y) = \text{median}\{f(x+s, y+t)\}}$$
+<strong>Optimal for Salt-and-Pepper (Impulse) Noise:</strong> Completely removes impulse spikes without blurring sharp object boundaries!</li>
+</ul>
+
+<h4>2. Sharpening Filters (Highpass &amp; Derivatives):</h4>
+<p>Sharpening highlights fine details, edges, and transitions by computing spatial derivatives:</p>
+<ul>
+<li><strong>The Laplacian (2nd Derivative Operator):</strong>
+$$\nabla^2 f = \frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial y^2} = [f(x+1, y) + f(x-1, y) + f(x, y+1) + f(x, y-1)] - 4 f(x, y)$$
+<em>Standard Laplacian Mask (Center Positive):</em>
+$$\begin{bmatrix} 0 & -1 & 0 \\ -1 & 4 & -1 \\ 0 & -1 & 0 \end{bmatrix} \quad \text{or with diagonals: } \begin{bmatrix} -1 & -1 & -1 \\ -1 & 8 & -1 \\ -1 & -1 & -1 \end{bmatrix}$$
+<em>Image Sharpening Equation:</em>
+$$g(x, y) = f(x, y) + c \nabla^2 f(x, y)$$</li>
+</ul>
+</div>
+</section>
+
+<!-- SECTION 2: NUMERICALS -->
+<section class="module-section" id="numerical-section">
+<div class="section-title">
+<h2>2. In-Depth Enhancement Numericals</h2>
+<span class="cross-ref-badge">NMIMS Exam Solved Calculations</span>
+</div>
+
+<div class="problem-card" id="num-laplacian">
+<div class="problem-header">
+<span class="difficulty easy">Laplacian Calculation</span>
+<h3>Problem 2.1: Laplacian Filter Sharpening at Center Pixel</h3>
+</div>
+<p><strong>Problem Statement (From NMIMS Paper 1 Q1b):</strong> Consider the following \(3 \times 3\) grayscale image region:
+$$I = \begin{bmatrix} 10 & 20 & 30 \\ 40 & 50 & 60 \\ 70 & 80 & 90 \end{bmatrix}$$
+Using a Laplacian filter having <strong>positive center without diagonal elements</strong>, compute the output value at center pixel (50).</p>
+
+<div class="solution-flow">
+<div class="step-row"><span class="step-badge">MASK</span>
+<div>
+<p>Positive center without diagonal elements:
+$$\text{Mask } W = \begin{bmatrix} 0 & -1 & 0 \\ -1 & 4 & -1 \\ 0 & -1 & 0 \end{bmatrix}$$
+</div>
+</div>
+<div class="step-row"><span class="step-badge">CALCULATION</span>
+<div>
+$$\nabla^2 I = (0 \cdot 10) + (-1 \cdot 20) + (0 \cdot 30) + (-1 \cdot 40) + (4 \cdot 50) + (-1 \cdot 60) + (0 \cdot 70) + (-1 \cdot 80) + (0 \cdot 90)$$
+$$\nabla^2 I = -20 - 40 + 200 - 60 - 80 = 200 - 200 = \mathbf{0}$$
+</div>
+</div>
+<div class="step-row"><span class="step-badge answer">FINAL RESULT</span>
+<div>
+<p class="final-box">\(\mathbf{\text{Output Value } = 0}\) (or sharpened \(50 + 0 = \mathbf{50}\))</p>
+<p class="hint">Interpretation: The image intensities form a perfectly linear planar ramp across both X and Y directions. Because the second derivative of a linear ramp is mathematically zero, the Laplacian correctly outputs 0.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="problem-card" id="num-hist-eq">
+<div class="problem-header">
+<span class="difficulty medium">Histogram Equalization Trace</span>
+<h3>Problem 2.2: Complete Step-by-Step Histogram Equalization</h3>
+</div>
+<p><strong>Problem Statement:</strong> Consider a \(3\text{-bit}\) (\(L = 8\)) image of size \(64 \times 64 = 4096\text{ pixels}\) with gray-level distribution:
+<br/>\(r_0 = 790, r_1 = 1023, r_2 = 850, r_3 = 656, r_4 = 329, r_5 = 245, r_6 = 122, r_7 = 81\).
+<br/>Perform histogram equalization and calculate the output mapped gray levels \(s_k\).</p>
+
+<div class="solution-flow">
+<div class="step-row"><span class="step-badge">EQUALIZATION TABLE</span>
+<div>
+<table class="data-table">
+<thead><tr><th>\(r_k\)</th><th>\(n_k\)</th><th>\(p_r(r_k) = n_k/4096\)</th><th>Cumulative \(\sum p_r\)</th><th>\((L-1) \cdot \text{CDF} = 7 \cdot \text{CDF}\)</th><th>\(s_k = \text{round}(7 \cdot \text{CDF})\)</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>790</td><td>0.19</td><td>0.19</td><td>1.33</td><td><strong>1</strong></td></tr>
+<tr><td>1</td><td>1023</td><td>0.25</td><td>0.44</td><td>3.08</td><td><strong>3</strong></td></tr>
+<tr><td>2</td><td>850</td><td>0.21</td><td>0.65</td><td>4.55</td><td><strong>5</strong></td></tr>
+<tr><td>3</td><td>656</td><td>0.16</td><td>0.81</td><td>5.67</td><td><strong>6</strong></td></tr>
+<tr><td>4</td><td>329</td><td>0.08</td><td>0.89</td><td>6.23</td><td><strong>6</strong></td></tr>
+<tr><td>5</td><td>245</td><td>0.06</td><td>0.95</td><td>6.65</td><td><strong>7</strong></td></tr>
+<tr><td>6</td><td>122</td><td>0.03</td><td>0.98</td><td>6.86</td><td><strong>7</strong></td></tr>
+<tr><td>7</td><td>81</td><td>0.02</td><td>1.00</td><td>7.00</td><td><strong>7</strong></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 3: COMPARATIVE STUDIES -->
+<section class="module-section" id="comparison-section">
+<div class="section-title">
+<h2>3. Comprehensive Comparative Studies</h2>
+<span class="cross-ref-badge">Frequent Exam Distinctions</span>
+</div>
+
+<h3>Table 2.1: Mean (Averaging) Filter vs. Median Filter</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Linear Mean (Box) Filter</th>
+<th>Non-Linear Median Filter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Operation</strong></td>
+<td>Computes weighted arithmetic mean: \(\frac{1}{9}\sum p_i\).</td>
+<td>Sorts neighborhood pixels and picks center median value.</td>
+</tr>
+<tr>
+<td><strong>Impulse Noise Suppression</strong></td>
+<td>Poor. Spreads single dead/white noise spikes across neighboring pixels as blurred patches.</td>
+<td><strong>Outstanding.</strong> Completely eliminates isolated extreme impulse noise spikes.</td>
+</tr>
+<tr>
+<td><strong>Edge Sharpness</strong></td>
+<td>Blurs and degrades high-frequency step edges.</td>
+<td><strong>Preserves sharp structural edges</strong> while eliminating noise.</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<!-- SECTION 4: CASE STUDIES & EXAM QUESTIONS -->
+<section class="module-section" id="questions-section">
+<div class="section-title">
+<h2>4. Possible University Exam Questions &amp; Marking Guide</h2>
+<span class="cross-ref-badge">NMIMS Pattern Solutions</span>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">10 Marks</span>
+<h4>Q1. Differentiate between Power-Law (Gamma) Transformation and Contrast Stretching. Explain Histogram Equalization with mathematical steps. [From NMIMS Paper 1 Q7]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Model Answer Key:</strong> Detail Section 1.1 for Power-law (\(s = c r^\gamma\)) vs Contrast stretching. Contrast stretching is piecewise linear and maps actual min/max bounds directly to full range; Gamma correction uses exponential curves to expand dark shadows (\(\gamma &lt; 1\)) or brighten highlights (\(\gamma &gt; 1\)). Detail Histogram Equalization using CDF transformation formula and the full 8-step matrix derivation from Section 1.2 and Problem 2.2.</p>
+</div>
+</div>
+</section>
+
+<!-- SECTION 5: WHAT TO KNOW FOR THE EXAM -->
+<section class="module-section" id="exam-checklist">
+<div class="section-title">
+<h2>What to Know for the Exam &amp; Coverage Checklist</h2>
+<span class="cross-ref-badge">Final Revision Anchor</span>
+</div>
+
+<div class="callout callout-tip">
+<h4>Core Exam Takeaways:</h4>
+<ul>
+<li><strong>Digital Negative:</strong> \(s = 255 - r\). Log: \(s = c \log(1+r)\). Power-law: \(s = c r^\gamma\).</li>
+<li><strong>Histogram Equalization:</strong> \(s_k = \text{round}\left( (L-1) \sum_{j=0}^k \frac{n_j}{MN} \right)\).</li>
+<li><strong>Laplacian Center Positive:</strong> Center is \(+4\), orthogonal neighbors are \(-1\). Center positive with diagonals is \(+8\) with \(-1\) surrounding.</li>
+<li><strong>Median Filter:</strong> Sort all 9 values \(\to\) select 5th element.</li>
+</ul>
+</div>
+</section>
+
+<!-- Unit Pagination -->
+<div class="unit-pagination">
+<a class="btn btn-outline" href="IVP_Unit_1_Image_Fundamentals.html">← Previous: Unit 1 - Image Fundamentals</a>
+<a class="btn btn-primary" href="IVP_Unit_3_Image_Transforms.html">Next: Unit 3 - Image Transforms →</a>
+</div>
+
+</article>
+</main>
+</div>
+
+<script>
+const toggleBtn = document.getElementById('theme-toggle');
+if (toggleBtn) {
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    toggleBtn.setAttribute('aria-pressed', 'true');
+  }
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.setAttribute('aria-pressed', !isDark);
+  });
+}
+</script>
+</body>
+</html>

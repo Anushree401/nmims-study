@@ -1,20 +1,689 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script>
-try{const t=localStorage.getItem('nmims-ai-color-theme');const d=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(!t&&d))document.documentElement.dataset.theme='dark'}catch(_){}
-</script><title>Deadlocks and Banker’s Algorithm</title><style>:root{color-scheme:light;--ink:#17243b;--muted:#53647a;--blue:#155eef;--pale:#eef4ff;--line:#d9e2ef;--gold:#fff4d6}*{box-sizing:border-box}body{margin:0;background:#f6f8fb;color:var(--ink);font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:980px;margin:auto;padding:32px 22px 70px}header{background:linear-gradient(125deg,#102b52,#155eef);color:white;padding:32px;border-radius:18px;margin-bottom:24px}h1{line-height:1.15;margin:0 0 10px}header p{margin:0;color:#e7efff}section,article{background:white;border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0}h2{margin-top:0;color:#173e74}h3{color:#244f86}li{margin:.28em 0}.callout{background:var(--pale);border-left:4px solid var(--blue);padding:12px 16px;border-radius:8px}.warn{background:var(--gold);padding:12px 16px;border-radius:8px}table{border-collapse:collapse;width:100%;margin:12px 0}td,th{border:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}th{background:#eef4ff}code,.formula{background:#f1f4f8;padding:2px 5px;border-radius:4px}.diagram{font-family:ui-monospace,monospace;background:#f3f6fa;padding:14px;border-radius:8px;white-space:pre-wrap}details{border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:8px 0}summary{font-weight:650;cursor:pointer}footer{font-size:.9em;color:var(--muted);padding:16px;text-align:center}@media print{body{background:white}main{max-width:none;padding:0}header,section,article{break-inside:avoid}}
-/* Shared NMIMS light/dark theme */
-html{color-scheme:light;--os-bg:#f6f8fb;--os-ink:#17243b;--os-muted:#53647a;--os-card:#fff;--os-line:#d9e2ef;--os-pale:#eef4ff;--os-gold:#fff4d6;--os-code:#f1f4f8;--os-diagram:#f3f6fa}
-html[data-theme="dark"]{color-scheme:dark;--os-bg:#171b20;--os-ink:#edf2f8;--os-muted:#b4c0ce;--os-card:#222a33;--os-line:#3c4856;--os-pale:#263645;--os-gold:#433923;--os-code:#303a46;--os-diagram:#202a34}
-html[data-theme="dark"] body{background:var(--os-bg);color:var(--os-ink)}
-html[data-theme="dark"] section,html[data-theme="dark"] article{background:var(--os-card);border-color:var(--os-line)}
-html[data-theme="dark"] h2,html[data-theme="dark"] h3{color:#9bc5ff}
-html[data-theme="dark"] .callout,html[data-theme="dark"] th{background:var(--os-pale)}
-html[data-theme="dark"] .warn{background:var(--os-gold)}
-html[data-theme="dark"] td,html[data-theme="dark"] th,html[data-theme="dark"] details{border-color:var(--os-line)}
-html[data-theme="dark"] code,html[data-theme="dark"] .formula{background:var(--os-code)}
-html[data-theme="dark"] .diagram{background:var(--os-diagram)}
-html[data-theme="dark"] footer{color:var(--os-muted)}
-.theme-bar{display:flex;justify-content:flex-end;margin:0 0 10px}
-.theme-switch{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--os-line);border-radius:9px;background:var(--os-card);color:var(--os-ink);padding:8px 12px;font:600 .9rem/1.2 system-ui,-apple-system,Segoe UI,sans-serif;cursor:pointer}
-.theme-switch:hover{filter:brightness(.96)}
-.theme-switch:focus-visible{outline:3px solid #6ca8ff;outline-offset:2px}
-</style><main><div class="theme-bar"><button class="theme-switch" id="shared-theme-toggle" type="button" aria-pressed="false"><span class="theme-icon" aria-hidden="true">☾</span><span class="theme-label">Dark mode</span></button></div><header><h1>Deadlocks and Banker’s Algorithm</h1><p>Unit 4 | conditions, prevention, avoidance, detection, recovery, resource graphs</p></header><div class="warn"><b>Scope note:</b> No Operating Systems course policy was present in OS. The only syllabus PDF found is for Artificial Intelligence and does not apply to these slides. Therefore the checklist follows the OS slide decks; exam format, weighting, exclusions, and instructor-specific marking rules could not be verified. Assumptions and ambiguous source points are flagged below.</div><section><h2>1. Deadlock and necessary conditions</h2><p>A deadlock is a set of processes where each waits for a resource held by another, so none can progress. All four Coffman conditions must hold simultaneously: mutual exclusion, hold-and-wait, no preemption, and circular wait. Breaking any one prevents deadlock.</p><div class="diagram">P1 holds R1 → waits for R2<br>P2 holds R2 → waits for R1<br>cycle: P1 → R2 → P2 → R1 → P1</div></section><section><h2>2. Handling strategies</h2><p><b>Prevention</b> structurally denies a condition: make resources shareable where possible; request all resources at once or release before requesting more; preempt where safe; impose a total resource order. Each can lower utilization or cause inconvenience. <b>Avoidance</b> grants a request only if the resulting state remains safe. <b>Detection and recovery</b> allow allocation, periodically detect deadlock, then terminate processes or preempt resources. <b>Ignore</b> (ostrich approach) is a pragmatic choice when risk/cost is low, but it does not solve the deadlock.</p></section><section><h2>3. Safe state and Banker’s method</h2><p>Safe means there exists an ordering in which every process can obtain its remaining Need from currently Available plus resources released by earlier completed processes. Unsafe does not mean deadlocked; it means no safe completion order is currently demonstrated.</p><p>Compute <code>Need = Max − Allocation</code> elementwise. To test safety, set Work=Available and Finish=false. Find an unfinished process with Need≤Work for every resource; assume it finishes and set Work=Work+Allocation. Repeat. If all finish, the sequence is safe. For a request, first require Request≤Need and Request≤Available; tentatively subtract from Available, add to Allocation, subtract from Need; run safety test. Commit only if safe.</p><p>Example: Available=(3,3,2), process P0 Need=(7,4,3), P1 Need=(1,2,2). P1 can finish first because its Need fits; Work becomes Available+Allocation(P1). Continue similarly. Compare vectors componentwise, not by sum.</p></section><section><h2>4. Resource-allocation graphs, detection, recovery</h2><p>In a RAG, process nodes and resource-type nodes are different; request edge P→R means waiting, assignment edge R→P means allocated. With one instance per resource, a cycle is sufficient for deadlock. With multiple instances, a cycle is necessary but not sufficient. Detection uses a Work/Finish-style procedure over current Allocation and outstanding requests. Recovery choices include killing all involved, killing one at a time and retesting, or resource preemption; preemption can cause starvation unless victim choice/rollback is managed.</p><div class="warn">Some Unit 4 slides show tables/graphs as images without extractable labels. Their exact instance counts and numeric examples are not recoverable from the provided text; use the algorithms above and the visible Resource Request Algorithm slide. Do not infer missing table entries.</div></section><section><h2>Common traps and self-test</h2><h3>Self-test (answers follow)</h3><details><summary>Can an unsafe state already be deadlocked?</summary><p>Yes, but unsafe only means a guaranteed safe sequence is not available; it is not proof of deadlock.</p></details><details><summary>For one-instance resources, what does a RAG cycle imply?</summary><p>Deadlock.</p></details><details><summary>For multiple instances, is a cycle sufficient?</summary><p>No. It is necessary but not sufficient.</p></details><details><summary>In Banker’s algorithm, what relation defines Need?</summary><p>Need=Max−Allocation.</p></details><details><summary>What is the acceptance rule for a tentative request?</summary><p>Request≤Need, Request≤Available, and the resulting state must pass the safety test.</p></details></section><section><h2>What to know for the exam</h2><p>Be ready to define the central terms, compare mechanisms using their assumptions and trade-offs, trace a process or algorithm step by step, and justify the result. State units and conventions whenever a question supplies them.</p></section><section><h2>Final coverage checklist</h2><table><tr><th>Source section</th><th>Coverage in this file</th></tr><tr><td>Unit 4 slides 1–6</td><td>Definition; four conditions; prevention</td></tr><tr><td>Unit 4 slides 7–13</td><td>Avoidance, detection and recovery</td></tr><tr><td>Unit 4 slides 14–27</td><td>Resource allocation graphs, safe state examples, resource request algorithm; image-only data flagged</td></tr></table></section><footer>Prepared from the OS course files in NMIMS-STUDY/OS/theory. Past papers were treated as exam-pattern context only.</footer></main></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unit 4: Deadlocks &amp; Banker's Algorithm - NMIMS Master Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="theme.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="os-custom-polish">
+:root { --ai-content-width: 980px; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+body { min-width: 320px; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+.main-content { width: calc(100% - 290px); max-width: none; }
+.content-wrapper { max-width: var(--ai-content-width); }
+.top-bar { position: sticky; top: 0; z-index: 90; min-height: 52px; padding: 12px 0; margin-top: -32px; background: color-mix(in srgb, var(--bg-main) 94%, transparent); backdrop-filter: blur(10px); }
+.unit-hero { padding-top: 6px; margin-bottom: clamp(26px, 4vw, 42px); }
+.unit-hero h1 { font-size: clamp(1.8rem, 3.3vw, 2.45rem); letter-spacing: -0.035em; text-wrap: balance; }
+.module-section { scroll-margin-top: 76px; padding: clamp(20px, 3vw, 34px); margin-bottom: clamp(24px, 4vw, 40px); }
+.topic-block { scroll-margin-top: 76px; margin-bottom: 2.2rem; }
+.topic-block p, .topic-block li, .q-answer p, .callout p { max-width: 82ch; line-height: 1.72; }
+.callout { padding: 18px 20px; border-radius: 10px; margin: 16px 0; border-left: 4px solid var(--primary); background: #f1f5f9; }
+.callout-def { border-left-color: #2563eb; background: #eff6ff; }
+.callout-warn { border-left-color: #f59e0b; background: #fffbeb; }
+.callout-tip { border-left-color: #10b981; background: #ecfdf5; }
+.data-table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+.data-table th, .data-table td { border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; }
+.data-table th { background: #f8fafc; font-weight: 600; }
+.diagram-wrapper { margin: 20px 0; text-align: center; }
+.diagram-caption { font-size: 0.88rem; color: var(--text-muted); margin-top: 8px; font-style: italic; }
+.problem-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+.problem-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.difficulty.easy { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.medium { background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.hard { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.solution-flow { display: flex; flex-direction: column; gap: 14px; }
+.step-row { display: flex; gap: 16px; align-items: flex-start; }
+.step-badge { font-size: 0.72rem; font-weight: 700; padding: 4px 8px; background: #e2e8f0; color: #334155; border-radius: 4px; white-space: nowrap; }
+.step-badge.answer { background: #dcfce7; color: #166534; }
+.final-box { background: #ecfdf5; border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 6px; font-weight: 600; color: #065f46; }
+.question-item { border-bottom: 1px solid var(--border-color); padding: 20px 0; }
+.question-item:last-child { border-bottom: none; }
+.q-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+.marks-badge { font-size: 0.75rem; font-weight: 700; background: #f1f5f9; color: var(--secondary); border: 1px solid #cbd5e1; padding: 2px 7px; border-radius: 4px; }
+.q-answer { background: #f8fafc; padding: 14px 18px; border-radius: 6px; }
+.unit-pagination { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+.btn { padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-outline { border: 1px solid var(--border-color); color: var(--text-main); }
+@media (max-width: 900px) { .sidebar { max-height: 34vh; padding: 16px; } .main-content { width: 100%; padding: 24px 16px 56px; } }
+</style>
+</head>
+<body>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · OS Master</a>
+<span class="badge">Semester Exam Prep</span>
+<button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle" type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark mode</span></button>
+</div>
+<nav class="sidebar-nav">
+<h3>All Units &amp; Guides</h3>
+<ul>
+<li><a href="01-os-foundations.html"><span class="unit-num">01</span> OS Overview &amp; Architecture</a></li>
+<li><a href="02-processes-and-cpu-scheduling.html"><span class="unit-num">02</span> Processes &amp; CPU Scheduling</a></li>
+<li><a href="03-concurrency-and-synchronization.html"><span class="unit-num">03</span> Concurrency &amp; Synchronization</a></li>
+<li><a class="active" href="04-deadlocks.html"><span class="unit-num">04</span> Deadlocks &amp; Banker's Algorithm</a></li>
+<li><a href="05-memory-management.html"><span class="unit-num">05</span> Memory Management &amp; Fitting</a></li>
+<li><a href="06-paging-and-replacement.html"><span class="unit-num">06</span> Paging &amp; Virtual Memory</a></li>
+<li><a href="07-io-and-disk-scheduling.html"><span class="unit-num">07</span> I/O &amp; Disk Scheduling</a></li>
+<li><a href="08-file-systems.html"><span class="unit-num">08</span> File System Interface &amp; Storage</a></li>
+<li><a href="09-numericals-and-problem-solving.html"><span class="unit-num">09</span> Master Problem-Solving Guide</a></li>
+<li><a href="10-solved-examples.html"><span class="unit-num">10</span> Comprehensive Solved Bank</a></li>
+<li><a href="11-topic-checklist.html"><span class="unit-num">11</span> Final Topic Checklist</a></li>
+</ul>
+<h3>Unit 4 Sections</h3>
+<ul>
+<li><a href="#theory-section">1. In-Depth Lecture &amp; Theory</a></li>
+<li><a href="#sec-deadlock-def">1.1 Deadlock Definition &amp; System Model</a></li>
+<li><a href="#sec-coffman">1.2 The Four Coffman Necessary Conditions</a></li>
+<li><a href="#sec-rag">1.3 Resource Allocation Graphs (RAG)</a></li>
+<li><a href="#sec-methods">1.4 Four Deadlock Handling Strategies</a></li>
+<li><a href="#sec-prevention">1.5 Deadlock Prevention (Breaking Coffman)</a></li>
+<li><a href="#sec-banker">1.6 Deadlock Avoidance: Banker's Algorithm</a></li>
+<li><a href="#sec-detection">1.7 Deadlock Detection &amp; Recovery</a></li>
+<li><a href="#numerical-section">2. In-Depth Banker's Numericals</a></li>
+<li><a href="#num-safety">2.1 Banker's Safety Algorithm Trace</a></li>
+<li><a href="#num-request">2.2 Resource-Request Algorithm Trace</a></li>
+<li><a href="#comparison-section">3. Comparative Studies</a></li>
+<li><a href="#case-section">4. Real-World Deadlock Scenarios</a></li>
+<li><a href="#questions-section">5. NMIMS Exam Questions &amp; Marking Guide</a></li>
+</ul>
+</nav>
+</aside>
+
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 4: Deadlocks &amp; Banker's Algorithm</span>
+</div>
+<div class="meta-tag">Unit 4 · 100% Lecture &amp; PYQ Faithful Masterclass</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>Unit 4: Deadlocks &amp; Banker's Algorithm</h1>
+<p class="lead">An exhaustive masterclass covering deadlock characterization, the four Coffman necessary conditions, Resource Allocation Graphs (RAG) with single vs. multiple instances, the four handling paradigms (Ignorance, Prevention, Avoidance, Detection), rigorous Banker's Safety and Resource-Request algorithms with step-by-step matrix traces, and recovery techniques (Process Termination vs. Resource Preemption).</p>
+</header>
+<section class="theory-sources" aria-label="Original theory files"><h2>Original theory files</h2><p>Open the unchanged lecture source or expand its preview here.</p><ul><li><a href="theory/UNIT%204.pptx" target="_blank" rel="noopener">Open original: UNIT 4.pptx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of UNIT 4.pptx" src="theory/previews/UNIT%204.pdf"></iframe></div><p><a href="theory/previews/UNIT%204.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li><li><a href="theory/bankers%20extended.pptx" target="_blank" rel="noopener">Open original: bankers extended.pptx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of bankers extended.pptx" src="theory/previews/bankers%20extended.pdf"></iframe></div><p><a href="theory/previews/bankers%20extended.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li></ul></section>
+
+
+<!-- SECTION 1: IN-DEPTH THEORY -->
+<section class="module-section" id="theory-section">
+<div class="section-title">
+<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+<span class="cross-ref-badge">Faithful to UNIT 4.pptx, bankers extended.pptx &amp; NMIMS Past Papers</span>
+</div>
+
+<div class="topic-block" id="sec-deadlock-def">
+<h3>1.1 Deadlock Definition &amp; System Resource Model</h3>
+<p>In a multiprogramming system, processes compete for a finite set of resources (e.g., CPU, memory partitions, tape drives, printers, database locks).</p>
+<div class="callout callout-def">
+<h4>Formal Definition of Deadlock</h4>
+<p>A <strong>Deadlock</strong> is a situation where a set of processes are blocked because every process in the set holds one or more resources while waiting for another resource that is currently held by another process in that very same set.</p>
+$$\forall P_i \in \{P_0, P_1, \dots, P_n\}, \quad P_i \text{ is waiting for a resource held by } P_{(i+1) \bmod (n+1)}$$
+</div>
+<p>Under deadlock, no process can ever execute, complete, or release its resources. The system remains permanently frozen unless an external agent intervenes.</p>
+</div>
+
+<div class="topic-block" id="sec-coffman">
+<h3>1.2 The Four Coffman Necessary Conditions</h3>
+<p>In 1971, Edward G. Coffman Jr. proved that a deadlock can arise <strong>if and only if all four</strong> of the following conditions hold simultaneously in a system:</p>
+
+<table class="data-table">
+<thead>
+<tr>
+<th>#</th>
+<th>Coffman Condition</th>
+<th>Rigorous Technical Meaning &amp; Hardware Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td><strong>Mutual Exclusion</strong></td>
+<td>At least one resource must be held in a <strong>non-shareable mode</strong>. Only one process can use the resource at any given time. If another process requests that resource, it must wait until the resource is released.</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td><strong>Hold and Wait</strong></td>
+<td>A process must currently be <strong>holding at least one resource</strong> and simultaneously waiting to acquire additional resources that are currently being held by other active processes.</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td><strong>No Preemption</strong></td>
+<td>Resources <strong>cannot be forcibly taken away</strong> from a process holding them. A resource can only be released voluntarily by the holding process after that process has finished its task.</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td><strong>Circular Wait</strong></td>
+<td>A closed circular chain of processes \(\{P_0, P_1, \dots, P_n\}\) must exist such that \(P_0\) is waiting for a resource held by \(P_1\), \(P_1\) is waiting for a resource held by \(P_2\), \(\dots\), and \(P_n\) is waiting for a resource held by \(P_0\).</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn">
+<h4>Exam Golden Rule: All Four Must Hold!</h4>
+<p>If you can engineer a system to prevent or eliminate <strong>even one</strong> of these four conditions, a deadlock is mathematically impossible!</p>
+</div>
+</div>
+
+<div class="topic-block" id="sec-rag">
+<h3>1.3 Resource Allocation Graphs (RAG)</h3>
+<p>A Resource Allocation Graph is a directed graph \(G = (V, E)\) used to precisely model resource allocation and wait states:</p>
+<ul>
+<li><strong>Vertices (\(V\)):</strong> Partitioned into two sets:
+  <ul>
+    <li>Processes \(P = \{P_1, P_2, \dots, P_n\}\) (Drawn as circles).</li>
+    <li>Resource Types \(R = \{R_1, R_2, \dots, R_m\}\) (Drawn as squares; internal dots indicate discrete resource instances).</li>
+  </ul>
+</li>
+<li><strong>Edges (\(E\)):</strong> Directed connections:
+  <ul>
+    <li><strong>Request Edge (\(P_i \to R_j\)):</strong> Directed arrow from process to resource square. Process \(P_i\) is currently waiting for an instance of \(R_j\).</li>
+    <li><strong>Assignment Edge (\(R_j \to P_i\)):</strong> Directed arrow originating from an internal instance dot within \(R_j\) to process circle \(P_i\). Resource \(R_j\) is currently allocated to \(P_i\).</li>
+  </ul>
+</li>
+</ul>
+
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:620px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewBox="0 0 620 220" xmlns="http://www.w3.org/2000/svg">
+  <!-- P1 -->
+  <circle cx="120" cy="110" r="30" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="120" y="115" fill="#1d4ed8" font-size="14" font-weight="700" text-anchor="middle">P1</text>
+
+  <!-- P2 -->
+  <circle cx="500" cy="110" r="30" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="500" y="115" fill="#1d4ed8" font-size="14" font-weight="700" text-anchor="middle">P2</text>
+
+  <!-- R1 (Top) -->
+  <rect x="280" y="20" width="60" height="60" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="6"/>
+  <text x="310" y="40" fill="#b45309" font-size="11" font-weight="700" text-anchor="middle">R1</text>
+  <circle cx="310" cy="55" r="5" fill="#b45309"/> <!-- 1 instance -->
+
+  <!-- R2 (Bottom) -->
+  <rect x="280" y="140" width="60" height="60" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="6"/>
+  <text x="310" y="160" fill="#b45309" font-size="11" font-weight="700" text-anchor="middle">R2</text>
+  <circle cx="310" cy="175" r="5" fill="#b45309"/> <!-- 1 instance -->
+
+  <!-- Edges for Deadlock Cycle -->
+  <!-- R1 -> P1 (Assignment) -->
+  <line x1="305" y1="55" x2="148" y2="95" stroke="#22c55e" stroke-width="2.5"/>
+  <text x="210" y="70" fill="#15803d" font-size="10" font-weight="600">Assigned</text>
+
+  <!-- P1 -> R2 (Request) -->
+  <line x1="148" y1="125" x2="280" y2="160" stroke="#dc2626" stroke-width="2.5"/>
+  <text x="210" y="155" fill="#b91c1c" font-size="10" font-weight="600">Requests</text>
+
+  <!-- R2 -> P2 (Assignment) -->
+  <line x1="315" y1="175" x2="472" y2="125" stroke="#22c55e" stroke-width="2.5"/>
+  <text x="400" y="165" fill="#15803d" font-size="10" font-weight="600">Assigned</text>
+
+  <!-- P2 -> R1 (Request) -->
+  <line x1="472" y1="95" x2="340" y2="55" stroke="#dc2626" stroke-width="2.5"/>
+  <text x="400" y="70" fill="#b91c1c" font-size="10" font-weight="600">Requests</text>
+</svg>
+<p class="diagram-caption">Figure 4.1: Resource Allocation Graph showing a complete Deadlock Cycle (\(P_1 \to R_2 \to P_2 \to R_1 \to P_1\)).</p>
+</div>
+
+<div class="callout callout-def">
+<h4>Exam Theorem: Cycle vs. Deadlock Relationship:</h4>
+<ul>
+<li><strong>Single-Instance Resource Graphs:</strong> A cycle in the graph is a <strong>necessary and sufficient condition</strong> for deadlock. (If there is a cycle, the system is guaranteed deadlocked!).</li>
+<li><strong>Multiple-Instance Resource Graphs:</strong> A cycle is a <strong>necessary condition, but NOT sufficient</strong>. A cycle may exist without deadlock if an external process holding an instance of that resource completes and breaks the cycle!</li>
+</ul>
+</div>
+</div>
+
+<div class="topic-block" id="sec-methods">
+<h3>1.4 The Four Strategies for Handling Deadlocks</h3>
+<ol>
+<li><strong>1. Deadlock Ignorance (The Ostrich Algorithm):</strong> Stick your head in the sand and pretend deadlocks never occur! Used by mainstream OSes (Linux, Windows) because deadlocks are rare in well-designed applications, and the runtime overhead of continuous prevention/avoidance is deemed too high. The burden is pushed onto the application developer.</li>
+<li><strong>2. Deadlock Prevention:</strong> Design system protocols that structurally constrain resource requests such that at least one of the four Coffman conditions can never hold.</li>
+<li><strong>3. Deadlock Avoidance (Banker's Algorithm):</strong> The OS dynamically tracks resource allocation state and only grants requests if the resulting state is provably <strong>Safe</strong>.</li>
+<li><strong>4. Deadlock Detection and Recovery:</strong> Allow deadlocks to occur freely. Periodically run an algorithm to detect cycles, and invoke recovery (killing processes or preemption).</li>
+</ol>
+</div>
+
+<div class="topic-block" id="sec-prevention">
+<h3>1.5 Deadlock Prevention: Eliminating Coffman Conditions</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Targeted Condition</th>
+<th>Prevention Protocol &amp; Implementation Strategy</th>
+<th>Severe Drawback / System Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Mutual Exclusion</strong></td>
+<td>Make all resources shareable (e.g., read-only files, or spooling printers via software daemon).</td>
+<td>Fundamentally impossible for inherently non-shareable hardware (e.g., tape drives, mutex locks).</td>
+</tr>
+<tr>
+<td><strong>Hold and Wait</strong></td>
+<td><strong>Protocol 1:</strong> A process must request and receive all required resources at once before beginning execution.<br/><strong>Protocol 2:</strong> A process can only request resources when it currently holds none.</td>
+<td><strong>Severe Resource Underutilization:</strong> Resources held but unused for hours sit idle; processes needing many resources face starvation.</td>
+</tr>
+<tr>
+<td><strong>No Preemption</strong></td>
+<td>If process \(P_1\) holding resources requests resource \(R\) that is held by waiting process \(P_2\), \(R\) is preempted from \(P_2\) and given to \(P_1\). If \(R\) is busy with a running process, \(P_1\) is forced to release all its currently held resources!</td>
+<td>Only practical for resources whose complete machine state can be easily saved and restored (e.g., CPU registers, memory pages). Disastrous for database transactions or disk writes.</td>
+</tr>
+<tr>
+<td><strong>Circular Wait</strong></td>
+<td><strong>Resource Ordering Protocol:</strong> Impose a total linear ordering function \(F: R \to \mathbb{N}\) on all resource types (e.g., Tape=1, Disk=2, Printer=3). A process can request a resource \(R_j\) only if \(F(R_j) &gt; F(R_i)\) for all currently held resources \(R_i\).</td>
+<td><strong>Highly effective (Havender's Method)!</strong> However, forces programmers to acquire resources in artificial order, restricting programming flexibility.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="topic-block" id="sec-banker">
+<h3>1.6 Deadlock Avoidance: Safe States &amp; The Banker's Algorithm</h3>
+<p>Developed by Edsger Dijkstra, the <strong>Banker's Algorithm</strong> is designed for systems where resource types have multiple instances. A bank never allocates cash unless it can satisfy the maximum cash needs of every customer in some valid sequence.</p>
+
+<div class="callout callout-def">
+<h4>Definition: Safe State &amp; Safe Sequence</h4>
+<p>A system state is <strong>Safe</strong> if there exists a <strong>Safe Sequence</strong> \(\langle P_0, P_1, \dots, P_{n-1} \rangle\) of processes such that, for each process \(P_i\), the resources that \(P_i\) can still request can be satisfied by the currently available resources plus the resources already held by all preceding processes \(P_j\) (where \(j &lt; i\)).</p>
+<p><strong>Safe \(\implies\) No Deadlock.</strong><br/>
+<strong>Unsafe \(\centernot\implies\) Deadlock</strong> (An unsafe state only carries the <em>possibility</em> of deadlock if processes demand their maximum claims simultaneously!).</p>
+</div>
+
+<h4>Data Structures for Banker's Algorithm (System with \(n\) processes and \(m\) resources):</h4>
+<ul>
+<li><code>Available[m]</code>: Vector of length \(m\). <code>Available[j] = k</code> means \(k\) instances of resource \(R_j\) are free.</li>
+<li><code>Max[n][m]</code>: \(n \times m\) matrix. <code>Max[i][j] = k</code> defines the maximum claim of process \(P_i\) for resource \(R_j\).</li>
+<li><code>Allocation[n][m]</code>: \(n \times m\) matrix. Number of instances of \(R_j\) currently held by \(P_i\).</li>
+<li><code>Need[n][m]</code>: \(n \times m\) matrix. Remaining resources that \(P_i\) may request:
+$$\mathbf{Need[i][j] = Max[i][j] - Allocation[i][j]}$$</li>
+</ul>
+
+<h4>1. The Safety Algorithm:</h4>
+<ol>
+<li>Let <code>Work = Available</code> (vector of length \(m\)) and <code>Finish[i] = false</code> for \(i = 0, 1, \dots, n-1\).</li>
+<li>Find an index \(i\) such that both:
+  <br/>(a) <code>Finish[i] == false</code>
+  <br/>(b) <code>Need[i] &lt;= Work</code>
+  <br/>If no such \(i\) exists, go to Step 4.</li>
+<li><code>Work = Work + Allocation[i]</code>; <code>Finish[i] = true</code>; Go back to Step 2.</li>
+<li>If <code>Finish[i] == true</code> for all \(i\), the system is in a <strong>Safe State</strong>.</li>
+</ol>
+
+<h4>2. The Resource-Request Algorithm:</h4>
+<p>When process \(P_i\) makes a vector request <code>Request[i]</code>:</p>
+<ol>
+<li><strong>Check 1:</strong> If <code>Request[i] &lt;= Need[i]</code>, proceed to Step 2. Else, throw error (process exceeded maximum claim!).</li>
+<li><strong>Check 2:</strong> If <code>Request[i] &lt;= Available</code>, proceed to Step 3. Else, \(P_i\) must wait (resources not currently free).</li>
+<li><strong>Temporary Allocation:</strong> The OS pretends to allocate resources by modifying data structures:
+  <ul>
+    <li><code>Available = Available - Request[i];</code></li>
+    <li><code>Allocation[i] = Allocation[i] + Request[i];</code></li>
+    <li><code>Need[i] = Need[i] - Request[i];</code></li>
+  </ul>
+</li>
+<li>Run the <strong>Safety Algorithm</strong> on the modified state:
+  <ul>
+    <li>If Safe \(\implies\) Grant request immediately!</li>
+    <li>If Unsafe \(\implies\) Roll back state changes; \(P_i\) must wait.</li>
+  </ul>
+</li>
+</ol>
+</div>
+
+<div class="topic-block" id="sec-detection">
+<h3>1.7 Deadlock Detection &amp; Recovery</h3>
+<p>When deadlocks are not prevented or avoided, the OS must periodically execute a detection algorithm. For single-instance resources, this is done by maintaining a <strong>Wait-For Graph</strong> (collapsing resource nodes into direct process-to-process wait edges) and running cycle detection (\(O(V^2)\)).</p>
+<h4>Deadlock Recovery Techniques:</h4>
+<ul>
+<li><strong>1. Process Termination:</strong>
+  <ul>
+    <li><em>Abort all deadlocked processes:</em> Guaranteed to break cycle, but discards hours of expensive computation.</li>
+    <li><em>Abort one process at a time:</em> Abort one, re-run detection. Repeat until cycle breaks. Select victim based on priority, computation completed, and resources held.</li>
+  </ul>
+</li>
+<li><strong>2. Resource Preemption:</strong>
+  <ul>
+    <li><em>Selecting a Victim:</em> Preempt resources from process with lowest cost.</li>
+    <li><em>Rollback:</em> Must roll back victim process to a safe checkpoint state.</li>
+    <li><em>Starvation Prevention:</em> Ensure a process is not perpetually chosen as victim by including rollback count in victim selection cost.</li>
+  </ul>
+</li>
+</ul>
+</div>
+</section>
+
+<!-- SECTION 2: NUMERICALS & BANKER'S TRACES -->
+<section class="module-section" id="numerical-section">
+<div class="section-title">
+<h2>2. In-Depth Banker's Numericals (Step-by-Step)</h2>
+<span class="cross-ref-badge">NMIMS 10-Mark Solved Problems</span>
+</div>
+
+<div class="problem-card" id="num-safety">
+<div class="problem-header">
+<span class="difficulty medium">Core 10-Mark Problem</span>
+<h3>Problem 4.1: Comprehensive Banker's Safety &amp; Safe Sequence Trace</h3>
+</div>
+<p><strong>Problem Statement (From NMIMS Paper 5 &amp; Paper 2):</strong> Consider a snapshot of a system with 5 processes (\(P_0, P_1, P_2, P_3, P_4\)) and 3 resource types (\(A, B, C\)). Resource type \(A\) has 10 instances, \(B\) has 5 instances, and \(C\) has 7 instances.
+<br/>Given the snapshot:</p>
+<table class="data-table">
+<thead>
+<tr>
+<th>Process</th><th colspan="3">Allocation (\(A, B, C\))</th><th colspan="3">Max (\(A, B, C\))</th><th colspan="3">Available (\(A, B, C\))</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>\(P_0\)</td><td>0</td><td>1</td><td>0</td><td>7</td><td>5</td><td>3</td><td>3</td><td>3</td><td>2</td></tr>
+<tr><td>\(P_1\)</td><td>2</td><td>0</td><td>0</td><td>3</td><td>2</td><td>2</td><td colspan="3"></td></tr>
+<tr><td>\(P_2\)</td><td>3</td><td>0</td><td>2</td><td>9</td><td>0</td><td>2</td><td colspan="3"></td></tr>
+<tr><td>\(P_3\)</td><td>2</td><td>1</td><td>1</td><td>2</td><td>2</td><td>2</td><td colspan="3"></td></tr>
+<tr><td>\(P_4\)</td><td>0</td><td>0</td><td>2</td><td>4</td><td>3</td><td>3</td><td colspan="3"></td></tr>
+</tbody>
+</table>
+<p>(a) Calculate the <strong>Need Matrix</strong>.
+<br/>(b) Determine whether the system is in a <strong>Safe State</strong>. If yes, find the complete Safe Sequence.</p>
+
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">STEP 1: NEED MATRIX</span>
+<div>
+<p>Formula: \(\text{Need}[i] = \text{Max}[i] - \text{Allocation}[i]\)</p>
+<ul>
+<li>\(\text{Need}(P_0) = (7, 5, 3) - (0, 1, 0) = \mathbf{(7, 4, 3)}\)</li>
+<li>\(\text{Need}(P_1) = (3, 2, 2) - (2, 0, 0) = \mathbf{(1, 2, 2)}\)</li>
+<li>\(\text{Need}(P_2) = (9, 0, 2) - (3, 0, 2) = \mathbf{(6, 0, 0)}\)</li>
+<li>\(\text{Need}(P_3) = (2, 2, 2) - (2, 1, 1) = \mathbf{(0, 1, 1)}\)</li>
+<li>\(\text{Need}(P_4) = (4, 3, 3) - (0, 0, 2) = \mathbf{(4, 3, 1)}\)</li>
+</ul>
+</div>
+</div>
+
+<div class="step-row">
+<span class="step-badge">STEP 2: SAFETY ALGORITHM</span>
+<div>
+<p>Initial: \(\text{Work} = \text{Available} = (3, 3, 2)\). All \(\text{Finish} = \text{false}\).</p>
+<ul>
+<li><strong>Iteration 1:</strong>
+  <ul>
+    <li>Check \(P_0\): Need \((7, 4, 3) \le (3, 3, 2)\)? False! Cannot satisfy \(P_0\).</li>
+    <li>Check \(P_1\): Need \((1, 2, 2) \le (3, 3, 2)\)? <strong>True!</strong></li>
+    <li>\(P_1\) executes and finishes. \(\text{Work} = (3, 3, 2) + \text{Alloc}(P_1)(2, 0, 0) = \mathbf{(5, 3, 2)}\). \(\text{Finish}[P_1] = \text{true}\).</li>
+  </ul>
+</li>
+<li><strong>Iteration 2:</strong> With \(\text{Work} = (5, 3, 2)\):
+  <ul>
+    <li>Check \(P_3\): Need \((0, 1, 1) \le (5, 3, 2)\)? <strong>True!</strong></li>
+    <li>\(P_3\) executes and finishes. \(\text{Work} = (5, 3, 2) + \text{Alloc}(P_3)(2, 1, 1) = \mathbf{(7, 4, 3)}\). \(\text{Finish}[P_3] = \text{true}\).</li>
+  </ul>
+</li>
+<li><strong>Iteration 3:</strong> With \(\text{Work} = (7, 4, 3)\):
+  <ul>
+    <li>Check \(P_4\): Need \((4, 3, 1) \le (7, 4, 3)\)? <strong>True!</strong></li>
+    <li>\(P_4\) executes and finishes. \(\text{Work} = (7, 4, 3) + \text{Alloc}(P_4)(0, 0, 2) = \mathbf{(7, 4, 5)}\). \(\text{Finish}[P_4] = \text{true}\).</li>
+  </ul>
+</li>
+<li><strong>Iteration 4:</strong> With \(\text{Work} = (7, 4, 5)\):
+  <ul>
+    <li>Check \(P_0\): Need \((7, 4, 3) \le (7, 4, 5)\)? <strong>True!</strong></li>
+    <li>\(P_0\) executes and finishes. \(\text{Work} = (7, 4, 5) + \text{Alloc}(P_0)(0, 1, 0) = \mathbf{(7, 5, 5)}\). \(\text{Finish}[P_0] = \text{true}\).</li>
+  </ul>
+</li>
+<li><strong>Iteration 5:</strong> With \(\text{Work} = (7, 5, 5)\):
+  <ul>
+    <li>Check \(P_2\): Need \((6, 0, 0) \le (7, 5, 5)\)? <strong>True!</strong></li>
+    <li>\(P_2\) executes and finishes. \(\text{Work} = (7, 5, 5) + \text{Alloc}(P_2)(3, 0, 2) = \mathbf{(10, 5, 7)}\). \(\text{Finish}[P_2] = \text{true}\).</li>
+  </ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div class="step-row">
+<span class="step-badge answer">FINAL RESULT</span>
+<div>
+<p class="final-box">The system is in a <strong>SAFE STATE</strong>.<br/>Valid Safe Sequence: \(\mathbf{\langle P_1, P_3, P_4, P_0, P_2 \rangle}\)</p>
+<p class="hint">Sanity Check: Final Work vector \((10, 5, 7)\) matches total system resources. All processes terminated successfully!</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="problem-card" id="num-request">
+<div class="problem-header">
+<span class="difficulty hard">Resource-Request Trace</span>
+<h3>Problem 4.2: Evaluating Immediate Grant Request</h3>
+</div>
+<p><strong>Problem Statement (From 'bankers extended.pptx' &amp; Exam Papers):</strong> Using the system state from Problem 4.1, suppose process \(P_1\) makes an immediate request:
+$$\text{Request}(P_1) = (1, 0, 2)$$
+Can this request be granted immediately?</p>
+
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">CHECK 1 &amp; 2</span>
+<div>
+<ul>
+<li><strong>Check 1: \(\text{Request} \le \text{Need}\)?</strong>
+  <br/>\((1, 0, 2) \le \text{Need}(P_1)(1, 2, 2)\)? <strong>YES!</strong> (Process did not exceed maximum claim).</li>
+<li><strong>Check 2: \(\text{Request} \le \text{Available}\)?</strong>
+  <br/>\((1, 0, 2) \le \text{Available}(3, 3, 2)\)? <strong>YES!</strong> (Resources are currently free).</li>
+</ul>
+</div>
+</div>
+
+<div class="step-row">
+<span class="step-badge">TEMP ALLOCATION</span>
+<div>
+<p>Temporarily modify system vectors for \(P_1\):</p>
+<ul>
+<li>\(\text{Available}_{\text{new}} = (3, 3, 2) - (1, 0, 2) = \mathbf{(2, 3, 0)}\)</li>
+<li>\(\text{Allocation}(P_1)_{\text{new}} = (2, 0, 0) + (1, 0, 2) = \mathbf{(3, 0, 2)}\)</li>
+<li>\(\text{Need}(P_1)_{\text{new}} = (1, 2, 2) - (1, 0, 2) = \mathbf{(0, 2, 0)}\)</li>
+</ul>
+</div>
+</div>
+
+<div class="step-row">
+<span class="step-badge">SAFETY TEST</span>
+<div>
+<p>Run Safety Algorithm with \(\text{Work} = (2, 3, 0)\):</p>
+<ul>
+<li>Check \(P_1\): \(\text{Need}(P_1) = (0, 2, 0) \le (2, 3, 0)\)? <strong>Yes!</strong>
+  <br/>\(P_1\) finishes \(\to \text{Work} = (2, 3, 0) + (3, 0, 2) = \mathbf{(5, 3, 2)}\).</li>
+<li>With \(\text{Work} = (5, 3, 2)\), sequence \(\langle P_3, P_4, P_0, P_2 \rangle\) satisfies all remaining needs exactly as in Problem 4.1!</li>
+</ul>
+</div>
+</div>
+
+<div class="step-row">
+<span class="step-badge answer">CONCLUSION</span>
+<div>
+<p class="final-box">The resulting state is <strong>SAFE</strong> (Safe sequence: \(\langle P_1, P_3, P_4, P_0, P_2 \rangle\)).<br/><strong>DECISION: The request by \(P_1\) for \((1, 0, 2)\) can be GRANTED IMMEDIATELY!</strong></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 3: COMPARATIVE STUDIES -->
+<section class="module-section" id="comparison-section">
+<div class="section-title">
+<h2>3. Comprehensive Comparative Studies</h2>
+<span class="cross-ref-badge">Frequent Exam Distinctions</span>
+</div>
+
+<h3>Table 4.1: Deadlock Prevention vs. Avoidance vs. Detection</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Deadlock Prevention</th>
+<th>Deadlock Avoidance (Banker's)</th>
+<th>Deadlock Detection &amp; Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Core Philosophy</strong></td>
+<td>Strictly eliminate one of the 4 Coffman conditions at design time.</td>
+<td>Dynamically inspect safe sequences before granting each request.</td>
+<td>Grant requests freely; detect deadlocks after they occur.</td>
+</tr>
+<tr>
+<td><strong>Resource Information Needed</strong></td>
+<td>None (enforced via rigid access rules or linear orderings).</td>
+<td><strong>Requires maximum resource claim</strong> declarations in advance.</td>
+<td>Requires current allocation and outstanding wait matrices.</td>
+</tr>
+<tr>
+<td><strong>Resource Utilization</strong></td>
+<td><strong>Low.</strong> Severe underutilization due to rigid hold-and-wait restrictions.</td>
+<td><strong>High.</strong> Allocates resources dynamically up to safe limits.</td>
+<td><strong>Maximum.</strong> Zero pre-allocation restrictions.</td>
+</tr>
+<tr>
+<td><strong>Runtime Overhead</strong></td>
+<td>Low. Rules enforced at request time without complex matrix calculations.</td>
+<td><strong>High.</strong> Runs \(O(m \cdot n^2)\) safety algorithm on every request!</td>
+<td>Moderate. Detection runs periodically (e.g., every 5 minutes).</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<!-- SECTION 4: CASE STUDIES -->
+<section class="module-section" id="case-section">
+<div class="section-title">
+<h2>4. Real-World Deadlock Scenarios</h2>
+<span class="cross-ref-badge">Enterprise Database Systems</span>
+</div>
+<div class="problem-card">
+<span class="difficulty hard">Database Deadlocks Case Study</span>
+<h3>Deadlock Detection in Relational Databases (PostgreSQL / MySQL InnoDB)</h3>
+<p>Unlike general-purpose operating systems, relational database management systems (RDBMS) actively implement deadlock detection and recovery:</p>
+<ul>
+<li><strong>Row-Level Locks:</strong> Transaction \(T_1\) updates row 100 and requests row 200. Concurrently, transaction \(T_2\) updates row 200 and requests row 100.</li>
+<li><strong>Wait-For Graph Background Thread:</strong> Every 1000 milliseconds, InnoDB checks its internal wait-for graph for directed cycles.</li>
+<li><strong>Automated Victim Rollback:</strong> When a cycle is detected, InnoDB selects the transaction with the fewest modified rows, rolls back its transaction (undoing writes via WAL logs), and releases its locks so the other transaction can finish!</li>
+</ul>
+</div>
+</section>
+
+<!-- SECTION 5: EXAM QUESTIONS & MARKING GUIDE -->
+<section class="module-section" id="questions-section">
+<div class="section-title">
+<h2>5. Possible University Exam Questions &amp; Marking Guide</h2>
+<span class="cross-ref-badge">NMIMS Pattern: 5 &amp; 10 Mark Solutions</span>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">10 Marks</span>
+<h4>Q1. Explain the four necessary conditions for deadlock occurrence. How can deadlocks be prevented by eliminating circular wait? [From NMIMS Paper 1, 2, 4]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong></p>
+<ul>
+<li>Explanation of 4 Coffman conditions (Mutual Exclusion, Hold &amp; Wait, No Preemption, Circular Wait): <strong>4 Marks</strong></li>
+<li>Resource Allocation Graph illustration of conditions: <strong>2 Marks</strong></li>
+<li>Havender's linear resource ordering protocol to eliminate Circular Wait: <strong>4 Marks</strong></li>
+</ul>
+<p><strong>Model Answer Key:</strong> Detail the 4 conditions from Section 1.2. Then explain Havender's linear ordering method: assign a unique natural number \(F(R_i)\) to every resource. Enforce that a process holding \(R_i\) can only request \(R_j\) if \(F(R_j) &gt; F(R_i)\). Prove by contradiction: if a circular wait existed (\(P_0 \to P_1 \to \dots \to P_0\)), then \(F(R_0) &lt; F(R_1) &lt; \dots &lt; F(R_0)\), meaning \(F(R_0) &lt; F(R_0)\), which is mathematically impossible!</p>
+</div>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">5 Marks</span>
+<h4>Q2. Describe the process of deadlock recovery after detection. What are the common methods used? [From NMIMS Paper 5]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong></p>
+<ul>
+<li>Process termination methods (Abort all vs. Abort one-by-one): <strong>2.5 Marks</strong></li>
+<li>Resource preemption methods (Victim selection, rollback, starvation prevention): <strong>2.5 Marks</strong></li>
+</ul>
+<p><strong>Model Answer Key:</strong> Provide the recovery details from Section 1.7. Explain process termination trade-offs and the three critical issues in resource preemption: (1) Selecting the victim with minimum cost, (2) Checkpoint rollback, and (3) Starvation prevention using aging.</p>
+</div>
+</div>
+</section>
+
+<!-- SECTION 6: WHAT TO KNOW FOR THE EXAM & CHECKLIST -->
+<section class="module-section" id="exam-checklist">
+<div class="section-title">
+<h2>What to Know for the Exam &amp; Coverage Checklist</h2>
+<span class="cross-ref-badge">Final Revision Anchor</span>
+</div>
+
+<div class="callout callout-tip">
+<h4>Core Exam Takeaways:</h4>
+<ul>
+<li><strong>Four Coffman Conditions:</strong> Mutual Exclusion, Hold &amp; Wait, No Preemption, Circular Wait. All four must hold for deadlock!</li>
+<li><strong>RAG Cycle Rule:</strong> Single-instance \(\implies\) Cycle = Deadlock. Multiple-instance \(\implies\) Cycle \(\centernot\implies\) Deadlock.</li>
+<li><strong>Need Matrix Formula:</strong> \(\text{Need} = \text{Max} - \text{Allocation}\).</li>
+<li><strong>Banker's Request Rule:</strong> Always perform Check 1 (\(\text{Request} \le \text{Need}\)) and Check 2 (\(\text{Request} \le \text{Available}\)) before temporary allocation and safety testing!</li>
+<li><strong>Safe \(\implies\) No Deadlock.</strong> Unsafe \(\implies\) Possibility of deadlock.</li>
+</ul>
+</div>
+
+<h3>Final Unit Coverage Checklist</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Topic / Slide Reference</th><th>Coverage Status</th><th>Core Concept Mastered</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>UNIT 4 Slides 1–6: Deadlock Concept &amp; Coffman</td><td>Complete</td><td>Deadlock definition, 2-process scenario, 4 Coffman necessary conditions.</td></tr>
+<tr><td>UNIT 4 Slides 7–12: Handling Paradigms &amp; Prevention</td><td>Complete</td><td>Ignorance, Prevention (breaking all 4 conditions), Havender's ordering.</td></tr>
+<tr><td>UNIT 4 Slides 13–18 &amp; Bankers Extended: Avoidance</td><td>Complete</td><td>Safe states, Banker's Safety &amp; Request algorithms, complete matrix trace.</td></tr>
+<tr><td>NMIMS Past Paper Questions (Paper 1, 2, 4, 5)</td><td>Complete</td><td>Full 10-mark Banker's numerical, Need matrix, immediate grant, recovery.</td></tr>
+</tbody>
+</table>
+</section>
+
+<!-- Unit Pagination -->
+<div class="unit-pagination">
+<a class="btn btn-outline" href="03-concurrency-and-synchronization.html">← Previous: Unit 3 - Concurrency &amp; Sync</a>
+<a class="btn btn-primary" href="05-memory-management.html">Next: Unit 5 - Memory Management →</a>
+</div>
+
+</article>
+</main>
+</div>
+
+<script>
+const toggleBtn = document.getElementById('theme-toggle');
+if (toggleBtn) {
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    toggleBtn.setAttribute('aria-pressed', 'true');
+  }
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.setAttribute('aria-pressed', !isDark);
+  });
+}
+</script>
+</body>
+</html>

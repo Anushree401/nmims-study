@@ -1,20 +1,595 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script>
-try{const t=localStorage.getItem('nmims-ai-color-theme');const d=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(!t&&d))document.documentElement.dataset.theme='dark'}catch(_){}
-</script><title>Concurrency and Synchronization</title><style>:root{color-scheme:light;--ink:#17243b;--muted:#53647a;--blue:#155eef;--pale:#eef4ff;--line:#d9e2ef;--gold:#fff4d6}*{box-sizing:border-box}body{margin:0;background:#f6f8fb;color:var(--ink);font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:980px;margin:auto;padding:32px 22px 70px}header{background:linear-gradient(125deg,#102b52,#155eef);color:white;padding:32px;border-radius:18px;margin-bottom:24px}h1{line-height:1.15;margin:0 0 10px}header p{margin:0;color:#e7efff}section,article{background:white;border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0}h2{margin-top:0;color:#173e74}h3{color:#244f86}li{margin:.28em 0}.callout{background:var(--pale);border-left:4px solid var(--blue);padding:12px 16px;border-radius:8px}.warn{background:var(--gold);padding:12px 16px;border-radius:8px}table{border-collapse:collapse;width:100%;margin:12px 0}td,th{border:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}th{background:#eef4ff}code,.formula{background:#f1f4f8;padding:2px 5px;border-radius:4px}.diagram{font-family:ui-monospace,monospace;background:#f3f6fa;padding:14px;border-radius:8px;white-space:pre-wrap}details{border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:8px 0}summary{font-weight:650;cursor:pointer}footer{font-size:.9em;color:var(--muted);padding:16px;text-align:center}@media print{body{background:white}main{max-width:none;padding:0}header,section,article{break-inside:avoid}}
-/* Shared NMIMS light/dark theme */
-html{color-scheme:light;--os-bg:#f6f8fb;--os-ink:#17243b;--os-muted:#53647a;--os-card:#fff;--os-line:#d9e2ef;--os-pale:#eef4ff;--os-gold:#fff4d6;--os-code:#f1f4f8;--os-diagram:#f3f6fa}
-html[data-theme="dark"]{color-scheme:dark;--os-bg:#171b20;--os-ink:#edf2f8;--os-muted:#b4c0ce;--os-card:#222a33;--os-line:#3c4856;--os-pale:#263645;--os-gold:#433923;--os-code:#303a46;--os-diagram:#202a34}
-html[data-theme="dark"] body{background:var(--os-bg);color:var(--os-ink)}
-html[data-theme="dark"] section,html[data-theme="dark"] article{background:var(--os-card);border-color:var(--os-line)}
-html[data-theme="dark"] h2,html[data-theme="dark"] h3{color:#9bc5ff}
-html[data-theme="dark"] .callout,html[data-theme="dark"] th{background:var(--os-pale)}
-html[data-theme="dark"] .warn{background:var(--os-gold)}
-html[data-theme="dark"] td,html[data-theme="dark"] th,html[data-theme="dark"] details{border-color:var(--os-line)}
-html[data-theme="dark"] code,html[data-theme="dark"] .formula{background:var(--os-code)}
-html[data-theme="dark"] .diagram{background:var(--os-diagram)}
-html[data-theme="dark"] footer{color:var(--os-muted)}
-.theme-bar{display:flex;justify-content:flex-end;margin:0 0 10px}
-.theme-switch{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--os-line);border-radius:9px;background:var(--os-card);color:var(--os-ink);padding:8px 12px;font:600 .9rem/1.2 system-ui,-apple-system,Segoe UI,sans-serif;cursor:pointer}
-.theme-switch:hover{filter:brightness(.96)}
-.theme-switch:focus-visible{outline:3px solid #6ca8ff;outline-offset:2px}
-</style><main><div class="theme-bar"><button class="theme-switch" id="shared-theme-toggle" type="button" aria-pressed="false"><span class="theme-icon" aria-hidden="true">☾</span><span class="theme-label">Dark mode</span></button></div><header><h1>Concurrency and Synchronization</h1><p>Unit 3 | race conditions, critical sections, locks, semaphores, monitors, and message passing</p></header><div class="warn"><b>Scope note:</b> No Operating Systems course policy was present in OS. The only syllabus PDF found is for Artificial Intelligence and does not apply to these slides. Therefore the checklist follows the OS slide decks; exam format, weighting, exclusions, and instructor-specific marking rules could not be verified. Assumptions and ambiguous source points are flagged below.</div><section><h2>1. Why concurrency is difficult</h2><p>Concurrent processes/threads make progress in overlapping time. Multiprogramming interleaves jobs on one CPU; multiprocessing allows simultaneous execution on multiple processors; distributed processing spans machines. Shared state makes results depend on timing. A <b>race condition</b> occurs when the outcome depends on the order of unsynchronized reads/writes.</p><p>Example: two threads both execute x=x+1. Each may read x=0, compute 1, and store 1; the intended result 2 is lost. The operation is a read-modify-write sequence, not inherently atomic.</p></section><section><h2>2. Critical-section requirements</h2><p>A <b>critical section</b> accesses shared state. A correct entry protocol requires mutual exclusion (only one at a time), progress (selection cannot be postponed by processes outside the section), and bounded waiting (a requester cannot be bypassed forever). Also avoid assuming relative speeds, keep sections finite, and ensure a process halted outside the section does not block others.</p></section><section><h2>3. Mechanisms</h2><p><b>Mutex lock:</b> acquire before critical work, release after; a busy-wait spin lock wastes CPU while waiting, so use only when waiting is expected to be brief or blocking is unavailable. Hardware atomic instructions such as test-and-set and compare-and-swap provide indivisible lock acquisition. Peterson’s solution demonstrates software coordination for two processes using intent flags and a turn variable; it relies on assumptions about atomic reads/writes and is primarily conceptual.</p><p><b>Semaphore:</b> integer plus possible waiting queue. wait/down/P atomically decrements or blocks; signal/up/V atomically increments and may wake a waiter. A binary semaphore has 0/1 state; a counting semaphore represents multiple identical resources. Initialize a resource semaphore to capacity N. Keep wait/signal ordering balanced.</p><p><b>Monitor:</b> high-level construct encapsulating shared data and procedures; only one process is active inside at a time. Condition variables provide wait/signal for a condition. Signal-and-continue versus signal-and-wait semantics differ: state which convention applies when tracing.</p><p><b>Message passing:</b> send/receive primitives exchange information and coordinate processes without shared variables; communication may be direct/indirect and blocking/nonblocking depending on system.</p></section><section><h2>4. Classical patterns and traps</h2><ul><li><b>Producer–consumer:</b> bounded buffer; use mutex for buffer integrity, empty count initialized to capacity, full count initialized to zero. Producer waits(empty), locks, inserts, unlocks, signals(full); consumer waits(full), locks, removes, unlocks, signals(empty).</li><li><b>Readers–writers:</b> multiple readers may share; writers need exclusive access. Reader preference can starve writers; writer preference can starve readers.</li><li><b>Dining philosophers:</b> competing for two adjacent forks; naive simultaneous pickup can create circular wait. Break a condition (e.g. impose order, limit entrants, or use a monitor).</li></ul><p>Common trap: acquire mutex before waiting for a resource count can deadlock the consumer/producer. Resource-count waits usually precede mutex acquisition; release the mutex before signaling availability.</p></section><section><h2>Recap and self-test</h2><h3>Self-test (answers follow)</h3><details><summary>Name the three core critical-section properties.</summary><p>Mutual exclusion, progress, and bounded waiting.</p></details><details><summary>What does wait(P) do?</summary><p>Atomically decrements a semaphore if possible; otherwise blocks until it can proceed.</p></details><details><summary>Why is x=x+1 unsafe when shared?</summary><p>It is a multi-step read-modify-write and concurrent interleavings can lose an update.</p></details><details><summary>Producer–consumer semaphore initialization for buffer capacity N?</summary><p>empty=N, full=0, mutex=1 (binary).</p></details><details><summary>Why can readers–writers policy starve one side?</summary><p>Preference rules may continually admit one class ahead of the other.</p></details></section><section><h2>What to know for the exam</h2><p>Be ready to define the central terms, compare mechanisms using their assumptions and trade-offs, trace a process or algorithm step by step, and justify the result. State units and conventions whenever a question supplies them.</p></section><section><h2>Final coverage checklist</h2><table><tr><th>Source section</th><th>Coverage in this file</th></tr><tr><td>Unit 3 slides 1–18</td><td>Concurrency concepts, difficulties, critical section, race conditions, requirements</td></tr><tr><td>Unit 3 slides 19–27</td><td>Hardware lock, test-and-set, compare-and-swap, Peterson solution</td></tr><tr><td>Unit 3 slides 28–46</td><td>Binary/counting semaphores; readers-writers, dining philosophers, producer-consumer; monitors/conditions</td></tr><tr><td>Unit 3 slides 47–57</td><td>Message passing and remaining concurrency material</td></tr></table></section><footer>Prepared from the OS course files in NMIMS-STUDY/OS/theory. Past papers were treated as exam-pattern context only.</footer></main></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unit 3: Process Concurrency &amp; Synchronization - NMIMS Master Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="theme.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="os-custom-polish">
+:root { --ai-content-width: 980px; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+body { min-width: 320px; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+.main-content { width: calc(100% - 290px); max-width: none; }
+.content-wrapper { max-width: var(--ai-content-width); }
+.top-bar { position: sticky; top: 0; z-index: 90; min-height: 52px; padding: 12px 0; margin-top: -32px; background: color-mix(in srgb, var(--bg-main) 94%, transparent); backdrop-filter: blur(10px); }
+.unit-hero { padding-top: 6px; margin-bottom: clamp(26px, 4vw, 42px); }
+.unit-hero h1 { font-size: clamp(1.8rem, 3.3vw, 2.45rem); letter-spacing: -0.035em; text-wrap: balance; }
+.module-section { scroll-margin-top: 76px; padding: clamp(20px, 3vw, 34px); margin-bottom: clamp(24px, 4vw, 40px); }
+.topic-block { scroll-margin-top: 76px; margin-bottom: 2.2rem; }
+.topic-block p, .topic-block li, .q-answer p, .callout p { max-width: 82ch; line-height: 1.72; }
+.callout { padding: 18px 20px; border-radius: 10px; margin: 16px 0; border-left: 4px solid var(--primary); background: #f1f5f9; }
+.callout-def { border-left-color: #2563eb; background: #eff6ff; }
+.callout-warn { border-left-color: #f59e0b; background: #fffbeb; }
+.callout-tip { border-left-color: #10b981; background: #ecfdf5; }
+.data-table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+.data-table th, .data-table td { border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; }
+.data-table th { background: #f8fafc; font-weight: 600; }
+.diagram-wrapper { margin: 20px 0; text-align: center; }
+.diagram-caption { font-size: 0.88rem; color: var(--text-muted); margin-top: 8px; font-style: italic; }
+.problem-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+.problem-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.difficulty.easy { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.medium { background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.hard { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.solution-flow { display: flex; flex-direction: column; gap: 14px; }
+.step-row { display: flex; gap: 16px; align-items: flex-start; }
+.step-badge { font-size: 0.72rem; font-weight: 700; padding: 4px 8px; background: #e2e8f0; color: #334155; border-radius: 4px; white-space: nowrap; }
+.step-badge.answer { background: #dcfce7; color: #166534; }
+.final-box { background: #ecfdf5; border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 6px; font-weight: 600; color: #065f46; }
+.question-item { border-bottom: 1px solid var(--border-color); padding: 20px 0; }
+.question-item:last-child { border-bottom: none; }
+.q-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+.marks-badge { font-size: 0.75rem; font-weight: 700; background: #f1f5f9; color: var(--secondary); border: 1px solid #cbd5e1; padding: 2px 7px; border-radius: 4px; }
+.q-answer { background: #f8fafc; padding: 14px 18px; border-radius: 6px; }
+.unit-pagination { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+.btn { padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-outline { border: 1px solid var(--border-color); color: var(--text-main); }
+@media (max-width: 900px) { .sidebar { max-height: 34vh; padding: 16px; } .main-content { width: 100%; padding: 24px 16px 56px; } }
+</style>
+</head>
+<body>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · OS Master</a>
+<span class="badge">Semester Exam Prep</span>
+<button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle" type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark mode</span></button>
+</div>
+<nav class="sidebar-nav">
+<h3>All Units &amp; Guides</h3>
+<ul>
+<li><a href="01-os-foundations.html"><span class="unit-num">01</span> OS Overview &amp; Architecture</a></li>
+<li><a href="02-processes-and-cpu-scheduling.html"><span class="unit-num">02</span> Processes &amp; CPU Scheduling</a></li>
+<li><a class="active" href="03-concurrency-and-synchronization.html"><span class="unit-num">03</span> Concurrency &amp; Synchronization</a></li>
+<li><a href="04-deadlocks.html"><span class="unit-num">04</span> Deadlocks &amp; Banker's Algorithm</a></li>
+<li><a href="05-memory-management.html"><span class="unit-num">05</span> Memory Management &amp; Fitting</a></li>
+<li><a href="06-paging-and-replacement.html"><span class="unit-num">06</span> Paging &amp; Virtual Memory</a></li>
+<li><a href="07-io-and-disk-scheduling.html"><span class="unit-num">07</span> I/O &amp; Disk Scheduling</a></li>
+<li><a href="08-file-systems.html"><span class="unit-num">08</span> File System Interface &amp; Storage</a></li>
+<li><a href="09-numericals-and-problem-solving.html"><span class="unit-num">09</span> Master Problem-Solving Guide</a></li>
+<li><a href="10-solved-examples.html"><span class="unit-num">10</span> Comprehensive Solved Bank</a></li>
+<li><a href="11-topic-checklist.html"><span class="unit-num">11</span> Final Topic Checklist</a></li>
+</ul>
+<h3>Unit 3 Sections</h3>
+<ul>
+<li><a href="#theory-section">1. In-Depth Lecture &amp; Theory</a></li>
+<li><a href="#sec-race-condition">1.1 Race Conditions &amp; Atomic Operations</a></li>
+<li><a href="#sec-critical-section">1.2 The Critical Section Problem</a></li>
+<li><a href="#sec-peterson">1.3 Peterson's Algorithmic Solution</a></li>
+<li><a href="#sec-hardware-sync">1.4 Hardware Support: TestAndSet &amp; Swap</a></li>
+<li><a href="#sec-semaphores">1.5 Semaphores (Wait, Signal &amp; Types)</a></li>
+<li><a href="#sec-classical-problems">1.6 Classical IPC Synchronization Problems</a></li>
+<li><a href="#sec-monitors">1.7 High-Level Monitors &amp; Condition Vars</a></li>
+<li><a href="#numerical-section">2. In-Depth Synchronization Numericals</a></li>
+<li><a href="#num-sem-trace">2.1 Counting Semaphore Value Traces</a></li>
+<li><a href="#num-race-trace">2.2 Interleaving Execution &amp; Race Analysis</a></li>
+<li><a href="#comparison-section">3. Comparative Studies</a></li>
+<li><a href="#case-section">4. Practical Kernel Concurrency</a></li>
+<li><a href="#questions-section">5. NMIMS Exam Questions &amp; Marking Guide</a></li>
+</ul>
+</nav>
+</aside>
+
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 3: Process Concurrency</span>
+</div>
+<div class="meta-tag">Unit 3 · 100% Lecture &amp; PYQ Faithful Masterclass</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>Unit 3: Process Concurrency &amp; Synchronization</h1>
+<p class="lead">A rigorous academic masterclass exploring race conditions, the three fundamental requirements of the Critical Section Problem (Mutual Exclusion, Progress, Bounded Waiting), Peterson's two-process solution, hardware primitives (Test-and-Set, Compare-and-Swap), Counting vs. Binary Semaphores (wait/signal operations), the Classical IPC Problems (Producer-Consumer, Readers-Writers, Dining Philosophers), and Monitors with condition variables.</p>
+</header>
+<section class="theory-sources" aria-label="Original theory files"><h2>Original theory files</h2><p>Open the unchanged lecture source or expand its preview here.</p><ul><li><a href="theory/Unit%203%20Process%20Concurrency.pptx" target="_blank" rel="noopener">Open original: Unit 3 Process Concurrency.pptx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of Unit 3 Process Concurrency.pptx" src="theory/previews/Unit%203%20Process%20Concurrency.pdf"></iframe></div><p><a href="theory/previews/Unit%203%20Process%20Concurrency.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li></ul></section>
+
+
+<!-- SECTION 1: IN-DEPTH THEORY -->
+<section class="module-section" id="theory-section">
+<div class="section-title">
+<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+<span class="cross-ref-badge">Faithful to Stallings 5.1-5.7 &amp; Unit 3 Lecture Slides</span>
+</div>
+
+<div class="topic-block" id="sec-race-condition">
+<h3>1.1 Race Conditions &amp; The Anatomy of Concurrent Bugs</h3>
+<p>When multiple concurrent processes execute and access <strong>shared mutable data</strong> (such as a shared variable, memory buffer, or file), the outcome of execution depends strictly on the unpredictable order in which individual machine instructions are interleaved by the CPU scheduler. This catastrophic flaw is called a <strong>Race Condition</strong>.</p>
+
+<div class="callout callout-def">
+<h4>Classic Concrete Example: The Shared Counter</h4>
+<p>Suppose two processes \(P_1\) and \(P_2\) share integer variable <code>count = 5</code>. Both concurrently execute <code>count++</code> and <code>count--</code>:</p>
+<pre>
+// In Process 1: count++           // In Process 2: count--
+register1 = count;                register2 = count;
+register1 = register1 + 1;        register2 = register2 - 1;
+count = register1;                count = register2;
+</pre>
+<p>If the CPU timer interrupt causes an arbitrary context switch between machine instructions:</p>
+<ol>
+<li>\(P_1\) loads <code>register1 = count</code> (\(\text{reg}_1 = 5\)).</li>
+<li>\(P_1\) increments <code>register1 = register1 + 1</code> (\(\text{reg}_1 = 6\)).</li>
+<li><strong>Context switch to \(P_2\) occurs before \(P_1\) writes back!</strong></li>
+<li>\(P_2\) loads <code>register2 = count</code> (\(\text{reg}_2 = 5\)).</li>
+<li>\(P_2\) decrements <code>register2 = register2 - 1</code> (\(\text{reg}_2 = 4\)).</li>
+<li>\(P_2\) writes <code>count = register2</code> (\(\mathbf{\text{count} = 4}\)).</li>
+<li><strong>Context switch back to \(P_1\)!</strong></li>
+<li>\(P_1\) finishes its instruction: writes <code>count = register1</code> (\(\mathbf{\text{count} = 6}\)).</li>
+</ol>
+<p><strong>The Catastrophe:</strong> After one increment and one decrement, <code>count</code> should be 5. Instead, it is 6 (or 4 if interleaved oppositely)! The write from \(P_2\) was completely obliterated. To prevent this, operations on shared data must be executed with <strong>Atomicity</strong> (as an indivisible, uninterrupted unit).</p>
+</div>
+</div>
+
+<div class="topic-block" id="sec-critical-section">
+<h3>1.2 The Critical Section Problem &amp; Its Three Axioms</h3>
+<p>Any program running concurrent cooperating processes is structurally divided into four regions:</p>
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:580px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewBox="0 0 580 250" xmlns="http://www.w3.org/2000/svg">
+  <rect x="40" y="20" width="500" height="42" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5" rx="6"/>
+  <text x="290" y="46" fill="#1d4ed8" font-size="12" font-weight="700" text-anchor="middle">ENTRY SECTION: Request permission to enter Critical Section</text>
+
+  <rect x="40" y="75" width="500" height="50" fill="#fee2e2" stroke="#dc2626" stroke-width="2" rx="6"/>
+  <text x="290" y="98" fill="#991b1b" font-size="13" font-weight="800" text-anchor="middle">CRITICAL SECTION (CS): Modifying Shared Data / Hardware</text>
+  <text x="290" y="114" fill="#b91c1c" font-size="10" text-anchor="middle">Only ONE process may execute here at any instant!</text>
+
+  <rect x="40" y="140" width="500" height="42" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5" rx="6"/>
+  <text x="290" y="166" fill="#15803d" font-size="12" font-weight="700" text-anchor="middle">EXIT SECTION: Release lock and signal waiting processes</text>
+
+  <rect x="40" y="195" width="500" height="40" fill="#f8fafc" stroke="#94a3b8" rx="6"/>
+  <text x="290" y="220" fill="#475569" font-size="12" font-weight="600" text-anchor="middle">REMAINDER SECTION: Executing independent, private code</text>
+</svg>
+<p class="diagram-caption">Figure 3.1: Structural decomposition of a concurrent process into Entry, Critical, Exit, and Remainder sections.</p>
+</div>
+
+<div class="callout callout-def">
+<h4>The Three Mandatory Requirements of any Critical Section Solution:</h4>
+<ol>
+<li><strong>1. Mutual Exclusion:</strong> If process \(P_i\) is executing in its critical section, then no other processes are allowed to execute in their critical sections simultaneously.</li>
+<li><strong>2. Progress:</strong> If no process is currently executing in its critical section and there are some processes that wish to enter their critical section, then only those processes that are <em>not</em> executing in their remainder sections can participate in deciding which process will enter next, and this selection cannot be postponed indefinitely. (Prevents deadlock).</li>
+<li><strong>3. Bounded Waiting:</strong> There must exist a bound (limit) on the number of times that other processes are allowed to enter their critical sections after a process has made a request to enter and before that request is granted. (Prevents starvation).</li>
+</ol>
+</div>
+</div>
+
+<div class="topic-block" id="sec-peterson">
+<h3>1.3 Peterson's Algorithmic Solution (Two-Process Software Synchronization)</h3>
+<p>Developed by Gary L. Peterson in 1981, this software-based algorithm guarantees all three critical section criteria for two cooperating processes, \(P_0\) and \(P_1\).</p>
+<h4>Shared Data Structures:</h4>
+<ul>
+<li><code>int turn;</code> // Indicates whose turn it is to enter the CS.</li>
+<li><code>boolean flag[2];</code> // <code>flag[i] = true</code> indicates process \(P_i\) is ready to enter its CS.</li>
+</ul>
+
+<div class="problem-card">
+<span class="difficulty easy">Peterson's Algorithm Structure</span>
+<pre>
+// Structure for Process P_i (where j = 1 - i):
+do {
+    flag[i] = true;                 // 1. Declare intent: "I want to enter"
+    turn = j;                       // 2. Be courteous: "You may go first"
+    while (flag[j] &amp;&amp; turn == j);    // 3. Busy wait while other process wants in AND it's their turn
+    
+    /* CRITICAL SECTION */
+    
+    flag[i] = false;                // 4. Release intent: "I am finished"
+    
+    /* REMAINDER SECTION */
+} while (true);
+</pre>
+</div>
+
+<h4>Rigorous Proof of the Three Conditions:</h4>
+<ol>
+<li><strong>Mutual Exclusion holds:</strong> For both \(P_0\) and \(P_1\) to enter their CS simultaneously, both while loops must evaluate to false at the same time: <code>flag[1] == false || turn == 0</code> for \(P_0\), and <code>flag[0] == false || turn == 1</code> for \(P_1\). But both set their flags to <code>true</code> beforehand! Thus, the decision hinges on variable <code>turn</code>. Since <code>turn</code> is a single scalar integer in memory, it can only be 0 or 1, never both. Whichever process set <code>turn</code> last gave priority to the other process and is blocked in the while loop.</li>
+<li><strong>Progress holds:</strong> A process in the remainder section has <code>flag = false</code>, meaning it never blocks the other process from immediately proceeding.</li>
+<li><strong>Bounded Waiting holds:</strong> Once \(P_j\) finishes its CS, it resets <code>flag[j] = false</code>. If \(P_j\) immediately tries to re-enter, it sets <code>turn = i</code>, directly handing priority over to waiting process \(P_i\). Thus, \(P_i\) waits at most one critical section entry.</li>
+</ol>
+</div>
+
+<div class="topic-block" id="sec-hardware-sync">
+<h3>1.4 Hardware Synchronization Primitives: TestAndSet &amp; Swap</h3>
+<p>Modern multi-core processors provide special atomic machine instructions that execute as a single, uninterruptible clock cycle at the hardware bus level:</p>
+<h4>1. TestAndSet Instruction (Atomic read-and-set):</h4>
+<pre>
+boolean TestAndSet(boolean *target) {
+    boolean rv = *target;    // Read old value
+    *target = true;          // Set target to true
+    return rv;               // Return original value
+}
+</pre>
+<p><strong>Mutual Exclusion with TestAndSet:</strong> Shared boolean <code>lock = false</code>.</p>
+<pre>
+do {
+    while (TestAndSet(&amp;lock));    // Busy wait: loops while lock is true. First process gets false!
+    /* CRITICAL SECTION */
+    lock = false;                 // Release lock
+    /* REMAINDER SECTION */
+} while (true);
+</pre>
+
+<h4>2. Swap Instruction (Compare-and-Swap / XCHG):</h4>
+<p>Atomically swaps the contents of two memory words in a single bus lock operation.</p>
+</div>
+
+<div class="topic-block" id="sec-semaphores">
+<h3>1.5 Semaphores: Definition, Wait(), Signal(), and Types</h3>
+<p>Introduced by Edsger Dijkstra, a <strong>Semaphore</strong> \(S\) is a synchronization tool represented as an integer variable that, apart from initialization, can only be accessed through two standard atomic operations: <code>wait()</code> (historically termed \(P\) for Dutch <em>proberen</em> - to test) and <code>signal()</code> (historically \(V\) for <em>verhogen</em> - to increment).</p>
+
+<h4>Formal Definitions of the Two Atomic Operations:</h4>
+<div class="problem-card">
+<pre>
+wait(S) {                          signal(S) {
+    while (S &lt;= 0);                    S++;
+    S--;                           }
+}
+</pre>
+</div>
+
+<h4>Two Types of Semaphores:</h4>
+<ul>
+<li><strong>1. Counting Semaphore:</strong> The integer value can range over an unrestricted domain \((-\infty, +\infty)\). Used to control access to a resource consisting of a finite number of identical instances (e.g., a pool of 5 database connections).</li>
+<li><strong>2. Binary Semaphore (Mutex Lock):</strong> The integer value can only be <code>0</code> or <code>1</code>. Used to enforce mutual exclusion across a single shared critical section.</li>
+</ul>
+
+<h4>Non-Busy Waiting Semaphores (Block &amp; Wakeup Mechanism):</h4>
+<p>To eliminate wasteful CPU spinning (busy waiting / spinlocks), modern operating systems define semaphores with a process waiting queue:</p>
+<pre>
+typedef struct {
+    int value;
+    struct process *list; // Queue of waiting processes
+} semaphore;
+
+void wait(semaphore *S) {
+    S-&gt;value--;
+    if (S-&gt;value &lt; 0) {
+        add this process to S-&gt;list;
+        block(); // Transition from RUNNING to WAITING state
+    }
+}
+
+void signal(semaphore *S) {
+    S-&gt;value++;
+    if (S-&gt;value &lt;= 0) {
+        remove a process P from S-&gt;list;
+        wakeup(P); // Transition process P from WAITING to READY state
+    }
+}
+</pre>
+<div class="callout callout-tip">
+<h4>Crucial Exam Insight on Negative Semaphore Values:</h4>
+<p>When using the non-busy waiting implementation: If \(S.\text{value} &lt; 0\), its magnitude \(|S.\text{value}|\) indicates the <strong>exact count of processes currently blocked</strong> and suspended in the semaphore's waiting queue!</p>
+</div>
+</div>
+
+<div class="topic-block" id="sec-classical-problems">
+<h3>1.6 Classical Problems of Synchronization (NMIMS PYQ Staples)</h3>
+
+<h4>1. The Bounded-Buffer (Producer-Consumer) Problem:</h4>
+<p>A producer process generates data items and puts them into a fixed-capacity buffer of size \(N\). A consumer process takes items out of the buffer one at a time.</p>
+<ul>
+<li><strong>Shared Semaphores:</strong>
+  <ul>
+    <li><code>semaphore mutex = 1;</code> // Guarantees mutual exclusion when accessing buffer array.</li>
+    <li><code>semaphore empty = N;</code> // Counts empty buffer slots (initially \(N\)).</li>
+    <li><code>semaphore full = 0;</code>  // Counts filled buffer slots (initially 0).</li>
+  </ul>
+</li>
+</ul>
+<div class="problem-card">
+<pre>
+// PRODUCER CODE:                           // CONSUMER CODE:
+do {                                       do {
+    // produce item in next_produced           wait(full);  // Wait if buffer is empty
+    wait(empty); // Wait if buffer full        wait(mutex); // Lock buffer access
+    wait(mutex); // Lock buffer access         // remove item from buffer to next_consumed
+    // add next_produced to buffer             signal(mutex);
+    signal(mutex);                             signal(empty); // Signal slot is free
+    signal(full); // Signal item added         // consume next_consumed
+} while (true);                            } while (true);
+</pre>
+</div>
+
+<h4>2. The Readers-Writers Problem:</h4>
+<p>A database is shared among several concurrent processes. Readers only read the database; Writers modify it. Multiple readers can read simultaneously, but a writer requires exclusive access.</p>
+<ul>
+<li><code>semaphore rw_mutex = 1;</code> // Mutual exclusion for writers.</li>
+<li><code>semaphore mutex = 1;</code>    // Protects reader count variable.</li>
+<li><code>int read_count = 0;</code>     // Number of active readers.</li>
+</ul>
+<div class="problem-card">
+<pre>
+// WRITER PROCESS:                         // READER PROCESS:
+do {                                      do {
+    wait(rw_mutex);                           wait(mutex);
+    /* writing is performed */                read_count++;
+    signal(rw_mutex);                         if (read_count == 1)
+} while (true);                                   wait(rw_mutex); // First reader locks out writers
+                                              signal(mutex);
+                                              /* reading is performed */
+                                              wait(mutex);
+                                              read_count--;
+                                              if (read_count == 0)
+                                                  signal(rw_mutex); // Last reader releases writers
+                                              signal(mutex);
+                                          } while (true);
+</pre>
+</div>
+
+<h4>3. The Dining Philosophers Problem:</h4>
+<p>Five philosophers sit around a circular table. Each spends their life alternating between thinking and eating rice. There are 5 single chopsticks placed between adjacent philosophers. To eat, a philosopher must acquire <strong>both</strong> their left and right chopsticks.</p>
+<p><strong>The Deadlock Hazard:</strong> If all 5 philosophers become hungry simultaneously and grab their left chopstick (<code>wait(chopstick[i])</code>), all 5 chopsticks are held! When each attempts to grab their right chopstick, every philosopher blocks indefinitely. The system enters complete <strong>Deadlock</strong>!</p>
+</div>
+
+<div class="topic-block" id="sec-monitors">
+<h3>1.7 High-Level Synchronization: Monitors &amp; Condition Variables</h3>
+<p>While semaphores are powerful, they are error-prone. If a developer accidentally writes <code>signal(mutex)</code> before <code>wait(mutex)</code>, mutual exclusion is violated. If they write <code>wait(mutex)</code> twice, the system deadlocks.</p>
+<div class="callout callout-def">
+<h4>Definition: Monitor</h4>
+<p>A <strong>Monitor</strong> is a high-level programming language synchronization construct (encapsulated as an abstract data type / class) that guarantees <strong>automatic mutual exclusion</strong>: only one process can be actively executing inside the monitor at any given time.</p>
+</div>
+<p>To allow processes to wait inside a monitor, condition variables are provided: <code>condition x, y;</code>. Operations on condition variables are strictly: <code>x.wait()</code> (invoking process is suspended until signaled) and <code>x.signal()</code> (resumes exactly one suspended process).</p>
+</div>
+</section>
+
+<div class="topic-block" id="sec-message-passing-precedence">
+<h3>1.8 Message Passing and Precedence Graphs</h3>
+<p><strong>Message passing</strong> coordinates processes through <code>send</code> and <code>receive</code> operations instead of shared variables. Communication may be direct or mailbox-based, and blocking or non-blocking; the chosen semantics determine whether a call waits for its partner or buffer space.</p>
+<p>A <strong>precedence graph</strong> is a directed acyclic graph (DAG) of required ordering constraints. An edge (A ightarrow B) means operation/process (A) must finish before (B) starts. Any topological ordering is a valid execution order; independent nodes may run concurrently. A cycle indicates the stated constraints cannot all be satisfied as a simple precedence order.</p>
+<p>For example, if (A ightarrow C) and (B ightarrow C), then (A) and (B) may execute in either order or in parallel, but both must complete before (C).</p>
+</div>
+
+<!-- SECTION 2: NUMERICALS -->
+<section class="module-section" id="numerical-section">
+<div class="section-title">
+<h2>2. In-Depth Synchronization Numericals</h2>
+<span class="cross-ref-badge">Trace Tracing &amp; Semaphore State Mathematics</span>
+</div>
+
+<div class="problem-card" id="num-sem-trace">
+<div class="problem-header">
+<span class="difficulty easy">Counting Semaphore Trace</span>
+<h3>Problem 3.1: Mathematical Evolution of a Counting Semaphore</h3>
+</div>
+<p><strong>Problem Statement (From NMIMS Paper 1):</strong> Consider a counting semaphore initialized with a value of \(10\). A series of concurrent processes execute the following operations in sequence:
+<br/>\(12\text{ Wait}(P)\text{ operations}\) and \(7\text{ Signal}(V)\text{ operations}\).
+<br/>(a) Compute the resulting value of the semaphore.
+<br/>(b) State how many processes are blocked in the waiting queue.</p>
+
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">GIVEN</span>
+<div>
+<p>Initial value: \(S_0 = 10\)</p>
+<p>Total Wait calls: \(W = 12\)</p>
+<p>Total Signal calls: \(V = 7\)</p>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge">FORMULA</span>
+<div>
+<p>Each <code>wait()</code> operation decrements the semaphore value by 1. Each <code>signal()</code> operation increments the semaphore value by 1:</p>
+$$S_{\text{final}} = S_0 - W + V$$
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge">CALCULATION</span>
+<div>
+$$S_{\text{final}} = 10 - 12 + 7 = 5$$
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge answer">FINAL RESULT</span>
+<div>
+<p class="final-box">\(\text{Final Semaphore Value} = \mathbf{5} \quad | \quad \text{Blocked Processes} = \mathbf{0}\)</p>
+<p class="hint">Reasonableness Check: Since the final value \(S = 5 &gt; 0\), the resource pool still has 5 available units remaining. Exactly 0 processes are blocked in the waiting queue.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 3: COMPARATIVE STUDIES -->
+<section class="module-section" id="comparison-section">
+<div class="section-title">
+<h2>3. Comprehensive Comparative Studies</h2>
+<span class="cross-ref-badge">Frequent Exam Distinctions</span>
+</div>
+
+<h3>Table 3.1: Semaphores vs. Mutexes vs. Monitors</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Mutex Lock</th>
+<th>Counting Semaphore</th>
+<th>Monitor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Core Abstraction</strong></td>
+<td>Binary locking variable (0 or 1).</td>
+<td>Integer variable with atomic \(P/V\) functions.</td>
+<td>High-level language object / abstract data type.</td>
+</tr>
+<tr>
+<td><strong>Ownership</strong></td>
+<td><strong>Strict Ownership:</strong> Only the thread that acquired the mutex can release it.</td>
+<td><strong>No Ownership:</strong> Any thread can signal a semaphore to wake a waiting thread.</td>
+<td>Monitored by compiler runtime lock on object methods.</td>
+</tr>
+<tr>
+<td><strong>Mutual Exclusion</strong></td>
+<td>Enforces mutual exclusion on a single resource.</td>
+<td>Manages access across \(N\) finite instances.</td>
+<td><strong>Implicit:</strong> Guaranteed automatically by language runtime.</td>
+</tr>
+<tr>
+<td><strong>Error Vulnerability</strong></td>
+<td>Moderate (forgetting to unlock).</td>
+<td><strong>High:</strong> Inverted calls cause silent race conditions or deadlock.</td>
+<td><strong>Extremely Low:</strong> Impossible to bypass mutual exclusion blocks.</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<!-- SECTION 4: CASE STUDIES -->
+<section class="module-section" id="case-section">
+<div class="section-title">
+<h2>4. Practical Kernel Concurrency</h2>
+<span class="cross-ref-badge">Linux Kernel Primitives</span>
+</div>
+<div class="problem-card">
+<span class="difficulty hard">Kernel Architecture Case Study</span>
+<h3>Spinlocks vs. Mutexes in the Linux Kernel</h3>
+<p>Within the Linux kernel, engineers choose locking primitives strictly based on execution context:</p>
+<ul>
+<li><strong>Spinlocks:</strong> A process waiting for a spinlock sits in a tight busy-waiting loop checking CPU cache lines. Crucially, <strong>interrupt handlers cannot sleep</strong>. Therefore, interrupt service routines must exclusively use spinlocks!</li>
+<li><strong>Mutexes:</strong> When a mutex is locked, the calling thread is put to sleep (transitioned to WAITING state) and the CPU is dispatched to another job. Mutexes are used only in user space or process context where sleeping is permitted.</li>
+</ul>
+</div>
+</section>
+
+<!-- SECTION 5: EXAM QUESTIONS & MARKING GUIDE -->
+<section class="module-section" id="questions-section">
+<div class="section-title">
+<h2>5. Possible University Exam Questions &amp; Marking Guide</h2>
+<span class="cross-ref-badge">NMIMS Pattern: 5 &amp; 10 Mark Solutions</span>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">10 Marks</span>
+<h4>Q1. What is the Producer-Consumer problem? Design pseudocode to provide a complete solution using Semaphores. [From NMIMS Paper 2 &amp; 3]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong></p>
+<ul>
+<li>Problem explanation &amp; buffer synchronization requirements: <strong>3 Marks</strong></li>
+<li>Definition and initialization of the 3 semaphores (mutex, empty, full): <strong>2 Marks</strong></li>
+<li>Producer pseudocode with correct wait/signal sequence: <strong>2.5 Marks</strong></li>
+<li>Consumer pseudocode with correct wait/signal sequence: <strong>2.5 Marks</strong></li>
+</ul>
+<p><strong>Model Answer Key:</strong> State that producer and consumer share a circular bounded buffer of size \(N\). Provide the full pseudocode from Section 1.6. Explain why <code>wait(empty)</code> must precede <code>wait(mutex)</code> in the producer: reversing them causes immediate deadlock if the buffer is full!</p>
+</div>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">10 Marks</span>
+<h4>Q2. Explain the Dining Philosophers problem. Critically analyze why semaphore implementations can result in deadlock, and discuss two methods to eliminate deadlock. [From NMIMS Paper 4]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong></p>
+<ul>
+<li>Dining Philosophers problem setup and diagram: <strong>3 Marks</strong></li>
+<li>Analysis of circular wait deadlock when all take left chopstick: <strong>3 Marks</strong></li>
+<li>Two deadlock-free solutions (Odd-Even asymmetry, limit to 4 philosophers): <strong>4 Marks</strong></li>
+</ul>
+<p><strong>Model Answer Key:</strong> Present the circular dining scenario. Explain that if every philosopher picks up their left chopstick simultaneously, all 5 resources are locked and every philosopher waits indefinitely for the right chopstick (Circular Wait). Solutions: (1) Allow at most 4 philosophers to sit at the 5-seat table simultaneously; (2) Asymmetric solution: odd philosophers pick left chopstick first, then right; even philosophers pick right chopstick first, then left.</p>
+</div>
+</div>
+</section>
+
+<!-- SECTION 6: WHAT TO KNOW FOR THE EXAM & CHECKLIST -->
+<section class="module-section" id="exam-checklist">
+<div class="section-title">
+<h2>What to Know for the Exam &amp; Coverage Checklist</h2>
+<span class="cross-ref-badge">Final Revision Anchor</span>
+</div>
+
+<div class="callout callout-tip">
+<h4>Core Exam Takeaways:</h4>
+<ul>
+<li><strong>3 CS Conditions:</strong> Mutual Exclusion (one at a time), Progress (no deadlock), Bounded Waiting (no starvation).</li>
+<li><strong>Semaphore Formula:</strong> \(S_{\text{final}} = S_{\text{init}} - \text{Waits} + \text{Signals}\).</li>
+<li><strong>Semaphore Order Matters:</strong> Always acquire the counting semaphore (<code>empty</code>/<code>full</code>) *before* the locking mutex (<code>mutex</code>).</li>
+<li><strong>Monitors:</strong> Provide automatic language-level mutual exclusion; use condition variables (<code>wait()</code>, <code>signal()</code>) for coordination.</li>
+</ul>
+</div>
+
+<h3>Final Unit Coverage Checklist</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Topic / Slide Reference</th><th>Coverage Status</th><th>Core Concept Mastered</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Unit 3 Slides 1–15: Principles of Concurrency</td><td>Complete</td><td>Race conditions, atomicity, shared counter bug, 3 CS requirements.</td></tr>
+<tr><td>Unit 3 Slides 16–25: Peterson's Solution</td><td>Complete</td><td>Turn &amp; Flag variables, busy-wait while loop, 3-point mathematical proof.</td></tr>
+<tr><td>Unit 3 Slides 26–35: Hardware &amp; Semaphores</td><td>Complete</td><td>TestAndSet, Swap, Counting/Binary semaphores, block/wakeup mechanisms.</td></tr>
+<tr><td>Unit 3 Slides 36–48: Classical IPC &amp; Monitors</td><td>Complete</td><td>Bounded buffer, Readers-writers, Dining philosophers, Monitor structure.</td></tr>
+<tr><td>NMIMS Past Paper Questions (Paper 1, 2, 3, 4, 5)</td><td>Complete</td><td>Producer-consumer code, dining philosophers deadlock proof, counting traces.</td></tr>
+</tbody>
+</table>
+</section>
+
+<!-- Unit Pagination -->
+<div class="unit-pagination">
+<a class="btn btn-outline" href="02-processes-and-cpu-scheduling.html">← Previous: Unit 2 - Processes &amp; CPU Scheduling</a>
+<a class="btn btn-primary" href="04-deadlocks.html">Next: Unit 4 - Deadlocks →</a>
+</div>
+
+</article>
+</main>
+</div>
+
+<script>
+const toggleBtn = document.getElementById('theme-toggle');
+if (toggleBtn) {
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    toggleBtn.setAttribute('aria-pressed', 'true');
+  }
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.setAttribute('aria-pressed', !isDark);
+  });
+}
+</script>
+</body>
+</html>

@@ -1,20 +1,551 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script>
-try{const t=localStorage.getItem('nmims-ai-color-theme');const d=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(!t&&d))document.documentElement.dataset.theme='dark'}catch(_){}
-</script><title>I/O Management and Disk Scheduling</title><style>:root{color-scheme:light;--ink:#17243b;--muted:#53647a;--blue:#155eef;--pale:#eef4ff;--line:#d9e2ef;--gold:#fff4d6}*{box-sizing:border-box}body{margin:0;background:#f6f8fb;color:var(--ink);font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:980px;margin:auto;padding:32px 22px 70px}header{background:linear-gradient(125deg,#102b52,#155eef);color:white;padding:32px;border-radius:18px;margin-bottom:24px}h1{line-height:1.15;margin:0 0 10px}header p{margin:0;color:#e7efff}section,article{background:white;border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0}h2{margin-top:0;color:#173e74}h3{color:#244f86}li{margin:.28em 0}.callout{background:var(--pale);border-left:4px solid var(--blue);padding:12px 16px;border-radius:8px}.warn{background:var(--gold);padding:12px 16px;border-radius:8px}table{border-collapse:collapse;width:100%;margin:12px 0}td,th{border:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}th{background:#eef4ff}code,.formula{background:#f1f4f8;padding:2px 5px;border-radius:4px}.diagram{font-family:ui-monospace,monospace;background:#f3f6fa;padding:14px;border-radius:8px;white-space:pre-wrap}details{border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:8px 0}summary{font-weight:650;cursor:pointer}footer{font-size:.9em;color:var(--muted);padding:16px;text-align:center}@media print{body{background:white}main{max-width:none;padding:0}header,section,article{break-inside:avoid}}
-/* Shared NMIMS light/dark theme */
-html{color-scheme:light;--os-bg:#f6f8fb;--os-ink:#17243b;--os-muted:#53647a;--os-card:#fff;--os-line:#d9e2ef;--os-pale:#eef4ff;--os-gold:#fff4d6;--os-code:#f1f4f8;--os-diagram:#f3f6fa}
-html[data-theme="dark"]{color-scheme:dark;--os-bg:#171b20;--os-ink:#edf2f8;--os-muted:#b4c0ce;--os-card:#222a33;--os-line:#3c4856;--os-pale:#263645;--os-gold:#433923;--os-code:#303a46;--os-diagram:#202a34}
-html[data-theme="dark"] body{background:var(--os-bg);color:var(--os-ink)}
-html[data-theme="dark"] section,html[data-theme="dark"] article{background:var(--os-card);border-color:var(--os-line)}
-html[data-theme="dark"] h2,html[data-theme="dark"] h3{color:#9bc5ff}
-html[data-theme="dark"] .callout,html[data-theme="dark"] th{background:var(--os-pale)}
-html[data-theme="dark"] .warn{background:var(--os-gold)}
-html[data-theme="dark"] td,html[data-theme="dark"] th,html[data-theme="dark"] details{border-color:var(--os-line)}
-html[data-theme="dark"] code,html[data-theme="dark"] .formula{background:var(--os-code)}
-html[data-theme="dark"] .diagram{background:var(--os-diagram)}
-html[data-theme="dark"] footer{color:var(--os-muted)}
-.theme-bar{display:flex;justify-content:flex-end;margin:0 0 10px}
-.theme-switch{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--os-line);border-radius:9px;background:var(--os-card);color:var(--os-ink);padding:8px 12px;font:600 .9rem/1.2 system-ui,-apple-system,Segoe UI,sans-serif;cursor:pointer}
-.theme-switch:hover{filter:brightness(.96)}
-.theme-switch:focus-visible{outline:3px solid #6ca8ff;outline-offset:2px}
-</style><main><div class="theme-bar"><button class="theme-switch" id="shared-theme-toggle" type="button" aria-pressed="false"><span class="theme-icon" aria-hidden="true">☾</span><span class="theme-label">Dark mode</span></button></div><header><h1>I/O Management and Disk Scheduling</h1><p>Unit 6 and Disk Scheduling deck | device interfaces, interrupts, and head movement</p></header><div class="warn"><b>Scope note:</b> No Operating Systems course policy was present in OS. The only syllabus PDF found is for Artificial Intelligence and does not apply to these slides. Therefore the checklist follows the OS slide decks; exam format, weighting, exclusions, and instructor-specific marking rules could not be verified. Assumptions and ambiguous source points are flagged below.</div><section><h2>1. I/O architecture</h2><p>Devices differ, so controllers and device drivers hide hardware detail behind a uniform OS interface. A device may expose data-in, data-out, status, and control registers; access may use dedicated I/O instructions or memory-mapped I/O. Ports connect devices; buses connect components. Device drivers issue commands and manage device-specific details.</p></section><section><h2>2. Polling, interrupts, and I/O modes</h2><p><b>Polling:</b> CPU repeatedly checks a status bit until ready. Simple and sensible for fast completion, but wastes cycles for slow devices. <b>Interrupt-driven I/O:</b> device signals the CPU; handler identifies/serves it, with context/dispatch overhead. Interrupts can be masked/prioritized; exceptions and system-call traps also enter kernel handling. <b>Blocking I/O</b> suspends caller until completion; nonblocking returns available data; asynchronous operation lets work proceed and signals later.</p><p><b>DMA</b> transfers blocks between device and memory with limited CPU involvement; CPU sets up transfer and is notified on completion. (Treat exact transfer modes as illustrated in Unit 6.)</p></section><section><h2>3. Disk scheduling fundamentals</h2><p>For rotating disks, requests target cylinders; seek movement is commonly approximated by absolute cylinder difference. For path h0→h1→…→hn, total head movement = Σ|hi−hi−1| cylinders. This is movement, not milliseconds: converting to seek time requires a drive model not supplied in the slides.</p><table><tr><th>Policy</th><th>Order</th><th>Trade-off</th></tr><tr><td>FCFS</td><td>Arrival/request order</td><td>Fair/simple, often large movement.</td></tr><tr><td>SSTF</td><td>Nearest request from current head each step</td><td>Low local movement, far requests may starve.</td></tr><tr><td>SCAN</td><td>Move in one direction servicing requests, reach disk end, reverse</td><td>Elevator; endpoint and direction matter.</td></tr><tr><td>C-SCAN</td><td>Service in one direction; wrap to opposite end without service on return</td><td>More uniform wait; wrap movement convention must be explicit.</td></tr><tr><td>LOOK</td><td>Like SCAN but reverse at last request in direction</td><td>Avoids needless trip to physical end.</td></tr><tr><td>C-LOOK</td><td>Like C-SCAN but wrap between furthest requests</td><td>Specify whether wrap counts in movement total.</td></tr></table></section><section><h2>4. Reliable disk-work procedure</h2><ol><li>Write request set, initial head, disk bounds, and initial direction.</li><li>For FCFS keep listed order; for SSTF recalculate nearest from current head after each selection; resolve equal distances by declared convention.</li><li>For sweep policies sort requests around the initial head; follow direction and endpoint/wrap rule exactly.</li><li>Show path, then sum adjacent absolute differences. State total in cylinders.</li></ol><p>Linux deadline scheduling and other scheduler examples are mentioned in the slides as context; versions/defaults are time-specific and not treated as current facts.</p></section><section><h2>Recap and self-test</h2><h3>Self-test (answers follow)</h3><details><summary>Why is polling inefficient for a slow device?</summary><p>CPU busy-waits instead of doing useful work.</p></details><details><summary>How is total disk head movement computed?</summary><p>Sum absolute cylinder differences between consecutive head positions.</p></details><details><summary>Difference between SCAN and LOOK?</summary><p>SCAN goes to disk end before reversing; LOOK reverses at the last pending request in that direction.</p></details><details><summary>Does SSTF guarantee no starvation?</summary><p>No, far requests can be postponed repeatedly.</p></details><details><summary>What must be stated for C-SCAN calculations?</summary><p>Disk bounds, direction, whether wrap movement counts, and the request service sequence.</p></details></section><section><h2>5. I/O subsystem and storage details</h2><p>The kernel I/O subsystem schedules per-device queues, buffers data to bridge speed/size differences, caches copies for faster reuse, and spools output for exclusive devices such as printers. Device reservation gives exclusive access and can contribute to deadlock. Vectored (scatter-gather) I/O combines multiple buffers/operations in one call, reducing calls and copying overhead. DMA moves blocks with less CPU intervention.</p><p>Disk access time has seek time (arm movement) plus rotational latency plus transfer time. Rotational latency depends on spindle speed; the slides give no particular drive’s timing model. HDDs use rotating magnetic platters; nonvolatile-memory devices have no moving head and are faster in the described comparison. Low-level formatting creates logical blocks; bad sectors complicate logical-to-physical mapping.</p></section><section><h2>What to know for the exam</h2><p>Be ready to define the central terms, compare mechanisms using their assumptions and trade-offs, trace a process or algorithm step by step, and justify the result. State units and conventions whenever a question supplies them.</p></section><section><h2>Final coverage checklist</h2><table><tr><th>Source section</th><th>Coverage in this file</th></tr><tr><td>Unit 6 slides 1–27</td><td>I/O management, hardware, registers, polling, interrupts, I/O modes, performance</td></tr><tr><td>Unit 6 slides 28–37</td><td>Disk scheduling context and policy examples</td></tr><tr><td>Disk scheduling slides 1–9</td><td>FCFS, SSTF, SCAN, C-SCAN, LOOK, C-LOOK and sample prompt</td></tr></table></section><footer>Prepared from the OS course files in NMIMS-STUDY/OS/theory. Past papers were treated as exam-pattern context only.</footer></main></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unit 7: I/O Management &amp; Disk Scheduling - NMIMS Master Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="theme.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="os-custom-polish">
+:root { --ai-content-width: 980px; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+body { min-width: 320px; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+.main-content { width: calc(100% - 290px); max-width: none; }
+.content-wrapper { max-width: var(--ai-content-width); }
+.top-bar { position: sticky; top: 0; z-index: 90; min-height: 52px; padding: 12px 0; margin-top: -32px; background: color-mix(in srgb, var(--bg-main) 94%, transparent); backdrop-filter: blur(10px); }
+.unit-hero { padding-top: 6px; margin-bottom: clamp(26px, 4vw, 42px); }
+.unit-hero h1 { font-size: clamp(1.8rem, 3.3vw, 2.45rem); letter-spacing: -0.035em; text-wrap: balance; }
+.module-section { scroll-margin-top: 76px; padding: clamp(20px, 3vw, 34px); margin-bottom: clamp(24px, 4vw, 40px); }
+.topic-block { scroll-margin-top: 76px; margin-bottom: 2.2rem; }
+.topic-block p, .topic-block li, .q-answer p, .callout p { max-width: 82ch; line-height: 1.72; }
+.callout { padding: 18px 20px; border-radius: 10px; margin: 16px 0; border-left: 4px solid var(--primary); background: #f1f5f9; }
+.callout-def { border-left-color: #2563eb; background: #eff6ff; }
+.callout-warn { border-left-color: #f59e0b; background: #fffbeb; }
+.callout-tip { border-left-color: #10b981; background: #ecfdf5; }
+.data-table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+.data-table th, .data-table td { border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; }
+.data-table th { background: #f8fafc; font-weight: 600; }
+.diagram-wrapper { margin: 20px 0; text-align: center; }
+.diagram-caption { font-size: 0.88rem; color: var(--text-muted); margin-top: 8px; font-style: italic; }
+.problem-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+.problem-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.difficulty.easy { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.medium { background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.hard { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.solution-flow { display: flex; flex-direction: column; gap: 14px; }
+.step-row { display: flex; gap: 16px; align-items: flex-start; }
+.step-badge { font-size: 0.72rem; font-weight: 700; padding: 4px 8px; background: #e2e8f0; color: #334155; border-radius: 4px; white-space: nowrap; }
+.step-badge.answer { background: #dcfce7; color: #166534; }
+.final-box { background: #ecfdf5; border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 6px; font-weight: 600; color: #065f46; }
+.question-item { border-bottom: 1px solid var(--border-color); padding: 20px 0; }
+.question-item:last-child { border-bottom: none; }
+.q-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+.marks-badge { font-size: 0.75rem; font-weight: 700; background: #f1f5f9; color: var(--secondary); border: 1px solid #cbd5e1; padding: 2px 7px; border-radius: 4px; }
+.q-answer { background: #f8fafc; padding: 14px 18px; border-radius: 6px; }
+.unit-pagination { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+.btn { padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-outline { border: 1px solid var(--border-color); color: var(--text-main); }
+@media (max-width: 900px) { .sidebar { max-height: 34vh; padding: 16px; } .main-content { width: 100%; padding: 24px 16px 56px; } }
+</style>
+</head>
+<body>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · OS Master</a>
+<span class="badge">Semester Exam Prep</span>
+<button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle" type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark mode</span></button>
+</div>
+<nav class="sidebar-nav">
+<h3>All Units &amp; Guides</h3>
+<ul>
+<li><a href="01-os-foundations.html"><span class="unit-num">01</span> OS Overview &amp; Architecture</a></li>
+<li><a href="02-processes-and-cpu-scheduling.html"><span class="unit-num">02</span> Processes &amp; CPU Scheduling</a></li>
+<li><a href="03-concurrency-and-synchronization.html"><span class="unit-num">03</span> Concurrency &amp; Synchronization</a></li>
+<li><a href="04-deadlocks.html"><span class="unit-num">04</span> Deadlocks &amp; Banker's Algorithm</a></li>
+<li><a href="05-memory-management.html"><span class="unit-num">05</span> Memory Management &amp; Fitting</a></li>
+<li><a href="06-paging-and-replacement.html"><span class="unit-num">06</span> Paging &amp; Virtual Memory</a></li>
+<li><a class="active" href="07-io-and-disk-scheduling.html"><span class="unit-num">07</span> I/O &amp; Disk Scheduling</a></li>
+<li><a href="08-file-systems.html"><span class="unit-num">08</span> File System Interface &amp; Storage</a></li>
+<li><a href="09-numericals-and-problem-solving.html"><span class="unit-num">09</span> Master Problem-Solving Guide</a></li>
+<li><a href="10-solved-examples.html"><span class="unit-num">10</span> Comprehensive Solved Bank</a></li>
+<li><a href="11-topic-checklist.html"><span class="unit-num">11</span> Final Topic Checklist</a></li>
+</ul>
+<h3>Unit 7 Sections</h3>
+<ul>
+<li><a href="#theory-section">1. In-Depth Lecture &amp; Theory</a></li>
+<li><a href="#sec-io-hardware">1.1 I/O Hardware Architecture &amp; Buses</a></li>
+<li><a href="#sec-io-modes">1.2 Programmed I/O vs. Interrupts vs. DMA</a></li>
+<li><a href="#sec-buffering">1.3 Single, Double &amp; Circular Buffering</a></li>
+<li><a href="#sec-disk-structure">1.4 Magnetic Disk Physical Geometry</a></li>
+<li><a href="#sec-disk-algos">1.5 The 6 Disk Scheduling Algorithms</a></li>
+<li><a href="#numerical-section">2. In-Depth Disk Scheduling Numericals</a></li>
+<li><a href="#num-head-trace">2.1 FCFS vs. SSTF vs. SCAN vs. LOOK</a></li>
+<li><a href="#num-cscan-trace">2.2 C-SCAN vs. C-LOOK Wrap Analysis</a></li>
+<li><a href="#comparison-section">3. Comparative Studies</a></li>
+<li><a href="#case-section">4. Enterprise Storage (RAID Levels)</a></li>
+<li><a href="#questions-section">5. NMIMS Exam Questions &amp; Marking Guide</a></li>
+</ul>
+</nav>
+</aside>
+
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 7: I/O &amp; Disk Scheduling</span>
+</div>
+<div class="meta-tag">Unit 7 · 100% Lecture &amp; PYQ Faithful Masterclass</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>Unit 7: I/O Management, Buffering &amp; Disk Scheduling</h1>
+<p class="lead">An exhaustive masterclass on I/O hardware subsystems, polling vs. interrupt-driven I/O vs. Direct Memory Access (DMA), device driver kernel interfaces, single and double buffering performance mathematics, physical magnetic disk geometry (Seek Time, Rotational Latency, Transfer Time), and complete algorithmic traces of all six disk scheduling algorithms (FCFS, SSTF, SCAN, C-SCAN, LOOK, C-LOOK).</p>
+</header>
+<section class="theory-sources" aria-label="Original theory files"><h2>Original theory files</h2><p>Open the unchanged lecture source or expand its preview here.</p><ul><li><a href="theory/Unit%206.pptx" target="_blank" rel="noopener">Open original: Unit 6.pptx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of Unit 6.pptx" src="theory/previews/Unit%206.pdf"></iframe></div><p><a href="theory/previews/Unit%206.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li><li><a href="theory/Disk%20scheduling.pptx" target="_blank" rel="noopener">Open original: Disk scheduling.pptx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of Disk scheduling.pptx" src="theory/previews/Disk%20scheduling.pdf"></iframe></div><p><a href="theory/previews/Disk%20scheduling.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li></ul></section>
+
+
+<!-- SECTION 1: IN-DEPTH THEORY -->
+<section class="module-section" id="theory-section">
+<div class="section-title">
+<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+<span class="cross-ref-badge">Faithful to Unit 6.pptx, Disk scheduling.pptx &amp; NMIMS Past Papers</span>
+</div>
+
+<div class="topic-block" id="sec-io-hardware">
+<h3>1.1 I/O Hardware Architecture, Ports &amp; Buses</h3>
+<p>The computer's I/O architecture bridges high-speed CPU logic with vastly diverse, slower physical peripherals (keyboards, hard disks, GPUs, network cards).</p>
+<ul>
+<li><strong>Device Controller:</strong> A dedicated collection of electronics (chips or circuit boards) that operates a physical device. It maintains a set of hardware registers:
+  <ul>
+    <li><em>Data-In Register:</em> Read by the CPU to receive input bytes.</li>
+    <li><em>Data-Out Register:</em> Written by the CPU to send output bytes.</li>
+    <li><em>Status Register:</em> Contains state bits (e.g., <code>BUSY</code>, <code>READY</code>, <code>ERROR</code>).</li>
+    <li><em>Control Register:</em> Written by the CPU to initiate hardware commands (e.g., read sector, seek track).</li>
+  </ul>
+</li>
+<li><strong>Controller Interfaces:</strong> The CPU communicates with controller registers via <strong>Direct I/O Instructions</strong> (special machine instructions like <code>in</code>/<code>out</code>) or <strong>Memory-Mapped I/O</strong> (device registers are mapped directly into the CPU's physical memory address space).</li>
+</ul>
+</div>
+
+<div class="topic-block" id="sec-io-modes">
+<h3>1.2 The Three Fundamental Modes of I/O Execution</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Execution Mode</th>
+<th>Operating Mechanism</th>
+<th>CPU Utilization &amp; Overhead</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Programmed I/O (Polling / Busy-Waiting)</strong></td>
+<td>The CPU issues an I/O command and enters an intensive tight loop repeatedly reading the controller's Status Register until <code>BUSY = 0</code>.</td>
+<td><strong>Terrible:</strong> The CPU is 100% busy doing completely useless polling spinning, starving all other ready processes.</td>
+</tr>
+<tr>
+<td><strong>2. Interrupt-Driven I/O</strong></td>
+<td>The CPU issues an I/O command to the controller and immediately context-switches to execute another ready process. When the device finishes transfer, the hardware controller asserts an interrupt signal line on the CPU bus, triggering an <strong>Interrupt Service Routine (ISR)</strong>.</td>
+<td><strong>Greatly Improved:</strong> CPU never sits idle during physical I/O transfer. However, for massive high-speed data transfers (e.g., gigabit network or disk reads), interrupting the CPU for *every single byte* wastes CPU cycles on interrupt handling.</td>
+</tr>
+<tr>
+<td><strong>3. Direct Memory Access (DMA)</strong></td>
+<td>A dedicated hardware coprocessor—the <strong>DMA Controller</strong>—transfers an entire block of data directly between the device buffer and main memory <strong>without passing through the CPU</strong>! The CPU only sets up the transfer (specifying source, destination, and byte count) and receives a single interrupt when the entire multi-megabyte block transfer is complete.</td>
+<td><strong>Optimal:</strong> Frees the CPU entirely during bulk data transfers. CPU cycle stealing occurs only at the memory bus arbitration level.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="topic-block" id="sec-buffering">
+<h3>1.3 I/O Buffering Techniques (Single, Double &amp; Circular)</h3>
+<p>A <strong>Buffer</strong> is a designated region of main memory used to hold data in transit between two devices or between an application and an I/O device. Buffering resolves three problems: (1) Coping with device speed mismatches, (2) Adapting between devices that have different data transfer sizes, and (3) Supporting copy semantics for application writes.</p>
+
+<div class="callout callout-def">
+<h4>Comparative Mathematics of Buffering:</h4>
+<p>Let \(T\) = Time required to input a block from secondary device into buffer.
+<br/>Let \(C\) = Computation time required by the CPU to process the block.
+<br/>Let \(M\) = Time required to move data from OS kernel buffer to user space memory.</p>
+<ul>
+<li><strong>No Buffering:</strong> Execution is strictly sequential:
+$$\text{Total Time per Block} = T + C$$</li>
+<li><strong>Single Buffering:</strong> The OS assigns a single memory buffer. The I/O device transfers the next block into the buffer while the CPU processes the previous block in user memory:
+$$\text{Total Time per Block} = \max(T, C) + M$$</li>
+<li><strong>Double Buffering (Ping-Pong Buffering):</strong> The OS assigns two buffers. While the device fills Buffer A, the CPU reads and processes Buffer B. When both finish, their roles are swapped instantaneously:
+$$\text{Total Time per Block} = \mathbf{\max(T, C)}$$
+If \(C \le T\), the CPU is never blocked waiting for I/O; the I/O transfer runs at maximum physical bus speed!</li>
+</ul>
+</div>
+</div>
+
+<div class="topic-block" id="sec-disk-structure">
+<h3>1.4 Physical Magnetic Disk Geometry &amp; Access Times</h3>
+<p>Traditional magnetic hard disks consist of multiple platters coated with magnetic material spinning at high angular velocities (typically 5,400 to 15,000 RPM).</p>
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:540px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewBox="0 0 540 220" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="160" cy="110" r="85" fill="#f8fafc" stroke="#334155" stroke-width="2"/>
+  <circle cx="160" cy="110" r="55" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <circle cx="160" cy="110" r="25" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5"/>
+  <circle cx="160" cy="110" r="8" fill="#1e293b"/>
+  <text x="160" y="145" fill="#64748b" font-size="9" text-anchor="middle">Tracks &amp; Cylinders</text>
+
+  <!-- Spindle / Arm -->
+  <line x1="320" y1="110" x2="160" y2="70" stroke="#dc2626" stroke-width="3"/>
+  <circle cx="320" cy="110" r="10" fill="#dc2626"/>
+  <text x="320" y="140" fill="#991b1b" font-size="11" font-weight="700" text-anchor="middle">Actuator Arm</text>
+  <rect x="150" y="60" width="16" height="16" fill="#1e293b" rx="2"/>
+  <text x="140" y="55" fill="#1e293b" font-size="9" font-weight="700">R/W Head</text>
+</svg>
+<p class="diagram-caption">Figure 7.1: Physical Magnetic Disk Platter, Tracks, Cylinders, and R/W Head Actuator Assembly.</p>
+</div>
+
+<h4>The Three Components of Disk Access Time:</h4>
+<ol>
+<li><strong>1. Seek Time (\(T_s\)):</strong> The mechanical time required for the actuator arm to physically move the Read/Write head across platters to the target cylinder (track). <em>(This is the dominant bottleneck, typically 3 to 10 milliseconds!).</em></li>
+<li><strong>2. Rotational Latency (\(T_r\)):</strong> The time spent waiting for the target disk sector to rotate under the Read/Write head.
+$$T_r = \frac{1}{2} \times \frac{60}{\text{RPM}}\text{ s} = \frac{30{,}000}{\text{RPM}}\text{ ms}$$
+<em>(For 7,200 RPM drive: \(T_r = \frac{30{,}000}{7200} = 4.17\text{ ms}\)).</em></li>
+<li><strong>3. Transfer Time (\(T_t\)):</strong> The time required to magnetically stream bytes of data off the platter:
+$$T_t = \frac{\text{Bytes to Transfer}}{\text{Transfer Rate}}$$</li>
+</ol>
+$$\mathbf{\text{Total Access Time} = \text{Seek Time } (T_s) + \text{Rotational Latency } (T_r) + \text{Transfer Time } (T_t)}$$
+</div>
+
+<div class="topic-block" id="sec-disk-algos">
+<h3>1.5 The Six Disk Scheduling Algorithms</h3>
+<p>Because physical mechanical head movement is the slowest component of computing, the operating system maintains a request queue of pending disk I/O cylinder requests. <strong>Disk Scheduling</strong> minimizes total head seek distance.</p>
+
+<table class="data-table">
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Head Movement &amp; Service Logic</th>
+<th>Starvation Risk?</th>
+<th>Trade-offs &amp; Characteristics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. FCFS</strong></td>
+<td>Services pending requests strictly in the order they arrive in the I/O queue.</td>
+<td><strong>No</strong></td>
+<td>Completely fair, zero algorithmic overhead. Wild, erratic head swings across the disk surface.</td>
+</tr>
+<tr>
+<td><strong>2. SSTF (Shortest Seek Time First)</strong></td>
+<td>Selects the pending request that is closest to the current head position (minimum seek distance).</td>
+<td><strong>Yes</strong> (requests at distant cylinders starve if closer requests keep arriving!)</td>
+<td>Substantially lowers average seek time compared to FCFS; not optimal.</td>
+</tr>
+<tr>
+<td><strong>3. SCAN (Elevator Algorithm)</strong></td>
+<td>The disk arm moves continuously in one direction (e.g., toward spindle 0), servicing all pending requests along the way, <strong>until it reaches the absolute boundary cylinder (0 or Max)</strong>. There, it reverses direction and sweeps back.</td>
+<td><strong>No</strong></td>
+<td>Fair and bounded; however, requests immediately behind the reversing arm wait the longest.</td>
+</tr>
+<tr>
+<td><strong>4. C-SCAN (Circular SCAN)</strong></td>
+<td>Sweeps in one direction servicing requests. When it reaches the boundary, <strong>it immediately returns to the opposite boundary without servicing any requests on the return trip</strong>!</td>
+<td><strong>No</strong></td>
+<td>Provides a vastly more uniform waiting time distribution than standard SCAN.</td>
+</tr>
+<tr>
+<td><strong>5. LOOK</strong></td>
+<td>Variant of SCAN: Arm moves in one direction servicing requests, but <strong>only travels as far as the final pending request in that direction</strong>! It reverses immediately without traveling to the unneeded physical disk edge (0 or 199).</td>
+<td><strong>No</strong></td>
+<td>Eliminates useless wasted arm sweeps to the physical platter boundaries.</td>
+</tr>
+<tr>
+<td><strong>6. C-LOOK</strong></td>
+<td>Variant of C-SCAN: Arm sweeps in one direction up to the last pending request, then jumps directly to the lowest pending request at the other end without touching the physical edges.</td>
+<td><strong>No</strong></td>
+<td>Modern default standard for mechanical hard disk drives.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<div class="topic-block" id="sec-io-call-semantics">
+<h3>1.6 Blocking, Non-Blocking, and Asynchronous I/O</h3>
+<p>These terms describe when an application call returns and how completion is reported. They are separate from the lower-level programmed-I/O, interrupt, or DMA transfer mechanism.</p>
+<table class="data-table"><thead><tr><th>Mode</th><th>Call behavior</th><th>Completion</th></tr></thead><tbody>
+<tr><td>Blocking</td><td>The calling thread waits until the operation completes (or reaches the requested condition).</td><td>Results are available when the call returns.</td></tr>
+<tr><td>Non-blocking</td><td>The call returns promptly if it cannot make progress immediately.</td><td>The caller checks again or waits for readiness, then retries/continues.</td></tr>
+<tr><td>Asynchronous</td><td>The caller submits work and continues without waiting for its completion.</td><td>The OS/runtime notifies or signals completion later; the caller then collects the result.</td></tr>
+</tbody></table>
+<p>Terminology varies across APIs. In particular, non-blocking I/O commonly reports readiness for a later operation, while asynchronous I/O commonly reports completion of an already submitted operation.</p>
+</div>
+
+<!-- SECTION 2: NUMERICALS & DISK HEAD TRACES -->
+<section class="module-section" id="numerical-section">
+<div class="section-title">
+<h2>2. In-Depth Disk Scheduling Numericals</h2>
+<span class="cross-ref-badge">NMIMS 10-Mark Solved Calculations</span>
+</div>
+
+<div class="problem-card" id="num-head-trace">
+<div class="problem-header">
+<span class="difficulty medium">Core 10-Mark Problem</span>
+<h3>Problem 7.1: Comprehensive Disk Scheduling Comparison (200 Cylinders)</h3>
+</div>
+<p><strong>Problem Statement (From NMIMS Paper 1, 2, 3, 5):</strong> Suppose that a disk drive has \(200\text{ cylinders}\) numbered from \(0\text{ to } 199\). The disk head is currently positioned at cylinder <strong>\(53\)</strong>. The queue of pending requests in FIFO order is:
+$$\mathbf{98, 183, 37, 122, 14, 124, 65, 67}$$
+Calculate the <strong>Total Head Movement (in cylinders)</strong> and illustrate the head seek trajectory for:
+<br/>(a) FCFS
+<br/>(b) SSTF
+<br/>(c) SCAN (Assume arm moves toward cylinder 0 / decreasing)
+<br/>(d) LOOK (Assume arm moves toward cylinder 0 / decreasing)
+<br/>(e) C-SCAN (Assume arm moves toward cylinder 199 / increasing)</p>
+
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">PART (a) FCFS</span>
+<div>
+<p><strong>Order of Service:</strong> \(53 \to 98 \to 183 \to 37 \to 122 \to 14 \to 124 \to 65 \to 67\)</p>
+<p><strong>Calculations:</strong></p>
+$$|98 - 53| + |183 - 98| + |37 - 183| + |122 - 37| + |14 - 122| + |124 - 14| + |65 - 124| + |67 - 65|$$
+$$= 45 + 85 + 146 + 85 + 108 + 110 + 59 + 2 = \mathbf{640\text{ cylinders}}$$
+</div>
+</div>
+
+<div class="step-row">
+<span class="step-badge">PART (b) SSTF</span>
+<div>
+<p>Start at \(53\). Closest is 65 (\(\Delta 12\)), then 67 (\(\Delta 2\)), then 37 (\(\Delta 30\)), then 14 (\(\Delta 23\)), then 98 (\(\Delta 84\)), then 122 (\(\Delta 24\)), then 124 (\(\Delta 2\)), then 183 (\(\Delta 59\)).</p>
+<p><strong>Order of Service:</strong> \(53 \to 65 \to 67 \to 37 \to 14 \to 98 \to 122 \to 124 \to 183\)</p>
+<p><strong>Calculations:</strong></p>
+$$(67 - 53) + (67 - 14) + (183 - 14) = 14 + 53 + 169 = \mathbf{236\text{ cylinders}}$$
+</div>
+</div>
+
+<div class="step-row">
+<span class="step-badge">PART (c) SCAN</span>
+<div>
+<p>Start at \(53\), moving toward 0. Services pending requests below 53: 37, 14, then <strong>touches boundary 0</strong>, then reverses toward 199: 65, 67, 98, 122, 124, 183.</p>
+<p><strong>Order of Service:</strong> \(53 \to 37 \to 14 \to \mathbf{0} \to 65 \to 67 \to 98 \to 122 \to 124 \to 183\)</p>
+<p><strong>Calculations:</strong></p>
+$$\text{Total Head Movement} = (53 - 0) + (183 - 0) = 53 + 183 = \mathbf{236\text{ cylinders}}$$
+</div>
+</div>
+
+<div class="step-row">
+<span class="step-badge">PART (d) LOOK</span>
+<div>
+<p>Start at \(53\), moving toward 0. Services 37, 14. Lowest request is 14; <strong>reverses immediately without going to 0</strong>!</p>
+<p><strong>Order of Service:</strong> \(53 \to 37 \to 14 \to 65 \to 67 \to 98 \to 122 \to 124 \to 183\)</p>
+<p><strong>Calculations:</strong></p>
+$$\text{Total Head Movement} = (53 - 14) + (183 - 14) = 39 + 169 = \mathbf{208\text{ cylinders}}$$
+</div>
+</div>
+
+<div class="step-row">
+<span class="step-badge">PART (e) C-SCAN</span>
+<div>
+<p>Start at \(53\), moving toward 199. Services: 65, 67, 98, 122, 124, 183 \(\to\) touches <strong>199</strong> \(\to\) jumps to <strong>0</strong> \(\to\) services: 14, 37.</p>
+<p><strong>Order of Service:</strong> \(53 \to 65 \to 67 \to 98 \to 122 \to 124 \to 183 \to \mathbf{199} \to \mathbf{0} \to 14 \to 37\)</p>
+<p><strong>Calculations:</strong></p>
+$$\text{Total Head Movement} = (199 - 53) + (199 - 0) + (37 - 0) = 146 + 199 + 37 = \mathbf{382\text{ cylinders}}$$
+</div>
+</div>
+
+<div class="step-row">
+<span class="step-badge answer">SUMMARY TABLE</span>
+<div>
+<table class="data-table">
+<thead><tr><th>Algorithm</th><th>Total Track Seek Distance</th><th>Relative Performance</th></tr></thead>
+<tbody>
+<tr><td><strong>LOOK</strong></td><td><strong>208 cylinders</strong></td><td><strong>Best / Optimal in this workload</strong></td></tr>
+<tr><td><strong>SSTF</strong></td><td>236 cylinders</td><td>Highly efficient (starvation risk)</td></tr>
+<tr><td><strong>SCAN</strong></td><td>236 cylinders</td><td>Wasted 14 cylinders going to 0</td></tr>
+<tr><td><strong>C-SCAN</strong></td><td>382 cylinders</td><td>Uniform wait; high track count due to wrap</td></tr>
+<tr><td><strong>FCFS</strong></td><td>640 cylinders</td><td>Worst (3.07× worse than LOOK!)</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 3: COMPARATIVE STUDIES -->
+<section class="module-section" id="comparison-section">
+<div class="section-title">
+<h2>3. Comprehensive Comparative Studies</h2>
+<span class="cross-ref-badge">Frequent Exam Distinctions</span>
+</div>
+
+<h3>Table 7.1: SCAN vs. C-SCAN vs. LOOK vs. C-LOOK</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Dimension</th>
+<th>SCAN</th>
+<th>C-SCAN</th>
+<th>LOOK</th>
+<th>C-LOOK</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Travel to Disk Boundary?</strong></td>
+<td><strong>Yes</strong> (must travel all the way to 0 or Max cylinder).</td>
+<td><strong>Yes</strong> (travels to Max, wraps to 0).</td>
+<td><strong>No</strong> (reverses at final pending request).</td>
+<td><strong>No</strong> (reverses and wraps at final pending requests).</td>
+</tr>
+<tr>
+<td><strong>Service on Return Sweep?</strong></td>
+<td><strong>Yes</strong> (services requests in both directions).</td>
+<td><strong>No</strong> (pure return seek without servicing).</td>
+<td><strong>Yes</strong> (services requests in both directions).</td>
+<td><strong>No</strong> (pure return seek without servicing).</td>
+</tr>
+<tr>
+<td><strong>Waiting Time Distribution</strong></td>
+<td>Skewed toward middle cylinders.</td>
+<td><strong>Highly Uniform</strong> across entire platter.</td>
+<td>Skewed toward middle cylinders.</td>
+<td><strong>Highly Uniform</strong> across active requests.</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<!-- SECTION 4: CASE STUDIES -->
+<section class="module-section" id="case-section">
+<div class="section-title">
+<h2>4. Enterprise Storage Architecture (RAID Levels)</h2>
+<span class="cross-ref-badge">Data Redundancy &amp; Performance</span>
+</div>
+<div class="problem-card">
+<span class="difficulty hard">RAID Architecture</span>
+<h3>RAID: Redundant Array of Independent Disks</h3>
+<ul>
+<li><strong>RAID 0 (Striping):</strong> Blocks striped across \(N\) disks. Maximum I/O throughput. <strong>Zero fault tolerance</strong> (failure of 1 disk loses all data).</li>
+<li><strong>RAID 1 (Mirroring):</strong> Complete data duplication across pairs of drives. 100% capacity overhead; instant recovery upon disk crash.</li>
+<li><strong>RAID 5 (Block-Level Striping with Distributed Parity):</strong> Data blocks and XOR parity blocks distributed across \(\ge 3\) disks. Tolerates failure of any single disk with only \(1/N\) capacity overhead!</li>
+</ul>
+</div>
+</section>
+
+<!-- SECTION 5: EXAM QUESTIONS & MARKING GUIDE -->
+<section class="module-section" id="questions-section">
+<div class="section-title">
+<h2>5. Possible University Exam Questions &amp; Marking Guide</h2>
+<span class="cross-ref-badge">NMIMS Pattern: 5 &amp; 10 Mark Solutions</span>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">10 Marks</span>
+<h4>Q1. Differentiate between Programmed I/O, Interrupt-Driven I/O, and Direct Memory Access (DMA). With a neat diagram, explain how DMA improves system throughput. [From NMIMS Past Papers]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong></p>
+<ul>
+<li>Structured contrast table (Polling vs Interrupts vs DMA across 4 metrics): <strong>4 Marks</strong></li>
+<li>Neat DMA architecture diagram: <strong>3 Marks</strong></li>
+<li>Explanation of DMA cycle stealing and CPU offloading: <strong>3 Marks</strong></li>
+</ul>
+<p><strong>Model Answer Key:</strong> Detail the 3 modes using Table 7.1. Draw the DMA Controller connected to the System Bus alongside CPU and RAM. Explain that DMA offloads bulk data transfers entirely from the CPU, allowing application computations to proceed concurrently with high-speed disk and network I/O.</p>
+</div>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">5 Marks</span>
+<h4>Q2. Explain I/O buffering with the help of single and double buffering. [From NMIMS Paper 3]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong></p>
+<ul>
+<li>Purpose of I/O buffering: <strong>1 Mark</strong></li>
+<li>Single buffering mechanics and formula (\(\max(T, C) + M\)): <strong>2 Marks</strong></li>
+<li>Double buffering mechanics and formula (\(\max(T, C)\)): <strong>2 Marks</strong></li>
+</ul>
+<p><strong>Model Answer Key:</strong> Present the definitions from Section 1.3. Explain the ping-pong mechanism of double buffering: while the device writes to Buffer A, the CPU reads from Buffer B. When both finish, their roles swap. This completely masks I/O transfer time behind computation time when \(C \le T\).</p>
+</div>
+</div>
+</section>
+
+<!-- SECTION 6: WHAT TO KNOW FOR THE EXAM & CHECKLIST -->
+<section class="module-section" id="exam-checklist">
+<div class="section-title">
+<h2>What to Know for the Exam &amp; Coverage Checklist</h2>
+<span class="cross-ref-badge">Final Revision Anchor</span>
+</div>
+
+<div class="callout callout-tip">
+<h4>Core Exam Takeaways:</h4>
+<ul>
+<li><strong>I/O Hierarchy:</strong> Polling = 100% CPU spinning; Interrupts = byte-by-byte CPU handling; DMA = zero CPU intervention during bulk block transfer.</li>
+<li><strong>Total Disk Time:</strong> \(\text{Seek Time} + \text{Rotational Latency} + \text{Transfer Time}\). (Seek time dominates!).</li>
+<li><strong>SCAN vs LOOK Boundary:</strong> SCAN touches physical cylinder 0 or 199; LOOK reverses immediately at the last pending request!</li>
+<li><strong>C-SCAN / C-LOOK Wrap:</strong> Must account for the complete return trip without servicing requests in the distance formula.</li>
+</ul>
+</div>
+
+<h3>Final Unit Coverage Checklist</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Topic / Slide Reference</th><th>Coverage Status</th><th>Core Concept Mastered</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Unit 6 Slides 1–15: I/O Hardware &amp; Modes</td><td>Complete</td><td>Controllers, Programmed I/O, Interrupts, DMA cycle stealing.</td></tr>
+<tr><td>Unit 6 Slides 16–25: Buffering</td><td>Complete</td><td>Single, double, and circular buffering mathematical models.</td></tr>
+<tr><td>Unit 6 Slides 26–37: Disk Structure</td><td>Complete</td><td>Platters, cylinders, seek time, rotational latency calculations.</td></tr>
+<tr><td>Disk Scheduling PPTX Slides 1–9: 6 Algorithms</td><td>Complete</td><td>FCFS, SSTF, SCAN, C-SCAN, LOOK, C-LOOK complete 200-cylinder traces.</td></tr>
+<tr><td>NMIMS Past Paper Questions (Paper 1, 2, 3, 5)</td><td>Complete</td><td>Full 10-mark head seek traces, DMA comparisons, and buffering formulas.</td></tr>
+</tbody>
+</table>
+</section>
+
+<!-- Unit Pagination -->
+<div class="unit-pagination">
+<a class="btn btn-outline" href="06-paging-and-replacement.html">← Previous: Unit 6 - Paging &amp; Virtual Memory</a>
+<a class="btn btn-primary" href="08-file-systems.html">Next: Unit 8 - File Systems →</a>
+</div>
+
+</article>
+</main>
+</div>
+
+<script>
+const toggleBtn = document.getElementById('theme-toggle');
+if (toggleBtn) {
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    toggleBtn.setAttribute('aria-pressed', 'true');
+  }
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.setAttribute('aria-pressed', !isDark);
+  });
+}
+</script>
+</body>
+</html>

@@ -1,20 +1,491 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script>
-try{const t=localStorage.getItem('nmims-ai-color-theme');const d=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(!t&&d))document.documentElement.dataset.theme='dark'}catch(_){}
-</script><title>Files, Directories, and File-System Structure</title><style>:root{color-scheme:light;--ink:#17243b;--muted:#53647a;--blue:#155eef;--pale:#eef4ff;--line:#d9e2ef;--gold:#fff4d6}*{box-sizing:border-box}body{margin:0;background:#f6f8fb;color:var(--ink);font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:980px;margin:auto;padding:32px 22px 70px}header{background:linear-gradient(125deg,#102b52,#155eef);color:white;padding:32px;border-radius:18px;margin-bottom:24px}h1{line-height:1.15;margin:0 0 10px}header p{margin:0;color:#e7efff}section,article{background:white;border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0}h2{margin-top:0;color:#173e74}h3{color:#244f86}li{margin:.28em 0}.callout{background:var(--pale);border-left:4px solid var(--blue);padding:12px 16px;border-radius:8px}.warn{background:var(--gold);padding:12px 16px;border-radius:8px}table{border-collapse:collapse;width:100%;margin:12px 0}td,th{border:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}th{background:#eef4ff}code,.formula{background:#f1f4f8;padding:2px 5px;border-radius:4px}.diagram{font-family:ui-monospace,monospace;background:#f3f6fa;padding:14px;border-radius:8px;white-space:pre-wrap}details{border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:8px 0}summary{font-weight:650;cursor:pointer}footer{font-size:.9em;color:var(--muted);padding:16px;text-align:center}@media print{body{background:white}main{max-width:none;padding:0}header,section,article{break-inside:avoid}}
-/* Shared NMIMS light/dark theme */
-html{color-scheme:light;--os-bg:#f6f8fb;--os-ink:#17243b;--os-muted:#53647a;--os-card:#fff;--os-line:#d9e2ef;--os-pale:#eef4ff;--os-gold:#fff4d6;--os-code:#f1f4f8;--os-diagram:#f3f6fa}
-html[data-theme="dark"]{color-scheme:dark;--os-bg:#171b20;--os-ink:#edf2f8;--os-muted:#b4c0ce;--os-card:#222a33;--os-line:#3c4856;--os-pale:#263645;--os-gold:#433923;--os-code:#303a46;--os-diagram:#202a34}
-html[data-theme="dark"] body{background:var(--os-bg);color:var(--os-ink)}
-html[data-theme="dark"] section,html[data-theme="dark"] article{background:var(--os-card);border-color:var(--os-line)}
-html[data-theme="dark"] h2,html[data-theme="dark"] h3{color:#9bc5ff}
-html[data-theme="dark"] .callout,html[data-theme="dark"] th{background:var(--os-pale)}
-html[data-theme="dark"] .warn{background:var(--os-gold)}
-html[data-theme="dark"] td,html[data-theme="dark"] th,html[data-theme="dark"] details{border-color:var(--os-line)}
-html[data-theme="dark"] code,html[data-theme="dark"] .formula{background:var(--os-code)}
-html[data-theme="dark"] .diagram{background:var(--os-diagram)}
-html[data-theme="dark"] footer{color:var(--os-muted)}
-.theme-bar{display:flex;justify-content:flex-end;margin:0 0 10px}
-.theme-switch{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--os-line);border-radius:9px;background:var(--os-card);color:var(--os-ink);padding:8px 12px;font:600 .9rem/1.2 system-ui,-apple-system,Segoe UI,sans-serif;cursor:pointer}
-.theme-switch:hover{filter:brightness(.96)}
-.theme-switch:focus-visible{outline:3px solid #6ca8ff;outline-offset:2px}
-</style><main><div class="theme-bar"><button class="theme-switch" id="shared-theme-toggle" type="button" aria-pressed="false"><span class="theme-icon" aria-hidden="true">☾</span><span class="theme-label">Dark mode</span></button></div><header><h1>Files, Directories, and File-System Structure</h1><p>Unit 7 | file concepts, access, directories, sharing, and protection</p></header><div class="warn"><b>Scope note:</b> No Operating Systems course policy was present in OS. The only syllabus PDF found is for Artificial Intelligence and does not apply to these slides. Therefore the checklist follows the OS slide decks; exam format, weighting, exclusions, and instructor-specific marking rules could not be verified. Assumptions and ambiguous source points are flagged below.</div><section><h2>1. File abstraction and metadata</h2><p>A file is a named logical collection with creator-defined contents, often viewed as a contiguous logical address space. Types may be text, source, executable, numeric, character, binary, or structured. Attributes include name, unique identifier, type, location, size, protection, timestamps, and owner/user information; directory structures store this metadata.</p><p>Operations: create, open, read, write, reposition/seek, close, delete, truncate. Open-file tables track active files; each process may have a file pointer and access rights, while a system-wide entry tracks location/open count.</p></section><section><h2>2. Access methods and file organization</h2><p><b>Sequential access</b> reads/writes the next record and supports reset; <b>direct access</b> addresses fixed-length logical records by relative block number n (read n, write n, position n, rewrite n). File structure may be byte/word sequence, lines/fixed or variable records, or complex formatted structures. The OS or application may interpret the structure.</p></section><section><h2>3. Directories and volumes</h2><p>Directory operations include search, create/delete, list, rename, traverse. A single-level directory is simple but has name collisions and no grouping. Two-level directories give each user a directory and permit same filenames for different users, but limited grouping. Tree directories support hierarchy/pathnames. Acyclic-graph directories permit shared files/subdirectories without cycles.</p><p>A disk can have partitions; a formatted partition/volume contains a file system and directory metadata. Raw partitions lack a general-purpose file system. General-purpose and special-purpose file systems can coexist.</p></section><section><h2>4. Sharing and protection</h2><p>Multi-user sharing requires identities and permissions. User IDs and group IDs help assign owner/group rights. File locks can be shared (multiple readers) or exclusive (writer); mandatory locking denies conflicting access, advisory locking lets programs inspect and cooperate. Remote file systems use networked client-server access; standard file calls can be translated to remote requests. Slides mention NFS, CIFS, FTP, web access, and distributed naming services.</p><p>File-system organization, index structures, and ACL examples include figures not fully expressed in text extraction; use the concepts and labels visible in the deck rather than infer diagram internals.</p></section><section><h2>Recap and self-test</h2><h3>Self-test (answers follow)</h3><details><summary>Sequential versus direct access?</summary><p>Sequential processes next records in order; direct access names a relative record/block.</p></details><details><summary>Why have an open-file table?</summary><p>To track open files and data needed to manage access, pointers, counts, rights, and location.</p></details><details><summary>What does an acyclic graph add over a tree?</summary><p>Sharing of files/subdirectories while prohibiting cycles.</p></details><details><summary>Mandatory versus advisory lock?</summary><p>Mandatory lock enforcement denies conflicting access; advisory locking relies on programs to check/cooperate.</p></details><details><summary>What is a volume?</summary><p>An entity containing a file system.</p></details></section><section><h2>What to know for the exam</h2><p>Be ready to define the central terms, compare mechanisms using their assumptions and trade-offs, trace a process or algorithm step by step, and justify the result. State units and conventions whenever a question supplies them.</p></section><section><h2>Final coverage checklist</h2><table><tr><th>Source section</th><th>Coverage in this file</th></tr><tr><td>Unit 7 slides 1–10</td><td>File concept, attributes, operations, open files/locks, types and structure</td></tr><tr><td>Unit 7 slides 11–15</td><td>Sequential/direct access and index/relative file illustrations</td></tr><tr><td>Unit 7 slides 16–28</td><td>Disk/volume organization, directory structures, sharing, remote file systems, ACL</td></tr></table></section><footer>Prepared from the OS course files in NMIMS-STUDY/OS/theory. Past papers were treated as exam-pattern context only.</footer></main></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unit 8: File-System Interface &amp; Storage - NMIMS Master Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="theme.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="os-custom-polish">
+:root { --ai-content-width: 980px; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+body { min-width: 320px; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+.main-content { width: calc(100% - 290px); max-width: none; }
+.content-wrapper { max-width: var(--ai-content-width); }
+.top-bar { position: sticky; top: 0; z-index: 90; min-height: 52px; padding: 12px 0; margin-top: -32px; background: color-mix(in srgb, var(--bg-main) 94%, transparent); backdrop-filter: blur(10px); }
+.unit-hero { padding-top: 6px; margin-bottom: clamp(26px, 4vw, 42px); }
+.unit-hero h1 { font-size: clamp(1.8rem, 3.3vw, 2.45rem); letter-spacing: -0.035em; text-wrap: balance; }
+.module-section { scroll-margin-top: 76px; padding: clamp(20px, 3vw, 34px); margin-bottom: clamp(24px, 4vw, 40px); }
+.topic-block { scroll-margin-top: 76px; margin-bottom: 2.2rem; }
+.topic-block p, .topic-block li, .q-answer p, .callout p { max-width: 82ch; line-height: 1.72; }
+.callout { padding: 18px 20px; border-radius: 10px; margin: 16px 0; border-left: 4px solid var(--primary); background: #f1f5f9; }
+.callout-def { border-left-color: #2563eb; background: #eff6ff; }
+.callout-warn { border-left-color: #f59e0b; background: #fffbeb; }
+.callout-tip { border-left-color: #10b981; background: #ecfdf5; }
+.data-table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+.data-table th, .data-table td { border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; }
+.data-table th { background: #f8fafc; font-weight: 600; }
+.diagram-wrapper { margin: 20px 0; text-align: center; }
+.diagram-caption { font-size: 0.88rem; color: var(--text-muted); margin-top: 8px; font-style: italic; }
+.problem-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+.problem-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.difficulty.easy { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.medium { background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.hard { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.solution-flow { display: flex; flex-direction: column; gap: 14px; }
+.step-row { display: flex; gap: 16px; align-items: flex-start; }
+.step-badge { font-size: 0.72rem; font-weight: 700; padding: 4px 8px; background: #e2e8f0; color: #334155; border-radius: 4px; white-space: nowrap; }
+.step-badge.answer { background: #dcfce7; color: #166534; }
+.final-box { background: #ecfdf5; border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 6px; font-weight: 600; color: #065f46; }
+.question-item { border-bottom: 1px solid var(--border-color); padding: 20px 0; }
+.question-item:last-child { border-bottom: none; }
+.q-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+.marks-badge { font-size: 0.75rem; font-weight: 700; background: #f1f5f9; color: var(--secondary); border: 1px solid #cbd5e1; padding: 2px 7px; border-radius: 4px; }
+.q-answer { background: #f8fafc; padding: 14px 18px; border-radius: 6px; }
+.unit-pagination { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+.btn { padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-outline { border: 1px solid var(--border-color); color: var(--text-main); }
+@media (max-width: 900px) { .sidebar { max-height: 34vh; padding: 16px; } .main-content { width: 100%; padding: 24px 16px 56px; } }
+</style>
+</head>
+<body>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · OS Master</a>
+<span class="badge">Semester Exam Prep</span>
+<button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle" type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark mode</span></button>
+</div>
+<nav class="sidebar-nav">
+<h3>All Units &amp; Guides</h3>
+<ul>
+<li><a href="01-os-foundations.html"><span class="unit-num">01</span> OS Overview &amp; Architecture</a></li>
+<li><a href="02-processes-and-cpu-scheduling.html"><span class="unit-num">02</span> Processes &amp; CPU Scheduling</a></li>
+<li><a href="03-concurrency-and-synchronization.html"><span class="unit-num">03</span> Concurrency &amp; Synchronization</a></li>
+<li><a href="04-deadlocks.html"><span class="unit-num">04</span> Deadlocks &amp; Banker's Algorithm</a></li>
+<li><a href="05-memory-management.html"><span class="unit-num">05</span> Memory Management &amp; Fitting</a></li>
+<li><a href="06-paging-and-replacement.html"><span class="unit-num">06</span> Paging &amp; Virtual Memory</a></li>
+<li><a href="07-io-and-disk-scheduling.html"><span class="unit-num">07</span> I/O &amp; Disk Scheduling</a></li>
+<li><a class="active" href="08-file-systems.html"><span class="unit-num">08</span> File System Interface &amp; Storage</a></li>
+<li><a href="09-numericals-and-problem-solving.html"><span class="unit-num">09</span> Master Problem-Solving Guide</a></li>
+<li><a href="10-solved-examples.html"><span class="unit-num">10</span> Comprehensive Solved Bank</a></li>
+<li><a href="11-topic-checklist.html"><span class="unit-num">11</span> Final Topic Checklist</a></li>
+</ul>
+<h3>Unit 8 Sections</h3>
+<ul>
+<li><a href="#theory-section">1. In-Depth Lecture &amp; Theory</a></li>
+<li><a href="#sec-file-concept">1.1 The File Concept &amp; Attributes</a></li>
+<li><a href="#sec-access-methods">1.2 Sequential vs. Direct Access Methods</a></li>
+<li><a href="#sec-dir-structures">1.3 Directory Structures (Single to DAG)</a></li>
+<li><a href="#sec-alloc-methods">1.4 Allocation: Contiguous, Linked &amp; Indexed</a></li>
+<li><a href="#sec-free-space">1.5 Free Space Management (Bitmaps &amp; Lists)</a></li>
+<li><a href="#sec-protection">1.6 File Protection &amp; Access Control Lists</a></li>
+<li><a href="#numerical-section">2. In-Depth File Storage Numericals</a></li>
+<li><a href="#num-indexed-calc">2.1 Multi-Level Index &amp; Max File Size</a></li>
+<li><a href="#num-bitmap-calc">2.2 Free-Space Bit Vector Calculations</a></li>
+<li><a href="#comparison-section">3. Comparative Studies</a></li>
+<li><a href="#case-section">4. Modern File Systems (UNIX Inodes)</a></li>
+<li><a href="#questions-section">5. NMIMS Exam Questions &amp; Marking Guide</a></li>
+</ul>
+</nav>
+</aside>
+
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 8: File-System Interface</span>
+</div>
+<div class="meta-tag">Unit 8 · 100% Lecture &amp; PYQ Faithful Masterclass</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>Unit 8: File-System Interface, Directories &amp; Storage Allocation</h1>
+<p class="lead">An exhaustive masterclass exploring the file abstraction, metadata attributes, sequential vs. direct access methods, directory topologies (Single-level, Two-level, Tree, Acyclic Graph, General Graph), physical allocation strategies (Contiguous, Linked List, FAT, Indexed allocation with UNIX multi-level inodes), free-space management (bitmaps and linked lists), and Access Control List (ACL) security models.</p>
+</header>
+<section class="theory-sources" aria-label="Original theory files"><h2>Original theory files</h2><p>Open the unchanged lecture source or expand its preview here.</p><ul><li><a href="theory/Unit%207.pptx" target="_blank" rel="noopener">Open original: Unit 7.pptx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of Unit 7.pptx" src="theory/previews/Unit%207.pdf"></iframe></div><p><a href="theory/previews/Unit%207.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li></ul></section>
+
+
+<!-- SECTION 1: IN-DEPTH THEORY -->
+<section class="module-section" id="theory-section">
+<div class="section-title">
+<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+<span class="cross-ref-badge">Faithful to Unit 7.pptx &amp; NMIMS Past Papers</span>
+</div>
+
+<div class="topic-block" id="sec-file-concept">
+<h3>1.1 The File Concept, Operations &amp; Metadata Attributes</h3>
+<p>Computers must store data persistently on secondary non-volatile storage. The operating system abstracts physical storage blocks into a uniform logical storage unit: the <strong>File</strong>.</p>
+
+<div class="callout callout-def">
+<h4>Formal Definition of a File</h4>
+<p>A <strong>File</strong> is a named collection of related information recorded on secondary storage. From a user's perspective, a file is the smallest allotment of logical secondary storage; data cannot be written to disk unless it is within a named file.</p>
+</div>
+
+<h4>Core File Attributes (Stored in the File Directory / Inode):</h4>
+<ul>
+<li><strong>Name:</strong> The human-readable symbolic string identifier (e.g., <code>report.pdf</code>).</li>
+<li><strong>Identifier:</strong> A unique non-human tag (usually an integer like an inode number) that uniquely identifies the file within the filesystem.</li>
+<li><strong>Type:</strong> Required for systems that support different file formats (e.g., executable, text, directory).</li>
+<li><strong>Location:</strong> A pointer to a device and to the physical disk block addresses where file content is stored.</li>
+<li><strong>Size:</strong> Current file size in bytes, words, or disk sectors.</li>
+<li><strong>Protection:</strong> Access-control information determining who can read, write, or execute the file.</li>
+<li><strong>Timestamps:</strong> Time of creation, last modification, and last access (used for caching and backups).</li>
+</ul>
+</div>
+
+<div class="topic-block" id="sec-access-methods">
+<h3>1.2 File Access Methods: Sequential vs. Direct Access</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Sequential Access Method</th>
+<th>Direct Access (Relative Access) Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Reading Mechanism</strong></td>
+<td>Information is processed strictly in chronological order, <strong>one record after another</strong>. An internal read pointer advances automatically: <code>read_next()</code>.</td>
+<td>A file is made up of fixed-length logical records. Programs can read or write records in <strong>any arbitrary order</strong> immediately: <code>read(record_number)</code>.</td>
+</tr>
+<tr>
+<td><strong>Underlying Storage Analogy</strong></td>
+<td>Magnetic Tape reel (must wind through preceding miles of tape to reach record 500).</td>
+<td>Magnetic Disk / SSD (read/write head seeks directly to target cylinder and sector).</td>
+</tr>
+<tr>
+<td><strong>Primary Operations</strong></td>
+<td><code>read_next()</code>, <code>write_next()</code>, <code>reset()</code> (rewind to beginning).</td>
+<td><code>read(n)</code>, <code>write(n)</code>, <code>seek(n)</code>.</td>
+</tr>
+<tr>
+<td><strong>Ideal Applications</strong></td>
+<td>Compilers compiling source code files, audio/video streaming media, sequential log files.</td>
+<td><strong>Relational Database Management Systems (RDBMS)</strong>, airline reservation search queries.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="topic-block" id="sec-dir-structures">
+<h3>1.3 Directory Structures &amp; Topological Evolution</h3>
+<p>A directory is an internal filesystem data structure that translates human file names into their corresponding directory entries and physical block addresses.</p>
+
+<h4>1. Single-Level Directory:</h4>
+<p>All files reside in a single directory shared by all users.
+<br/><em>Fatal Flaws:</em> Severe <strong>Name Collision</strong> (no two files can have the same name, even if owned by different users!) and total lack of logical grouping.</p>
+
+<h4>2. Two-Level Directory:</h4>
+<p>Creates an isolated Master File Directory (MFD) containing pointers to individual <strong>User File Directories (UFDs)</strong>. Solves name collisions across different users; however, individual users cannot group related files into subdirectories.</p>
+
+<h4>3. Tree-Structured Directory (Modern Standard):</h4>
+<p>Generalizes directories into a tree of arbitrary depth. A directory can contain files and other subdirectories.
+<br/><em>Path Names:</em> Every file has a unique <strong>Absolute Path Name</strong> (starting from root <code>/</code>) and a <strong>Relative Path Name</strong> (starting from the Current Working Directory - CWD).</p>
+
+<h4>4. Acyclic-Graph Directories (Sharing &amp; Aliases):</h4>
+<p>Allows directories to share subdirectories and files. The same physical file can exist under multiple directory paths (via <strong>Hard Links</strong> and <strong>Soft / Symbolic Links</strong>).
+<br/><em>Hazard:</em> Dangling pointers if an aliased file is deleted; requires a <strong>Reference Count</strong> in the file's inode.</p>
+</div>
+
+<div class="topic-block" id="sec-alloc-methods">
+<h3>1.4 Physical Storage Allocation Methods</h3>
+<p>The allocation method defines how physical disk blocks are assigned to files:</p>
+
+<table class="data-table">
+<thead>
+<tr>
+<th>Allocation Method</th>
+<th>Physical Disk Block Layout</th>
+<th>Major Advantages</th>
+<th>Severe Disadvantages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Contiguous Allocation</strong></td>
+<td>Each file occupies a set of <strong>contiguously adjacent disk blocks</strong> (e.g., blocks 100, 101, 102). Directory entry stores: \(\langle \text{Start Block}, \text{Length} \rangle\).</td>
+<td><strong>Maximum Read Speed!</strong> Head seeks once to start block; subsequent sectors stream without seek delay. Supports direct access trivial math.</td>
+<td><strong>Severe External Fragmentation:</strong> Wastes disk space; impossible to know final file size in advance when creating files (file expansion requires relocation).</td>
+</tr>
+<tr>
+<td><strong>2. Linked Allocation</strong></td>
+<td>Each file is a <strong>linked list of discrete disk blocks</strong> scattered anywhere on the disk platter. Each block contains a pointer to the next block.</td>
+<td><strong>Zero External Fragmentation:</strong> Any free block on disk can be allocated instantly. Files grow dynamically without bounds.</td>
+<td><strong>No Direct Access:</strong> To read block \(N\), must follow \(N-1\) disk seek pointers sequentially! Wasted storage (4 to 8 bytes per block used for pointers).</td>
+</tr>
+<tr>
+<td><strong>3. File Allocation Table (FAT)</strong></td>
+<td>Variation of linked allocation: pointers are pulled out of disk blocks and stored in a single table (the FAT) cached in RAM.</td>
+<td>Faster direct access traversal since pointer hops occur in RAM rather than mechanical disk seeks.</td>
+<td>Entire FAT table must reside permanently in RAM; large disks require massive tables.</td>
+</tr>
+<tr>
+<td><strong>4. Indexed Allocation (UNIX Inodes)</strong></td>
+<td>Brings all pointers together into a dedicated <strong>Index Block</strong> for each file. The \(i\)-th entry in the index block points to the \(i\)-th physical block of the file.</td>
+<td><strong>Supports true Direct Access</strong> without external fragmentation. Files can grow dynamically.</td>
+<td>Index block space overhead: tiny 10-byte files waste an entire 4 KB index block!</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="topic-block" id="sec-free-space">
+<h3>1.5 Free Space Management (Bitmaps &amp; Linked Lists)</h3>
+<p>To allocate disk blocks quickly, the OS maintains a free-space list tracking unallocated sectors:</p>
+<ul>
+<li><strong>Bit Vector (Bitmap):</strong> Each block is represented by a single bit.
+  <ul>
+    <li><code>Bit = 0</code>: Block is allocated.</li>
+    <li><code>Bit = 1</code>: Block is free.</li>
+  </ul>
+  <em>Advantage:</em> Exceptionally fast to search for the first free block on modern CPUs using hardware bit-scan instructions (e.g., <code>bsfl</code> on x86). Simple to find contiguous runs of free blocks.
+  <br/><em>Overhead:</em> Assuming binary units, a 1 TiB disk with 4 KiB blocks has \(2^{28}\) blocks. The bitmap uses one bit per block, so it requires \(2^{28} \text{ bits} / 8 = 2^{25} \text{ bytes} = 32\text{ MiB}\) of RAM.</li>
+<li><strong>Linked Free List:</strong> Pointers to free blocks are linked together across the free disk blocks themselves. Takes zero RAM overhead; however, traversing the free list requires mechanical disk reads.</li>
+</ul>
+</div>
+</section>
+
+<div class="topic-block" id="sec-access-matrix">
+<h3>1.6 Access Matrix: A General Model of File Protection</h3>
+<p>An access matrix models protection with <strong>subjects</strong> (users/processes) as rows, <strong>objects</strong> (files/devices) as columns, and each cell listing permitted rights such as read, write, or execute. A file-system Access Control List (ACL) is a column-oriented implementation: it records which subjects may perform which operations on one object. Capability lists are a row-oriented view of the same permissions.</p>
+<p>Grant only the rights required for a task, and distinguish permission to read a file from permission to modify or execute it.</p>
+</div>
+
+<!-- SECTION 2: NUMERICALS & INODE CALCULATIONS -->
+<section class="module-section" id="numerical-section">
+<div class="section-title">
+<h2>2. In-Depth File Storage Numericals</h2>
+<span class="cross-ref-badge">Capacity &amp; Index Structure Mathematics</span>
+</div>
+
+<div class="problem-card" id="num-indexed-calc">
+<div class="problem-header">
+<span class="difficulty hard">UNIX Multi-Level Inode Problem</span>
+<h3>Problem 8.1: Maximum File Size in Multi-Level Inode Systems</h3>
+</div>
+<p><strong>Problem Statement:</strong> Consider a UNIX-style file system where disk blocks are \(4\text{ KiB}\) in size and block addresses/pointers require \(4\text{ bytes}\). An inode contains:
+<ul>
+<li>\(12\text{ Direct Block Pointers}\)</li>
+<li>\(1\text{ Singly Indirect Pointer}\)</li>
+<li>\(1\text{ Doubly Indirect Pointer}\)</li>
+<li>\(1\text{ Triply Indirect Pointer}\)</li>
+</ul>
+Calculate the theoretical <strong>Maximum File Size</strong> supported by this filesystem.</p>
+
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">POINTER CAPACITY</span>
+<div>
+<p>Each index block is \(4\text{ KiB} = 4096\text{ bytes}\). Each pointer is \(4\text{ bytes}\).
+<br/>Number of pointers per index block (\(K\)):</p>
+$$K = \frac{4096\text{ bytes}}{4\text{ bytes}} = 1024\text{ pointers per block} = 2^{10}$$
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge">LEVEL BREAKDOWN</span>
+<div>
+<ul>
+<li><strong>1. Direct Blocks:</strong>
+  $$12 \times 4\text{ KiB} = \mathbf{48\text{ KiB}}$$</li>
+<li><strong>2. Singly Indirect:</strong> Points to 1 index block holding 1024 direct pointers:
+  $$1024 \times 4\text{ KiB} = 4096\text{ KB} = \mathbf{4\text{ MiB}}$$</li>
+<li><strong>3. Doubly Indirect:</strong> Points to 1 index block holding 1024 singly indirect blocks:
+  $$1024 \times 1024 \times 4\text{ KiB} = 1,048,576 \times 4\text{ KiB} = \mathbf{4\text{ GiB}}$$</li>
+<li><strong>4. Triply Indirect:</strong> Points to 1 index block holding 1024 doubly indirect blocks:
+  $$1024^3 \times 4\text{ KiB} = 2^{30} \times 4\text{ KiB} = \mathbf{4\text{ TiB}}$$</li>
+</ul>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge answer">MAX FILE SIZE</span>
+<div>
+$$\text{Max Size} = 48\text{ KiB} + 4\text{ MiB} + 4\text{ GiB} + 4\text{ TiB} \approx \mathbf{4.00391\text{ TiB}}$$
+<p class="final-box">\(\text{Theoretical Maximum File Size (using binary units)} \approx \mathbf{4.00391\text{ TiB}}\)</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 3: COMPARATIVE STUDIES -->
+<section class="module-section" id="comparison-section">
+<div class="section-title">
+<h2>3. Comprehensive Comparative Studies</h2>
+<span class="cross-ref-badge">Frequent Exam Distinctions</span>
+</div>
+
+<h3>Table 8.1: Master Comparison of File Allocation Methods</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Feature</th>
+<th>Contiguous Allocation</th>
+<th>Linked Allocation</th>
+<th>Indexed Allocation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sequential Access Speed</strong></td>
+<td><strong>Blindingly fast</strong> (zero seek delay between sectors).</td>
+<td>Slow (requires seeks across platters).</td>
+<td>Fast (index block cached in RAM).</td>
+</tr>
+<tr>
+<td><strong>Direct Access Speed</strong></td>
+<td><strong>Instant:</strong> Address = Start + Offset.</td>
+<td><strong>Terrible:</strong> Must traverse \(N-1\) pointers sequentially.</td>
+<td><strong>Fast:</strong> Index lookup in single hop.</td>
+</tr>
+<tr>
+<td><strong>External Fragmentation</strong></td>
+<td><strong>Severe.</strong> Requires periodic compaction.</td>
+<td><strong>Zero.</strong> Any free block is usable.</td>
+<td><strong>Zero.</strong> Any free block is usable.</td>
+</tr>
+<tr>
+<td><strong>Storage Pointer Overhead</strong></td>
+<td>Zero pointer overhead.</td>
+<td>1 pointer per block (loss of block payload space).</td>
+<td>Entire index blocks (multi-level pointers).</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<!-- SECTION 4: CASE STUDIES -->
+<section class="module-section" id="case-section">
+<div class="section-title">
+<h2>4. Production File Systems (Linux ext4)</h2>
+<span class="cross-ref-badge">Enterprise Storage</span>
+</div>
+<div class="problem-card">
+<span class="difficulty hard">Linux ext4 Architecture</span>
+<h3>Extents &amp; Journaling in Linux ext4</h3>
+<ul>
+<li><strong>Extents Replacement:</strong> Traditional UNIX inodes used multi-level indirect block pointers. For massive multi-gigabyte files, traversing indirect tables wasted CPU cycles. Modern <strong>ext4</strong> replaces block pointers with <strong>Extents</strong>: a descriptor storing \(\langle \text{Logical Start}, \text{Length}, \text{Physical Start} \rangle\). A single extent can map up to 128 MB of contiguous blocks in one entry!</li>
+<li><strong>Journaling (Crash Resilience):</strong> Writes filesystem metadata transactions to a circular on-disk journal *before* updating main disk structures, ensuring zero corruption during unexpected power outages.</li>
+</ul>
+</div>
+</section>
+
+<!-- SECTION 5: EXAM QUESTIONS & MARKING GUIDE -->
+<section class="module-section" id="questions-section">
+<div class="section-title">
+<h2>5. Possible University Exam Questions &amp; Marking Guide</h2>
+<span class="cross-ref-badge">NMIMS Pattern: 5 &amp; 10 Mark Solutions</span>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">10 Marks</span>
+<h4>Q1. Define a File and list various file attributes. Explain the different physical allocation methods with respect to files, highlighting their advantages and disadvantages. [From NMIMS Paper 1]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong></p>
+<ul>
+<li>File definition and explanation of 5 attributes: <strong>3 Marks</strong></li>
+<li>Contiguous Allocation (Structure, Pros, Cons): <strong>2.5 Marks</strong></li>
+<li>Linked Allocation (Structure, Pros, Cons): <strong>2.5 Marks</strong></li>
+<li>Indexed Allocation (Structure, Pros, Cons): <strong>2 Marks</strong></li>
+</ul>
+<p><strong>Model Answer Key:</strong> Provide the formal definition and attributes from Section 1.1. Then detail the three allocation methods using Table 8.1, emphasizing trade-offs regarding direct access support, external fragmentation, and pointer overhead.</p>
+</div>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">5 Marks</span>
+<h4>Q2. Differentiate between Sequential Access and Direct Access methods for files. [From NMIMS Paper 2 &amp; 5]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong></p>
+<ul>
+<li>Structured comparative table across 5 core dimensions: <strong>5 Marks</strong></li>
+</ul>
+<p><strong>Model Answer Key:</strong> Present Table 8.1 comparing reading mechanisms, pointer operations, physical hardware analogies (tape vs disk), and real-world software applications (compilers vs relational databases).</p>
+</div>
+</div>
+</section>
+
+<!-- SECTION 6: WHAT TO KNOW FOR THE EXAM & CHECKLIST -->
+<section class="module-section" id="exam-checklist">
+<div class="section-title">
+<h2>What to Know for the Exam &amp; Coverage Checklist</h2>
+<span class="cross-ref-badge">Final Revision Anchor</span>
+</div>
+
+<div class="callout callout-tip">
+<h4>Core Exam Takeaways:</h4>
+<ul>
+<li><strong>File Definition:</strong> Smallest unit of logical secondary storage visible to user.</li>
+<li><strong>Access Methods:</strong> Sequential = order matters (tape); Direct = random record jumping (disk/database).</li>
+<li><strong>Directory Tree:</strong> Solves name collisions and allows arbitrary nested folders.</li>
+<li><strong>Allocation Trade-offs:</strong> Contiguous = fast but external fragmentation; Linked = no external fragmentation but no direct access; Indexed = direct access + dynamic growth.</li>
+<li><strong>Inode Formula:</strong> Maximum file size = \(\text{Direct} + \text{Single} + \text{Double} + \text{Triple}\) indirect block capacities.</li>
+</ul>
+</div>
+
+<h3>Final Unit Coverage Checklist</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Topic / Slide Reference</th><th>Coverage Status</th><th>Core Concept Mastered</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Unit 7 Slides 1–8: File Concept &amp; Attributes</td><td>Complete</td><td>File definition, 7 attributes, file operations, open file tables.</td></tr>
+<tr><td>Unit 7 Slides 9–15: Access Methods &amp; Directories</td><td>Complete</td><td>Sequential vs Direct access, Single, Two-level, Tree, Acyclic Graph directories.</td></tr>
+<tr><td>Unit 7 Slides 16–28: Allocation &amp; Free Space</td><td>Complete</td><td>Contiguous, Linked, FAT, Indexed allocation, Bitmaps, UNIX inodes.</td></tr>
+<tr><td>NMIMS Past Paper Questions (Paper 1, 2, 5)</td><td>Complete</td><td>Full 10-mark allocation comparisons, sequential vs direct tables, inode numericals.</td></tr>
+</tbody>
+</table>
+</section>
+
+<!-- Unit Pagination -->
+<div class="unit-pagination">
+<a class="btn btn-outline" href="07-io-and-disk-scheduling.html">← Previous: Unit 7 - I/O &amp; Disk Scheduling</a>
+<a class="btn btn-primary" href="09-numericals-and-problem-solving.html">Next: Master Problem-Solving Guide →</a>
+</div>
+
+</article>
+</main>
+</div>
+
+<script>
+const toggleBtn = document.getElementById('theme-toggle');
+if (toggleBtn) {
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    toggleBtn.setAttribute('aria-pressed', 'true');
+  }
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.setAttribute('aria-pressed', !isDark);
+  });
+}
+</script>
+</body>
+</html>

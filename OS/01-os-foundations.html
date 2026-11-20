@@ -1,20 +1,1131 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script>
-try{const t=localStorage.getItem('nmims-ai-color-theme');const d=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(!t&&d))document.documentElement.dataset.theme='dark'}catch(_){}
-</script><title>OS Foundations: What the Operating System Does</title><style>:root{color-scheme:light;--ink:#17243b;--muted:#53647a;--blue:#155eef;--pale:#eef4ff;--line:#d9e2ef;--gold:#fff4d6}*{box-sizing:border-box}body{margin:0;background:#f6f8fb;color:var(--ink);font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:980px;margin:auto;padding:32px 22px 70px}header{background:linear-gradient(125deg,#102b52,#155eef);color:white;padding:32px;border-radius:18px;margin-bottom:24px}h1{line-height:1.15;margin:0 0 10px}header p{margin:0;color:#e7efff}section,article{background:white;border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0}h2{margin-top:0;color:#173e74}h3{color:#244f86}li{margin:.28em 0}.callout{background:var(--pale);border-left:4px solid var(--blue);padding:12px 16px;border-radius:8px}.warn{background:var(--gold);padding:12px 16px;border-radius:8px}table{border-collapse:collapse;width:100%;margin:12px 0}td,th{border:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}th{background:#eef4ff}code,.formula{background:#f1f4f8;padding:2px 5px;border-radius:4px}.diagram{font-family:ui-monospace,monospace;background:#f3f6fa;padding:14px;border-radius:8px;white-space:pre-wrap}details{border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:8px 0}summary{font-weight:650;cursor:pointer}footer{font-size:.9em;color:var(--muted);padding:16px;text-align:center}@media print{body{background:white}main{max-width:none;padding:0}header,section,article{break-inside:avoid}}
-/* Shared NMIMS light/dark theme */
-html{color-scheme:light;--os-bg:#f6f8fb;--os-ink:#17243b;--os-muted:#53647a;--os-card:#fff;--os-line:#d9e2ef;--os-pale:#eef4ff;--os-gold:#fff4d6;--os-code:#f1f4f8;--os-diagram:#f3f6fa}
-html[data-theme="dark"]{color-scheme:dark;--os-bg:#171b20;--os-ink:#edf2f8;--os-muted:#b4c0ce;--os-card:#222a33;--os-line:#3c4856;--os-pale:#263645;--os-gold:#433923;--os-code:#303a46;--os-diagram:#202a34}
-html[data-theme="dark"] body{background:var(--os-bg);color:var(--os-ink)}
-html[data-theme="dark"] section,html[data-theme="dark"] article{background:var(--os-card);border-color:var(--os-line)}
-html[data-theme="dark"] h2,html[data-theme="dark"] h3{color:#9bc5ff}
-html[data-theme="dark"] .callout,html[data-theme="dark"] th{background:var(--os-pale)}
-html[data-theme="dark"] .warn{background:var(--os-gold)}
-html[data-theme="dark"] td,html[data-theme="dark"] th,html[data-theme="dark"] details{border-color:var(--os-line)}
-html[data-theme="dark"] code,html[data-theme="dark"] .formula{background:var(--os-code)}
-html[data-theme="dark"] .diagram{background:var(--os-diagram)}
-html[data-theme="dark"] footer{color:var(--os-muted)}
-.theme-bar{display:flex;justify-content:flex-end;margin:0 0 10px}
-.theme-switch{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--os-line);border-radius:9px;background:var(--os-card);color:var(--os-ink);padding:8px 12px;font:600 .9rem/1.2 system-ui,-apple-system,Segoe UI,sans-serif;cursor:pointer}
-.theme-switch:hover{filter:brightness(.96)}
-.theme-switch:focus-visible{outline:3px solid #6ca8ff;outline-offset:2px}
-</style><main><div class="theme-bar"><button class="theme-switch" id="shared-theme-toggle" type="button" aria-pressed="false"><span class="theme-icon" aria-hidden="true">☾</span><span class="theme-label">Dark mode</span></button></div><header><h1>OS Foundations: What the Operating System Does</h1><p>Unit 1 | system structure, evolution, services, and kernel organization</p></header><div class="warn"><b>Scope note:</b> No Operating Systems course policy was present in OS. The only syllabus PDF found is for Artificial Intelligence and does not apply to these slides. Therefore the checklist follows the OS slide decks; exam format, weighting, exclusions, and instructor-specific marking rules could not be verified. Assumptions and ambiguous source points are flagged below.</div><section><h2>1. The machine an OS manages</h2><p>A computer combines a processor (executes instructions), main memory (fast, volatile working storage), I/O modules/devices, persistent storage, and a system bus. The OS coordinates these shared resources so applications can run safely and usefully.</p><div class="diagram">User / application → system-call interface → kernel → CPU, memory, devices, storage</div><p>The OS is both a resource manager and an interface. Convenience, efficiency, and the ability to evolve are its stated objectives.</p></section><section><h2>2. Core responsibilities and quality goals</h2><dl><dt><b>Process management</b></dt><dd>Track process state, schedule CPU time, allocate and release processor resources.</dd><dt><b>Memory management</b></dt><dd>Decide which processes occupy main memory, allocate regions, and reclaim them.</dd><dt><b>I/O management</b></dt><dd>Track devices, arbitrate access, and allocate/deallocate devices.</dd><dt><b>Protection and security</b></dt><dd>Protect resources and data. Availability resists interruption; confidentiality limits unauthorized reading; integrity prevents unauthorized changes; authenticity verifies identity or message validity.</dd><dt><b>Scheduling goals</b></dt><dd>Balance fairness, differential responsiveness for different job classes, and efficiency (throughput, response time, user capacity).</dd></dl></section><section><h2>3. Kernel, shell, system calls</h2><p>The <b>kernel</b> is the privileged core that manages hardware resources and implements OS services. A <b>shell</b> is a user-facing command interpreter/interface to kernel services. Programs request protected operations through <b>system calls</b>, commonly exposed through language libraries; categories include process control, memory, files/directories, devices, protection, and networking.</p><p>Do not conflate a shell command with the system call itself: a shell parses user commands; a program/library invokes the kernel interface.</p></section><section><h2>4. Evolution and operating-system organization</h2><p><b>Serial processing</b> ran jobs one at a time with little automation. <b>Batch systems</b> queue submitted jobs and execute them without interactive input; long jobs can delay later work. <b>Multiprogramming</b> keeps several jobs resident and switches CPU work while one waits for I/O. <b>Multitasking/time sharing</b> gives jobs/users short turns for interactive response. <b>Multiprocessing</b> uses multiple processors for true parallel execution and higher throughput.</p><p>A <b>monolithic</b> design puts many services in one kernel address space: direct interaction can be fast, but changes and faults can affect a large tightly coupled core. A <b>layered</b> design organizes services into levels: modularity and localized debugging improve, while boundaries/layout add complexity and can make cross-layer work slower.</p><div class="warn">The slides name the evolution section but some intermediate slides are blank or image-only in extracted text. The descriptions above reflect the visible labels and definitions; detailed historical dates/examples are not specified.</div></section><section><h2>Common confusions and exam traps</h2><p>Multiprogramming overlaps CPU and I/O across jobs; multiprocessing has multiple processors; multitasking is the user-visible time-sharing behavior. Main memory is volatile; disk storage persists. Efficiency is not the only OS objective. “Shell translates high-level language to low-level” is imprecise in the slides: learn it as command interpreter/interface, not as a compiler.</p></section><section><h2>Recap and self-test</h2><h3>Self-test (answers follow)</h3><details><summary>What are the three stated OS objectives?</summary><p>Convenience, efficient resource use, and ability to evolve.</p></details><details><summary>How do multiprogramming and multiprocessing differ?</summary><p>Multiprogramming overlaps jobs on a processor, often using CPU while another job waits for I/O. Multiprocessing provides multiple processors that can execute in parallel.</p></details><details><summary>Give four protection/security goals listed in the slides.</summary><p>Availability, confidentiality, integrity, and authenticity.</p></details><details><summary>Why use system calls?</summary><p>They provide the controlled interface through which programs request OS services.</p></details></section><section><h2>What to know for the exam</h2><p>Be ready to define the central terms, compare mechanisms using their assumptions and trade-offs, trace a process or algorithm step by step, and justify the result. State units and conventions whenever a question supplies them.</p></section><section><h2>Final coverage checklist</h2><table><tr><th>Source section</th><th>Coverage in this file</th></tr><tr><td>Unit 1 slides 1–15</td><td>Hardware basics; OS definition/objectives; kernel/shell; functions, security, scheduling goals</td></tr><tr><td>Unit 1 slides 16–25</td><td>Evolution labels; serial, batch, multiprogramming, multitasking, multiprocessing</td></tr><tr><td>Unit 1 slides 26–34</td><td>System calls; monolithic and layered structures</td></tr></table></section><footer>Prepared from the OS course files in NMIMS-STUDY/OS/theory. Past papers were treated as exam-pattern context only.</footer></main></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unit 1: Operating System Overview &amp; Architecture - NMIMS Master Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="theme.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="os-custom-polish">
+:root {
+  --ai-content-width: 980px;
+}
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+body {
+  min-width: 320px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+.main-content {
+  width: calc(100% - 290px);
+  max-width: none;
+}
+.content-wrapper {
+  max-width: var(--ai-content-width);
+}
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  min-height: 52px;
+  padding: 12px 0;
+  margin-top: -32px;
+  background: color-mix(in srgb, var(--bg-main) 94%, transparent);
+  backdrop-filter: blur(10px);
+}
+.unit-hero {
+  padding-top: 6px;
+  margin-bottom: clamp(26px, 4vw, 42px);
+}
+.unit-hero h1 {
+  font-size: clamp(1.8rem, 3.3vw, 2.45rem);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.module-section {
+  scroll-margin-top: 76px;
+  padding: clamp(20px, 3vw, 34px);
+  margin-bottom: clamp(24px, 4vw, 40px);
+}
+.topic-block {
+  scroll-margin-top: 76px;
+  margin-bottom: 2.2rem;
+}
+.topic-block p, .topic-block li, .q-answer p, .callout p {
+  max-width: 82ch;
+  line-height: 1.72;
+}
+.callout {
+  padding: 18px 20px;
+  border-radius: 10px;
+  margin: 16px 0;
+  border-left: 4px solid var(--primary);
+  background: #f1f5f9;
+}
+.callout-def { border-left-color: #2563eb; background: #eff6ff; }
+.callout-warn { border-left-color: #f59e0b; background: #fffbeb; }
+.callout-tip { border-left-color: #10b981; background: #ecfdf5; }
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0;
+}
+.data-table th, .data-table td {
+  border: 1px solid var(--border-color);
+  padding: 10px 14px;
+  text-align: left;
+}
+.data-table th {
+  background: #f8fafc;
+  font-weight: 600;
+}
+.diagram-wrapper {
+  margin: 20px 0;
+  text-align: center;
+}
+.diagram-caption {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+  font-style: italic;
+}
+.problem-card {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.problem-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.difficulty.easy { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.medium { background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.hard { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.solution-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.step-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.step-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  background: #e2e8f0;
+  color: #334155;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.step-badge.answer { background: #dcfce7; color: #166534; }
+.final-box {
+  background: #ecfdf5;
+  border-left: 4px solid #10b981;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  color: #065f46;
+}
+.question-item {
+  border-bottom: 1px solid var(--border-color);
+  padding: 20px 0;
+}
+.question-item:last-child { border-bottom: none; }
+.q-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.marks-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: var(--secondary);
+  border: 1px solid #cbd5e1;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+.q-answer {
+  background: #f8fafc;
+  padding: 14px 18px;
+  border-radius: 6px;
+}
+.unit-pagination {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+.btn {
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-outline { border: 1px solid var(--border-color); color: var(--text-main); }
+@media (max-width: 900px) {
+  .sidebar { max-height: 34vh; padding: 16px; }
+  .main-content { width: 100%; padding: 24px 16px 56px; }
+}
+</style>
+</head>
+<body>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · OS Master</a>
+<span class="badge">Semester Exam Prep</span>
+<button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle" type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark mode</span></button>
+</div>
+<nav class="sidebar-nav">
+<h3>All Units &amp; Guides</h3>
+<ul>
+<li><a class="active" href="01-os-foundations.html"><span class="unit-num">01</span> OS Overview &amp; Architecture</a></li>
+<li><a href="02-processes-and-cpu-scheduling.html"><span class="unit-num">02</span> Processes &amp; CPU Scheduling</a></li>
+<li><a href="03-concurrency-and-synchronization.html"><span class="unit-num">03</span> Concurrency &amp; Synchronization</a></li>
+<li><a href="04-deadlocks.html"><span class="unit-num">04</span> Deadlocks &amp; Banker's Algorithm</a></li>
+<li><a href="05-memory-management.html"><span class="unit-num">05</span> Memory Management &amp; Fitting</a></li>
+<li><a href="06-paging-and-replacement.html"><span class="unit-num">06</span> Paging &amp; Virtual Memory</a></li>
+<li><a href="07-io-and-disk-scheduling.html"><span class="unit-num">07</span> I/O &amp; Disk Scheduling</a></li>
+<li><a href="08-file-systems.html"><span class="unit-num">08</span> File System Interface &amp; Storage</a></li>
+<li><a href="09-numericals-and-problem-solving.html"><span class="unit-num">09</span> Master Problem-Solving Guide</a></li>
+<li><a href="10-solved-examples.html"><span class="unit-num">10</span> Comprehensive Solved Bank</a></li>
+<li><a href="11-topic-checklist.html"><span class="unit-num">11</span> Final Topic Checklist</a></li>
+</ul>
+<h3>Unit 1 Sections</h3>
+<ul>
+<li><a href="#theory-section">1. In-Depth Lecture &amp; Theory</a></li>
+<li><a href="#sec-components">1.1 Core Hardware &amp; OS Components</a></li>
+<li><a href="#sec-objectives">1.2 Primary OS Objectives &amp; Views</a></li>
+<li><a href="#sec-kernel-shell">1.3 Kernel vs. Shell &amp; Architecture</a></li>
+<li><a href="#sec-core-functions">1.4 Core OS Functional Modules</a></li>
+<li><a href="#sec-evolution">1.5 Detailed Evolution of OS Generations</a></li>
+<li><a href="#sec-syscalls">1.6 System Calls &amp; Dual-Mode Protection</a></li>
+<li><a href="#sec-structures">1.7 Monolithic vs. Layered vs. Microkernel</a></li>
+<li><a href="#numerical-section">2. In-Depth Numerical &amp; Metrics</a></li>
+<li><a href="#num-util">2.1 CPU Utilization &amp; Multiprogramming Degree</a></li>
+<li><a href="#num-speedup">2.2 Speedup &amp; Throughput in Multiprocessing</a></li>
+<li><a href="#comparison-section">3. Comparative Architectural Studies</a></li>
+<li><a href="#case-section">4. Real-World OS Implementations</a></li>
+<li><a href="#questions-section">5. NMIMS Exam Questions &amp; Marking Guide</a></li>
+</ul>
+</nav>
+</aside>
+
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 1: OS Overview &amp; Architecture</span>
+</div>
+<div class="meta-tag">Unit 1 · 100% Lecture &amp; PYQ Faithful Masterclass</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>Unit 1: Operating System Overview, Structure &amp; Evolution</h1>
+<p class="lead">A comprehensive academic masterclass covering hardware elements, OS definitions, objectives, core management modules (Process, Memory, I/O, Protection), historical evolution from serial processing to multiprocessing, dual-mode execution, system call mechanisms, and structural comparisons (Monolithic vs. Layered vs. Microkernel architectures).</p>
+</header>
+<section class="theory-sources" aria-label="Original theory files"><h2>Original theory files</h2><p>Open the unchanged lecture source or expand its preview here.</p><ul><li><a href="theory/Unit%201.pptx" target="_blank" rel="noopener">Open original: Unit 1.pptx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of Unit 1.pptx" src="theory/previews/Unit%201.pdf"></iframe></div><p><a href="theory/previews/Unit%201.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li></ul></section>
+
+
+
+<!-- SECTION 1: IN-DEPTH THEORY -->
+<section class="module-section" id="theory-section">
+<div class="section-title">
+<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+<span class="cross-ref-badge">Faithful to Unit 1 Slides &amp; NMIMS Past Papers</span>
+</div>
+
+<div class="topic-block" id="sec-components">
+<h3>1.1 Basic Elements of a Computer System &amp; OS Components</h3>
+<p>An operating system functions directly above the physical computing hardware. To master how an OS operates, one must first understand the four fundamental hardware elements that the OS coordinates:</p>
+<ul>
+<li><strong>1. Processor (CPU - Central Processing Unit):</strong> Controls the overall operation of the computer and performs its data processing functions. When there is only one processor, it is referred to as the CPU. It executes instructions fetched from main memory, sequences arithmetic and logic operations, and responds to hardware interrupts.</li>
+<li><strong>2. Main Memory (Primary / Real Memory):</strong> Stores active programs and the operational data currently manipulated by the CPU. Main memory is strictly <em>volatile</em>—its entire contents are erased when the computer loses electrical power. It is directly addressable by the CPU via the memory bus.</li>
+<li><strong>3. I/O Modules:</strong> Move data between the internal computer environment (CPU and RAM) and its external environment. The external environment consists of secondary storage devices (hard drives, SSDs), human-interface devices (keyboard, monitor, mouse), and communications equipment (Ethernet, Wi-Fi network interface cards).</li>
+<li><strong>4. System Bus:</strong> A set of physical electrical pathways providing communication among processors, main memory, and I/O modules. It consists of the Data Bus (carries content), Address Bus (specifies memory/device locations), and Control Bus (transmits timing and command signals).</li>
+</ul>
+
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:680px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- System Bus -->
+  <rect x="50" y="130" width="580" height="40" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2" rx="6"/>
+  <text x="340" y="155" fill="#334155" font-family="'Inter', sans-serif" font-size="14" font-weight="700" text-anchor="middle">SYSTEM BUS (Control, Address, Data Pathways)</text>
+  
+  <!-- CPU -->
+  <rect x="70" y="30" width="140" height="65" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" rx="8"/>
+  <text x="140" y="60" fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle">PROCESSOR (CPU)</text>
+  <text x="140" y="78" fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Registers, ALU, Control Unit</text>
+  <line x1="140" y1="95" x2="140" y2="130" stroke="#3b82f6" stroke-width="3" stroke-dasharray="4,4"/>
+
+  <!-- Main Memory -->
+  <rect x="270" y="30" width="140" height="65" fill="#f0fdf4" stroke="#22c55e" stroke-width="2" rx="8"/>
+  <text x="340" y="60" fill="#15803d" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle">MAIN MEMORY</text>
+  <text x="340" y="78" fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Volatile (RAM), Direct Access</text>
+  <line x1="340" y1="95" x2="340" y2="130" stroke="#22c55e" stroke-width="3" stroke-dasharray="4,4"/>
+
+  <!-- I/O Module -->
+  <rect x="470" y="30" width="140" height="65" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="8"/>
+  <text x="540" y="60" fill="#b45309" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle">I/O MODULES</text>
+  <text x="540" y="78" fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Buffers &amp; Device Controllers</text>
+  <line x1="540" y1="95" x2="540" y2="130" stroke="#f59e0b" stroke-width="3" stroke-dasharray="4,4"/>
+
+  <!-- External Devices below -->
+  <rect x="470" y="205" width="140" height="65" fill="#fff7ed" stroke="#ea580c" stroke-width="1.5" rx="8"/>
+  <text x="540" y="235" fill="#c2410c" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">EXTERNAL DEVICES</text>
+  <text x="540" y="253" fill="#64748b" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Secondary Storage, NIC, Human UI</text>
+  <line x1="540" y1="170" x2="540" y2="205" stroke="#ea580c" stroke-width="2"/>
+</svg>
+<p class="diagram-caption">Figure 1.1: Physical architecture interconnecting Processor, Memory, and I/O Modules via System Bus.</p>
+</div>
+
+<div class="callout callout-def">
+<h4>Formal Definition of an Operating System (NMIMS Standard)</h4>
+<p>An <strong>Operating System (OS)</strong> is a master system software program that controls the execution of application software and acts as an intermediary interface between application programs and raw computer physical hardware.</p>
+</div>
+</div>
+
+<div class="topic-block" id="sec-objectives">
+<h3>1.2 Primary OS Objectives &amp; System Perspectives</h3>
+<p>According to Stallings and the course curriculum, an Operating System is designed to achieve three foundational objectives:</p>
+<ol>
+<li><strong>Convenience:</strong> Makes computer hardware significantly more user-friendly, abstracting brutal register-level machine code and bit manipulation into intuitive high-level operations (e.g., file reads, window drawing).</li>
+<li><strong>Efficiency:</strong> Guarantees that expensive and finite system hardware resources (CPU cycles, RAM partitions, disk sectors, I/O bandwidth) are utilized at the highest productive efficiency possible without starvation or idle wastage.</li>
+<li><strong>Ability to Evolve:</strong> Constructed modularly such that system architects can develop, test, and introduce new hardware drivers, advanced memory managers, and security patches without breaking existing user software services.</li>
+</ol>
+
+<h4>Dual Views of the Operating System:</h4>
+<ul>
+<li><strong>User View:</strong> The user views the operating system as an abstraction layer designed for ease of use, responsiveness, and convenience. The user is isolated from hardware details like disk track seeking, memory bus timing, or interrupt vector arbitration.</li>
+<li><strong>System View (Resource Allocator):</strong> The OS views itself as a resource allocator and control program. Faced with numerous competing processes, it acts as a fair judge deciding how to allocate CPU bursts, memory frames, and device access to prevent conflicts and maximize total system throughput.</li>
+</ul>
+</div>
+
+<div class="topic-block" id="sec-kernel-shell">
+<h3>1.3 Kernel vs. Shell: The Dual-Layer Software Architecture</h3>
+<p>An operating system is broadly segregated into two fundamental components: the internal <strong>Kernel</strong> and the outer <strong>Shell</strong>.</p>
+
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:650px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewBox="0 0 650 320" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer Ring: Users & Apps -->
+  <ellipse cx="325" cy="160" rx="300" ry="140" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="325" y="42" fill="#475569" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle">USER APPLICATIONS (Compilers, Web Browsers, Databases)</text>
+  
+  <!-- Middle Ring: Shell / GUI / System Calls -->
+  <ellipse cx="325" cy="165" rx="220" ry="105" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="325" y="82" fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle">SHELL &amp; SYSTEM CALL INTERFACE (Command Interpreter / GUI)</text>
+  
+  <!-- Inner Ring: Kernel -->
+  <ellipse cx="325" cy="175" rx="140" ry="70" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="325" y="150" fill="#1e3a8a" font-family="'Inter', sans-serif" font-size="13" font-weight="800" text-anchor="middle">KERNEL</text>
+  <text x="325" y="168" fill="#1e40af" font-family="'Inter', sans-serif" font-size="10.5" text-anchor="middle">Scheduler · Memory Mgr · Device Drivers</text>
+  <text x="325" y="184" fill="#1e40af" font-family="'Inter', sans-serif" font-size="10.5" text-anchor="middle">Interrupt Handler · IPC · File System</text>
+  
+  <!-- Core: Hardware -->
+  <rect x="250" y="205" width="150" height="40" fill="#1e293b" stroke="#0f172a" stroke-width="2" rx="6"/>
+  <text x="325" y="230" fill="#ffffff" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">CPU · RAM · DISK · I/O</text>
+</svg>
+<p class="diagram-caption">Figure 1.2: Layered software hierarchy showing Applications, Shell, Kernel, and Physical Hardware.</p>
+</div>
+
+<table class="data-table">
+<thead>
+<tr>
+<th>Architectural Attribute</th>
+<th>Kernel (Core)</th>
+<th>Shell (Outer Interface)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fundamental Role</strong></td>
+<td>The central, foundational core of the OS that directly interacts with physical hardware and manages system resources.</td>
+<td>The command interpreter and user interface software layer wrapping the kernel.</td>
+</tr>
+<tr>
+<td><strong>Execution Privilege</strong></td>
+<td>Runs exclusively in privileged <strong>Kernel Mode (Supervisor Mode / Ring 0)</strong> with unrestricted hardware instruction access.</td>
+<td>Runs strictly in unprivileged <strong>User Mode (Ring 3)</strong>. Cannot execute raw hardware machine instructions.</td>
+</tr>
+<tr>
+<td><strong>Memory Residence</strong></td>
+<td>Permanently resident in high-memory protected RAM throughout computer uptime.</td>
+<td>Loaded as an independent process; can be terminated, swapped, or replaced (e.g., bash, zsh, GUI shells).</td>
+</tr>
+<tr>
+<td><strong>Responsibilities</strong></td>
+<td>CPU scheduling, dispatching, virtual memory management, interrupt handling, inter-process communication (IPC).</td>
+<td>Parsing user command strings, expanding environment variables, file path redirection, invoking system call routines.</td>
+</tr>
+<tr>
+<td><strong>Crash Vulnerability</strong></td>
+<td>A panic or fatal crash inside the kernel crashes the entire computer operating system (Blue Screen of Death / Kernel Panic).</td>
+<td>A shell crash terminates only that individual user terminal session; the core OS continues uninterrupted.</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn">
+<h4>Exam Caution on Slide Phrasing: "Shell as Translator"</h4>
+<p>Lecture Slide 8 states: <em>"Shell helps to convert high level language by user applications to low level which is understood by kernel."</em><br/>
+<strong>Clarification for Exams:</strong> Do NOT confuse the shell with a language compiler (such as GCC) or interpreter (such as Python). The shell translates <em>human user commands and scripts</em> into concrete <strong>system call sequences</strong> that the kernel executes!</p>
+</div>
+</div>
+
+<div class="topic-block" id="sec-core-functions">
+<h3>1.4 Detailed Breakdown of the Four Core OS Management Functions</h3>
+<p>The course curriculum identifies four mandatory management pillars executed continuously by the OS:</p>
+
+<h4>1. Process Management &amp; Scheduling (The Traffic Controller)</h4>
+<p>A <strong>process</strong> is formally defined as a <em>program in execution</em>. It requires CPU time, memory space, files, and I/O devices to perform its computational work. The OS performs the following activities:</p>
+<ul>
+<li><strong>Traffic Controller:</strong> Continuously monitors and tracks the execution status, priority, and resource consumption of every active process in the system.</li>
+<li><strong>Scheduler:</strong> Decides the precise order in which competing processes are granted CPU core access, and the exact quantum of execution time awarded to each.</li>
+<li><strong>Dispatcher:</strong> Performs the physical context switch—saving the registers of the outgoing process and loading the state of the incoming process.</li>
+<li><strong>Lifecycle Management:</strong> Manages process creation (e.g., <code>fork()</code>), synchronization primitives, communication channels, and termination cleanup (<code>exit()</code>).</li>
+</ul>
+
+<h4>2. Memory Management</h4>
+<p>Main memory is a volatile, high-speed array of addressable bytes directly accessible by the CPU. Because RAM capacity is strictly limited compared to demand, the OS must manage it dynamically:</p>
+<ul>
+<li>Tracks which bytes of memory are currently occupied, and identifies which specific process owns them.</li>
+<li>Decides dynamic memory allocation strategies (First-Fit, Best-Fit, Worst-Fit) when processes request heap/stack expansion.</li>
+<li>Enforces <strong>hardware address protection</strong> (via Base and Limit registers) to ensure no user process corrupts kernel memory or another user space.</li>
+<li>Coordinates swapping and virtual memory mechanisms, migrating dormant pages between RAM and secondary swap space on disk.</li>
+</ul>
+
+<h4>3. I/O Device Management &amp; Device Drivers</h4>
+<p>Because multiple processes concurrently request shared, slow physical devices (such as disk drives, network interfaces, or printers), direct access would create catastrophic data corruption. The OS provides:</p>
+<ul>
+<li><strong>Device Drivers:</strong> Highly customized hardware-specific code modules that hide controller register complexities behind a uniform software interface.</li>
+<li><strong>Buffering &amp; Caching:</strong> Storing data in transit in main memory to smooth out severe speed mismatches between high-speed CPUs and slow electromechanical devices.</li>
+<li><strong>Spooling (Simultaneous Peripheral Operations On-Line):</strong> Buffering output intended for non-shareable devices (like printers) onto disk so multiple jobs can finish without blocking the CPU.</li>
+</ul>
+
+<h4>4. Information Protection and Security</h4>
+<p>Protection refers to any mechanism for controlling the access of programs, processes, or users to the resources defined by a computer system. The lecture curriculum groups OS security into four vital pillars:</p>
+<ul>
+<li><strong>Availability:</strong> Guarantees that system hardware and data services remain uninterrupted and accessible when authorized requests occur (preventing Denial-of-Service attacks and deadlock freezes).</li>
+<li><strong>Confidentiality:</strong> Ensures that unauthorized entities, processes, or remote eavesdroppers are strictly blocked from reading confidential system or user files.</li>
+<li><strong>Data Integrity:</strong> Assures that stored information and executing code are protected from unauthorized, unnoticed modification or tampering.</li>
+<li><strong>Authenticity:</strong> Verifies the true identity of users and validating the genuine origin of incoming network messages, transactions, or system requests.</li>
+</ul>
+</div>
+
+<div class="topic-block" id="sec-evolution">
+<h3>1.5 Historical Evolution of Operating Systems</h3>
+<p>The progression of operating systems spans several distinct technological generations, each driven by hardware advances and the urgent economic need to minimize idle processor time:</p>
+
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:720px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewBox="0 0 720 180" xmlns="http://www.w3.org/2000/svg">
+  <!-- Line -->
+  <line x1="60" y1="90" x2="660" y2="90" stroke="#94a3b8" stroke-width="4"/>
+  
+  <!-- Gen 1 -->
+  <circle cx="80" cy="90" r="14" fill="#3b82f6"/>
+  <text x="80" y="65" fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">1940s-50s</text>
+  <text x="80" y="125" fill="#334155" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">Serial Processing</text>
+  <text x="80" y="140" fill="#64748b" font-family="'Inter', sans-serif" font-size="9.5" text-anchor="middle">No OS · Console signup</text>
+
+  <!-- Gen 2 -->
+  <circle cx="220" cy="90" r="14" fill="#3b82f6"/>
+  <text x="220" y="65" fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">1950s-60s</text>
+  <text x="220" y="125" fill="#334155" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">Simple Batch</text>
+  <text x="220" y="140" fill="#64748b" font-family="'Inter', sans-serif" font-size="9.5" text-anchor="middle">Resident Monitor · JCL</text>
+
+  <!-- Gen 3 -->
+  <circle cx="360" cy="90" r="14" fill="#3b82f6"/>
+  <text x="360" y="65" fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">1960s</text>
+  <text x="360" y="125" fill="#334155" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">Multiprogrammed Batch</text>
+  <text x="360" y="140" fill="#64748b" font-family="'Inter', sans-serif" font-size="9.5" text-anchor="middle">Overlap I/O &amp; CPU bursts</text>
+
+  <!-- Gen 4 -->
+  <circle cx="500" cy="90" r="14" fill="#3b82f6"/>
+  <text x="500" y="65" fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">1970s</text>
+  <text x="500" y="125" fill="#334155" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">Time-Sharing (Multitasking)</text>
+  <text x="500" y="140" fill="#64748b" font-family="'Inter', sans-serif" font-size="9.5" text-anchor="middle">Round-robin · Interactive</text>
+
+  <!-- Gen 5 -->
+  <circle cx="640" cy="90" r="14" fill="#10b981"/>
+  <text x="640" y="65" fill="#047857" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">Modern</text>
+  <text x="640" y="125" fill="#334155" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">Multiprocessing</text>
+  <text x="640" y="140" fill="#64748b" font-family="'Inter', sans-serif" font-size="9.5" text-anchor="middle">True parallel multi-core</text>
+</svg>
+<p class="diagram-caption">Figure 1.3: Chronological timeline of Operating System evolution.</p>
+</div>
+
+<h4>1. Serial Processing (Early 1940s – Mid 1950s)</h4>
+<p>Programmers interacted directly with the raw hardware. There was no operating system.</p>
+<ul>
+<li><strong>Operation:</strong> Users signed up for discrete blocks of console machine time on paper sign-up sheets. The programmer loaded programs manually via punched cards or paper tapes, set toggle switches, and observed output via blinking console lamps.</li>
+<li><strong>Severe Inefficiencies:</strong>
+  <ul>
+    <li><em>Scheduling Wastage:</em> Users often finished early (wasting booked time) or ran out of time before finishing debugging.</li>
+    <li><em>Massive Setup Time:</em> Loading compilers, linking paper tapes, setting up input card decks, and mounting tape reels took substantially longer than the actual computation!</li>
+  </ul>
+</li>
+</ul>
+
+<h4>2. Simple Batch Systems (Late 1950s)</h4>
+<p>The first true operating system ancestor: the <strong>Resident Monitor</strong> software program.</p>
+<ul>
+<li><strong>Operation:</strong> A human computer operator collected job decks with similar requirements (e.g., all FORTRAN jobs) and batched them together sequentially onto magnetic tape using an offline computer. The resident monitor permanently occupied a fixed partition of RAM. It automatically read each job, compiled it, executed it, and passed control directly to the next job via <strong>Job Control Language (JCL)</strong> instructions without human pause.</li>
+<li><strong>Limitation:</strong> Uniprogramming bottleneck! While a job waited for slow mechanical card readers or printers, the expensive CPU sat completely idle. CPU utilization remained very poor (often below 15%).</li>
+</ul>
+
+<h4>3. Multiprogrammed Batch Systems</h4>
+<p>When multiple jobs are loaded into memory simultaneously, the CPU can switch between them.</p>
+<ul>
+<li><strong>Mechanism:</strong> When currently executing Job A initiates an I/O transfer, the CPU does not wait. The OS context-switches the CPU to Job B. If Job B later blocks on I/O, CPU switches to Job C. When Job A's I/O finishes, it rejoins the ready pool.</li>
+<li><strong>Hardware Prerequisites:</strong> Multiprogramming required three crucial hardware advances: (a) <em>I/O Interrupts</em> and <em>DMA</em> so CPU and I/O can work concurrently, (b) <em>Memory Protection hardware</em> to isolate jobs, and (c) <em>CPU Timer Interrupts</em> to prevent infinite loops.</li>
+</ul>
+
+<h4>4. Time-Sharing Systems (Multitasking Systems)</h4>
+<p>While multiprogramming aimed to maximize <strong>processor utilization</strong> for batch jobs, Time-Sharing systems were developed to minimize <strong>user response time</strong> for multiple interactive users.</p>
+<ul>
+<li><strong>Mechanism:</strong> Multiple users access the system simultaneously through video terminals. The CPU executes each user's job in rapid succession for a microscopic time slice (typically 10 to 100 milliseconds) called a <strong>time quantum</strong>.</li>
+<li><strong>Psychological Effect:</strong> Because the CPU switches so fast, each user feels they have their own dedicated computer.</li>
+</ul>
+
+<h4>5. Multiprocessing Systems</h4>
+<p>Systems equipped with two or more physical processors (or multi-core CPUs) sharing a common physical memory and peripheral infrastructure. True <strong>parallel computing</strong> is achieved—multiple instructions execute at the exact same physical instant.</p>
+</div>
+
+<div class="topic-block" id="sec-syscalls">
+<h3>1.6 Dual-Mode Operation &amp; System Call Mechanisms</h3>
+<p>To prevent malicious or buggy application code from crashing the computer or illegally reading other users' private data, modern computer architectures enforce <strong>Dual-Mode Operation</strong> through hardware:</p>
+
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:680px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg">
+  <!-- User Space Boundary -->
+  <rect x="40" y="25" width="600" height="95" fill="#f8fafc" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,4" rx="8"/>
+  <text x="55" y="45" fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="12" font-weight="700">USER MODE (Mode Bit = 1)</text>
+  
+  <rect x="70" y="55" width="180" height="45" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5" rx="6"/>
+  <text x="160" y="82" fill="#1e40af" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" text-anchor="middle">User App calls open()</text>
+
+  <!-- Kernel Space Boundary -->
+  <rect x="40" y="155" width="600" height="105" fill="#f1f5f9" stroke="#dc2626" stroke-width="1.5" rx="8"/>
+  <text x="55" y="175" fill="#b91c1c" font-family="'Inter', sans-serif" font-size="12" font-weight="700">KERNEL MODE (Mode Bit = 0)</text>
+
+  <rect x="360" y="185" width="240" height="55" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5" rx="6"/>
+  <text x="480" y="210" fill="#991b1b" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">Kernel System Call Handler</text>
+  <text x="480" y="228" fill="#7f1d1d" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Index Syscall Table &amp; Access Disk</text>
+
+  <!-- Arrows -->
+  <!-- Trap Step -->
+  <path d="M 250 78 L 480 78 L 480 180" fill="none" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="360" y="70" fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="11" font-weight="700">1. Software Trap / INT (Mode Bit -&gt; 0)</text>
+
+  <!-- Return Step -->
+  <path d="M 360 215 L 160 215 L 160 105" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-dasharray="4,4"/>
+  <text x="250" y="240" fill="#15803d" font-family="'Inter', sans-serif" font-size="11" font-weight="700">2. Return from Trap (Mode Bit -&gt; 1)</text>
+</svg>
+<p class="diagram-caption">Figure 1.4: Detailed flow of control during a System Call transition across hardware protection rings.</p>
+</div>
+
+<ul>
+<li><strong>Hardware Mode Bit:</strong> A physical bit in the processor status register (PSR).
+  <ul>
+    <li><code>Mode Bit = 0</code>: <strong>Kernel Mode</strong> (Privileged mode, System mode, Supervisor mode). The CPU can execute every instruction in its machine architecture (e.g., disable interrupts, modify page tables, access I/O ports).</li>
+    <li><code>Mode Bit = 1</code>: <strong>User Mode</strong>. The CPU cannot execute privileged instructions. Attempting to do so triggers a hardware protection fault trap to the kernel.</li>
+  </ul>
+</li>
+<li><strong>The System Call Mechanism:</strong> When a user process requires an OS service (such as writing to a file, allocating heap memory, or creating a network socket):
+  <ol>
+    <li>The process loads the system call identifier number into a CPU register (e.g., register <code>RAX</code> on x86_64) and puts parameters in registers or on the stack.</li>
+    <li>The process executes a special hardware trap instruction (such as <code>syscall</code> or <code>int 0x80</code>).</li>
+    <li>The CPU hardware automatically flips the Mode Bit from <code>1</code> to <code>0</code>, saves the user Program Counter (PC), and jumps directly to a fixed kernel entry point defined in the <strong>Interrupt Vector Table (IVT)</strong>.</li>
+    <li>The kernel inspects the syscall number, validates all input pointers to prevent buffer overruns, executes the requested service, writes return values to registers, and executes the privileged <code>sysret</code>/<code>iret</code> instruction.</li>
+    <li>The CPU hardware flips the Mode Bit back from <code>0</code> to <code>1</code> and resumes the user application immediately following the call instruction.</li>
+  </ol>
+</li>
+</ul>
+
+<h4>Taxonomy of Core System Calls (Exam Reference Matrix):</h4>
+<table class="data-table">
+<thead>
+<tr>
+<th>Category</th>
+<th>POSIX / UNIX System Calls</th>
+<th>Windows Win32 API Equivalents</th>
+<th>System Operation Performed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Process Control</strong></td>
+<td><code>fork()</code>, <code>exec()</code>, <code>wait()</code>, <code>exit()</code></td>
+<td><code>CreateProcess()</code>, <code>WaitForSingleObject()</code></td>
+<td>Spawn new child process, replace address space, synchronize lifecycle.</td>
+</tr>
+<tr>
+<td><strong>File Manipulation</strong></td>
+<td><code>open()</code>, <code>read()</code>, <code>write()</code>, <code>close()</code></td>
+<td><code>CreateFile()</code>, <code>ReadFile()</code>, <code>WriteFile()</code></td>
+<td>Create file descriptors, stream byte blocks to/from persistent disk storage.</td>
+</tr>
+<tr>
+<td><strong>Device Management</strong></td>
+<td><code>ioctl()</code>, <code>read()</code>, <code>write()</code></td>
+<td><code>DeviceIoControl()</code></td>
+<td>Query device capabilities, send control codes to physical controllers.</td>
+</tr>
+<tr>
+<td><strong>Information / Status</strong></td>
+<td><code>getpid()</code>, <code>alarm()</code>, <code>sleep()</code></td>
+<td><code>GetCurrentProcessId()</code>, <code>SetTimer()</code></td>
+<td>Read system clock, retrieve process identification credentials.</td>
+</tr>
+<tr>
+<td><strong>Communications &amp; IPC</strong></td>
+<td><code>pipe()</code>, <code>shmget()</code>, <code>socket()</code></td>
+<td><code>CreatePipe()</code>, <code>CreateFileMapping()</code></td>
+<td>Create unidirectional byte pipes, map shared RAM, bind network sockets.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="topic-block" id="sec-structures">
+<h3>1.7 Operating System Structures: Monolithic vs. Layered vs. Microkernel</h3>
+<p>The internal structural organization of an OS kernel determines its performance, reliability, and ease of maintenance. The curriculum contrasts two primary architectures, with modern microkernels representing the evolutionary third:</p>
+
+<div class="diagram-wrapper">
+<svg style="width:100%; max-width:700px; height:auto; display:block; margin:20px auto; background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);" viewBox="0 0 700 240" xmlns="http://www.w3.org/2000/svg">
+  <!-- Monolithic Box -->
+  <rect x="30" y="20" width="290" height="200" fill="#f8fafc" stroke="#3b82f6" stroke-width="2" rx="8"/>
+  <text x="175" y="45" fill="#1d4ed8" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle">MONOLITHIC KERNEL</text>
+  
+  <rect x="50" y="60" width="250" height="145" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5" rx="6"/>
+  <text x="175" y="85" fill="#1e40af" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">SINGLE LARGE ADDRESS SPACE (Ring 0)</text>
+  <rect x="65" y="100" width="105" height="40" fill="#ffffff" stroke="#93c5fd" rx="4"/>
+  <text x="117" y="125" fill="#1e3a8a" font-size="10" font-weight="600" text-anchor="middle">File System</text>
+  <rect x="180" y="100" width="105" height="40" fill="#ffffff" stroke="#93c5fd" rx="4"/>
+  <text x="232" y="125" fill="#1e3a8a" font-size="10" font-weight="600" text-anchor="middle">IPC &amp; Signals</text>
+  <rect x="65" y="150" width="105" height="40" fill="#ffffff" stroke="#93c5fd" rx="4"/>
+  <text x="117" y="175" fill="#1e3a8a" font-size="10" font-weight="600" text-anchor="middle">CPU Sched</text>
+  <rect x="180" y="150" width="105" height="40" fill="#ffffff" stroke="#93c5fd" rx="4"/>
+  <text x="232" y="175" fill="#1e3a8a" font-size="10" font-weight="600" text-anchor="middle">Device Drivers</text>
+
+  <!-- Layered Box -->
+  <rect x="380" y="20" width="290" height="200" fill="#f8fafc" stroke="#10b981" stroke-width="2" rx="8"/>
+  <text x="525" y="45" fill="#047857" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle">LAYERED ARCHITECTURE</text>
+  
+  <rect x="400" y="60" width="250" height="32" fill="#eff6ff" stroke="#3b82f6" rx="4"/>
+  <text x="525" y="81" fill="#1d4ed8" font-size="10" font-weight="700" text-anchor="middle">Layer N: User Interface / Shell</text>
+  
+  <rect x="400" y="98" width="250" height="32" fill="#f0fdf4" stroke="#22c55e" rx="4"/>
+  <text x="525" y="119" fill="#15803d" font-size="10" font-weight="700" text-anchor="middle">Layer 3: File System &amp; Buffers</text>
+  
+  <rect x="400" y="136" width="250" height="32" fill="#fef3c7" stroke="#f59e0b" rx="4"/>
+  <text x="525" y="157" fill="#b45309" font-size="10" font-weight="700" text-anchor="middle">Layer 2: Memory &amp; Device Drivers</text>
+
+  <rect x="400" y="174" width="250" height="32" fill="#fee2e2" stroke="#dc2626" rx="4"/>
+  <text x="525" y="195" fill="#991b1b" font-size="10" font-weight="700" text-anchor="middle">Layer 0: Raw Hardware</text>
+</svg>
+<p class="diagram-caption">Figure 1.5: Comparison of Monolithic single-binary address space vs. strictly hierarchical Layered OS.</p>
+</div>
+
+<h4>1. Monolithic Operating Systems (e.g., Traditional UNIX, Linux, MS-DOS)</h4>
+<p>The entire operating system—including the CPU scheduler, memory allocator, virtual file system, networking stack, and thousands of device drivers—is compiled together into a <strong>single massive binary image</strong> executing entirely within supervisor kernel mode (Ring 0).</p>
+<ul>
+<li><strong>Major Advantages:</strong>
+  <ul>
+    <li><em>Extreme Performance Speed:</em> Every subsystem shares the exact same virtual address space. Components communicate via direct, lightning-fast C function calls without memory copying or context-switching overhead.</li>
+    <li><em>Direct Hardware Access:</em> Streamlined data paths for intensive computational tasks and high-throughput networking.</li>
+  </ul>
+</li>
+<li><strong>Severe Disadvantages:</strong>
+  <ul>
+    <li><em>Zero Fault Isolation:</em> Because all components share Ring 0 memory without memory protection barriers, a single null-pointer dereference or bug in a third-party printer driver instantly crashes the entire operating system (Kernel Panic / BSOD).</li>
+    <li><em>Difficult Maintenance &amp; Evolution:</em> Highly intertwined monolithic codebases make it challenging to modify or update one component without unpredictable side effects in distant subsystems.</li>
+  </ul>
+</li>
+</ul>
+
+<h4>2. Layered Operating Systems (e.g., THE Multiprogramming System by Dijkstra)</h4>
+<p>The OS is broken into a strict hierarchy of discrete modular layers, numbered from Layer 0 (the underlying raw computer hardware) up to Layer N (the top-level User Interface / Shell).</p>
+<ul>
+<li><strong>Strict Axiom of Interaction:</strong> Each layer \(M\) is implemented solely using the operations provided by lower-level layer \(M-1\), and can only be invoked by higher-level layer \(M+1\).</li>
+<li><strong>Major Advantages:</strong>
+  <ul>
+    <li><em>Simplicity of Debugging and Verification:</em> The first layer (Layer 0) is verified and debugged independently. Once verified, Layer 1 is constructed on top of it. If an error occurs during Layer 1 testing, the bug must reside exclusively within Layer 1 code, because Layer 0 has already been proven correct!</li>
+    <li><em>Modularity:</em> Implementation details of a layer can be modified freely provided its exposed interface remains stable.</li>
+  </ul>
+</li>
+<li><strong>Severe Disadvantages:</strong>
+  <ul>
+    <li><em>Difficult Architectural Partitioning:</em> It is exceptionally difficult to define layers cleanly. For example, the virtual memory manager needs the backing store disk driver, but the disk driver needs memory buffers managed by the memory manager!</li>
+    <li><em>Severe Performance Overhead:</em> A simple user request must cross 5 to 7 distinct software layers, incurring function invocation and parameter transformation overhead at each boundary.</li>
+  </ul>
+</li>
+</ul>
+</div>
+</section>
+
+<div class="topic-block" id="sec-os-types-policy">
+<h3>1.8 Additional OS Types in the Course Lab Scope</h3>
+<p>The lab policy also asks students to study Real-Time, Distributed, and Mobile Operating Systems. These describe different operating constraints and deployment settings; they are not mutually exclusive categories.</p>
+<table class="data-table"><thead><tr><th>Type</th><th>Core idea</th><th>Typical concern</th></tr></thead><tbody>
+<tr><td>Real-Time OS (RTOS)</td><td>Schedules work against timing deadlines.</td><td>Predictable, bounded response; hard RTOS deadlines are correctness requirements.</td></tr>
+<tr><td>Distributed OS</td><td>Coordinates networked computers and presents services across multiple machines.</td><td>Communication delay, partial failures, and coordination.</td></tr>
+<tr><td>Mobile OS</td><td>Manages phones/tablets and their application ecosystem.</td><td>Power, wireless connectivity, sensors, and constrained resources.</td></tr>
+</tbody></table>
+</div>
+<div class="topic-block" id="sec-syscall-categories">
+<h3>1.9 System Call Categories (Lab Policy)</h3>
+<table class="data-table"><thead><tr><th>Category</th><th>Purpose</th><th>Examples</th></tr></thead><tbody>
+<tr><td>Process control</td><td>Create, execute, wait for, or end a process.</td><td><code>fork()</code>, <code>exec()</code>, <code>wait()</code>, <code>exit()</code></td></tr>
+<tr><td>File management</td><td>Open, read, write, and close files.</td><td><code>open()</code>, <code>read()</code>, <code>write()</code>, <code>close()</code></td></tr>
+<tr><td>Device management</td><td>Request or control device operations.</td><td>Device-specific control and I/O calls</td></tr>
+<tr><td>Information maintenance</td><td>Read or update process and system information.</td><td><code>getpid()</code>, <code>getppid()</code>, <code>gettimeofday()</code></td></tr>
+<tr><td>Communication</td><td>Exchange data or coordinate processes.</td><td>Pipes, sockets, and message-queue operations</td></tr>
+</tbody></table>
+<p>Names and availability vary by operating system; these are category examples, not a portable guarantee that every OS exposes identical calls.</p>
+</div>
+
+<!-- SECTION 2: NUMERICALS & METRICS -->
+<section class="module-section" id="numerical-section">
+<div class="section-title">
+<h2>2. In-Depth Numerical Explanations (Step-by-Step)</h2>
+<span class="cross-ref-badge">Performance Metrics &amp; Speedup Calculations</span>
+</div>
+
+<div class="problem-card" id="num-util">
+<div class="problem-header">
+<span class="difficulty easy">Core Problem Type</span>
+<h3>Problem 1.1: CPU Utilization Under Uniprogramming vs. Multiprogramming</h3>
+</div>
+<p><strong>Problem Statement:</strong> Consider a computer running processes that spend an average fraction \(p = 0.70\) (70%) of their execution time waiting for I/O operations to complete.
+<br/>(a) Calculate CPU utilization in a uniprogramming environment.
+<br/>(b) Using the probabilistic model of multiprogramming, calculate the resulting CPU utilization when the degree of multiprogramming is increased to \(n = 4\) processes loaded simultaneously in main memory.</p>
+
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">GIVEN</span>
+<div>
+<p>I/O wait fraction: \(p = 0.70\)</p>
+<p>Uniprogramming degree: \(n_1 = 1\)</p>
+<p>Multiprogramming degree: \(n_2 = 4\)</p>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge">FORMULA</span>
+<div>
+<p>In a uniprogramming system, CPU utilization is simply the computing fraction:</p>
+$$\text{CPU Utilization}_{\text{uniprogramming}} = 1 - p$$
+<p>Under the independent probabilistic model of multiprogramming (assuming process I/O behaviors are independent), the probability that all \(n\) processes are simultaneously blocked waiting for I/O is \(p^n\). The CPU utilization is the probability that at least one process is ready to compute:</p>
+$$\text{CPU Utilization}_{\text{multiprogramming}} = 1 - p^n$$
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge">CALCULATION</span>
+<div>
+<p><strong>Part (a): Uniprogramming Utilization:</strong></p>
+$$\text{Util}_1 = 1 - 0.70 = 0.30 = \mathbf{30\%}$$
+<p><em>Reasoning:</em> For every 10 seconds of wall-clock time, the CPU is completely idle for 7 seconds waiting for hardware I/O controllers.</p>
+<p><strong>Part (b): Multiprogramming with \(n = 4\) processes:</strong></p>
+$$\text{Probability all 4 processes are blocked} = (0.70)^4 = 0.2401$$
+$$\text{Util}_4 = 1 - 0.2401 = 0.7599 = \mathbf{75.99\%}$$
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge answer">FINAL RESULT</span>
+<div>
+<p class="final-box">\(\text{Uniprogramming CPU Utilization} = \mathbf{30\%} \quad \longrightarrow \quad \text{Multiprogrammed (Degree 4) Utilization} = \mathbf{75.99\%}\)</p>
+<p class="hint">Reasonableness Check: By overlapping I/O wait times with CPU bursts across 4 concurrent jobs, CPU utilization increases by a factor of 2.53× (from 30% to nearly 76%), preventing expensive processor silicon from sitting idle.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="problem-card" id="num-speedup">
+<div class="problem-header">
+<span class="difficulty medium">Intermediate Problem Type</span>
+<h3>Problem 1.2: Multiprocessor Speedup &amp; Amdahl's Law Scaling</h3>
+</div>
+<p><strong>Problem Statement:</strong> An operating system workload consists of a program where \(80\%\) of the execution time can be perfectly parallelized across multiple CPU cores, but \(20\%\) consists of strictly sequential tasks (such as initializing hardware and acquiring a global kernel lock) that must run on a single processor core.
+<br/>(a) Calculate the theoretical speedup when running on a dual-core multiprocessor (\(N = 2\)).
+<br/>(b) Calculate the theoretical maximum possible speedup if the system is upgraded to an infinite number of processors (\(N \to \infty\)).</p>
+
+<div class="solution-flow">
+<div class="step-row">
+<span class="step-badge">GIVEN</span>
+<div>
+<p>Parallel fraction: \(P = 0.80\)</p>
+<p>Serial fraction: \(S = 1 - P = 0.20\)</p>
+<p>Processor count: \(N = 2\)</p>
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge">FORMULA</span>
+<div>
+<p>According to <strong>Amdahl's Law</strong>, the speedup \(S(N)\) achieved by an \(N\)-processor system is given by:</p>
+$$S(N) = \frac{1}{(1 - P) + \frac{P}{N}}$$
+$$\lim_{N \to \infty} S(N) = \frac{1}{1 - P} = \frac{1}{S}$$
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge">CALCULATION</span>
+<div>
+<p><strong>Part (a): Speedup on \(N = 2\) processors:</strong></p>
+$$S(2) = \frac{1}{0.20 + \frac{0.80}{2}} = \frac{1}{0.20 + 0.40} = \frac{1}{0.60} \approx \mathbf{1.67\times}$$
+<p><strong>Part (b): Theoretical Maximum Speedup as \(N \to \infty\):</strong></p>
+$$S(\infty) = \frac{1}{0.20} = \mathbf{5.00\times}$$
+</div>
+</div>
+<div class="step-row">
+<span class="step-badge answer">FINAL RESULT</span>
+<div>
+<p class="final-box">\(\text{Speedup for } N=2: \mathbf{1.67\times} \quad | \quad \text{Maximum Speedup Limit } (N \to \infty): \mathbf{5.00\times}\)</p>
+<p class="hint">Reasonableness Check: Even with thousands of CPU cores, the 20% sequential bottleneck caps the maximum possible throughput speedup at 5×. This demonstrates why OS kernels must minimize serialized global locks.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 3: COMPARATIVE STUDIES -->
+<section class="module-section" id="comparison-section">
+<div class="section-title">
+<h2>3. Comprehensive Comparative Studies</h2>
+<span class="cross-ref-badge">Frequent NMIMS Exam Question Formats</span>
+</div>
+
+<h3>Table 1.1: Detailed Comparison of Operating System Generational Types</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Comparison Dimension</th>
+<th>Batch Processing System</th>
+<th>Multiprogramming System</th>
+<th>Time-Sharing System</th>
+<th>Multiprocessing System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Primary Engineering Goal</strong></td>
+<td>Maximize job throughput by automating sequential batch execution.</td>
+<td>Maximize CPU utilization by overlapping I/O wait with compute bursts.</td>
+<td>Minimize response time and provide interactive multi-user service.</td>
+<td>Maximize computational speedup and parallel execution throughput.</td>
+</tr>
+<tr>
+<td><strong>Number of Processors</strong></td>
+<td>Single Central Processor.</td>
+<td>Single Central Processor.</td>
+<td>Single or Multiple Processors.</td>
+<td><strong>Two or more</strong> physical processors or CPU cores.</td>
+</tr>
+<tr>
+<td><strong>User Interaction</strong></td>
+<td>None. Offline submission via punched card decks.</td>
+<td>Very low or none. Batch jobs execute autonomously.</td>
+<td><strong>High direct interactivity</strong> via terminal keyboard / display.</td>
+<td>Variable (supports both interactive and batch tasks).</td>
+</tr>
+<tr>
+<td><strong>CPU Scheduling Mechanism</strong></td>
+<td>First-Come, First-Served (FCFS) job sequencing.</td>
+<td>Preemptive or non-preemptive priority / I/O-bound switching.</td>
+<td><strong>Round Robin (Time Quantum slicing)</strong> with clock interrupts.</td>
+<td>Multi-Queue Symmetric Multiprocessing (SMP) affinity schedulers.</td>
+</tr>
+<tr>
+<td><strong>Key Hardware Requirement</strong></td>
+<td>Resident Monitor memory partition, card reader controllers.</td>
+<td>I/O Interrupts, Direct Memory Access (DMA), Base-Limit registers.</td>
+<td>Programmable interval timer clock chips, paging hardware.</td>
+<td>Shared system bus, cache-coherency logic, inter-processor interrupts.</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Table 1.2: Monolithic vs. Layered vs. Microkernel Architectures</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Feature / Metric</th>
+<th>Monolithic Architecture</th>
+<th>Layered Architecture</th>
+<th>Microkernel Architecture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kernel Size &amp; Complexity</strong></td>
+<td>Massive single binary (millions of lines of C code).</td>
+<td>Medium size; partitioned into discrete nested software layers.</td>
+<td><strong>Minimalist core</strong> (typically under 20,000 lines of code).</td>
+</tr>
+<tr>
+<td><strong>Address Space Separation</strong></td>
+<td>All services (VFS, IPC, drivers) reside in Ring 0 Kernel Space.</td>
+<td>Layers reside in kernel space with strict call hierarchies.</td>
+<td>Only basic IPC, virtual memory primitives, and scheduling remain in Ring 0. Drivers run in <strong>User Space</strong>.</td>
+</tr>
+<tr>
+<td><strong>Inter-Component Communication</strong></td>
+<td>Direct, zero-overhead C function calls and shared memory pointers.</td>
+<td>Strict function calls restricted to immediately adjacent layers.</td>
+<td><strong>Message Passing (IPC)</strong> across user-kernel boundaries.</td>
+</tr>
+<tr>
+<td><strong>Fault Isolation &amp; Reliability</strong></td>
+<td><strong>Extremely Low.</strong> Any driver bug triggers complete kernel panic.</td>
+<td>Moderate. Errors localized to the layer under development.</td>
+<td><strong>Extremely High.</strong> A crashed driver process is simply restarted in user mode without OS crash.</td>
+</tr>
+<tr>
+<td><strong>Execution Performance</strong></td>
+<td><strong>Maximum Speed.</strong> Zero context-switch overhead between subsystems.</td>
+<td>Slowed by multi-layer traversal overhead.</td>
+<td>Slower due to frequent user-to-kernel context switches during IPC.</td>
+</tr>
+<tr>
+<td><strong>Real-World Examples</strong></td>
+<td>Linux, FreeBSD, traditional UNIX, MS-DOS.</td>
+<td>THE Multiprogramming System, early OS/2 layers.</td>
+<td>Mach, QNX (automotive / medical systems), seL4, Minix.</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<!-- SECTION 4: CASE STUDIES -->
+<section class="module-section" id="case-section">
+<div class="section-title">
+<h2>4. Real-World Case Studies &amp; Practical Systems</h2>
+<span class="cross-ref-badge">Industry Architecture Implementations</span>
+</div>
+
+<div class="problem-card">
+<span class="difficulty easy">Enterprise Case Study</span>
+<h3>Case 1: The Linux Hybrid-Monolithic Kernel Design</h3>
+<p>While theoretical textbooks sharply divide operating systems into monolithic versus microkernels, real-world modern systems utilize hybrid engineering compromise. Linux is classified as a <strong>Modular Monolithic Kernel</strong>:</p>
+<ul>
+<li><strong>The Monolithic Core:</strong> The entire kernel executes inside Ring 0 for raw performance speed. Network packet filtering and filesystem access occur without IPC messaging context switches.</li>
+<li><strong>Loadable Kernel Modules (LKMs):</strong> To overcome the monolithic limitation of having to recompile the kernel when adding new hardware, Linux supports dynamically inserting and unloading binary object code (<code>.ko</code> files) at runtime using commands like <code>insmod</code> and <code>rmmod</code>.</li>
+<li><strong>Engineering Tradeoff:</strong> While LKMs provide dynamic modularity, they still run inside Ring 0. Consequently, a buggy LKM can still crash the entire operating system, proving that modularity is distinct from true fault isolation.</li>
+</ul>
+</div>
+
+<div class="problem-card">
+<span class="difficulty hard">Safety-Critical Case Study</span>
+<h3>Case 2: QNX Neutrino Microkernel in Mission-Critical Systems</h3>
+<p>In safety-critical avionics, surgical robotics, and automotive ADAS (Advanced Driver Assistance Systems), a software crash can cost human lives. These systems reject monolithic kernels in favor of verified microkernels like <strong>QNX</strong>:</p>
+<ul>
+<li><strong>Core Principle:</strong> The QNX microkernel contains only ~10,000 lines of code. It manages thread creation, timer interrupts, and fast message passing. The network stack, USB drivers, display manager, and file systems execute as ordinary unprivileged user processes (Ring 3).</li>
+<li><strong>Fault Recovery in Action:</strong> If the Wi-Fi or USB driver encounters a memory corruption bug, only that specific user-space process crashes. The process monitor detects the dead process and transparently relaunches it in 5 milliseconds. The automobile's braking and steering control systems never experience an interruption!</li>
+</ul>
+</div>
+</section>
+
+<!-- SECTION 5: EXAM QUESTIONS & MARKING GUIDE -->
+<section class="module-section" id="questions-section">
+<div class="section-title">
+<h2>5. Possible University Exam Questions &amp; Marking Guide</h2>
+<span class="cross-ref-badge">NMIMS Pattern: 5 &amp; 10 Mark Solutions</span>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">5 Marks</span>
+<h4>Q1. What are the various components of an Operating System? Briefly explain with the help of a neat diagram. [From NMIMS Paper 5]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong></p>
+<ul>
+<li>Neat, well-labeled component diagram: <strong>1 Mark</strong></li>
+<li>Explanation of any four core OS components (1 mark each): <strong>4 Marks</strong></li>
+</ul>
+<p><strong>Model Answer Key:</strong></p>
+<ol>
+<li><strong>Neat Architecture Diagram:</strong> Draw Figure 1.2 showing the concentric layers: Hardware at the center, wrapped by the Kernel (Process, Memory, I/O, File System), wrapped by the Shell / System Call interface, accessed by User Applications.</li>
+<li><strong>Process Management:</strong> Manages processes in execution. The OS creates and deletes processes, schedules CPU burst time, handles context switching, and provides IPC mechanisms.</li>
+<li><strong>Main Memory Management:</strong> Allocates and deallocates memory blocks for active programs, maintains address mapping tables, and prevents processes from accessing memory outside their allocated partitions.</li>
+<li><strong>File System Management:</strong> Provides a uniform logical view of data storage by abstracting raw physical disk sectors into human-readable files and hierarchical directory trees.</li>
+<li><strong>I/O Device Management:</strong> Conceals hardware controller intricacies through device drivers, manages high-speed buffering, caching, and spooling to balance speed discrepancies.</li>
+</ol>
+</div>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">10 Marks</span>
+<h4>Q2. Differentiate between Layered and Monolithic structures of an Operating System. Explain the advantages and disadvantages of each. [From NMIMS Paper 3 &amp; Paper 1]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong></p>
+<ul>
+<li>Structured comparative table across 5 core dimensions: <strong>4 Marks</strong></li>
+<li>Detailed explanation of Monolithic structure (Architecture, Pros &amp; Cons): <strong>3 Marks</strong></li>
+<li>Detailed explanation of Layered structure (Architecture, Pros &amp; Cons): <strong>3 Marks</strong></li>
+</ul>
+<p><strong>Model Answer Key:</strong></p>
+<p>Structure the answer using Table 1.2: contrast kernel space residence, fault isolation, communication mechanisms, modularity, and runtime execution speed. Then provide diagrams for both (Figure 1.5):</p>
+<ul>
+<li><strong>Monolithic Analysis:</strong> Explain that all services share a single contiguous address space in supervisor mode. Advantage: Maximum execution throughput due to direct function calls. Disadvantage: Zero memory isolation—a single driver fault triggers an OS crash (Kernel Panic).</li>
+<li><strong>Layered Analysis:</strong> Explain Dijkstra's model where Layer 0 is hardware and Layer N is UI, with each layer only invoking the layer immediately below it. Advantage: Exceptional ease of modular debugging and verification. Disadvantage: Difficult to define clean layer hierarchies without circular dependencies; performance overhead due to multiple boundary crossings.</li>
+</ul>
+</div>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">5 Marks</span>
+<h4>Q3. What do you understand by Dual-Mode Operation in Operating Systems? Why is it essential for system protection? [From NMIMS Past Papers]</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong></p>
+<ul>
+<li>Definition and hardware Mode Bit explanation: <strong>2 Marks</strong></li>
+<li>User Mode vs. Kernel Mode contrast: <strong>2 Marks</strong></li>
+<li>Protection justification (preventing malicious takeover): <strong>1 Mark</strong></li>
+</ul>
+<p><strong>Model Answer Key:</strong></p>
+<p>Dual-mode operation is a hardware-enforced protection mechanism that separates system execution into two distinct operational states: <strong>User Mode (Mode Bit = 1)</strong> and <strong>Kernel/Supervisor Mode (Mode Bit = 0)</strong>.</p>
+<p>It is vital because user programs must not execute privileged hardware instructions directly (such as clearing interrupts, changing memory base/limit registers, or issuing direct disk controller commands). When a user process attempts to execute a privileged instruction in User Mode, the CPU hardware refuses and triggers a trap to the operating system, terminating the offending application and protecting system stability.</p>
+</div>
+</div>
+
+<div class="question-item">
+<div class="q-header">
+<span class="marks-badge">10 Marks</span>
+<h4>Q4. Trace the historical evolution of Operating Systems from Serial Processing to Modern Multiprocessing Systems. Highlight the key limitations that motivated each transition.</h4>
+</div>
+<div class="q-answer">
+<p><strong>Official Marking Scheme:</strong></p>
+<ul>
+<li>Serial Processing &amp; Simple Batch systems (Resident Monitor, JCL): <strong>3 Marks</strong></li>
+<li>Multiprogrammed Batch Systems (I/O overlap, interrupts, memory protection): <strong>3 Marks</strong></li>
+<li>Time-Sharing Systems (Time quantum, round-robin, interactivity): <strong>2 Marks</strong></li>
+<li>Multiprocessing Systems (Parallelism vs concurrency, speedup): <strong>2 Marks</strong></li>
+</ul>
+<p><strong>Model Answer Key:</strong> Detail the five evolutionary phases chronologically as laid out in Section 1.5 and Figure 1.3. For each generation, state: (1) Operational mechanism, (2) Technological limitation, and (3) Hardware innovation that enabled the subsequent generation.</p>
+</div>
+</div>
+</section>
+
+<!-- SECTION 6: WHAT TO KNOW FOR THE EXAM & CHECKLIST -->
+<section class="module-section" id="exam-checklist">
+<div class="section-title">
+<h2>What to Know for the Exam &amp; Coverage Checklist</h2>
+<span class="cross-ref-badge">Final Revision Anchor</span>
+</div>
+
+<div class="callout callout-tip">
+<h4>Core Exam Takeaways (Quick Memorization Points):</h4>
+<ul>
+<li><strong>Three OS Objectives:</strong> Convenience, Efficiency, Ability to evolve.</li>
+<li><strong>Four Protection Goals:</strong> Availability, Confidentiality, Integrity, Authenticity.</li>
+<li><strong>Kernel vs. Shell:</strong> Kernel is Ring 0 resident privileged core; Shell is Ring 3 command interpreter / GUI.</li>
+<li><strong>Evolution Trigger:</strong> Uniprogramming leaves CPU idle during slow I/O; Multiprogramming overlaps I/O with computation; Time-sharing slices CPU for human interactivity; Multiprocessing provides true hardware parallelism.</li>
+<li><strong>Monolithic vs. Layered:</strong> Monolithic = fast but fragile (zero fault isolation); Layered = modular and easy to debug but hard to define and incurs call overhead.</li>
+</ul>
+</div>
+
+<h3>Final Unit Coverage Checklist</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Topic / Slide Reference</th>
+<th>Coverage Status</th>
+<th>Examinable Concept Mastered</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unit 1 Slides 1–8: Hardware Elements &amp; OS Definition</td>
+<td>Complete</td>
+<td>CPU, RAM, I/O modules, system bus, OS definition, 3 objectives, Kernel vs Shell.</td>
+</tr>
+<tr>
+<td>Unit 1 Slides 9–15: Core Management Functions</td>
+<td>Complete</td>
+<td>Process (traffic controller), Memory, I/O devices, Information Security (4 goals).</td>
+</tr>
+<tr>
+<td>Unit 1 Slides 16–22: OS Historical Evolution</td>
+<td>Complete</td>
+<td>Serial processing, Batch (resident monitor), Multiprogramming, Multitasking, Multiprocessing.</td>
+</tr>
+<tr>
+<td>Unit 1 Slides 23–24: System Calls</td>
+<td>Complete</td>
+<td>Dual-mode operation, mode bit (0 vs 1), hardware trap, 5 categories of system calls.</td>
+</tr>
+<tr>
+<td>Unit 1 Slides 25–30: OS Architectures</td>
+<td>Complete</td>
+<td>Monolithic OS vs Layered OS structures, advantages, disadvantages, microkernel comparison.</td>
+</tr>
+<tr>
+<td>NMIMS Past Paper Questions (Paper 1, 3, 5)</td>
+<td>Complete</td>
+<td>5-mark and 10-mark solved exam questions with official marking rubrics and diagrams.</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<!-- Unit Pagination -->
+<div class="unit-pagination">
+<a class="btn btn-outline" href="../index.html">← Back to Subjects</a>
+<a class="btn btn-primary" href="02-processes-and-cpu-scheduling.html">Next: Unit 2 - Processes &amp; CPU Scheduling →</a>
+</div>
+
+</article>
+</main>
+</div>
+
+<script>
+// Dark / Light Theme Toggle Script
+const toggleBtn = document.getElementById('theme-toggle');
+if (toggleBtn) {
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    toggleBtn.setAttribute('aria-pressed', 'true');
+  }
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.setAttribute('aria-pressed', !isDark);
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unit 8: Digital Video &amp; Compression - NMIMS Master Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="theme.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="ivp-custom-polish">
+:root { --ai-content-width: 980px; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+body { min-width: 320px; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+.main-content { width: calc(100% - 290px); max-width: none; }
+.content-wrapper { max-width: var(--ai-content-width); }
+.top-bar { position: sticky; top: 0; z-index: 90; min-height: 52px; padding: 12px 0; margin-top: -32px; background: color-mix(in srgb, var(--bg-main) 94%, transparent); backdrop-filter: blur(10px); }
+.unit-hero { padding-top: 6px; margin-bottom: clamp(26px, 4vw, 42px); }
+.unit-hero h1 { font-size: clamp(1.8rem, 3.3vw, 2.45rem); letter-spacing: -0.035em; text-wrap: balance; }
+.module-section { scroll-margin-top: 76px; padding: clamp(20px, 3vw, 34px); margin-bottom: clamp(24px, 4vw, 40px); }
+.topic-block { scroll-margin-top: 76px; margin-bottom: 2.2rem; }
+.topic-block p, .topic-block li, .q-answer p, .callout p { max-width: 82ch; line-height: 1.72; }
+.callout { padding: 18px 20px; border-radius: 10px; margin: 16px 0; border-left: 4px solid var(--primary); background: #f1f5f9; }
+.callout-def { border-left-color: #2563eb; background: #eff6ff; }
+.callout-warn { border-left-color: #f59e0b; background: #fffbeb; }
+.callout-tip { border-left-color: #10b981; background: #ecfdf5; }
+.data-table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+.data-table th, .data-table td { border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; }
+.data-table th { background: #f8fafc; font-weight: 600; }
+.problem-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+.problem-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.difficulty.easy { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.medium { background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.hard { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.solution-flow { display: flex; flex-direction: column; gap: 14px; }
+.step-row { display: flex; gap: 16px; align-items: flex-start; }
+.step-badge { font-size: 0.72rem; font-weight: 700; padding: 4px 8px; background: #e2e8f0; color: #334155; border-radius: 4px; white-space: nowrap; }
+.step-badge.answer { background: #dcfce7; color: #166534; }
+.final-box { background: #ecfdf5; border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 6px; font-weight: 600; color: #065f46; }
+.unit-pagination { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+.btn { padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-outline { border: 1px solid var(--border-color); color: var(--text-main); }
+@media (max-width: 900px) { .sidebar { max-height: 34vh; padding: 16px; } .main-content { width: 100%; padding: 24px 16px 56px; } }
+</style>
+</head>
+<body>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · IVP Master</a>
+<span class="badge">Semester Exam Prep</span>
+<button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle" type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark mode</span></button>
+</div>
+<nav class="sidebar-nav">
+<h3>All Units &amp; Guides</h3>
+<ul>
+<li><a href="IVP_Unit_1_Image_Fundamentals.html"><span class="unit-num">01</span> Image Fundamentals</a></li>
+<li><a href="IVP_Unit_2_Image_Enhancement.html"><span class="unit-num">02</span> Image Enhancement</a></li>
+<li><a href="IVP_Unit_3_Image_Transforms.html"><span class="unit-num">03</span> Image Transforms</a></li>
+<li><a href="IVP_Unit_4_Morphological_Image_Processing.html"><span class="unit-num">04</span> Morphological Processing</a></li>
+<li><a href="IVP_Unit_5_Edge_Detection.html"><span class="unit-num">05</span> Edge Detection</a></li>
+<li><a href="IVP_Unit_6_Image_Segmentation.html"><span class="unit-num">06</span> Image Segmentation</a></li>
+<li><a href="IVP_Unit_7_Colour_Image_Processing.html"><span class="unit-num">07</span> Colour Image Processing</a></li>
+<li><a class="active" href="IVP_Unit_8_Digital_Video_and_Compression.html"><span class="unit-num">08</span> Video &amp; Compression</a></li>
+<li><a href="IVP_Numericals_and_Problem_Solving.html"><span class="unit-num">09</span> Master Problem-Solving Guide</a></li>
+<li><a href="IVP_Solved_Examples.html"><span class="unit-num">10</span> Comprehensive Solved Bank</a></li>
+<li><a href="IVP_Topic_Checklist.html"><span class="unit-num">11</span> Final Topic Checklist</a></li>
+</ul>
+</nav>
+</aside>
+
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 8: Video &amp; Compression</span>
+</div>
+<div class="meta-tag">Unit 8 · 100% Motion Estimation Masterclass</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>Unit 8: Digital Video Representation &amp; Motion Estimation</h1>
+<p class="lead">An exhaustive masterclass on digital video representations, temporal vs. spatial redundancy, video frame classifications (Intra I-frames, Predicted P-frames, Bidirectional B-frames), Group of Pictures (GOP), Block-Matching Motion Estimation (MAD and MSE cost metrics), Exhaustive Full Search (EBMA), 2D-Logarithmic Search, and the Three-Step Search (TSS) algorithm.</p>
+</header>
+<section class="theory-sources" aria-label="Original theory files"><h2>Original theory files</h2><p>Open the unchanged lecture source or expand its preview here.</p><ul><li><a href="theory/Video%20processing.pdf" target="_blank" rel="noopener">Open original: Video processing.pdf</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of Video processing.pdf" src="theory/Video%20processing.pdf"></iframe></div><p><a href="theory/Video%20processing.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li><li><a href="theory/Video%20processing.pptx" target="_blank" rel="noopener">Open original: Video processing.pptx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of Video processing.pptx" src="theory/previews/Video%20processing.pdf"></iframe></div><p><a href="theory/previews/Video%20processing.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li><li><a href="theory/IVP%20_%20Unit-8%20_%20Sample%20Numerical.pptx" target="_blank" rel="noopener">Open original: IVP _ Unit-8 _ Sample Numerical.pptx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of IVP _ Unit-8 _ Sample Numerical.pptx" src="theory/previews/IVP%20_%20Unit-8%20_%20Sample%20Numerical.pdf"></iframe></div><p><a href="theory/previews/IVP%20_%20Unit-8%20_%20Sample%20Numerical.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li></ul></section>
+
+
+<!-- SECTION 1: IN-DEPTH THEORY -->
+<section class="module-section" id="theory-section">
+<div class="section-title">
+<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+<span class="cross-ref-badge">Faithful to Video processing.pptx &amp; Syllabus</span>
+</div>
+
+<div class="topic-block" id="sec-redundancy">
+<h3>1.1 Spatial Redundancy vs. Temporal Redundancy (From NMIMS Paper 1 Q1d)</h3>
+<ul>
+<li><strong>Spatial Redundancy:</strong> Correlation between adjacent pixels *within the same frame*. Pixels in a blue sky patch have almost identical values. Exploited via <strong>Intra-frame compression</strong> (DCT transform coding, quantization).</li>
+<li><strong>Temporal Redundancy:</strong> Correlation between pixels *across consecutive time frames*. In 30 fps video, background scenery remains virtually identical from frame \(t\) to frame \(t+1\); only moving foreground objects shift position. Exploited via <strong>Inter-frame compression</strong> (Motion Estimation and Motion Compensation).</li>
+</ul>
+</div>
+
+<div class="topic-block" id="sec-frame-types">
+<h3>1.2 Video Frame Classifications: I, P, and B Frames</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Frame Type</th>
+<th>Encoding Mechanism &amp; Dependency</th>
+<th>Compression Ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>I-Frame (Intra-coded)</strong></td>
+<td>Self-contained; encoded independently of all other frames like a standalone JPEG image. Acts as a random access anchor and recovers from transmission errors.</td>
+<td><strong>Lowest</strong> (Largest file size: \(1\times\)).</td>
+</tr>
+<tr>
+<td><strong>P-Frame (Predictive-coded)</strong></td>
+<td>Forward predicted from the closest preceding I-frame or P-frame. Encodes only motion vectors and residual error differences.</td>
+<td><strong>Medium</strong> (\(\approx 3\times\) smaller than I-frame).</td>
+</tr>
+<tr>
+<td><strong>B-Frame (Bi-directionally predictive)</strong></td>
+<td>Interpolated bidirectionally using both past and future reference frames. Highest compression efficiency.</td>
+<td><strong>Highest</strong> (\(\approx 6\times\) smaller than I-frame).</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="topic-block" id="sec-motion-estimation">
+<h3>1.3 Block-Matching Motion Estimation Algorithms</h3>
+<p>Each current frame is divided into macroblocks of size \(N \times N\) (typically \(16 \times 16\)). For each block, the encoder searches within a search window of parameter \(p\) in the reference frame to find the best match minimizing the <strong>Mean Absolute Difference (MAD)</strong>:</p>
+$$\mathbf{\text{MAD}(dx, dy) = \frac{1}{N^2} \sum_{i=0}^{N-1} \sum_{j=0}^{N-1} |f_t(x+i, y+j) - f_{t-1}(x+i+dx, y+j+dy)|}$$
+
+<h4>1. Exhaustive Block Matching Algorithm (EBMA / Full Search):</h4>
+<p>Evaluates every single candidate position in the search window \([-p, +p]\).
+<br/>Total candidate locations: \(\mathbf{(2p + 1)^2}\).
+<br/><em>Property:</em> Provably optimal (finds absolute global minimum); exceptionally high computational burden.</p>
+
+<h4>2. Three-Step Search (TSS) Algorithm:</h4>
+<p>Fast search with logarithmic step size reduction:</p>
+<ol>
+<li><strong>Step 1:</strong> Set initial step size \(S = \lceil p / 2 \rceil = 4\) (for \(p = 7\)). Test center point and 8 surrounding points at distance \(\pm S\). Pick point with minimum MAD.</li>
+<li><strong>Step 2:</strong> Halve step size \(S = S / 2 = 2\). Center new search at the winner from Step 1; evaluate 8 surrounding points.</li>
+<li><strong>Step 3:</strong> Halve step size \(S = 1\). Evaluate 8 surrounding points at distance \(\pm 1\). The minimum is the final <strong>Motion Vector</strong>!</li>
+</ol>
+<p>Total evaluations in TSS: \(9 + 8 + 8 = \mathbf{25\text{ locations}}\) (compared to \((2\cdot 7 + 1)^2 = \mathbf{225\text{ locations}}\) in Full Search: <strong>9× faster!</strong>).</p>
+</div>
+</section>
+
+<div class="topic-block" id="sec-two-d-log-search">
+<h3>1.4 Two-Dimensional Logarithmic Search</h3>
+<p>Two-Dimensional Logarithmic Search (TDL) reduces motion-search cost by testing the center and points at a coarse step around it, moving the center to the best match, and reducing the step size when the best match is the center. When an off-center point wins, recentre and continue at the current step. Once the step reaches one pixel and the center is best, check the final neighboring points to select the minimum-cost motion vector. Boundary handling and exact point patterns vary by presentation of the algorithm.</p>
+<table class="data-table"><thead><tr><th>Method</th><th>Search strategy</th><th>Strength / limitation</th></tr></thead><tbody>
+<tr><td>Exhaustive block matching</td><td>Evaluates every candidate displacement in the search window.</td><td>Finds the global minimum within the window; highest computation.</td></tr>
+<tr><td>2D logarithmic search</td><td>Coarse-to-fine logarithmic step reduction around successive best locations.</td><td>Fewer evaluations; may miss the global minimum on irregular cost surfaces.</td></tr>
+<tr><td>Three-Step Search</td><td>Tests a fixed nine-point pattern, halves step size, and repeats.</td><td>Predictable low computation; can miss the global minimum.</td></tr>
+</tbody></table>
+<p>All methods typically minimize a block-matching cost such as MAD. Fewer candidate evaluations trade computation for a possibility of a less accurate match; fast searches are not generally guaranteed to equal exhaustive search.</p>
+</div>
+
+<!-- SECTION 2: WHAT TO KNOW FOR THE EXAM -->
+<section class="module-section" id="exam-checklist">
+<div class="section-title">
+<h2>What to Know for the Exam &amp; Coverage Checklist</h2>
+<span class="cross-ref-badge">Final Revision Anchor</span>
+</div>
+
+<div class="callout callout-tip">
+<h4>Core Exam Takeaways:</h4>
+<ul>
+<li><strong>Redundancy:</strong> Spatial = within frame (DCT); Temporal = across time (Motion Vectors).</li>
+<li><strong>Frame Hierarchy:</strong> I-frame (standalone) \(\to\) P-frame (forward) \(\to\) B-frame (bidirectional).</li>
+<li><strong>EBMA Candidates:</strong> \((2p + 1)^2\). For \(p = 7 \implies 225\) searches.</li>
+<li><strong>TSS Efficiency:</strong> Requires only 25 search evaluations for \(p = 7\) (\(9 + 8 + 8\)).</li>
+</ul>
+</div>
+</section>
+
+<!-- Unit Pagination -->
+<div class="unit-pagination">
+<a class="btn btn-outline" href="IVP_Unit_7_Colour_Image_Processing.html">← Previous: Unit 7 - Colour Processing</a>
+<a class="btn btn-primary" href="IVP_Numericals_and_Problem_Solving.html">Next: Master Problem-Solving Guide →</a>
+</div>
+
+</article>
+</main>
+</div>
+
+<script>
+const toggleBtn = document.getElementById('theme-toggle');
+if (toggleBtn) {
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    toggleBtn.setAttribute('aria-pressed', 'true');
+  }
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.setAttribute('aria-pressed', !isDark);
+  });
+}
+</script>
+</body>
+</html>

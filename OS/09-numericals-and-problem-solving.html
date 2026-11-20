@@ -1,21 +1,1282 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script>
-try{const t=localStorage.getItem('nmims-ai-color-theme');const d=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(!t&&d))document.documentElement.dataset.theme='dark'}catch(_){}
-</script><title>OS Numericals and Problem-Solving Guide</title><style>:root{color-scheme:light;--ink:#17243b;--muted:#53647a;--blue:#155eef;--pale:#eef4ff;--line:#d9e2ef;--gold:#fff4d6}*{box-sizing:border-box}body{margin:0;background:#f6f8fb;color:var(--ink);font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:980px;margin:auto;padding:32px 22px 70px}header{background:linear-gradient(125deg,#102b52,#155eef);color:white;padding:32px;border-radius:18px;margin-bottom:24px}h1{line-height:1.15;margin:0 0 10px}header p{margin:0;color:#e7efff}section,article{background:white;border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0}h2{margin-top:0;color:#173e74}h3{color:#244f86}li{margin:.28em 0}.callout{background:var(--pale);border-left:4px solid var(--blue);padding:12px 16px;border-radius:8px}.warn{background:var(--gold);padding:12px 16px;border-radius:8px}table{border-collapse:collapse;width:100%;margin:12px 0}td,th{border:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}th{background:#eef4ff}code,.formula{background:#f1f4f8;padding:2px 5px;border-radius:4px}.diagram{font-family:ui-monospace,monospace;background:#f3f6fa;padding:14px;border-radius:8px;white-space:pre-wrap}details{border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:8px 0}summary{font-weight:650;cursor:pointer}footer{font-size:.9em;color:var(--muted);padding:16px;text-align:center}@media print{body{background:white}main{max-width:none;padding:0}header,section,article{break-inside:avoid}}
-/* Shared NMIMS light/dark theme */
-html{color-scheme:light;--os-bg:#f6f8fb;--os-ink:#17243b;--os-muted:#53647a;--os-card:#fff;--os-line:#d9e2ef;--os-pale:#eef4ff;--os-gold:#fff4d6;--os-code:#f1f4f8;--os-diagram:#f3f6fa}
-html[data-theme="dark"]{color-scheme:dark;--os-bg:#171b20;--os-ink:#edf2f8;--os-muted:#b4c0ce;--os-card:#222a33;--os-line:#3c4856;--os-pale:#263645;--os-gold:#433923;--os-code:#303a46;--os-diagram:#202a34}
-html[data-theme="dark"] body{background:var(--os-bg);color:var(--os-ink)}
-html[data-theme="dark"] section,html[data-theme="dark"] article{background:var(--os-card);border-color:var(--os-line)}
-html[data-theme="dark"] h2,html[data-theme="dark"] h3{color:#9bc5ff}
-html[data-theme="dark"] .callout,html[data-theme="dark"] th{background:var(--os-pale)}
-html[data-theme="dark"] .warn{background:var(--os-gold)}
-html[data-theme="dark"] td,html[data-theme="dark"] th,html[data-theme="dark"] details{border-color:var(--os-line)}
-html[data-theme="dark"] code,html[data-theme="dark"] .formula{background:var(--os-code)}
-html[data-theme="dark"] .diagram{background:var(--os-diagram)}
-html[data-theme="dark"] footer{color:var(--os-muted)}
-.theme-bar{display:flex;justify-content:flex-end;margin:0 0 10px}
-.theme-switch{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--os-line);border-radius:9px;background:var(--os-card);color:var(--os-ink);padding:8px 12px;font:600 .9rem/1.2 system-ui,-apple-system,Segoe UI,sans-serif;cursor:pointer}
-.theme-switch:hover{filter:brightness(.96)}
-.theme-switch:focus-visible{outline:3px solid #6ca8ff;outline-offset:2px}
-</style><main><div class="theme-bar"><button class="theme-switch" id="shared-theme-toggle" type="button" aria-pressed="false"><span class="theme-icon" aria-hidden="true">☾</span><span class="theme-label">Dark mode</span></button></div><header><h1>OS Numericals and Problem-Solving Guide</h1><p>Recognition cues, repeatable methods, worked calculations, and error checks</p></header><div class="warn"><b>Scope note:</b> No Operating Systems course policy was present in OS. The only syllabus PDF found is for Artificial Intelligence and does not apply to these slides. Therefore the checklist follows the OS slide decks; exam format, weighting, exclusions, and instructor-specific marking rules could not be verified. Assumptions and ambiguous source points are flagged below.</div><section><h2>1. CPU scheduling: Gantt charts and metrics</h2><p><b>Recognize:</b> process table with arrival/burst/priority/quantum. First define whether policy is preemptive and tie rule. Draw time axis. At each decision, choose from ready jobs only; handle new arrivals before choosing at that instant as the prompt’s convention requires.</p><ol><li>Record each process’s first start and completion.</li><li>Response = first start − arrival.</li><li>Turnaround = completion − arrival.</li><li>Waiting = turnaround − CPU burst (single-burst model with no extra service; otherwise sum ready-queue intervals).</li><li>Average = sum / number of processes. Add units (ms, etc.).</li></ol><p>FCFS uses arrival sequence; nonpreemptive SJF chooses shortest burst only when CPU becomes free; SRTF re-evaluates remaining burst at arrivals; priority requires high/low convention; RR expires at quantum and queues unfinished work at tail. Context-switch time is included only if stated.</p></section><section><h2>2. Banker safety/request algorithm</h2><p><b>Recognize:</b> Allocation, Max, Available vectors/matrices, safety or request query. First compute Need=Max−Allocation. Compare componentwise.</p><ol><li>Safety: Work=Available, Finish=false.</li><li>Find a process with Need≤Work; mark finish and add its Allocation to Work.</li><li>Repeat; list safe sequence if all finish; otherwise no safe sequence is found.</li><li>Request: validate Request≤Need and ≤Available. Pretend allocate; rerun safety; commit if safe, else roll back.</li></ol><p>Units are resource instances, not time. Never compare summed totals when one resource component is deficient.</p></section><section><h2>3. Page-replacement trace</h2><p><b>Recognize:</b> reference string and fixed frame count; asked for faults/replacements. Make a row per reference and one column per frame. A miss while empty increases faults but is not a replacement; a miss with full frames is both. FIFO tracks load age; LRU tracks most recent use; OPT looks forward.</p><p>For OPT, if future-use distances tie, any tied victim yields a valid fault count for that trace; say your tie choice. At the end, fault rate = faults / references if requested.</p></section><section><h2>4. Disk head movement</h2><p><b>Recognize:</b> request queue, head start, scheduling policy. Show sequence including any endpoint or wrap. For each step compute |next−current| cylinders; sum. For SCAN/C-SCAN disk endpoints and initial direction are necessary. LOOK/C-LOOK use request extremes, not physical bounds. Do not label cylinder movement as seek time unless a timing model is provided.</p></section><section><h2>5. Worked algorithm example: CPU scheduling</h2><p>Given P1(AT=0,BT=5), P2(AT=1,BT=2), SRTF. At t=0 only P1 is ready: run to t=1. P2 arrives; P1 has 4 remaining, so P2 is shortest and runs t=1–3. Then P1 runs t=3–7.</p><table><tr><th>Process</th><th>CT</th><th>TAT=CT−AT</th><th>WT=TAT−BT</th><th>RT=first−AT</th></tr><tr><td>P1</td><td>7</td><td>7</td><td>2</td><td>0</td></tr><tr><td>P2</td><td>3</td><td>2</td><td>0</td><td>0</td></tr><tr><td>Average</td><td></td><td>4.5</td><td>1</td><td>0</td></tr></table><p>Check: total CPU service 5+2=7 time units; chart spans 0–7 with no idle gap.</p></section><section><h2>6. Worked algorithm example: page replacement</h2><p>Three frames; sequence 1,2,3,2,1,4; FIFO. 1,2,3 each fault and fill frames [1,2,3]. 2 and 1 hit. Reference 4 faults; evict oldest loaded page 1, giving [4,2,3]. Total=4 faults; 1 replacement (the first three faults were loads into empty frames). Rate=4/6=66.7%.</p><p>Why FIFO victim is 1: it entered before 2 and 3; recent use does not reset FIFO age.</p></section><section><h2>7. Worked algorithm example: disk FCFS</h2><p>Requests 70,140,50,125,30,25,160; head=60. FCFS path 60→70→140→50→125→30→25→160. Movements: 10+70+90+75+95+5+135=480 cylinders. Check every term is nonnegative absolute difference. No disk bounds are needed for FCFS.</p></section><section><h2>Common errors and self-test</h2><h3>Self-test (answers follow)</h3><details><summary>For an arrival at 4, first run at 9, response time?</summary><p>5 time units.</p></details><details><summary>Need=(7,2), Work=(8,1): can process finish?</summary><p>No; second component 2>1.</p></details><details><summary>Does an initial page load count as a replacement?</summary><p>No. It is a fault, but there was no victim to replace.</p></details><details><summary>Disk path 10→4→13 has total movement?</summary><p>|4−10|+|13−4|=6+9=15 cylinders.</p></details><details><summary>What should you do if disk direction is unspecified for SCAN?</summary><p>State the assumption explicitly or report both possible paths if the outcome depends on direction.</p></details></section><section><h2>5.5 Dynamic storage allocation numericals</h2><p><b>Recognize:</b> ordered hole list and ordered requests; simulate each policy sequentially and update leftover hole sizes.</p><p>For holes 100,500,200,300,600 K and requests 212,417,112,426 K: first-fit serves 212 from 500 (288 left), 417 from 600 (183 left), 112 from the 288 remainder (176 left), then cannot place 426. Best-fit serves requests from 300 (88 left), 500 (83 left), 200 (88 left), and 600 (174 left). Worst-fit serves 212 from 600 (388 left), 417 from 500 (83 left), 112 from 388 (276 left), then cannot place 426. The result depends on order; record holes after every allocation.</p></section>
-<section><h2>5.6 Address translation, TLB, and timing calculations</h2><p><b>Paging:</b> page p=⌊A/S⌋, offset d=A mod S. Look up frame f; physical address=fS+d. Verify 0≤d&lt;S.</p><p><b>Segmentation:</b> for logical &lt;s,d&gt;, ensure segment s exists and d&lt;limit[s]; physical=base[s]+d.</p><p><b>TLB effective access time:</b> if m=10 ns and hit ratio h=.80, with zero lookup overhead, EAT=.8(10)+.2(20)=12 ns. At h=.99, EAT=10.1 ns. Check that miss path includes page-table access and data access.</p><p><b>Swapping transfer:</b> time=size/rate. For 100 MB at 50 MB/s, one-way=2 s; swap out plus swap in=4 s, excluding overhead.</p></section><section><h2>What to know for the exam</h2><p>Be ready to define the central terms, compare mechanisms using their assumptions and trade-offs, trace a process or algorithm step by step, and justify the result. State units and conventions whenever a question supplies them.</p></section><section><h2>Final coverage checklist</h2><table><tr><th>Source section</th><th>Coverage in this file</th></tr><tr><td>Unit 2 scheduling examples and criteria</td><td>Gantt chart, completion/turnaround/wait/response, FCFS/SJF/SRTF/RR/priority</td></tr><tr><td>Unit 4 Banker/RAG</td><td>Need/Available vectors, safety check, request validation and rollback</td></tr><tr><td>Paging companion deck slide 8</td><td>3-frame page reference sequence, OPT/FIFO/LRU</td></tr><tr><td>Disk Scheduling slide 9</td><td>FCFS/SSTF/SCAN/C-SCAN/LOOK/C-LOOK sequence; start head 60</td></tr></table></section><footer>Prepared from the OS course files in NMIMS-STUDY/OS/theory. Past papers were treated as exam-pattern context only.</footer></main></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OS Master Numericals & Problem-Solving Guide - NMIMS</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="theme.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$','$'],['\\(','\\)']],
+    displayMath: [['$$','$$'],['\\[','\\]']],
+    processEscapes: true
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+:root { --ai-content-width: 1020px; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+body { min-width: 320px; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+.main-content { width: calc(100% - 290px); max-width: none; }
+.content-wrapper { max-width: var(--ai-content-width); }
+.top-bar { position: sticky; top: 0; z-index: 90; min-height: 52px; padding: 12px 0; margin-top: -32px; background: color-mix(in srgb, var(--bg-main) 94%, transparent); backdrop-filter: blur(10px); }
+.unit-hero h1 { font-size: clamp(1.8rem,3.3vw,2.45rem); letter-spacing: -0.035em; }
+.module-section { scroll-margin-top: 76px; padding: clamp(20px,3vw,34px); margin-bottom: clamp(24px,4vw,40px); }
+.problem-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 28px; margin-bottom: 28px; }
+[data-theme="dark"] .problem-card { background: #1e293b; }
+.problem-header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.difficulty.pyq  { background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 5px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.basic{ background: #dcfce7; color: #15803d; padding: 4px 10px; border-radius: 5px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.intermediate{ background: #fef3c7; color: #b45309; padding: 4px 10px; border-radius: 5px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.challenging{ background: #ede9fe; color: #6d28d9; padding: 4px 10px; border-radius: 5px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.marks-badge { font-size: 0.75rem; font-weight: 700; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 3px 8px; border-radius: 4px; }
+.problem-stmt { border-left: 4px solid #3b82f6; padding: 14px 18px; background: #eff6ff; border-radius: 0 8px 8px 0; margin-bottom: 18px; }
+[data-theme="dark"] .problem-stmt { background: #1e3a5f; border-color: #60a5fa; }
+.solution-flow { display: flex; flex-direction: column; gap: 16px; }
+.step-row { display: flex; gap: 16px; align-items: flex-start; }
+.step-badge { font-size: 0.72rem; font-weight: 800; padding: 5px 10px; border-radius: 4px; white-space: nowrap; min-width: 72px; text-align: center; background: #e2e8f0; color: #334155; }
+.step-badge.given  { background: #dbeafe; color: #1e40af; }
+.step-badge.formula{ background: #ede9fe; color: #5b21b6; }
+.step-badge.calc   { background: #fef3c7; color: #92400e; }
+.step-badge.answer { background: #dcfce7; color: #166534; }
+.step-badge.trap   { background: #fee2e2; color: #991b1b; }
+.step-badge.gantt  { background: #f0fdf4; color: #14532d; }
+.final-box { background: #ecfdf5; border-left: 4px solid #10b981; padding: 14px 18px; border-radius: 6px; font-weight: 700; color: #065f46; margin-top: 6px; }
+[data-theme="dark"] .final-box { background: #064e3b; color: #6ee7b7; border-color: #34d399; }
+.exam-trap-box { background: #fff5f5; border-left: 4px solid #ef4444; padding: 14px 18px; border-radius: 6px; margin-top: 10px; color: #7f1d1d; }
+[data-theme="dark"] .exam-trap-box { background: #450a0a; color: #fca5a5; border-color: #ef4444; }
+.exam-trap-box strong { color: #b91c1c; }
+.data-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.93rem; }
+.data-table th, .data-table td { border: 1px solid var(--border-color); padding: 9px 13px; text-align: left; }
+.data-table th { background: #f1f5f9; font-weight: 700; }
+[data-theme="dark"] .data-table th { background: #1e293b; }
+.data-table tr.highlight td { background: #fef9c3; font-weight: 600; }
+[data-theme="dark"] .data-table tr.highlight td { background: #422006; }
+.gantt-wrap { overflow-x: auto; margin: 16px 0; }
+.gantt-chart { display: flex; height: 42px; min-width: 600px; border-radius: 6px; overflow: hidden; border: 1px solid #cbd5e1; }
+.gantt-block { display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; color: #fff; border-right: 1px solid rgba(255,255,255,0.3); }
+.gb-p1  { background: #3b82f6; }
+.gb-p2  { background: #ef4444; }
+.gb-p3  { background: #10b981; }
+.gb-p4  { background: #f59e0b; }
+.gb-p5  { background: #8b5cf6; }
+.gb-idle{ background: #94a3b8; }
+.gantt-labels { display: flex; min-width: 600px; font-size: 0.72rem; color: var(--text-muted); padding: 2px 0; }
+.gantt-label { text-align: left; }
+.code-block { background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 18px 20px; font-family: 'Fira Code', monospace; font-size: 0.88rem; line-height: 1.65; overflow-x: auto; margin: 10px 0; }
+.code-block .kw  { color: #93c5fd; }
+.code-block .fn  { color: #86efac; }
+.code-block .cmt { color: #64748b; font-style: italic; }
+.code-block .err { color: #f87171; text-decoration: line-through; }
+.code-block .fix { color: #34d399; }
+.section-label { display: inline-block; background: #2563eb; color: #fff; border-radius: 20px; padding: 3px 14px; font-size: 0.8rem; font-weight: 700; margin-bottom: 10px; }
+.callout-tip { background: #ecfdf5; border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 6px; margin: 12px 0; font-size: 0.93rem; }
+[data-theme="dark"] .callout-tip { background: #064e3b; }
+.callout-warn { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 6px; margin: 12px 0; }
+[data-theme="dark"] .callout-warn { background: #422006; }
+@media (max-width: 900px) { .sidebar { max-height: 34vh; } .main-content { width: 100%; padding: 24px 16px 56px; } }
+</style>
+</head>
+<body>
+<div class="layout-container">
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <a class="logo" href="../index.html">NMIMS · OS Master</a>
+    <span class="badge">Semester Exam Prep</span>
+    <button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle" type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark mode</span></button>
+  </div>
+  <nav class="sidebar-nav">
+    <h3>All Units &amp; Guides</h3>
+    <ul>
+      <li><a href="01-os-foundations.html"><span class="unit-num">01</span> OS Overview &amp; Architecture</a></li>
+      <li><a href="02-processes-and-cpu-scheduling.html"><span class="unit-num">02</span> Processes &amp; CPU Scheduling</a></li>
+      <li><a href="03-concurrency-and-synchronization.html"><span class="unit-num">03</span> Concurrency &amp; Synchronization</a></li>
+      <li><a href="04-deadlocks.html"><span class="unit-num">04</span> Deadlocks &amp; Banker's Algorithm</a></li>
+      <li><a href="05-memory-management.html"><span class="unit-num">05</span> Memory Management &amp; Fitting</a></li>
+      <li><a href="06-paging-and-replacement.html"><span class="unit-num">06</span> Paging &amp; Virtual Memory</a></li>
+      <li><a href="07-io-and-disk-scheduling.html"><span class="unit-num">07</span> I/O &amp; Disk Scheduling</a></li>
+      <li><a href="08-file-systems.html"><span class="unit-num">08</span> File System Interface &amp; Storage</a></li>
+      <li><a href="09-numericals-and-problem-solving.html" class="active"><span class="unit-num">09</span> Master Numericals Guide</a></li>
+      <li><a href="10-solved-examples.html"><span class="unit-num">10</span> Comprehensive Solved Bank</a></li>
+      <li><a href="11-topic-checklist.html"><span class="unit-num">11</span> Final Topic Checklist</a></li>
+    </ul>
+    <h3>Problem Types</h3>
+    <ul>
+      <li><a href="#type1">Type 1: CPU Scheduling (All Algorithms)</a></li>
+      <li><a href="#type2">Type 2: Banker's Algorithm</a></li>
+      <li><a href="#type3">Type 3: Memory Partitioning</a></li>
+      <li><a href="#type4">Type 4: Page Replacement</a></li>
+      <li><a href="#type5">Type 5: TLB &amp; EAT</a></li>
+      <li><a href="#type6">Type 6: Disk Scheduling</a></li>
+      <li><a href="#type7">Type 7: UNIX Inode File Size</a></li>
+      <li><a href="#type8">Type 8: Semaphore Code Analysis</a></li>
+      <li><a href="#examtips">Exam Formula Sheet</a></li>
+    </ul>
+  </nav>
+</aside>
+<main class="main-content">
+<header class="top-bar">
+  <div class="breadcrumb"><a href="../index.html">Home</a> &gt; <span>Unit 09: Master Numericals Guide</span></div>
+  <div class="meta-tag">Master Guide · Every PYQ Problem Type · Fully Worked</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+  <h1>OS: Master Numerical &amp; Problem-Solving Guide</h1>
+  <p class="lead">Every NMIMS exam problem type — fully worked, step by step, with Gantt charts, formula derivations, decision traces, and exam trap boxes. Drawn directly from PYQ papers (Nov 2025 Final &amp; Feb 2026 Re-exam).</p>
+</header>
+
+<!-- ══════════════════════════════════════════════════════════
+     TYPE 1 — CPU SCHEDULING
+════════════════════════════════════════════════════════════ -->
+<section class="module-section" id="type1">
+<div class="section-title">
+  <h2>Type 1: CPU Scheduling Algorithms</h2>
+  <span class="cross-ref-badge">FCFS · SJF · SRTF · Priority (Preemptive) · Round Robin</span>
+</div>
+
+<div class="callout-tip">
+  <strong>How to recognize:</strong> Table of processes with Arrival Time (AT), Burst Time (BT), optionally Priority or Time Quantum. Asked for Gantt chart, CT, TAT, WT, RT and averages.<br/>
+  <strong>Key formulas (memorize):</strong> $TAT = CT - AT$ &nbsp;|&nbsp; $WT = TAT - BT$ &nbsp;|&nbsp; $RT = \text{First CPU start} - AT$
+</div>
+
+<!-- 1.1 FCFS -->
+<div class="problem-card" id="p1-fcfs">
+  <div class="problem-header">
+    <span class="difficulty basic">Basic</span>
+    <h3>Archetype 1.1 — FCFS (Non-Preemptive)</h3>
+    <span class="marks-badge">10 marks</span>
+  </div>
+  <div class="problem-stmt">
+    Four processes arrive at different times. Apply FCFS and compute TAT, WT, averages.<br/>
+    <table class="data-table" style="margin-top:10px">
+      <thead><tr><th>Process</th><th>AT</th><th>BT</th></tr></thead>
+      <tbody>
+        <tr><td>P1</td><td>0</td><td>6</td></tr>
+        <tr><td>P2</td><td>2</td><td>4</td></tr>
+        <tr><td>P3</td><td>4</td><td>2</td></tr>
+        <tr><td>P4</td><td>6</td><td>5</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="solution-flow">
+    <div class="step-row">
+      <span class="step-badge given">GIVEN</span>
+      <div>4 processes, non-preemptive, serve in arrival order. No priorities.</div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge gantt">GANTT</span>
+      <div>
+        <p>FCFS: P1 starts at 0, finishes at 6. P2 starts at 6 (arrives at 2 but waits), finishes at 10. P3 starts at 10, finishes at 12. P4 starts at 12, finishes at 17.</p>
+        <div class="gantt-wrap">
+          <div class="gantt-chart">
+            <div class="gantt-block gb-p1" style="flex:6">P1(6)</div>
+            <div class="gantt-block gb-p2" style="flex:4">P2(4)</div>
+            <div class="gantt-block gb-p3" style="flex:2">P3(2)</div>
+            <div class="gantt-block gb-p4" style="flex:5">P4(5)</div>
+          </div>
+          <div class="gantt-labels">
+            <span class="gantt-label" style="flex:6">0</span>
+            <span class="gantt-label" style="flex:4">6</span>
+            <span class="gantt-label" style="flex:2">10</span>
+            <span class="gantt-label" style="flex:5">12</span>
+            <span class="gantt-label" style="flex:0;min-width:30px">17</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge calc">CALC</span>
+      <div>
+        <table class="data-table">
+          <thead><tr><th>Process</th><th>AT</th><th>BT</th><th>CT</th><th>TAT=CT-AT</th><th>WT=TAT-BT</th><th>RT</th></tr></thead>
+          <tbody>
+            <tr><td>P1</td><td>0</td><td>6</td><td>6</td><td>6-0=<strong>6</strong></td><td>6-6=<strong>0</strong></td><td>0-0=<strong>0</strong></td></tr>
+            <tr><td>P2</td><td>2</td><td>4</td><td>10</td><td>10-2=<strong>8</strong></td><td>8-4=<strong>4</strong></td><td>6-2=<strong>4</strong></td></tr>
+            <tr><td>P3</td><td>4</td><td>2</td><td>12</td><td>12-4=<strong>8</strong></td><td>8-2=<strong>6</strong></td><td>10-4=<strong>6</strong></td></tr>
+            <tr><td>P4</td><td>6</td><td>5</td><td>17</td><td>17-6=<strong>11</strong></td><td>11-5=<strong>6</strong></td><td>12-6=<strong>6</strong></td></tr>
+          </tbody>
+        </table>
+        $$\text{Avg TAT} = \frac{6+8+8+11}{4} = \frac{33}{4} = \mathbf{8.25\text{ ms}} \qquad \text{Avg WT} = \frac{0+4+6+6}{4} = \frac{16}{4} = \mathbf{4.00\text{ ms}}$$
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge answer">ANSWER</span>
+      <div class="final-box">Avg TAT = <strong>8.25 ms</strong>, Avg WT = <strong>4.00 ms</strong>. Sanity: Avg WT = Avg TAT – Avg BT = 8.25 – 4.25 = 4.00 ✓</div>
+    </div>
+  </div>
+  <div class="exam-trap-box"><strong>⚠ Exam Trap:</strong> If a process arrives after the CPU is free (idle gap), CT of next = max(previous CT, AT). Don't assume CPU is always busy.</div>
+</div>
+
+<!-- 1.2 Preemptive Priority (PYQ Nov 2025) -->
+<div class="problem-card" id="p1-priority">
+  <div class="problem-header">
+    <span class="difficulty pyq">PYQ — Nov 2025 Final Q2(b)(I)</span>
+    <h3>Archetype 1.2 — Preemptive Priority Scheduling</h3>
+    <span class="marks-badge">10 marks</span>
+  </div>
+  <div class="problem-stmt">
+    <strong>Lower priority number = Higher priority (preemptive).</strong> Calculate average TAT and average WT.
+    <table class="data-table" style="margin-top:10px">
+      <thead><tr><th>Process</th><th>AT</th><th>BT</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td>P1</td><td>0</td><td>10</td><td>2</td></tr>
+        <tr><td>P2</td><td>1</td><td>4</td><td>1 ← highest</td></tr>
+        <tr><td>P3</td><td>3</td><td>7</td><td>3</td></tr>
+        <tr><td>P4</td><td>4</td><td>6</td><td>2</td></tr>
+        <tr><td>P5</td><td>6</td><td>5</td><td>0 ← highest of all</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="solution-flow">
+    <div class="step-row">
+      <span class="step-badge given">RULE</span>
+      <div>At each time unit, if a newly arrived process has <em>lower priority number</em> than current running process → preempt immediately.</div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge calc">TRACE</span>
+      <div>
+        <table class="data-table">
+          <thead><tr><th>Time</th><th>Event</th><th>Running</th><th>Remaining BT</th></tr></thead>
+          <tbody>
+            <tr><td>t=0</td><td>Only P1 available. P1 starts.</td><td>P1 (pri 2)</td><td>P1:10</td></tr>
+            <tr><td>t=1</td><td>P2 arrives, pri 1 &lt; 2 → <strong>P2 preempts P1</strong></td><td>P2 (pri 1)</td><td>P1:9, P2:4</td></tr>
+            <tr><td>t=3</td><td>P3 arrives, pri 3 &gt; 1 → no preemption</td><td>P2</td><td>P1:9, P2:2, P3:7</td></tr>
+            <tr><td>t=4</td><td>P4 arrives, pri 2 &gt; 1 → no preemption</td><td>P2</td><td>P1:9, P2:1, P3:7, P4:6</td></tr>
+            <tr><td>t=5</td><td>P2 finishes (CT=5). Ready: P1(pri2), P3(pri3), P4(pri2). P1 and P4 tie; use arrival order → <strong>P1 runs</strong></td><td>P1 (pri 2)</td><td>P1:9, P3:7, P4:6</td></tr>
+            <tr><td>t=6</td><td>P5 arrives, pri 0 &lt; 2 → <strong>P5 preempts P1</strong></td><td>P5 (pri 0)</td><td>P1:8, P3:7, P4:6, P5:5</td></tr>
+            <tr><td>t=11</td><td>P5 finishes (CT=11). Ready: P1(pri2), P3(pri3), P4(pri2). Tie P1&amp;P4 → <strong>P1 runs</strong></td><td>P1 (pri 2)</td><td>P1:8, P3:7, P4:6</td></tr>
+            <tr><td>t=19</td><td>P1 finishes (CT=19). Next highest: P4 (pri 2) over P3 (pri 3). <strong>P4 runs</strong></td><td>P4 (pri 2)</td><td>P3:7, P4:6</td></tr>
+            <tr><td>t=25</td><td>P4 finishes (CT=25). <strong>P3 runs</strong></td><td>P3 (pri 3)</td><td>P3:7</td></tr>
+            <tr><td>t=32</td><td>P3 finishes (CT=32)</td><td>—</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge gantt">GANTT</span>
+      <div>
+        <div class="gantt-wrap">
+          <div class="gantt-chart">
+            <div class="gantt-block gb-p1" style="flex:1">P1</div>
+            <div class="gantt-block gb-p2" style="flex:4">P2(4)</div>
+            <div class="gantt-block gb-p1" style="flex:1">P1</div>
+            <div class="gantt-block gb-p5" style="flex:5">P5(5)</div>
+            <div class="gantt-block gb-p1" style="flex:8">P1(8)</div>
+            <div class="gantt-block gb-p4" style="flex:6">P4(6)</div>
+            <div class="gantt-block gb-p3" style="flex:7">P3(7)</div>
+          </div>
+          <div class="gantt-labels">
+            <span class="gantt-label" style="flex:1">0</span>
+            <span class="gantt-label" style="flex:4">1</span>
+            <span class="gantt-label" style="flex:1">5</span>
+            <span class="gantt-label" style="flex:5">6</span>
+            <span class="gantt-label" style="flex:8">11</span>
+            <span class="gantt-label" style="flex:6">19</span>
+            <span class="gantt-label" style="flex:7">25</span>
+            <span class="gantt-label" style="flex:0;min-width:28px">32</span>
+          </div>
+        </div>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin-top:4px">P1: runs t=0–1, preempted; runs t=5–6, preempted; runs t=11–19, finishes.</p>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge calc">METRICS</span>
+      <div>
+        <table class="data-table">
+          <thead><tr><th>Process</th><th>AT</th><th>BT</th><th>CT</th><th>TAT=CT–AT</th><th>WT=TAT–BT</th><th>RT=First start–AT</th></tr></thead>
+          <tbody>
+            <tr><td>P1</td><td>0</td><td>10</td><td>19</td><td><strong>19</strong></td><td><strong>9</strong></td><td>0–0=<strong>0</strong></td></tr>
+            <tr><td>P2</td><td>1</td><td>4</td><td>5</td><td><strong>4</strong></td><td><strong>0</strong></td><td>1–1=<strong>0</strong></td></tr>
+            <tr><td>P3</td><td>3</td><td>7</td><td>32</td><td><strong>29</strong></td><td><strong>22</strong></td><td>25–3=<strong>22</strong></td></tr>
+            <tr><td>P4</td><td>4</td><td>6</td><td>25</td><td><strong>21</strong></td><td><strong>15</strong></td><td>19–4=<strong>15</strong></td></tr>
+            <tr><td>P5</td><td>6</td><td>5</td><td>11</td><td><strong>5</strong></td><td><strong>0</strong></td><td>6–6=<strong>0</strong></td></tr>
+          </tbody>
+        </table>
+        $$\text{Avg TAT} = \frac{19+4+29+21+5}{5} = \frac{78}{5} = \mathbf{15.6\text{ ms}} \qquad \text{Avg WT} = \frac{9+0+22+15+0}{5} = \frac{46}{5} = \mathbf{9.2\text{ ms}}$$
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge answer">ANSWER</span>
+      <div class="final-box">Avg TAT = <strong>15.6 ms</strong> &nbsp;|&nbsp; Avg WT = <strong>9.2 ms</strong><br/>Sanity: Avg WT = 15.6 – 32/5 = 15.6 – 6.4 = 9.2 ✓</div>
+    </div>
+  </div>
+  <div class="exam-trap-box"><strong>⚠ Exam Trap 1:</strong> "Lower number = higher priority" means P5(0) beats P2(1). Read the convention carefully — some papers flip this.<br/>
+  <strong>⚠ Exam Trap 2:</strong> P1's first run is only 1 unit (t=0 to t=1). Its BT remaining = 9, not 10, when P2 preempts. Keep tracking remaining BT, not original BT.</div>
+</div>
+
+<!-- 1.3 Round Robin -->
+<div class="problem-card" id="p1-rr">
+  <div class="problem-header">
+    <span class="difficulty pyq">PYQ — Nov 2025 Final Q2(b)(II)</span>
+    <h3>Archetype 1.3 — Round Robin (TQ = 4)</h3>
+    <span class="marks-badge">10 marks</span>
+  </div>
+  <div class="problem-stmt">
+    Same 5 processes, now apply Round Robin with time quantum = 4. Find Gantt chart, avg TAT, avg WT.
+    <table class="data-table" style="margin-top:10px">
+      <thead><tr><th>Process</th><th>AT</th><th>BT</th></tr></thead>
+      <tbody>
+        <tr><td>P1</td><td>0</td><td>10</td></tr>
+        <tr><td>P2</td><td>1</td><td>4</td></tr>
+        <tr><td>P3</td><td>3</td><td>7</td></tr>
+        <tr><td>P4</td><td>4</td><td>6</td></tr>
+        <tr><td>P5</td><td>6</td><td>5</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="solution-flow">
+    <div class="step-row">
+      <span class="step-badge given">RULE</span>
+      <div>Each process gets CPU for at most TQ=4 units, then goes back to ready queue. Newly arrived processes join queue <em>after</em> the current quantum ends (or immediately if CPU is free). Queue order: arrival order, then back-of-queue order.</div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge calc">TRACE</span>
+      <div>
+        <table class="data-table">
+          <thead><tr><th>Time</th><th>Process</th><th>Runs for</th><th>Remaining after</th><th>Next in queue</th></tr></thead>
+          <tbody>
+            <tr><td>0–4</td><td>P1</td><td>4</td><td>P1:6</td><td>At t=4: arrived P2(BT4),P3(BT7),P4(BT6). Queue: P2,P3,P4,P1</td></tr>
+            <tr><td>4–8</td><td>P2</td><td>4</td><td>P2:0 (done, CT=8)</td><td>At t=6: P5 arrived. Queue at t=8: P3,P4,P5,P1</td></tr>
+            <tr><td>8–12</td><td>P3</td><td>4</td><td>P3:3</td><td>Queue: P4,P5,P1,P3</td></tr>
+            <tr><td>12–16</td><td>P4</td><td>4</td><td>P4:2</td><td>Queue: P5,P1,P3,P4</td></tr>
+            <tr><td>16–20</td><td>P5</td><td>4</td><td>P5:1</td><td>Queue: P1,P3,P4,P5</td></tr>
+            <tr><td>20–24</td><td>P1</td><td>4</td><td>P1:2</td><td>Queue: P3,P4,P5,P1</td></tr>
+            <tr><td>24–27</td><td>P3</td><td>3</td><td>P3:0 (done, CT=27)</td><td>Queue: P4,P5,P1</td></tr>
+            <tr><td>27–29</td><td>P4</td><td>2</td><td>P4:0 (done, CT=29)</td><td>Queue: P5,P1</td></tr>
+            <tr><td>29–30</td><td>P5</td><td>1</td><td>P5:0 (done, CT=30)</td><td>Queue: P1</td></tr>
+            <tr><td>30–32</td><td>P1</td><td>2</td><td>P1:0 (done, CT=32)</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge gantt">GANTT</span>
+      <div>
+        <div class="gantt-wrap">
+          <div class="gantt-chart">
+            <div class="gantt-block gb-p1" style="flex:4">P1</div>
+            <div class="gantt-block gb-p2" style="flex:4">P2</div>
+            <div class="gantt-block gb-p3" style="flex:4">P3</div>
+            <div class="gantt-block gb-p4" style="flex:4">P4</div>
+            <div class="gantt-block gb-p5" style="flex:4">P5</div>
+            <div class="gantt-block gb-p1" style="flex:4">P1</div>
+            <div class="gantt-block gb-p3" style="flex:3">P3</div>
+            <div class="gantt-block gb-p4" style="flex:2">P4</div>
+            <div class="gantt-block gb-p5" style="flex:1">P5</div>
+            <div class="gantt-block gb-p1" style="flex:2">P1</div>
+          </div>
+          <div class="gantt-labels">
+            <span class="gantt-label" style="flex:4">0</span>
+            <span class="gantt-label" style="flex:4">4</span>
+            <span class="gantt-label" style="flex:4">8</span>
+            <span class="gantt-label" style="flex:4">12</span>
+            <span class="gantt-label" style="flex:4">16</span>
+            <span class="gantt-label" style="flex:4">20</span>
+            <span class="gantt-label" style="flex:3">24</span>
+            <span class="gantt-label" style="flex:2">27</span>
+            <span class="gantt-label" style="flex:1">29</span>
+            <span class="gantt-label" style="flex:2">30</span>
+            <span class="gantt-label" style="flex:0;min-width:28px">32</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge calc">METRICS</span>
+      <div>
+        <table class="data-table">
+          <thead><tr><th>Process</th><th>AT</th><th>BT</th><th>CT</th><th>TAT</th><th>WT</th></tr></thead>
+          <tbody>
+            <tr><td>P1</td><td>0</td><td>10</td><td>32</td><td>32</td><td>22</td></tr>
+            <tr><td>P2</td><td>1</td><td>4</td><td>8</td><td>7</td><td>3</td></tr>
+            <tr><td>P3</td><td>3</td><td>7</td><td>27</td><td>24</td><td>17</td></tr>
+            <tr><td>P4</td><td>4</td><td>6</td><td>29</td><td>25</td><td>19</td></tr>
+            <tr><td>P5</td><td>6</td><td>5</td><td>30</td><td>24</td><td>19</td></tr>
+          </tbody>
+        </table>
+        $$\text{Avg TAT} = \frac{32+7+24+25+24}{5} = \frac{112}{5} = \mathbf{22.4\text{ ms}} \qquad \text{Avg WT} = \frac{22+3+17+19+19}{5} = \frac{80}{5} = \mathbf{16.0\text{ ms}}$$
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge answer">ANSWER</span>
+      <div class="final-box">Round Robin (TQ=4): Avg TAT = <strong>22.4 ms</strong>, Avg WT = <strong>16.0 ms</strong></div>
+    </div>
+  </div>
+  <div class="exam-trap-box">
+    <strong>⚠ Exam Trap 1 (Queue Order):</strong> When P1 completes its quantum at t=4, P2 (arrived t=1), P3 (t=3), P4 (t=4) are already waiting. They enter queue in order: P2→P3→P4, then P1 rejoins at back.<br/>
+    <strong>⚠ Exam Trap 2 (Last quantum):</strong> If remaining BT &lt; TQ, the process runs for only remaining BT — don't pad to full TQ.<br/>
+    <strong>⚠ Exam Trap 3:</strong> P5 arrives at t=6 (during P2's quantum t=4–8). P5 joins queue at t=6 but cannot start until P2 finishes at t=8.
+  </div>
+</div>
+
+<!-- 1.4 SJF Non-Preemptive -->
+<div class="problem-card" id="p1-sjf">
+  <div class="problem-header">
+    <span class="difficulty intermediate">Intermediate</span>
+    <h3>Archetype 1.4 — SJF Non-Preemptive &amp; SRTF (Preemptive SJF)</h3>
+    <span class="marks-badge">10 marks</span>
+  </div>
+  <div class="problem-stmt">
+    <table class="data-table" style="margin-top:4px">
+      <thead><tr><th>Process</th><th>AT</th><th>BT</th></tr></thead>
+      <tbody>
+        <tr><td>P1</td><td>0</td><td>7</td></tr>
+        <tr><td>P2</td><td>2</td><td>4</td></tr>
+        <tr><td>P3</td><td>4</td><td>1</td></tr>
+        <tr><td>P4</td><td>5</td><td>4</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="solution-flow">
+    <div class="step-row">
+      <span class="step-badge given">SJF Non-Preemptive</span>
+      <div>
+        <p>At t=0: only P1 available → P1 runs fully (0–7). At t=7: P2(BT4), P3(BT1), P4(BT4) are ready. Shortest is P3(1) → P3 runs 7–8. Next shortest: P2 or P4 (both BT=4), tie → P2 (earlier arrival) → P2 runs 8–12. P4 runs 12–16.</p>
+        <p><strong>Gantt:</strong> P1(0–7) → P3(7–8) → P2(8–12) → P4(12–16)</p>
+        <table class="data-table">
+          <thead><tr><th>Process</th><th>CT</th><th>TAT</th><th>WT</th></tr></thead>
+          <tbody>
+            <tr><td>P1</td><td>7</td><td>7</td><td>0</td></tr>
+            <tr><td>P2</td><td>12</td><td>10</td><td>6</td></tr>
+            <tr><td>P3</td><td>8</td><td>4</td><td>3</td></tr>
+            <tr><td>P4</td><td>16</td><td>11</td><td>7</td></tr>
+          </tbody>
+        </table>
+        $$\text{Avg TAT} = \frac{7+10+4+11}{4} = \mathbf{8.0\text{ ms}},\quad \text{Avg WT} = \frac{0+6+3+7}{4} = \mathbf{4.0\text{ ms}}$$
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge given">SRTF (Preemptive SJF)</span>
+      <div>
+        <p>At each arrival, compare new BT with <em>remaining</em> BT of current process. Preempt if new is shorter.</p>
+        <table class="data-table">
+          <thead><tr><th>Time</th><th>Event</th><th>Runs</th><th>Remaining</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td>P1 starts (only one)</td><td>P1</td><td>P1:7</td></tr>
+            <tr><td>2</td><td>P2 arrives (BT4) &lt; P1 remaining(5) → preempt</td><td>P2</td><td>P1:5, P2:4</td></tr>
+            <tr><td>4</td><td>P3 arrives (BT1) &lt; P2 remaining(2) → preempt</td><td>P3</td><td>P1:5, P2:2, P3:1</td></tr>
+            <tr><td>5</td><td>P3 done (CT=5). P4 arrives (BT4). Ready: P2(2),P4(4),P1(5). Shortest=P2 → P2 runs</td><td>P2</td><td>P1:5, P2:2, P4:4</td></tr>
+            <tr><td>7</td><td>P2 done (CT=7). Ready: P4(4),P1(5). Shortest=P4 → P4 runs</td><td>P4</td><td>P1:5, P4:4</td></tr>
+            <tr><td>11</td><td>P4 done (CT=11). P1 runs</td><td>P1</td><td>P1:5</td></tr>
+            <tr><td>16</td><td>P1 done (CT=16)</td><td>—</td><td>—</td></tr>
+          </tbody>
+        </table>
+        <table class="data-table" style="margin-top:8px">
+          <thead><tr><th>Process</th><th>CT</th><th>TAT</th><th>WT</th></tr></thead>
+          <tbody>
+            <tr><td>P1</td><td>16</td><td>16</td><td>9</td></tr>
+            <tr><td>P2</td><td>7</td><td>5</td><td>1</td></tr>
+            <tr><td>P3</td><td>5</td><td>1</td><td>0</td></tr>
+            <tr><td>P4</td><td>11</td><td>6</td><td>2</td></tr>
+          </tbody>
+        </table>
+        $$\text{Avg TAT (SRTF)} = \frac{16+5+1+6}{4} = \mathbf{7.0\text{ ms}}, \quad \text{Avg WT} = \frac{9+1+0+2}{4} = \mathbf{3.0\text{ ms}}$$
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge answer">ANSWER</span>
+      <div class="final-box">SJF Non-Preemptive: Avg TAT=8.0, Avg WT=4.0 &nbsp;|&nbsp; SRTF: Avg TAT=7.0, Avg WT=3.0 (SRTF is optimal for minimizing avg WT)</div>
+    </div>
+  </div>
+  <div class="exam-trap-box"><strong>⚠ Exam Trap:</strong> SRTF compares new BT against <em>remaining</em> BT, not original BT. If P1 has already run 2 units, compare P2.BT against P1.remaining = original – executed.</div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     TYPE 2 — BANKER'S ALGORITHM
+════════════════════════════════════════════════════════════ -->
+<section class="module-section" id="type2">
+<div class="section-title">
+  <h2>Type 2: Banker's Algorithm — Safety Test &amp; Resource Request</h2>
+  <span class="cross-ref-badge">Need Matrix · Work Vector · Safe Sequence · Request Evaluation</span>
+</div>
+
+<div class="callout-tip">
+  <strong>How to recognize:</strong> Table of Allocation and Max for multiple processes and resources, plus Available vector. Find Need matrix, check safety, evaluate a specific request.<br/>
+  <strong>Key formulas:</strong> $\text{Need}[i] = \text{Max}[i] - \text{Alloc}[i]$ &nbsp;|&nbsp; Safe if $\text{Need}[i] \le \text{Work}$ for some process, then $\text{Work} \mathrel{+}= \text{Alloc}[i]$
+</div>
+
+<!-- 2.1 PYQ Nov 2025 -->
+<div class="problem-card" id="p2-pyq">
+  <div class="problem-header">
+    <span class="difficulty pyq">PYQ — Nov 2025 Final Q3(a)</span>
+    <h3>Archetype 2.1 — 5 Processes × 3 Resources: Safety + Request Evaluation</h3>
+    <span class="marks-badge">10 marks</span>
+  </div>
+  <div class="problem-stmt">
+    System has 5 processes and 3 resource types (A, B, C). Determine (i) Need matrix, (ii) safe state &amp; sequence, (iii) can P1 request (1,0,2)?
+    <table class="data-table" style="margin-top:10px">
+      <thead><tr><th>Process</th><th colspan="3">Allocation (A B C)</th><th colspan="3">Max (A B C)</th></tr></thead>
+      <tbody>
+        <tr><td>P0</td><td>0</td><td>1</td><td>0</td><td>7</td><td>5</td><td>3</td></tr>
+        <tr><td>P1</td><td>2</td><td>0</td><td>0</td><td>3</td><td>2</td><td>2</td></tr>
+        <tr><td>P2</td><td>3</td><td>0</td><td>2</td><td>9</td><td>0</td><td>2</td></tr>
+        <tr><td>P3</td><td>2</td><td>1</td><td>1</td><td>2</td><td>2</td><td>2</td></tr>
+        <tr><td>P4</td><td>0</td><td>0</td><td>2</td><td>4</td><td>3</td><td>3</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Available = [3, 3, 2]</strong></p>
+  </div>
+  <div class="solution-flow">
+    <div class="step-row">
+      <span class="step-badge formula">STEP 1</span>
+      <div>
+        <strong>Compute Need = Max − Allocation:</strong>
+        <table class="data-table">
+          <thead><tr><th>Process</th><th>Need A</th><th>Need B</th><th>Need C</th></tr></thead>
+          <tbody>
+            <tr><td>P0</td><td>7-0=<strong>7</strong></td><td>5-1=<strong>4</strong></td><td>3-0=<strong>3</strong></td></tr>
+            <tr><td>P1</td><td>3-2=<strong>1</strong></td><td>2-0=<strong>2</strong></td><td>2-0=<strong>2</strong></td></tr>
+            <tr><td>P2</td><td>9-3=<strong>6</strong></td><td>0-0=<strong>0</strong></td><td>2-2=<strong>0</strong></td></tr>
+            <tr><td>P3</td><td>2-2=<strong>0</strong></td><td>2-1=<strong>1</strong></td><td>2-1=<strong>1</strong></td></tr>
+            <tr><td>P4</td><td>4-0=<strong>4</strong></td><td>3-0=<strong>3</strong></td><td>3-2=<strong>1</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge formula">STEP 2</span>
+      <div>
+        <strong>Safety Test — Work = [3,3,2], Finish = [F,F,F,F,F]:</strong>
+        <table class="data-table">
+          <thead><tr><th>Pass</th><th>Process</th><th>Need ≤ Work?</th><th>Work after release</th></tr></thead>
+          <tbody>
+            <tr class="highlight"><td>1</td><td>P1</td><td>[1,2,2]≤[3,3,2] ✓</td><td>[3,3,2]+[2,0,0]=[5,3,2]</td></tr>
+            <tr class="highlight"><td>2</td><td>P3</td><td>[0,1,1]≤[5,3,2] ✓</td><td>[5,3,2]+[2,1,1]=[7,4,3]</td></tr>
+            <tr class="highlight"><td>3</td><td>P4</td><td>[4,3,1]≤[7,4,3] ✓</td><td>[7,4,3]+[0,0,2]=[7,4,5]</td></tr>
+            <tr class="highlight"><td>4</td><td>P0</td><td>[7,4,3]≤[7,4,5] ✓</td><td>[7,4,5]+[0,1,0]=[7,5,5]</td></tr>
+            <tr class="highlight"><td>5</td><td>P2</td><td>[6,0,0]≤[7,5,5] ✓</td><td>[7,5,5]+[3,0,2]=[10,5,7]</td></tr>
+          </tbody>
+        </table>
+        <p class="final-box">System is in <strong>SAFE STATE</strong>. Safe sequence: <strong>P1 → P3 → P4 → P0 → P2</strong></p>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge formula">STEP 3</span>
+      <div>
+        <strong>Evaluate Request from P1: R = [1,0,2]</strong>
+        <ol>
+          <li><strong>Check R ≤ Need[P1]:</strong> [1,0,2] ≤ [1,2,2] ✓ (P1 isn't exceeding its max)</li>
+          <li><strong>Check R ≤ Available:</strong> [1,0,2] ≤ [3,3,2] ✓ (resources are available)</li>
+          <li><strong>Pretend-allocate:</strong> Available' = [3,3,2]−[1,0,2] = [<strong>2,3,0</strong>]; Alloc[P1]' = [2,0,0]+[1,0,2]=[<strong>3,0,2</strong>]; Need[P1]' = [1,2,2]−[1,0,2]=[<strong>0,2,0</strong>]</li>
+          <li><strong>Re-run safety with Work=[2,3,0]:</strong><br/>
+            P1 need=[0,2,0]≤[2,3,0] ✓ → Work=[2,3,0]+[3,0,2]=[5,3,2]<br/>
+            P3 need=[0,1,1]≤[5,3,2] ✓ → Work=[7,4,3]<br/>
+            P4 need=[4,3,1]≤[7,4,3] ✓ → Work=[7,4,5]<br/>
+            P0 need=[7,4,3]≤[7,4,5] ✓ → Work=[7,5,5]<br/>
+            P2 need=[6,0,0]≤[7,5,5] ✓ → all done.</li>
+        </ol>
+        <p class="final-box"><strong>Request GRANTED.</strong> New safe sequence: P1→P3→P4→P0→P2</p>
+      </div>
+    </div>
+  </div>
+  <div class="exam-trap-box">
+    <strong>⚠ Exam Trap 1:</strong> Always run safety test <em>after</em> pretend-allocation, not before.<br/>
+    <strong>⚠ Exam Trap 2:</strong> If safety test fails after pretend-allocation → rollback (restore original Available, Alloc, Need) and deny request.<br/>
+    <strong>⚠ Exam Trap 3:</strong> Need = Max − Allocation (not Available − Allocation).
+  </div>
+</div>
+
+<!-- 2.2 Unsafe request detection -->
+<div class="problem-card" id="p2-unsafe">
+  <div class="problem-header">
+    <span class="difficulty challenging">Challenging</span>
+    <h3>Archetype 2.2 — Detecting an Unsafe Request</h3>
+    <span class="marks-badge">10 marks</span>
+  </div>
+  <div class="problem-stmt">
+    Same system as above. Can P4 request [3,3,0]?
+  </div>
+  <div class="solution-flow">
+    <div class="step-row">
+      <span class="step-badge calc">CHECK</span>
+      <div>
+        <ol>
+          <li>R=[3,3,0] ≤ Need[P4]=[4,3,1] ✓</li>
+          <li>R=[3,3,0] ≤ Available=[3,3,2] ✓</li>
+          <li>Pretend-allocate: Available'=[3,3,2]−[3,3,0]=[<strong>0,0,2</strong>]; Alloc[P4]'=[0,0,2]+[3,3,0]=[3,3,2]; Need[P4]'=[4,3,1]−[3,3,0]=[1,0,1]</li>
+          <li>Safety with Work=[0,0,2]:
+            <ul>
+              <li>P0 need=[7,4,3]: 7≤0? NO</li>
+              <li>P1 need=[1,2,2]: 2≤0? NO</li>
+              <li>P2 need=[6,0,0]: 6≤0? NO</li>
+              <li>P3 need=[0,1,1]: 1≤0? NO (B fails)</li>
+              <li>P4 need=[1,0,1]: 1≤0? NO</li>
+            </ul>
+            No process can proceed → <strong>UNSAFE STATE</strong>
+          </li>
+        </ol>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge answer">ANSWER</span>
+      <div class="final-box">Request from P4 for [3,3,0] is <strong>DENIED</strong> (would lead to unsafe state). Rollback all pretend changes.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     TYPE 3 — MEMORY PARTITIONING
+════════════════════════════════════════════════════════════ -->
+<section class="module-section" id="type3">
+<div class="section-title">
+  <h2>Type 3: Memory Partitioning — First-Fit, Best-Fit, Worst-Fit</h2>
+  <span class="cross-ref-badge">Contiguous Allocation · Internal Fragmentation · Unused Holes</span>
+</div>
+
+<div class="problem-card" id="p3-pyq">
+  <div class="problem-header">
+    <span class="difficulty pyq">PYQ — Feb 2026 Re-exam Q5(B)</span>
+    <h3>Archetype 3.1 — All Three Strategies Side-by-Side</h3>
+    <span class="marks-badge">10 marks</span>
+  </div>
+  <div class="problem-stmt">
+    Five memory partitions (KB): 110, 480, 210, 350, 140. Processes arrive in order: P1=100 KB, P2=200 KB, P3=300 KB, P4=140 KB, P5=50 KB. Apply First-Fit, Best-Fit, Worst-Fit.
+  </div>
+  <div class="solution-flow">
+    <div class="step-row">
+      <span class="step-badge given">METHOD</span>
+      <div>
+        <ul>
+          <li><strong>First-Fit:</strong> Scan left→right, use first partition that fits.</li>
+          <li><strong>Best-Fit:</strong> Scan all, use partition with smallest leftover (tightest fit).</li>
+          <li><strong>Worst-Fit:</strong> Scan all, use partition with largest leftover (most room for future).</li>
+        </ul>
+        <p>Partitions (initial): [<strong>110</strong>, <strong>480</strong>, <strong>210</strong>, <strong>350</strong>, <strong>140</strong>]</p>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge calc">FIRST-FIT</span>
+      <div>
+        <table class="data-table">
+          <thead><tr><th>Process</th><th>Size</th><th>Scan</th><th>Allocated to</th><th>Leftover</th></tr></thead>
+          <tbody>
+            <tr><td>P1=100</td><td>100</td><td>110≥100 ✓ (1st)</td><td>Partition 1 (110)</td><td>10 KB</td></tr>
+            <tr><td>P2=200</td><td>200</td><td>10&lt;200, 480≥200 ✓</td><td>Partition 2 (480)</td><td>280 KB</td></tr>
+            <tr><td>P3=300</td><td>300</td><td>10&lt;300, 280&lt;300, 210&lt;300, 350≥300 ✓</td><td>Partition 4 (350)</td><td>50 KB</td></tr>
+            <tr><td>P4=140</td><td>140</td><td>10&lt;140, 280≥140 ✓</td><td>Partition 2 remainder (280)</td><td>140 KB</td></tr>
+            <tr><td>P5=50</td><td>50</td><td>10&lt;50, 140≥50 ✓</td><td>Partition 2 remainder (140)</td><td>90 KB</td></tr>
+          </tbody>
+        </table>
+        <p>Unused: Partition 3 (210 KB) — entirely unused, Partition 5 (140 KB) — entirely unused.</p>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge calc">BEST-FIT</span>
+      <div>
+        <table class="data-table">
+          <thead><tr><th>Process</th><th>Candidates &amp; leftovers</th><th>Best (smallest leftover)</th><th>Leftover</th></tr></thead>
+          <tbody>
+            <tr><td>P1=100</td><td>110→10, 480→380, 210→110, 350→250, 140→40</td><td>110 (leftover=10)</td><td>10</td></tr>
+            <tr><td>P2=200</td><td>10→❌, 480→280, 210→10, 350→150, 140→❌</td><td>210 (leftover=10)</td><td>10</td></tr>
+            <tr><td>P3=300</td><td>10→❌, 480→180, 10→❌, 350→50, 140→❌</td><td>350 (leftover=50)</td><td>50</td></tr>
+            <tr><td>P4=140</td><td>10→❌, 180→40, 10→❌, 50→❌, 140→0</td><td>140 (leftover=0!)</td><td>0</td></tr>
+            <tr><td>P5=50</td><td>10→❌, 40→❌, 10→❌, 50→0, 0→❌</td><td>Partition 4 remainder 50 (leftover=0)</td><td>0</td></tr>
+          </tbody>
+        </table>
+        <p>All processes fit perfectly — zero wasted space! Partition 2 remainder (180KB) unused.</p>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge calc">WORST-FIT</span>
+      <div>
+        <table class="data-table">
+          <thead><tr><th>Process</th><th>Candidates &amp; leftovers</th><th>Worst (largest leftover)</th><th>Leftover</th></tr></thead>
+          <tbody>
+            <tr><td>P1=100</td><td>110→10, 480→380, 210→110, 350→250, 140→40</td><td>480 (leftover=380)</td><td>380</td></tr>
+            <tr><td>P2=200</td><td>110→❌, 380→180, 210→10, 350→150, 140→❌</td><td>380 (leftover=180)</td><td>180</td></tr>
+            <tr><td>P3=300</td><td>110→❌, 180→❌, 210→❌, 350→50, 140→❌</td><td>350 (leftover=50)</td><td>50</td></tr>
+            <tr><td>P4=140</td><td>110→❌, 180→40, 210→70, 50→❌, 140→0</td><td>210 (leftover=70)</td><td>70</td></tr>
+            <tr><td>P5=50</td><td>110→60, 180→130, 70→20, 50→0, 140→90</td><td>180 (leftover=130)</td><td>130</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge answer">ANSWER</span>
+      <div class="final-box">
+        <strong>First-Fit:</strong> P1→110, P2→480, P3→350, P4→480(rem), P5→480(rem). Leaves 210 &amp; 140 unused.<br/>
+        <strong>Best-Fit:</strong> P1→110, P2→210, P3→350, P4→140, P5→350(rem). Zero leftover holes — most compact.<br/>
+        <strong>Worst-Fit:</strong> P1→480, P2→480(rem), P3→350, P4→210, P5→480(rem rem). Largest holes remain.
+      </div>
+    </div>
+  </div>
+  <div class="exam-trap-box">
+    <strong>⚠ Exam Trap 1:</strong> After allocating to a partition, update that partition's remaining size — subsequent processes must check the leftover, not the original size.<br/>
+    <strong>⚠ Exam Trap 2:</strong> Best-Fit minimizes internal fragmentation per allocation. Worst-Fit leaves larger holes for future large processes (but causes more overall waste).<br/>
+    <strong>⚠ Exam Trap 3:</strong> If no partition is big enough, the process cannot be allocated — mark it as "Not Allocated".
+  </div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     TYPE 4 — PAGE REPLACEMENT
+════════════════════════════════════════════════════════════ -->
+<section class="module-section" id="type4">
+<div class="section-title">
+  <h2>Type 4: Page Replacement Algorithms — FIFO, LRU, Optimal</h2>
+  <span class="cross-ref-badge">Frame Traces · Page Fault Count · Belady's Anomaly</span>
+</div>
+
+<div class="callout-tip">
+  <strong>How to recognize:</strong> Reference string of page numbers + number of frames. Count page faults for each algorithm. ALWAYS draw the frame state table.<br/>
+  <strong>Key rule:</strong> Every time a page is NOT in any frame → page fault. First $n$ accesses (filling frames) are always faults.
+</div>
+
+<div class="problem-card" id="p4-pyq">
+  <div class="problem-header">
+    <span class="difficulty pyq">PYQ — Feb 2026 Re-exam Q6(B)</span>
+    <h3>Archetype 4.1 — FIFO vs LRU vs Optimal (3 frames, 12-step string)</h3>
+    <span class="marks-badge">10 marks</span>
+  </div>
+  <div class="problem-stmt">
+    Reference string: <strong>1 2 3 4 1 2 5 1 2 3 4 5</strong>. Frames = 3. Compute page faults for FIFO, LRU, Optimal.
+  </div>
+  <div class="solution-flow">
+    <div class="step-row">
+      <span class="step-badge calc">FIFO</span>
+      <div>
+        <p>FIFO: evict the page that has been in memory the <em>longest</em> (first loaded).</p>
+        <table class="data-table">
+          <thead><tr><th>#</th><th>Ref</th><th>Frame 1</th><th>Frame 2</th><th>Frame 3</th><th>Fault?</th><th>Evicted</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>1</td><td><strong>1</strong></td><td>—</td><td>—</td><td>✓ F</td><td>—</td></tr>
+            <tr><td>2</td><td>2</td><td>1</td><td><strong>2</strong></td><td>—</td><td>✓ F</td><td>—</td></tr>
+            <tr><td>3</td><td>3</td><td>1</td><td>2</td><td><strong>3</strong></td><td>✓ F</td><td>—</td></tr>
+            <tr><td>4</td><td>4</td><td><strong>4</strong></td><td>2</td><td>3</td><td>✓ F</td><td>1 (oldest)</td></tr>
+            <tr><td>5</td><td>1</td><td>4</td><td><strong>1</strong></td><td>3</td><td>✓ F</td><td>2</td></tr>
+            <tr><td>6</td><td>2</td><td>4</td><td>1</td><td><strong>2</strong></td><td>✓ F</td><td>3</td></tr>
+            <tr><td>7</td><td>5</td><td><strong>5</strong></td><td>1</td><td>2</td><td>✓ F</td><td>4</td></tr>
+            <tr><td>8</td><td>1</td><td>5</td><td>1</td><td>2</td><td>— Hit</td><td>—</td></tr>
+            <tr><td>9</td><td>2</td><td>5</td><td>1</td><td>2</td><td>— Hit</td><td>—</td></tr>
+            <tr><td>10</td><td>3</td><td>5</td><td><strong>3</strong></td><td>2</td><td>✓ F</td><td>1</td></tr>
+            <tr><td>11</td><td>4</td><td>5</td><td>3</td><td><strong>4</strong></td><td>✓ F</td><td>2</td></tr>
+            <tr><td>12</td><td>5</td><td>5</td><td>3</td><td>4</td><td>— Hit</td><td>—</td></tr>
+          </tbody>
+        </table>
+        <p class="final-box">FIFO Page Faults = <strong>9</strong></p>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge calc">LRU</span>
+      <div>
+        <p>LRU: evict the page <em>least recently used</em> (furthest back in time of last access).</p>
+        <table class="data-table">
+          <thead><tr><th>#</th><th>Ref</th><th>Frames (sorted: MRU→LRU)</th><th>Fault?</th><th>Evicted</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>1</td><td>[1]</td><td>✓ F</td><td>—</td></tr>
+            <tr><td>2</td><td>2</td><td>[2,1]</td><td>✓ F</td><td>—</td></tr>
+            <tr><td>3</td><td>3</td><td>[3,2,1]</td><td>✓ F</td><td>—</td></tr>
+            <tr><td>4</td><td>4</td><td>[4,3,2]</td><td>✓ F</td><td>1 (LRU)</td></tr>
+            <tr><td>5</td><td>1</td><td>[1,4,3]</td><td>✓ F</td><td>2 (LRU)</td></tr>
+            <tr><td>6</td><td>2</td><td>[2,1,4]</td><td>✓ F</td><td>3 (LRU)</td></tr>
+            <tr><td>7</td><td>5</td><td>[5,2,1]</td><td>✓ F</td><td>4 (LRU)</td></tr>
+            <tr><td>8</td><td>1</td><td>[1,5,2]</td><td>— Hit</td><td>—</td></tr>
+            <tr><td>9</td><td>2</td><td>[2,1,5]</td><td>— Hit</td><td>—</td></tr>
+            <tr><td>10</td><td>3</td><td>[3,2,1]</td><td>✓ F</td><td>5 (LRU)</td></tr>
+            <tr><td>11</td><td>4</td><td>[4,3,2]</td><td>✓ F</td><td>1 (LRU)</td></tr>
+            <tr><td>12</td><td>5</td><td>[5,4,3]</td><td>✓ F</td><td>2 (LRU)</td></tr>
+          </tbody>
+        </table>
+        <p class="final-box">LRU Page Faults = <strong>10</strong></p>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge calc">OPTIMAL</span>
+      <div>
+        <p>Optimal (Belady's): evict page whose <em>next use is furthest in the future</em> (or never used again).</p>
+        <table class="data-table">
+          <thead><tr><th>#</th><th>Ref</th><th>Frames</th><th>Fault?</th><th>Evicted (reason)</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>1</td><td>[1]</td><td>✓ F</td><td>—</td></tr>
+            <tr><td>2</td><td>2</td><td>[1,2]</td><td>✓ F</td><td>—</td></tr>
+            <tr><td>3</td><td>3</td><td>[1,2,3]</td><td>✓ F</td><td>—</td></tr>
+            <tr><td>4</td><td>4</td><td>[1,2,4]</td><td>✓ F</td><td>3 (next use: step 10, furthest)</td></tr>
+            <tr><td>5</td><td>1</td><td>[1,2,4]</td><td>— Hit</td><td>—</td></tr>
+            <tr><td>6</td><td>2</td><td>[1,2,4]</td><td>— Hit</td><td>—</td></tr>
+            <tr><td>7</td><td>5</td><td>[1,2,5]</td><td>✓ F</td><td>4 (next use: step 11, furthest; 1&amp;2 needed at steps 8&amp;9)</td></tr>
+            <tr><td>8</td><td>1</td><td>[1,2,5]</td><td>— Hit</td><td>—</td></tr>
+            <tr><td>9</td><td>2</td><td>[1,2,5]</td><td>— Hit</td><td>—</td></tr>
+            <tr><td>10</td><td>3</td><td>[3,2,5]</td><td>✓ F</td><td>1 (next use: never again, furthest)</td></tr>
+            <tr><td>11</td><td>4</td><td>[3,4,5]</td><td>✓ F</td><td>2 (next use: never again)</td></tr>
+            <tr><td>12</td><td>5</td><td>[3,4,5]</td><td>— Hit</td><td>—</td></tr>
+          </tbody>
+        </table>
+        <p class="final-box">Optimal Page Faults = <strong>7</strong> (theoretical minimum)</p>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge answer">SUMMARY</span>
+      <div class="final-box">
+        FIFO = <strong>9 faults</strong> &nbsp;|&nbsp; LRU = <strong>10 faults</strong> &nbsp;|&nbsp; Optimal = <strong>7 faults</strong><br/>
+        Note: FIFO beat LRU here — LRU is usually better but not always. Optimal is always best but requires future knowledge (theoretical only).
+      </div>
+    </div>
+  </div>
+  <div class="exam-trap-box">
+    <strong>⚠ Belady's Anomaly:</strong> FIFO can produce MORE page faults with MORE frames! This is Belady's anomaly. LRU and Optimal do NOT suffer from this.<br/>
+    <strong>⚠ Exam Trap:</strong> Always state Hit Ratio = Hits / Total = (12−faults)/12. For FIFO: (12−9)/12 = 25%. Marks are given for this.
+  </div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     TYPE 5 — TLB AND EAT
+════════════════════════════════════════════════════════════ -->
+<section class="module-section" id="type5">
+<div class="section-title">
+  <h2>Type 5: TLB &amp; Effective Access Time (EAT)</h2>
+  <span class="cross-ref-badge">Hit Ratio · 2-Level Paging · Address Translation</span>
+</div>
+
+<div class="problem-card" id="p5-eat">
+  <div class="problem-header">
+    <span class="difficulty intermediate">Intermediate</span>
+    <h3>Archetype 5.1 — EAT with 1-Level and 2-Level Paging</h3>
+    <span class="marks-badge">5–10 marks</span>
+  </div>
+  <div class="problem-stmt">
+    <strong>Part A:</strong> Memory access time = 100 ns, TLB access time = 20 ns, TLB hit ratio = 80%. Find EAT for <em>single-level</em> paging.<br/>
+    <strong>Part B:</strong> Same system, but <em>2-level</em> paging. Find EAT.
+  </div>
+  <div class="solution-flow">
+    <div class="step-row">
+      <span class="step-badge formula">FORMULA</span>
+      <div>
+        $$\text{EAT} = h \cdot (\text{TLB} + \text{MAT}) + (1-h) \cdot (\text{TLB} + k \cdot \text{MAT} + \text{MAT})$$
+        where $h$ = hit ratio, $k$ = levels of page table, MAT = memory access time.<br/>
+        <strong>Simplified:</strong> On hit: TLB + 1 mem access. On miss: TLB + k mem accesses (page tables) + 1 mem access (data).
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge calc">PART A (1-level)</span>
+      <div>
+        On TLB Hit: 20 + 100 = 120 ns (1 page table lookup bypassed)<br/>
+        On TLB Miss: 20 + 100 (page table) + 100 (data) = 220 ns<br/>
+        $$\text{EAT}_{\text{1-level}} = 0.80 \times 120 + 0.20 \times 220 = 96 + 44 = \mathbf{140\text{ ns}}$$
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge calc">PART B (2-level)</span>
+      <div>
+        On TLB Hit: 20 + 100 = 120 ns (same — TLB gives physical address directly)<br/>
+        On TLB Miss: 20 + 100 (level-1 table) + 100 (level-2 table) + 100 (data) = 320 ns<br/>
+        $$\text{EAT}_{\text{2-level}} = 0.80 \times 120 + 0.20 \times 320 = 96 + 64 = \mathbf{160\text{ ns}}$$
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge answer">ANSWER</span>
+      <div class="final-box">1-Level EAT = <strong>140 ns</strong> &nbsp;|&nbsp; 2-Level EAT = <strong>160 ns</strong><br/>Each additional level of paging adds (1−h)×MAT to EAT.</div>
+    </div>
+  </div>
+  <div class="exam-trap-box">
+    <strong>⚠ Exam Trap 1:</strong> On TLB <em>hit</em>, you still need 1 memory access (for the data/instruction). Don't forget this — EAT on hit = TLB + 1×MAT, not just TLB.<br/>
+    <strong>⚠ Exam Trap 2:</strong> With $k$-level paging, TLB miss requires $k$ page-table accesses + 1 data access = $k+1$ total memory accesses. So TLB miss time = TLB + $(k+1)$ × MAT.
+  </div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     TYPE 6 — DISK SCHEDULING
+════════════════════════════════════════════════════════════ -->
+<section class="module-section" id="type6">
+<div class="section-title">
+  <h2>Type 6: Disk Scheduling Algorithms</h2>
+  <span class="cross-ref-badge">FCFS · SSTF · SCAN · C-SCAN · LOOK · C-LOOK · Total Seek Distance</span>
+</div>
+
+<div class="problem-card" id="p6-pyq">
+  <div class="problem-header">
+    <span class="difficulty pyq">PYQ-Style (Nov 2025 Final Q4)</span>
+    <h3>Archetype 6.1 — Full Comparative Disk Scheduling</h3>
+    <span class="marks-badge">10 marks</span>
+  </div>
+  <div class="problem-stmt">
+    Disk request queue: <strong>98, 183, 37, 122, 14, 124, 65, 67</strong>. Head initially at <strong>53</strong>, moving toward higher cylinders. Disk size = 0–199. Apply FCFS, SSTF, SCAN, C-SCAN.
+  </div>
+  <div class="solution-flow">
+    <div class="step-row">
+      <span class="step-badge calc">FCFS</span>
+      <div>
+        Serve in arrival order: 53→98→183→37→122→14→124→65→67<br/>
+        Distances: |98-53|+|183-98|+|37-183|+|122-37|+|14-122|+|124-14|+|65-124|+|67-65|<br/>
+        = 45+85+146+85+108+110+59+2 = <strong>640 cylinders</strong>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge calc">SSTF</span>
+      <div>
+        Always serve the request closest to current head position.
+        <table class="data-table">
+          <thead><tr><th>Step</th><th>Head</th><th>Closest request</th><th>Distance</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>53</td><td>65 (dist=12)</td><td>12</td></tr>
+            <tr><td>2</td><td>65</td><td>67 (dist=2)</td><td>2</td></tr>
+            <tr><td>3</td><td>67</td><td>37 (dist=30)</td><td>30</td></tr>
+            <tr><td>4</td><td>37</td><td>14 (dist=23)</td><td>23</td></tr>
+            <tr><td>5</td><td>14</td><td>98 (dist=84)</td><td>84</td></tr>
+            <tr><td>6</td><td>98</td><td>122 (dist=24)</td><td>24</td></tr>
+            <tr><td>7</td><td>122</td><td>124 (dist=2)</td><td>2</td></tr>
+            <tr><td>8</td><td>124</td><td>183 (dist=59)</td><td>59</td></tr>
+          </tbody>
+        </table>
+        Total = 12+2+30+23+84+24+2+59 = <strong>236 cylinders</strong>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge calc">SCAN (Elevator)</span>
+      <div>
+        Head moves toward higher cylinders, serves requests on the way, hits the end (199), reverses.<br/>
+        Sorted requests: 14, 37, 65, 67, 98, 122, 124, 183<br/>
+        Head=53, moving up: serve 65, 67, 98, 122, 124, 183 → reach 199 → reverse → serve 37, 14<br/>
+        53→65→67→98→122→124→183→199→37→14<br/>
+        Distance = (199-53)+(199-14) = 146+185 = <strong>331 cylinders</strong><br/>
+        (Or equivalently: go to 199, come back to 14 = (199-53)+(199-14))
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge calc">C-SCAN</span>
+      <div>
+        Head moves in one direction only (up), serves requests, jumps to 0 when it hits end, continues upward.<br/>
+        Head=53, moving up: 65, 67, 98, 122, 124, 183 → 199 → jump to 0 → 14, 37<br/>
+        Distance = (199-53) + (199-0) + (37-0) = 146+199+37 = <strong>382 cylinders</strong>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge answer">SUMMARY</span>
+      <div class="final-box">
+        FCFS: <strong>640</strong> cylinders (worst, may swing back and forth)<br/>
+        SSTF: <strong>236</strong> cylinders (good avg, risk of starvation)<br/>
+        SCAN: <strong>331</strong> cylinders (fair, uniform response time)<br/>
+        C-SCAN: <strong>382</strong> cylinders (uniform wait, biased toward far-end requests)
+      </div>
+    </div>
+  </div>
+  <div class="exam-trap-box">
+    <strong>⚠ Exam Trap 1 (SCAN vs LOOK):</strong> SCAN goes all the way to end of disk (0 or max). LOOK only goes to the last request in that direction — does NOT go to 0 or 199. LOOK is more efficient.<br/>
+    <strong>⚠ Exam Trap 2 (C-SCAN jump):</strong> The jump from 199→0 in C-SCAN counts as seek distance (199 cylinders). Some papers omit this — clarify in your answer.<br/>
+    <strong>⚠ Exam Trap 3:</strong> SSTF can cause <em>starvation</em> of far-away requests if many nearby requests keep arriving.
+  </div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     TYPE 7 — UNIX INODE FILE SIZE
+════════════════════════════════════════════════════════════ -->
+<section class="module-section" id="type7">
+<div class="section-title">
+  <h2>Type 7: UNIX Inode — Maximum File Size Calculation</h2>
+  <span class="cross-ref-badge">Direct · Single Indirect · Double Indirect · Triple Indirect</span>
+</div>
+
+<div class="problem-card" id="p7-inode">
+  <div class="problem-header">
+    <span class="difficulty intermediate">Intermediate</span>
+    <h3>Archetype 7.1 — Computing Max File Size with n-Level Indirection</h3>
+    <span class="marks-badge">10 marks</span>
+  </div>
+  <div class="problem-stmt">
+    A UNIX file system has: Block size = 4 KB, Pointer size = 4 bytes. Each inode has: 10 direct pointers, 1 single-indirect, 1 double-indirect, 1 triple-indirect. Find maximum file size.
+  </div>
+  <div class="solution-flow">
+    <div class="step-row">
+      <span class="step-badge formula">FORMULA</span>
+      <div>
+        $$K = \frac{\text{Block size}}{\text{Pointer size}} = \frac{4096}{4} = \mathbf{1024 \text{ pointers/block}}$$
+        <table class="data-table">
+          <thead><tr><th>Section</th><th>Formula</th><th>Blocks addressable</th><th>Size</th></tr></thead>
+          <tbody>
+            <tr><td>Direct (10 pointers)</td><td>$10 \times 1$</td><td>10</td><td>$10 \times 4\text{ KB} = 40\text{ KB}$</td></tr>
+            <tr><td>Single Indirect</td><td>$1 \times K$</td><td>$1024$</td><td>$1024 \times 4\text{ KB} = 4\text{ MB}$</td></tr>
+            <tr><td>Double Indirect</td><td>$1 \times K^2$</td><td>$1024^2 = 1{,}048{,}576$</td><td>$\approx 4\text{ GB}$</td></tr>
+            <tr><td>Triple Indirect</td><td>$1 \times K^3$</td><td>$1024^3 = 1{,}073{,}741{,}824$</td><td>$\approx 4\text{ TB}$</td></tr>
+          </tbody>
+        </table>
+        $$\text{Max File Size} = (10 + 1024 + 1024^2 + 1024^3) \times 4\text{ KB}$$
+        $$\approx (10 + 1024 + 1{,}048{,}576 + 1{,}073{,}741{,}824) \times 4096 \approx \mathbf{4\text{ TB}}$$
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge given">VARIATION</span>
+      <div>
+        <p><strong>What if pointer size = 8 bytes?</strong> $K = 4096/8 = 512$ pointers/block. Triple indirect = $512^3$ blocks = much smaller. Max ≈ $512 \times 512 \times 512 \times 4\text{ KB} \approx 512\text{ GB}$.</p>
+        <p><strong>What if block size = 1 KB, pointer = 4 bytes?</strong> $K = 1024/4 = 256$. Max ≈ $256^3 \times 1\text{ KB} \approx 16\text{ GB}$.</p>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge answer">ANSWER</span>
+      <div class="final-box">With 4KB blocks, 4-byte pointers, 10+1+1+1 inode structure: Max File Size ≈ <strong>4 TB</strong> (dominated by triple-indirect).</div>
+    </div>
+  </div>
+  <div class="exam-trap-box">
+    <strong>⚠ Exam Trap 1:</strong> $K = \text{block size}/\text{pointer size}$ — in bytes! If block = 4 KB = 4096 bytes and pointer = 4 bytes, $K = 1024$. Don't use 4/4=1.<br/>
+    <strong>⚠ Exam Trap 2:</strong> Max file size is dominated by triple-indirect. The direct blocks contribute negligibly — but still include them in the formula.<br/>
+    <strong>⚠ Exam Trap 3:</strong> Total max = sum of ALL sections (direct + single + double + triple), not just the largest one.
+  </div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     TYPE 8 — SEMAPHORE CODE ANALYSIS
+════════════════════════════════════════════════════════════ -->
+<section class="module-section" id="type8">
+<div class="section-title">
+  <h2>Type 8: Semaphore Code Analysis — Bug Finding &amp; Correction</h2>
+  <span class="cross-ref-badge">Producer-Consumer · Readers-Writers · Dining Philosophers</span>
+</div>
+
+<div class="problem-card" id="p8-pyq">
+  <div class="problem-header">
+    <span class="difficulty pyq">PYQ — Nov 2025 Final Q1(b)</span>
+    <h3>Archetype 8.1 — Identify &amp; Fix Semaphore Bugs in Producer-Consumer</h3>
+    <span class="marks-badge">5 marks</span>
+  </div>
+  <div class="problem-stmt">
+    A student writes the following Producer-Consumer code. Identify the mistakes and correct them.
+  </div>
+  <div class="solution-flow">
+    <div class="step-row">
+      <span class="step-badge given">BUGGY CODE</span>
+      <div>
+        <div class="code-block">
+semaphore full = 0, empty = N, mutex = 1;
+
+Producer() {
+  while (true) {
+    produce_item(x);
+    <span class="err">wait(full);        // BUG 1: should be wait(empty)</span>
+    wait(mutex);
+    insert(x);
+    signal(mutex);
+    <span class="err">signal(empty);     // BUG 2: should be signal(full)</span>
+  }
+}
+
+Consumer() {
+  while (true) {
+    wait(empty);       <span class="cmt">// BUG 3: should be wait(full)</span>
+    wait(mutex);
+    remove(x);
+    signal(mutex);
+    <span class="err">signal(full);      // BUG 4: should be signal(empty)</span>
+    consume_item(x);
+  }
+}
+        </div>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge formula">ANALYSIS</span>
+      <div>
+        <p><strong>Semaphore semantics in this problem:</strong></p>
+        <ul>
+          <li><code>empty</code> = number of empty slots in buffer (init N). Producer must wait for an empty slot before inserting.</li>
+          <li><code>full</code> = number of full slots (init 0). Consumer must wait for a full slot before removing.</li>
+          <li><code>mutex</code> = mutual exclusion lock for buffer access (init 1).</li>
+        </ul>
+        <p><strong>Bug 1:</strong> Producer calls <code>wait(full)</code> — this waits until buffer has a full slot, which blocks forever when buffer is empty! Producer should call <code>wait(empty)</code> (wait for an empty slot).</p>
+        <p><strong>Bug 2:</strong> Producer signals <code>empty</code> after inserting — signals that more empty slots exist, opposite of what happened (it filled a slot). Should signal <code>full</code>.</p>
+        <p><strong>Bug 3:</strong> Consumer calls <code>wait(empty)</code> — waits for empty slots, which is what the Producer needs! Should call <code>wait(full)</code>.</p>
+        <p><strong>Bug 4:</strong> Consumer signals <code>full</code> after removing — signals more full slots, but it just removed one (created an empty slot). Should signal <code>empty</code>.</p>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge answer">CORRECTED CODE</span>
+      <div>
+        <div class="code-block">
+semaphore full = 0, empty = N, mutex = 1;
+
+Producer() {
+  while (true) {
+    produce_item(x);
+    <span class="fix">wait(empty);       // Wait for an empty slot</span>
+    wait(mutex);       // Enter critical section
+    insert(x);
+    signal(mutex);     // Leave critical section
+    <span class="fix">signal(full);      // Signal: one more full slot available</span>
+  }
+}
+
+Consumer() {
+  while (true) {
+    <span class="fix">wait(full);        // Wait for a full slot</span>
+    wait(mutex);       // Enter critical section
+    remove(x);
+    signal(mutex);     // Leave critical section
+    <span class="fix">signal(empty);     // Signal: one more empty slot available</span>
+    consume_item(x);
+  }
+}
+        </div>
+        <p class="final-box"><strong>4 bugs fixed:</strong> Producer: wait(empty)→signal(full). Consumer: wait(full)→signal(empty).</p>
+      </div>
+    </div>
+  </div>
+  <div class="exam-trap-box">
+    <strong>⚠ Exam Trap 1:</strong> There is also a potential deadlock if mutex is acquired BEFORE empty/full. If Producer holds mutex and calls wait(full/empty) which blocks, Consumer cannot acquire mutex either — deadlock! Always wait(semaphore) BEFORE wait(mutex).<br/>
+    <strong>⚠ Exam Trap 2 (Critical order):</strong> Correct order is ALWAYS: wait(count_semaphore) → wait(mutex) → [CS] → signal(mutex) → signal(count_semaphore). Reversing wait(mutex) and wait(empty) can cause deadlock.
+  </div>
+</div>
+
+<!-- 8.2 Readers-Writers -->
+<div class="problem-card" id="p8-rw">
+  <div class="problem-header">
+    <span class="difficulty pyq">PYQ — Feb 2026 Re-exam Q2(A)</span>
+    <h3>Archetype 8.2 — Readers-Writers with Counting Semaphores</h3>
+    <span class="marks-badge">10 marks</span>
+  </div>
+  <div class="problem-stmt">
+    Implement the Readers-Writers problem using semaphores. Multiple readers can read simultaneously; writers need exclusive access.
+  </div>
+  <div class="solution-flow">
+    <div class="step-row">
+      <span class="step-badge given">VARIABLES</span>
+      <div>
+        <div class="code-block">
+<span class="kw">semaphore</span> mutex = 1;   <span class="cmt">// Protects readcount</span>
+<span class="kw">semaphore</span> wrt = 1;     <span class="cmt">// Writer mutex (also used by 1st/last reader)</span>
+<span class="kw">int</span> readcount = 0;      <span class="cmt">// Number of active readers</span>
+        </div>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge answer">WRITER</span>
+      <div>
+        <div class="code-block">
+Writer() {
+  do {
+    <span class="fn">wait(wrt)</span>;         <span class="cmt">// Exclusive access</span>
+    <span class="cmt">// ... write ...</span>
+    <span class="fn">signal(wrt)</span>;       <span class="cmt">// Release</span>
+  } while(TRUE);
+}
+        </div>
+      </div>
+    </div>
+    <div class="step-row">
+      <span class="step-badge answer">READER</span>
+      <div>
+        <div class="code-block">
+Reader() {
+  do {
+    <span class="fn">wait(mutex)</span>;        <span class="cmt">// Lock readcount</span>
+    readcount++;
+    if (readcount == 1)
+      <span class="fn">wait(wrt)</span>;        <span class="cmt">// First reader locks out writers</span>
+    <span class="fn">signal(mutex)</span>;      <span class="cmt">// Unlock readcount</span>
+    
+    <span class="cmt">// ... read ...</span>
+    
+    <span class="fn">wait(mutex)</span>;        <span class="cmt">// Lock readcount</span>
+    readcount--;
+    if (readcount == 0)
+      <span class="fn">signal(wrt)</span>;      <span class="cmt">// Last reader releases writer lock</span>
+    <span class="fn">signal(mutex)</span>;      <span class="cmt">// Unlock readcount</span>
+  } while(TRUE);
+}
+        </div>
+        <p class="final-box">Key insight: First reader acquires wrt (blocks writers). Last reader releases wrt (allows writers in). All intermediate readers can read concurrently.</p>
+      </div>
+    </div>
+  </div>
+  <div class="exam-trap-box">
+    <strong>⚠ Exam Trap — Writer Starvation:</strong> This first-readers-preference solution can starve writers if readers keep arriving. As long as readcount &gt; 0, the writer never gets wrt. To solve this: add a semaphore to prevent new readers from entering when a writer is waiting (second readers-writers problem).
+  </div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     EXAM FORMULA SHEET
+════════════════════════════════════════════════════════════ -->
+<section class="module-section" id="examtips">
+<div class="section-title">
+  <h2>Quick Exam Formula Reference Sheet</h2>
+  <span class="cross-ref-badge">Print This · Know Cold</span>
+</div>
+<div class="problem-card">
+  <table class="data-table">
+    <thead><tr><th>Topic</th><th>Formula / Rule</th></tr></thead>
+    <tbody>
+      <tr><td><strong>TAT</strong></td><td>$TAT = CT - AT$</td></tr>
+      <tr><td><strong>WT</strong></td><td>$WT = TAT - BT = CT - AT - BT$</td></tr>
+      <tr><td><strong>RT</strong></td><td>$RT = \text{First CPU dispatch time} - AT$</td></tr>
+      <tr><td><strong>Avg WT sanity</strong></td><td>$\overline{WT} = \overline{TAT} - \overline{BT}$</td></tr>
+      <tr><td><strong>Banker Need</strong></td><td>$\text{Need}[i] = \text{Max}[i] - \text{Alloc}[i]$</td></tr>
+      <tr><td><strong>Banker safety</strong></td><td>Find $i$ where $\text{Need}[i] \le \text{Work}$; then $\text{Work} \mathrel{+}= \text{Alloc}[i]$</td></tr>
+      <tr><td><strong>EAT (1-level)</strong></td><td>$h(TLB+MAT) + (1-h)(TLB+2\cdot MAT)$</td></tr>
+      <tr><td><strong>EAT (k-level)</strong></td><td>$h(TLB+MAT) + (1-h)(TLB+(k+1)\cdot MAT)$</td></tr>
+      <tr><td><strong>Inode K</strong></td><td>$K = \text{block\_size} / \text{ptr\_size}$</td></tr>
+      <tr><td><strong>Max file size</strong></td><td>$(d + K + K^2 + K^3) \times \text{block\_size}$</td></tr>
+      <tr><td><strong>Page fault rate</strong></td><td>Faults / Total references</td></tr>
+      <tr><td><strong>Hit ratio</strong></td><td>Hits / Total = $(n - \text{faults})/n$</td></tr>
+      <tr><td><strong>SCAN total dist</strong></td><td>$(H - 0) + (\text{max\_req} - 0)$ (toward 0) <em>or</em> $(\text{max} - H) + (\text{max} - \text{min\_req})$ (toward max)</td></tr>
+      <tr><td><strong>LOOK total dist</strong></td><td>$(H - \text{min\_req}) + (\text{max\_req} - \text{min\_req})$ (toward low)</td></tr>
+      <tr><td><strong>C-SCAN dist</strong></td><td>$(\text{max} - H) + (\text{max} - 0) + (\text{last\_req\_in\_dir} - 0)$</td></tr>
+      <tr><td><strong>Internal fragmentation</strong></td><td>Allocated block size − Process size</td></tr>
+      <tr><td><strong>External fragmentation</strong></td><td>Total free memory scattered in non-contiguous holes</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="problem-card">
+  <h3 style="margin-bottom:14px">What to Know for the Exam</h3>
+  <ul>
+    <li><strong>CPU Scheduling:</strong> Always draw Gantt chart first, derive CT from it, then compute TAT, WT, RT. Verify: Avg WT = Avg TAT – Avg BT.</li>
+    <li><strong>Banker's:</strong> Three-step test — Need≤Work? Grant pretend-alloc, run safety. If unsafe, deny &amp; rollback.</li>
+    <li><strong>Memory fitting:</strong> Best-Fit = minimum leftover. First-Fit = fastest (stops at first fit). Worst-Fit = maximum leftover (leaves large holes).</li>
+    <li><strong>Page replacement:</strong> State all three algorithms. FIFO can suffer Belady's anomaly. Optimal = fewest faults (unrealizable). LRU ≈ practical optimal.</li>
+    <li><strong>TLB EAT:</strong> k extra memory accesses per miss for k-level page table. Hit = TLB + 1 mem access regardless of levels.</li>
+    <li><strong>Disk scheduling:</strong> SSTF best seek but starves. SCAN/LOOK fair. C-SCAN uniform wait. FCFS simple but worst seek.</li>
+    <li><strong>Semaphores:</strong> wait(count) BEFORE wait(mutex) or deadlock. match every wait with a signal.</li>
+  </ul>
+</div>
+
+<div class="problem-card" style="background:#ecfdf5;border-color:#10b981">
+  <h3 style="color:#065f46">Topic ↔ File Coverage Checklist</h3>
+  <table class="data-table">
+    <thead><tr><th>Topic</th><th>This File (09)</th><th>Solved Bank (10)</th></tr></thead>
+    <tbody>
+      <tr><td>CPU Scheduling (all algorithms)</td><td>✅ Types 1.1–1.4</td><td>✅ Unit 2 cards</td></tr>
+      <tr><td>Banker's Algorithm</td><td>✅ Types 2.1–2.2</td><td>✅ Unit 4 cards</td></tr>
+      <tr><td>Memory Partitioning</td><td>✅ Type 3.1</td><td>✅ Unit 5 card</td></tr>
+      <tr><td>Page Replacement</td><td>✅ Type 4.1</td><td>✅ Unit 6 cards</td></tr>
+      <tr><td>TLB &amp; EAT</td><td>✅ Type 5.1</td><td>✅ Paging unit</td></tr>
+      <tr><td>Disk Scheduling</td><td>✅ Type 6.1</td><td>✅ Unit 7 card</td></tr>
+      <tr><td>UNIX Inode file size</td><td>✅ Type 7.1</td><td>✅ Unit 8 card</td></tr>
+      <tr><td>Semaphore code bugs</td><td>✅ Types 8.1–8.2</td><td>✅ Unit 3 cards</td></tr>
+    </tbody>
+  </table>
+</div>
+</section>
+
+<div class="unit-pagination">
+  <a class="btn btn-outline" href="08-file-systems.html">← Unit 8: File Systems</a>
+  <a class="btn btn-primary" href="10-solved-examples.html">Next: Comprehensive Solved Bank →</a>
+</div>
+</article>
+</main>
+</div>
+<script>
+const toggleBtn = document.getElementById('theme-toggle');
+if (toggleBtn) {
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme','dark');
+    toggleBtn.setAttribute('aria-pressed','true');
+  }
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.setAttribute('aria-pressed', !isDark);
+  });
+}
+</script>
+</body>
+</html>

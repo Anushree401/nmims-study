@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unit 6: Image Segmentation &amp; Otsu - NMIMS Master Notes</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="theme.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    processHtmlClass: 'tex2jax_process|math'
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style id="ivp-custom-polish">
+:root { --ai-content-width: 980px; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+body { min-width: 320px; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+.main-content { width: calc(100% - 290px); max-width: none; }
+.content-wrapper { max-width: var(--ai-content-width); }
+.top-bar { position: sticky; top: 0; z-index: 90; min-height: 52px; padding: 12px 0; margin-top: -32px; background: color-mix(in srgb, var(--bg-main) 94%, transparent); backdrop-filter: blur(10px); }
+.unit-hero { padding-top: 6px; margin-bottom: clamp(26px, 4vw, 42px); }
+.unit-hero h1 { font-size: clamp(1.8rem, 3.3vw, 2.45rem); letter-spacing: -0.035em; text-wrap: balance; }
+.module-section { scroll-margin-top: 76px; padding: clamp(20px, 3vw, 34px); margin-bottom: clamp(24px, 4vw, 40px); }
+.topic-block { scroll-margin-top: 76px; margin-bottom: 2.2rem; }
+.topic-block p, .topic-block li, .q-answer p, .callout p { max-width: 82ch; line-height: 1.72; }
+.callout { padding: 18px 20px; border-radius: 10px; margin: 16px 0; border-left: 4px solid var(--primary); background: #f1f5f9; }
+.callout-def { border-left-color: #2563eb; background: #eff6ff; }
+.callout-warn { border-left-color: #f59e0b; background: #fffbeb; }
+.callout-tip { border-left-color: #10b981; background: #ecfdf5; }
+.data-table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+.data-table th, .data-table td { border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; }
+.data-table th { background: #f8fafc; font-weight: 600; }
+.problem-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+.problem-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.difficulty.easy { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.medium { background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.difficulty.hard { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.solution-flow { display: flex; flex-direction: column; gap: 14px; }
+.step-row { display: flex; gap: 16px; align-items: flex-start; }
+.step-badge { font-size: 0.72rem; font-weight: 700; padding: 4px 8px; background: #e2e8f0; color: #334155; border-radius: 4px; white-space: nowrap; }
+.step-badge.answer { background: #dcfce7; color: #166534; }
+.final-box { background: #ecfdf5; border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 6px; font-weight: 600; color: #065f46; }
+.unit-pagination { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+.btn { padding: 10px 18px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-outline { border: 1px solid var(--border-color); color: var(--text-main); }
+@media (max-width: 900px) { .sidebar { max-height: 34vh; padding: 16px; } .main-content { width: 100%; padding: 24px 16px 56px; } }
+</style>
+</head>
+<body>
+<div class="layout-container">
+<!-- Sidebar Navigation -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<a class="logo" href="../index.html">NMIMS · IVP Master</a>
+<span class="badge">Semester Exam Prep</span>
+<button aria-label="Switch to dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle" type="button"><span aria-hidden="true" class="theme-icon">☾</span><span class="theme-label">Dark mode</span></button>
+</div>
+<nav class="sidebar-nav">
+<h3>All Units &amp; Guides</h3>
+<ul>
+<li><a href="IVP_Unit_1_Image_Fundamentals.html"><span class="unit-num">01</span> Image Fundamentals</a></li>
+<li><a href="IVP_Unit_2_Image_Enhancement.html"><span class="unit-num">02</span> Image Enhancement</a></li>
+<li><a href="IVP_Unit_3_Image_Transforms.html"><span class="unit-num">03</span> Image Transforms</a></li>
+<li><a href="IVP_Unit_4_Morphological_Image_Processing.html"><span class="unit-num">04</span> Morphological Processing</a></li>
+<li><a href="IVP_Unit_5_Edge_Detection.html"><span class="unit-num">05</span> Edge Detection</a></li>
+<li><a class="active" href="IVP_Unit_6_Image_Segmentation.html"><span class="unit-num">06</span> Image Segmentation</a></li>
+<li><a href="IVP_Unit_7_Colour_Image_Processing.html"><span class="unit-num">07</span> Colour Image Processing</a></li>
+<li><a href="IVP_Unit_8_Digital_Video_and_Compression.html"><span class="unit-num">08</span> Video &amp; Compression</a></li>
+<li><a href="IVP_Numericals_and_Problem_Solving.html"><span class="unit-num">09</span> Master Problem-Solving Guide</a></li>
+<li><a href="IVP_Solved_Examples.html"><span class="unit-num">10</span> Comprehensive Solved Bank</a></li>
+<li><a href="IVP_Topic_Checklist.html"><span class="unit-num">11</span> Final Topic Checklist</a></li>
+</ul>
+</nav>
+</aside>
+
+<!-- Main Content Area -->
+<main class="main-content">
+<header class="top-bar">
+<div class="breadcrumb">
+<a href="../index.html">Home</a> &gt; <span>Unit 6: Image Segmentation</span>
+</div>
+<div class="meta-tag">Unit 6 · 100% Otsu &amp; Region Segmentation Masterclass</div>
+</header>
+<article class="content-wrapper">
+<header class="unit-hero">
+<h1>Unit 6: Image Segmentation, Otsu's Thresholding &amp; Regions</h1>
+<p class="lead">An exhaustive masterclass on pixel relationships, component labeling (4 and 8-connectivity algorithms), global and local thresholding, the Expectation-Maximization theorem for binarization, Otsu's optimal thresholding (between-class variance maximization), and Region-Based Segmentation (Region Growing and Region Splitting &amp; Merging with Quadtrees).</p>
+</header>
+<section class="theory-sources" aria-label="Original theory files"><h2>Original theory files</h2><p>Open the unchanged lecture source or expand its preview here.</p><ul><li><a href="theory/Image%20Segmentation.pptx" target="_blank" rel="noopener">Open original: Image Segmentation.pptx</a><details class="theory-source-preview"><summary>Preview source file</summary><div class="theory-source-frame"><iframe loading="lazy" title="Preview of Image Segmentation.pptx" src="theory/previews/Image%20Segmentation.pdf"></iframe></div><p><a href="theory/previews/Image%20Segmentation.pdf" target="_blank" rel="noopener">Open preview in a new tab</a></p></details></li></ul></section>
+
+
+<!-- SECTION 1: IN-DEPTH THEORY -->
+<section class="module-section" id="theory-section">
+<div class="section-title">
+<h2>1. In-Depth Theory &amp; Lecture Explanation</h2>
+<span class="cross-ref-badge">Faithful to Image Segmentation.pptx &amp; Syllabus</span>
+</div>
+
+<div class="topic-block" id="sec-otsu">
+<h3>1.1 Otsu's Optimal Global Thresholding Algorithm</h3>
+<p>Developed by Nobuyuki Otsu in 1979, this statistical clustering algorithm automatically finds the optimal threshold \(k^*\) that partitions image pixels into two classes: \(C_1\) (background: \([0, k]\)) and \(C_2\) (foreground: \([k+1, L-1]\)).</p>
+
+<div class="callout callout-def">
+<h4>Otsu's Core Criterion: Maximizing Between-Class Variance</h4>
+<p>Otsu proved that minimizing intra-class variance is mathematically equivalent to <strong>maximizing between-class variance \(\sigma_B^2(k)\)</strong>:</p>
+$$\mathbf{\sigma_B^2(k) = P_1(k) [m_1(k) - m_G]^2 + P_2(k) [m_2(k) - m_G]^2 = \frac{[m_G P_1(k) - m(k)]^2}{P_1(k)[1 - P_1(k)]}}$$
+<p>where:</p>
+<ul>
+<li>\(P_1(k) = \sum_{i=0}^k p_i\) (Cumulative probability of Class 1)</li>
+<li>\(m(k) = \sum_{i=0}^k i \cdot p_i\) (Cumulative mean of Class 1)</li>
+<li>\(m_G = \sum_{i=0}^{L-1} i \cdot p_i\) (Global mean of the entire image)</li>
+<li>\(k^* = \arg\max_{0 \le k &lt; L-1} \sigma_B^2(k)\) (Optimal threshold).</li>
+</ul>
+</div>
+</div>
+
+<div class="topic-block" id="sec-region-segmentation">
+<h3>1.2 Region-Based Segmentation: Growing vs. Splitting &amp; Merging</h3>
+<ul>
+<li><strong>Region Growing:</strong> Starts with an initial set of "seed points" and appends neighboring pixels to the region if they satisfy a predefined similarity predicate (e.g., \(|f(x, y) - \text{seed}| \le T\)).
+  <br/><em>Stopping Rule:</em> Growth halts when no neighboring pixels satisfy the predicate.</li>
+<li><strong>Region Splitting and Merging (Quadtree Algorithm):</strong> Subdivides an image into quadrants iteratively:
+  <ol>
+    <li>If region \(R_i\) is inhomogeneous (predicate \(Q(R_i) = \text{False}\)), split \(R_i\) into 4 equal subquadrants.</li>
+    <li>When no more splits are possible, merge adjacent regions \(R_j\) and \(R_k\) if their union is homogeneous: \(Q(R_j \cup R_k) = \text{True}\).</li>
+  </ol>
+</li>
+</ul>
+</div>
+</section>
+
+<div class="topic-block" id="sec-bayesian-segmentation">
+<h3>1.3 Bayesian Foreground/Background Classification</h3>
+<p>For an observed pixel feature or intensity (x), Bayesian classification compares the posterior probabilities of foreground (F) and background (B):</p>
+<p>\[P(F\mid x)=rac{P(x\mid F)P(F)}{P(x)},\qquad P(B\mid x)=rac{P(x\mid B)P(B)}{P(x)}.\]</p>
+<p>Assign the pixel to the class with the larger posterior probability. Since (P(x)) is common to both classes, compare (P(x\mid F)P(F)) with (P(x\mid B)P(B)). The likelihoods model class-specific pixel values and the priors encode prior class prevalence. The decision depends on those assumptions and is not automatically the same as Otsu's global threshold.</p>
+<p>For pixel adjacency and 4-, 8-, and m-connectivity definitions, review <a href="IVP_Unit_1_Image_Fundamentals.html#sec-connectivity">Unit 1 pixel relationships</a>.</p>
+</div>
+
+<!-- SECTION 2: NUMERICALS -->
+<section class="module-section" id="numerical-section">
+<div class="section-title">
+<h2>2. In-Depth Segmentation Numericals</h2>
+<span class="cross-ref-badge">NMIMS 10-Mark Solved Calculations</span>
+</div>
+
+<div class="problem-card" id="num-otsu">
+<div class="problem-header">
+<span class="difficulty hard">Core 10-Mark Problem</span>
+<h3>Problem 6.1: Step-by-Step Otsu Thresholding Calculation</h3>
+</div>
+<p><strong>Problem Statement (From NMIMS Paper 1 Q5):</strong> Consider an image with 6 gray levels \([0, 5]\) and normalized histogram:
+$$p_0 = 0.1, \quad p_1 = 0.4, \quad p_2 = 0.3, \quad p_3 = 0.1, \quad p_4 = 0.05, \quad p_5 = 0.05$$
+Find the optimal threshold using Otsu's method for threshold values \(k = 1\) and \(k = 2\) only.</p>
+
+<div class="solution-flow">
+<div class="step-row"><span class="step-badge">GLOBAL MEAN</span>
+<div>
+$$m_G = \sum_{i=0}^5 i \cdot p_i = (0\cdot 0.1) + (1\cdot 0.4) + (2\cdot 0.3) + (3\cdot 0.1) + (4\cdot 0.05) + (5\cdot 0.05)$$
+$$m_G = 0 + 0.4 + 0.6 + 0.3 + 0.2 + 0.25 = \mathbf{1.75}$$
+</div>
+</div>
+<div class="step-row"><span class="step-badge">THRESHOLD k = 1</span>
+<div>
+<p>\(P_1(1) = p_0 + p_1 = 0.1 + 0.4 = \mathbf{0.50}\). \(P_2(1) = 1 - 0.50 = \mathbf{0.50}\).
+<br/>\(m(1) = (0\cdot 0.1) + (1\cdot 0.4) = \mathbf{0.40}\).
+<br/>Class 1 Mean: \(m_1 = \frac{0.40}{0.50} = \mathbf{0.80}\).
+<br/>Class 2 Mean: \(m_2 = \frac{m_G - m(1)}{1 - P_1} = \frac{1.75 - 0.40}{0.50} = \frac{1.35}{0.50} = \mathbf{2.70}\).
+<br/>Between-class variance:</p>
+$$\sigma_B^2(1) = P_1 P_2 (m_1 - m_2)^2 = (0.50)(0.50)(0.80 - 2.70)^2 = 0.25 \times (-1.90)^2 = 0.25 \times 3.61 = \mathbf{0.9025}$$
+</div>
+</div>
+<div class="step-row"><span class="step-badge">THRESHOLD k = 2</span>
+<div>
+<p>\(P_1(2) = 0.1 + 0.4 + 0.3 = \mathbf{0.80}\). \(P_2(2) = 1 - 0.80 = \mathbf{0.20}\).
+<br/>\(m(2) = 0.40 + (2\cdot 0.3) = 0.40 + 0.60 = \mathbf{1.00}\).
+<br/>Class 1 Mean: \(m_1 = \frac{1.00}{0.80} = \mathbf{1.25}\).
+<br/>Class 2 Mean: \(m_2 = \frac{1.75 - 1.00}{0.20} = \frac{0.75}{0.20} = \mathbf{3.75}\).
+<br/>Between-class variance:</p>
+$$\sigma_B^2(2) = (0.80)(0.20)(1.25 - 3.75)^2 = 0.16 \times (-2.50)^2 = 0.16 \times 6.25 = \mathbf{1.0000}$$
+</div>
+</div>
+<div class="step-row"><span class="step-badge answer">CONCLUSION</span>
+<div>
+<p class="final-box">\(\sigma_B^2(k=1) = \mathbf{0.9025} \quad | \quad \sigma_B^2(k=2) = \mathbf{1.0000}\)</p>
+<p class="hint">Since \(\sigma_B^2(2) &gt; \sigma_B^2(1)\), threshold \(k = 2\) provides superior separation between foreground and background.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 3: WHAT TO KNOW FOR THE EXAM -->
+<section class="module-section" id="exam-checklist">
+<div class="section-title">
+<h2>What to Know for the Exam &amp; Coverage Checklist</h2>
+<span class="cross-ref-badge">Final Revision Anchor</span>
+</div>
+
+<div class="callout callout-tip">
+<h4>Core Exam Takeaways:</h4>
+<ul>
+<li><strong>Otsu Criterion:</strong> Maximizes between-class variance: \(\sigma_B^2(k) = P_1 P_2 (m_1 - m_2)^2\).</li>
+<li><strong>Quadtree Rules:</strong> Split if false; Merge if true.</li>
+<li><strong>Component Labeling:</strong> Resolves foreground connected components into unique integer IDs.</li>
+</ul>
+</div>
+</section>
+
+<!-- Unit Pagination -->
+<div class="unit-pagination">
+<a class="btn btn-outline" href="IVP_Unit_5_Edge_Detection.html">← Previous: Unit 5 - Edge Detection</a>
+<a class="btn btn-primary" href="IVP_Unit_7_Colour_Image_Processing.html">Next: Unit 7 - Colour Processing →</a>
+</div>
+
+</article>
+</main>
+</div>
+
+<script>
+const toggleBtn = document.getElementById('theme-toggle');
+if (toggleBtn) {
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    toggleBtn.setAttribute('aria-pressed', 'true');
+  }
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.setAttribute('aria-pressed', !isDark);
+  });
+}
+</script>
+</body>
+</html>
